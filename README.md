@@ -1,3 +1,3 @@
 # LianTuoTianJi
 V1.0
-V1.1.1
+V1.1
