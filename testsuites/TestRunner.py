@@ -1,7 +1,7 @@
 #_*_ coding:utf-8 _*_
 
 import unittest
-from MyHTMLTestReportCN import HTMLTestRunner
+from HtmlRpeort.HTMLTestReportCN import HTMLTestRunner
 import os
 import time
 
@@ -12,7 +12,7 @@ now = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
 
 HtmlFile = report_path+now+"HTMLtemplate.html"
 
-fp = file(HtmlFile, "wb")
+fp = open(HtmlFile, "wb")
 
 
 if __name__=='__main__':
