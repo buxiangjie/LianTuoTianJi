@@ -23,4 +23,4 @@ class Common():
 			requests.post(url, data=param)
 			return requests.post(url,data=param)
 		except Exception as e:
-			self.logger.error(e)
+			print(str(e))
