@@ -20,6 +20,8 @@ class Common():
 		try:
 			print("请求地址:%s"%url)
 			print("请求参数:%s"%param)
+			self.logger.info("请求地址:%s"%url)
+			self.logger.info("请求参数:%s"%param)
 			requests.post(url, data=param)
 			return requests.post(url,data=param)
 		except Exception as e:
