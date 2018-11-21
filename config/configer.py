@@ -17,7 +17,7 @@ class Config():
 			with open(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/config/config.ini", "w+") as f:
 				self.cf.write(f)
 			f.close()
-			return "添加成功"
+			return "修改成功"
 		except Exception as e:
 			return str(e)
 
