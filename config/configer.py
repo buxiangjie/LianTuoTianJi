@@ -8,9 +8,11 @@ class Config():
 		self.cf = configparser.ConfigParser()
 		self.cf.read(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/config/config.ini")
 
+	"""获取参数值"""
 	def Get_Item(self,section,option):
 		return self.cf.get(section,option)
 
+	"""修改参数值"""
 	def Set_Item(self,section,option,value=None):
 		try:
 			self.cf.set(section,option,value)
@@ -21,6 +23,7 @@ class Config():
 		except Exception as e:
 			return str(e)
 
+	"""添加参数"""
 	def Add_Section(self,section):
 		try:
 			self.cf.add_section(section)
