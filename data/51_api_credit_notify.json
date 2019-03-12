@@ -1,0 +1,15 @@
+{
+  "serviceName":"",
+  "requestNum":"",
+  "appId":"",
+  "requestTime":"",
+  "sign":"",
+  "ext":"",
+  "requestBody":{
+    "creditApplyNo":"",
+    "creditNo":"",
+    "cardType":"",
+    "cardId":"",
+    "fullName":""
+  }
+}
