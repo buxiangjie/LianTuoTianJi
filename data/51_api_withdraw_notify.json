@@ -1,0 +1,31 @@
+{
+  "serviceName":"",
+  "requestNum":"",
+  "appId":"",
+  "requestTime":"",
+  "sign":"",
+  "ext":"",
+  "requestBody":{
+    "applyNo":"",
+    "dueBillNo":"",
+    "itemNo":"",
+    "acctSetupInd":"",
+    "borrowNo":"",
+    "contractNo":"",
+    "premiumTradeNo":"",
+    "realLoanAmount":"",
+    "loanRate":"",
+    "bizTime":"",
+    "loanBizDate":"",
+    "paycompBizDate":"",
+    "repayMents":"",
+    "period":"",
+    "dueDate":"",
+    "shouldRepayPrincipal":"",
+    "shouldRepayInterest":"",
+    "shouldRepayFee":"",
+    "insuranceAmt":"",
+    "loanTermFeeAmt":"",
+    "payStatus":""
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "serviceName":"",
+  "requestNum":"",
+  "appId":"",
+  "requestTime":"",
+  "sign":"",
+  "ext":"",
+  "requestBody":{
+    "applyNo":"",
+    "creditApplyNo":"",
+    "creditNo":"",
+    "fullName":"",
+    "certType":"",
+    "certId":"",
+    "mobile":"",
+    "loanAmount":"",
+    "loanRate":"",
+    "currency":"",
+    "period":"",
+    "guarantyRate":"",
+    "bankCardNo":""
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "serviceName":"",
+  "requestNum":"",
+  "appId":"",
+  "requestTime":"",
+  "sign":"",
+  "ext":"",
+  "requestBody":{
+    "applyNo":"",
+    "itemNo":""
+  }
+}
