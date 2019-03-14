@@ -1,21 +1,21 @@
 {
-  "serviceName":"",
-  "requestNum":"",
-  "appId":"",
-  "requestTime":"",
+  "serviceName":"API_CREDIT_NOTIFY",
+  "requestNum":"20190314131300000000000000000002",
+  "appId":"0",
+  "requestTime":"20190314140000",
   "sign":"",
   "ext":"",
   "requestBody":{
-    "creditApplyNo":"",
+    "creditApplyNo":"1",
     "creditNo":"",
-    "cardType":"",
-    "cardId":"",
-    "fullName":"",
-    "bankCode":"",
-    "appLmt":"",
-    "loanRate":"",
-    "creditBeginDate":"",
-    "CreditEndDate":"",
-    "status":""
+    "cardType":"N",
+    "cardId":"13082319841211958X",
+    "fullName":"秦乐荷",
+    "bankCode":"001",
+    "appLmt":50001.00,
+    "loanRate":13.00,
+    "creditBeginDate":"2019-03-14",
+    "CreditEndDate":"2019-03-14",
+    "status":4
   }
 }

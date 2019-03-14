@@ -1,15 +1,15 @@
 {
-  "serviceName":"",
-  "requestNum":"",
-  "appId":"",
-  "requestTime":"",
+  "serviceName":"API_QUERY_CREDIT",
+  "requestNum":"20190314131300000000000000000001",
+  "appId":"0",
+  "requestTime":"20190314140000",
   "sign":"",
   "ext":"",
   "requestBody":{
-    "creditApplyNo":"",
+    "creditApplyNo":"1",
     "creditNo":"",
-    "cardType":"",
-    "cardId":"",
-    "fullName":""
+    "cardType":"N",
+    "cardId":"13082319841211958X",
+    "fullName":"秦乐荷"
   }
 }

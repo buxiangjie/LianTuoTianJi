@@ -1,12 +1,12 @@
 {
-  "serviceName":"",
-  "requestNum":"",
-  "appId":"",
-  "requestTime":"",
+  "serviceName":"API_QUERY_WITHDRAW",
+  "requestNum":"20190314131300000000000000000004",
+  "appId":"0",
+  "requestTime":"20190314140000",
   "sign":"",
   "ext":"",
   "requestBody":{
-    "applyNo":"",
+    "applyNo":"1",
     "itemNo":""
   }
 }
