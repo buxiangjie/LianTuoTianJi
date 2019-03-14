@@ -18,7 +18,6 @@
     "bizTime":"",
     "loanBizDate":"",
     "paycompBizDate":"",
-    "repayMents":"",
     "period":"",
     "dueDate":"",
     "shouldRepayPrincipal":"",
@@ -26,6 +25,16 @@
     "shouldRepayFee":"",
     "insuranceAmt":"",
     "loanTermFeeAmt":"",
-    "payStatus":""
+    "payStatus":"",
+    "repayMents":{
+      "period":"",
+      "dueDate":"",
+      "amount":"",
+      "interest":"",
+      "feeList":{
+        "feeCode":"",
+        "fee":""
+      }
+    }
   }
 }

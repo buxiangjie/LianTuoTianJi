@@ -18,6 +18,24 @@
     "currency":"",
     "period":"",
     "guarantyRate":"",
-    "bankCardNo":""
+    "payMentCardId":"",
+    "payMentCardName":"",
+    "loanContractPic":"",
+    "availableBalance":"",
+    "repayType":"",
+    "purpose":"",
+    "hisLoanCount":"",
+    "hisOverdueDays":"",
+    "bankAccountName":"",
+    "bankCardNo":"",
+    "bankCode":"",
+    "bankMobile":"",
+    "bankCardCount":"",
+    "overdueMonths":"",
+    "cardMaxAmount":"",
+    "phoneNumQty":"",
+    "creditAmtUseRateIncreasedMonths12M":"",
+    "avgCreditAmtUseRate6M":"",
+    "avgAm6M":""
   }
 }
