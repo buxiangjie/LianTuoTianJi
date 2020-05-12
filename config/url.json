@@ -1,0 +1,24 @@
+{
+  "krb": {
+    "dev": "http://api-dev1.igfax.net",
+    "test": "http://api-test1.igfax.net"
+  },
+  "pay": {
+    "test": "http://test-rongpay-deduction-busi.igfax.net",
+    "qa": "http://api-qa1.cloudloan.com:11070",
+    "online": "http://123.56.223.151:11070"
+  },
+  "pintic": {
+    "dev": "http://39.106.164.42:9011",
+    "test": "http://39.107.43.201:9011",
+    "qa": "http://api-qa1.cloudloan.com:9011"
+  },
+  "look_afar_data": {
+    "test": "http://172.16.100.113:9311"
+  },
+  "cloudloan": {
+    "dev": "http://39.106.164.42:9011",
+    "test": "http://39.107.43.201:9011",
+    "qa": "http://api-qa1.cloudloan.com:9011"
+  }
+}
