@@ -23,7 +23,6 @@
   },
   "gateway": {
     "test": "https://172.17.205.187:9018/busi-api",
-    "qa": "https://qa-gateway.cloudloan.com/busi-api",
-    "qa1": "https://cde.cloudloan.com/busi-api"
+    "qa": "https://qa-gateway.cloudloan.com/busi-api"
   }
 }
