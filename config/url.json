@@ -13,16 +13,13 @@
     "test": "http://39.107.43.201:9011",
     "qa": "http://api-qa1.cloudloan.com:9011"
   },
-  "look_afar_data": {
-    "test": "http://172.16.100.113:9311"
-  },
   "cloudloan": {
     "dev": "http://192.168.8.88:9011",
     "test": "http://39.107.43.201:9011",
     "qa": "http://api-qa1.cloudloan.com:9011"
   },
   "gateway": {
-    "test": "https://172.17.205.187:9018/busi-api",
+    "test": "http://172.17.205.187:9018/busi-api",
     "qa": "https://qa-gateway.cloudloan.com/busi-api"
   }
 }
