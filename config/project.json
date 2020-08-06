@@ -1,0 +1,277 @@
+{
+  "krb": {
+    "id": "krb_idCardNum",
+    "name": "krb_realName",
+    "card": "krb_bankcard"
+  },
+  "czb": {
+    "id": "cardNum",
+    "name": "custName",
+    "card": "czb_bankcard"
+  },
+  "jqh": {
+    "id": "jqh_cardNum",
+    "name": "jqh_custName",
+    "card": "jqh_bankcard"
+  },
+  "nqh": {
+    "id": "nqh_cardNum",
+    "name": "nqh_custName",
+    "card": "nqh_bankcard"
+  },
+  "yzf": {
+    "id": "yzf_cardNum",
+    "name": "yzf_custName",
+    "card": "yzf_bankcard"
+  },
+  "syj": {
+    "id": "syj_cardNum",
+    "name": "syj_custName",
+    "card": "syj_bankcard"
+  },
+  "kkd": {
+    "id": "kkd_cardNum",
+    "name": "kkd_custName",
+    "card": "kkd_bankcard"
+  },
+  "jqh_repayment": {
+    "id": "jqh_repayment_cardNum",
+    "name": "jqh_repayment_custName",
+    "card": "jqh_repayment_bankcard"
+  },
+  "nqh_repayment": {
+    "id": "nqh_repayment_cardNum",
+    "name": "nqh_repayment_custName",
+    "card": "nqh_repayment_bankcard"
+  },
+  "yzf_repayment": {
+    "id": "yzf_repayment_cardNum",
+    "name": "yzf_repayment_custName",
+    "card": "yzf_repayment_bankcard"
+  },
+  "syj_repayment": {
+    "id": "syj_repayment_cardNum",
+    "name": "syj_repayment_custName",
+    "card": "syj_repayment_bankcard"
+  },
+  "nqh_repayment_normal_settle": {
+    "id": "nqh_repayment_normal_settle_cardNum",
+    "name": "nqh_repayment_normal_settle_custName",
+    "card": "nqh_repayment_normal_settle_bankcard"
+  },
+  "jqh_repayment_normal_settle": {
+    "id": "jqh_repayment_normal_settle_cardNum",
+    "name": "jqh_repayment_normal_settle_custName",
+    "card": "jqh_repayment_normal_settle_bankcard"
+  },
+  "yzf_repayment_normal_settle": {
+    "id": "yzf_repayment_normal_settle_cardNum",
+    "name": "yzf_repayment_normal_settle_custName",
+    "card": "yzf_repayment_normal_settle_bankcard"
+  },
+  "syj_repayment_normal_settle": {
+    "id": "syj_repayment_normal_settle_cardNum",
+    "name": "syj_repayment_normal_settle_custName",
+    "card": "syj_repayment_normal_settle_bankcard"
+  },
+  "nqh_repayment_advance": {
+    "id": "nqh_repayment_advance_cardNum",
+    "name": "nqh_repayment_advance_custName",
+    "card": "nqh_repayment_advance_bankcard"
+  },
+  "jqh_repayment_advance": {
+    "id": "jqh_repayment_advance_cardNum",
+    "name": "jqh_repayment_advance_custName",
+    "card": "jqh_repayment_advance_bankcard"
+  },
+  "yzf_repayment_advance": {
+    "id": "yzf_repayment_advance_cardNum",
+    "name": "yzf_repayment_advance_custName",
+    "card": "yzf_repayment_advance_bankcard"
+  },
+  "syj_repayment_advance": {
+    "id": "syj_repayment_advance_cardNum",
+    "name": "syj_repayment_advance_custName",
+    "card": "syj_repayment_advance_bankcard"
+  },
+  "nqh_periods_same_day_return": {
+    "id": "nqh_periods_same_day_return_cardNum",
+    "name": "nqh_periods_same_day_return_custName",
+    "card": "nqh_periods_same_day_return_bankcard"
+  },
+  "nqh_periods_no_same_day_return": {
+    "id": "nqh_periods_no_same_day_return_cardNum",
+    "name": "nqh_periods_no_same_day_return_custName",
+    "card": "nqh_periods_no_same_day_return_bankcard"
+  },
+  "nqh_one_period_same_day_return": {
+    "id": "nqh_one_period_same_day_return_cardNum",
+    "name": "nqh_one_period_same_day_return_custName",
+    "card": "nqh_one_period_same_day_return_bankcard"
+  },
+  "jfx": {
+    "id": "jfx_cardNum",
+    "name": "jfx_custName",
+    "card": "jfx_bankcard"
+  },
+  "jfx_3_periods": {
+    "id": "jfx_3_periods_cardNum",
+    "name": "jfx_3_periods_custName",
+    "card": "jfx_3_periods_bankcard"
+  },
+  "jfx_6_periods": {
+    "id": "jfx_6_periods_cardNum",
+    "name": "jfx_6_periods_custName",
+    "card": "jfx_6_periods_bankcard"
+  },
+  "jfx_12_periods": {
+    "id": "jfx_12_periods_cardNum",
+    "name": "jfx_12_periods_custName",
+    "card": "jfx_12_periods_bankcard"
+  },
+  "jfx_required": {
+    "id": "jfx_required_cardNum",
+    "name": "jfx_required_custName",
+    "card": "jfx_required_bankcard"
+  },
+  "pay": {
+    "id": "pay_cardNum",
+    "name": "pay_custName",
+    "card": "pay_bankcard"
+  },
+  "rmkj_3_periods": {
+    "id": "rmkj_3_periods_cardNum",
+    "name": "rmkj_3_periods_custName",
+    "card": "rmkj_3_periods_bankcard"
+  },
+  "rmkj_6_periods": {
+    "id": "rmkj_6_periods_cardNum",
+    "name": "rmkj_6_periods_custName",
+    "card": "rmkj_6_periods_bankcard"
+  },
+  "rmkj_9_periods": {
+    "id": "rmkj_9_periods_cardNum",
+    "name": "rmkj_9_periods_custName",
+    "card": "rmkj_9_periods_bankcard"
+  },
+  "rmkj_12_periods": {
+    "id": "rmkj_12_periods_cardNum",
+    "name": "rmkj_12_periods_custName",
+    "card": "rmkj_12_periods_bankcard"
+  },
+  "cfq_24_periods": {
+    "id": "cfq_24_periods_cardNum",
+    "name": "cfq_24_periods_custName",
+    "card": "cfq_24_periods_bankcard"
+  },
+  "cfq_12_periods": {
+    "id": "cfq_12_periods_cardNum",
+    "name": "cfq_12_periods_custName",
+    "card": "cfq_12_periods_bankcard"
+  },
+  "new_roma": {
+    "id": "new_roma_cardNum",
+    "name": "new_roma_custName",
+    "card": "new_roma_bankcard"
+  },
+  "syjv2": {
+    "id": "syjv2_cardNum",
+    "name": "syjv2_custName",
+    "card": "syjv2_bankcard"
+  },
+  "kkd_3_periods": {
+    "id": "kkd_3_periods_cardNum",
+    "name": "kkd_3_periods_custName",
+    "card": "kkd_3_periods_bankcard"
+  },
+  "kkd_6_periods": {
+    "id": "kkd_6_periods_cardNum",
+    "name": "kkd_6_periods_custName",
+    "card": "kkd_9_periods_bankcard"
+  },
+  "kkd_9_periods": {
+    "id": "kkd_9_periods_cardNum",
+    "name": "kkd_9_periods_custName",
+    "card": "kkd_9_periods_bankcard"
+  },
+  "kkd_12_periods": {
+    "id": "kkd_12_periods_cardNum",
+    "name": "kkd_12_periods_custName",
+    "card": "kkd_12_periods_bankcard"
+  },
+  "ddq_3_periods": {
+    "id": "ddq_3_periods_cardNum",
+    "name": "ddq_3_periods_custName",
+    "card": "ddq_3_periods_bankcard"
+  },
+  "ddq_6_periods": {
+    "id": "ddq_6_periods_cardNum",
+    "name": "ddq_6_periods_custName",
+    "card": "ddq_6_periods_bankcard"
+  },
+  "ddq_9_periods": {
+    "id": "ddq_9_periods_cardNum",
+    "name": "ddq_9_periods_custName",
+    "card": "ddq_9_periods_bankcard"
+  },
+  "ddq_12_periods": {
+    "id": "ddq_12_periods_cardNum",
+    "name": "ddq_12_periods_custName",
+    "card": "ddq_12_periods_bankcard"
+  },
+  "cfq_12_periods_return": {
+    "id": "cfq_12_periods_return_cardNum",
+    "name": "cfq_12_periods_return_custName",
+    "card": "cfq_12_periods_return_bankcard"
+  },
+  "jfqjy_3_periods": {
+    "id": "jfqjy_3_periods_cardNum",
+    "name": "jfqjy_3_periods_custName",
+    "card": "jfqjy_3_periods_bankcard"
+  },
+  "jfqjy_6_periods": {
+    "id": "jfqjy_6_periods_cardNum",
+    "name": "jfqjy_6_periods_custName",
+    "card": "jfqjy_6_periods_bankcard"
+  },
+  "jfqjy_9_periods": {
+    "id": "jfqjy_9_periods_cardNum",
+    "name": "jfqjy_9_periods_custName",
+    "card": "jfqjy_9_periods_bankcard"
+  },
+  "jfqjy_12_periods": {
+    "id": "jfqjy_12_periods_cardNum",
+    "name": "jfqjy_12_periods_custName",
+    "card": "jfqjy_12_periods_bankcard"
+  },
+  "jfqyl_3_periods": {
+    "id": "jfqyl_3_periods_cardNum",
+    "name": "jfqyl_3_periods_custName",
+    "card": "jfqyl_3_periods_bankcard"
+  },
+  "jfqyl_6_periods": {
+    "id": "jfqyl_6_periods_cardNum",
+    "name": "jfqyl_6_periods_custName",
+    "card": "jfqyl_6_periods_bankcard"
+  },
+  "jfqyl_9_periods": {
+    "id": "jfqyl_9_periods_cardNum",
+    "name": "jfqyl_9_periods_custName",
+    "card": "jfqyl_9_periods_bankcard"
+  },
+  "jfqyl_12_periods": {
+    "id": "jfqyl_12_periods_cardNum",
+    "name": "jfqyl_12_periods_custName",
+    "card": "jfqyl_12_periods_bankcard"
+  },
+  "jfqyl_18_periods": {
+    "id": "jfqyl_18_periods_cardNum",
+    "name": "jfqyl_18_periods_custName",
+    "card": "jfqyl_18_periods_bankcard"
+  },
+  "jfqyl_24_periods": {
+    "id": "jfqyl_24_periods_cardNum",
+    "name": "jfqyl_24_periods_custName",
+    "card": "jfqyl_24_periods_bankcard"
+  }
+}

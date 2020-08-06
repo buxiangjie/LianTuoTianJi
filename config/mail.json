@@ -1,0 +1,96 @@
+{
+  "czb": {
+    "cc": "wangxl@cloudloan.com;zhangdawei@cloudloan.com;lirui@cloudloan.com",
+    "Subject": {
+      "dev": "报告-SAAS-车置宝dev",
+      "test": "报告-SAAS-车置宝test",
+      "qa": "报告-SAAS-车置宝qa"
+    }
+  },
+  "roma": {
+    "cc": "wangxl@cloudloan.com;zhangdawei@cloudloan.com;lirui@cloudloan.com",
+    "Subject": {
+      "dev": "报告-SAAS-罗马车贷dev",
+      "test": "报告-SAAS-罗马车贷test",
+      "qa": "报告-SAAS-罗马车贷qa"
+    }
+  },
+  "krb": {
+    "cc": "wangxl@cloudloan.com",
+    "Subject": {
+      "test": "报告-P2P-快融保P2Ptest"
+    }
+  },
+  "jfx": {
+    "cc": "wangxl@cloudloan.com;zhangdawei@cloudloan.com;lirui@cloudloan.com",
+    "Subject": {
+      "dev": "报告-SAAS-金服侠dev",
+      "test": "报告-SAAS-金服侠test",
+      "qa": "报告-SAAS-金服侠qa"
+    }
+  },
+  "jqh": {
+    "cc": "wangxl@cloudloan.com;zhangdawei@cloudloan.com;lirui@cloudloan.com",
+    "Subject": {
+      "dev": "报告-SAAS-借去花dev",
+      "test": "报告-SAAS-借去花test",
+      "qa": "报告-SAAS-借去花qa"
+    }
+  },
+  "nqh": {
+    "cc": "wangxl@cloudloan.com;zhangdawei@cloudloan.com;lirui@cloudloan.com",
+    "Subject": {
+      "dev": "报告-SAAS-拿去花dev",
+      "test": "报告-SAAS-拿去花test",
+      "qa": "报告-SAAS-拿去花qa"
+    }
+  },
+  "yzf": {
+    "cc": "wangxl@cloudloan.com;zhangdawei@cloudloan.com;lirui@cloudloan.com",
+    "Subject": {
+      "dev": "报告-SAAS-翼支付dev",
+      "test": "报告-SAAS-翼支付test",
+      "qa": "报告-SAAS-翼支付qa"
+    }
+  },
+  "syj": {
+    "cc": "wangxl@cloudloan.com;zhangdawei@cloudloan.com;lirui@cloudloan.com",
+    "Subject": {
+      "dev": "报告-SAAS-随意借dev",
+      "test": "报告-SAAS-随意借test",
+      "qa": "报告-SAAS-随意借qa"
+    }
+  },
+  "rmkj": {
+    "cc": "wangxl@cloudloan.com;zhangdawei@cloudloan.com;lirui@cloudloan.com",
+    "Subject": {
+      "dev": "报告-SAAS-任买医美dev",
+      "test": "报告-SAAS-任买医美test",
+      "qa": "报告-SAAS-任买医美qa"
+    }
+  },
+  "cfq": {
+    "cc": "wangxl@cloudloan.com;zhangdawei@cloudloan.com;lirui@cloudloan.com",
+    "Subject": {
+      "dev": "报告-SAAS-橙分期dev",
+      "test": "报告-SAAS-橙分期test",
+      "qa": "报告-SAAS-橙分期qa"
+    }
+  },
+  "kkd": {
+    "cc": "wangxl@cloudloan.com;zhangdawei@cloudloan.com;lirui@cloudloan.com;zhaochen@cloudloan.com",
+    "Subject": {
+      "dev": "报告-SAAS-卡卡贷dev",
+      "test": "报告-SAAS-卡卡贷test",
+      "qa": "报告-SAAS-卡卡贷qa"
+    }
+  },
+  "ddq": {
+    "cc": "wangxl@cloudloan.com;zhangdawei@cloudloan.com;lirui@cloudloan.com;zhaochen@cloudloan.com",
+    "Subject": {
+      "dev": "报告-SAAS-豆豆钱dev",
+      "test": "报告-SAAS-豆豆钱test",
+      "qa": "报告-SAAS-豆豆钱qa"
+    }
+  }
+}
