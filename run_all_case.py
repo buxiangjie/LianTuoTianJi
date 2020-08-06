@@ -6,6 +6,8 @@ import sys
 import smtplib
 import os
 
+import BeautifulReport as BeautifulReport
+
 from HtmlRpeort.HTMLTestReportCN import HTMLTestRunner
 from common.common_func import Common
 from email.mime.text import MIMEText
@@ -71,14 +73,14 @@ def begin(file: str):
 	if not os.path.exists("./test_report"):
 		os.mkdir("test_report")
 	globals()['filename'] = "./test_report/" + newtime + '.html'
-	# filename = newtime + ".html"
+	filename = newtime + ".html"
 	fp = open(globals()['filename'], 'wb+')
 	suit = all_case(file)
-	runner = HTMLTestRunner(stream=fp, title='小贷业务接口测试报告', description='执行情况')
-	runner.run(suit)
+	# runner = HTMLTestRunner(stream=fp, title='小贷业务接口测试报告', description='执行情况')
+	# runner.run(suit)
+	result = BeautifulReport.BeautifulReport(suit)
+	result.report(description="小贷业务接口报告", filename=filename, report_dir="test_report", theme="theme_candy")
 	fp.close()
-	# result = BeautifulReport(suit)
-	# result.report(description="小贷业务接口报告", filename=filename, report_dir="test_report", theme="theme_candy")
 
 
 if __name__ == "__main__":
