@@ -10,9 +10,11 @@ import pytest
 import sys
 import os
 
+from common.common_func import Common
+from config.configer import Config
+
 # 把当前目录的父目录加到sys.path中
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
-
 
 
 def pytest_addoption(parser):
@@ -24,6 +26,13 @@ def pytest_addoption(parser):
 def env(request):
 	return request.config.getoption("--env")
 
+
 @pytest.fixture(scope="session")
 def types(request):
 	return request.config.getoption("--types")
+
+
+@pytest.fixture(scope="session")
+def r(env):
+	print("只执行一次")
+	return Common.conn_redis(env)
