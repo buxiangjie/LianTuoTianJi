@@ -3,7 +3,7 @@
 import xlrd
 
 
-def open_excel(file):
+def open_excel(file: str):
     """
     :param file: 文件路径
     :return:An instance of the :class:`~xlrd.book.Book` class.
@@ -12,7 +12,7 @@ def open_excel(file):
         data = xlrd.open_workbook(file)
         return data
     except Exception as e:
-        print(str(e))
+        raise e
 
 
 def excel_table_byname(file, by_name, colnameindex=0) -> list:

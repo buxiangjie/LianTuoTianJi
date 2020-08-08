@@ -22,21 +22,13 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 logger = Logger(logger="test_yzf_tp").getlog()
 
 
+@allure.feature("翼支付流程")
 class TestYzfTp:
 
-	# @classmethod
-	# @allure.step("初始化")
-	# def setUpClass(cls):
-	# 	cls.env = 'qa'
-	# 	file = Config().get_item('File', 'yzf_case_file')
-	# 	cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
-	#
-	# # cls.r = Common.conn_redis(cls.env)
-	#
-	# @classmethod
-	# def tearDownClass(cls):
-	# 	pass
-
+	@allure.title("翼支付进件接口")
+	@pytest.mark.asset
+	@pytest.mark.comp
+	@pytest.mark.comp_repay
 	def test_0_approved(self, env, r, excel):
 		"""翼支付进件同意接口"""
 		data = excel_table_byname(excel, 'approved')
@@ -75,7 +67,7 @@ class TestYzfTp:
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=env,
 			product="pintic"
 		)
@@ -83,12 +75,16 @@ class TestYzfTp:
 		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		r.set("yzf_projectId", json.loads(rep.text)['content']['projectId'])
-		assert (json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		assert json.loads(rep.text)['resultCode'] == int(data[0]['msgCode'])
 		GetSqlData.change_project_audit_status(
 			project_id=r.get('yzf_projectId'),
 			enviroment=env
 		)
 
+	@allure.title("翼支付放款通知")
+	@pytest.mark.asset
+	@pytest.mark.comp
+	@pytest.mark.comp_repay
 	def test_1_loan_notice(self, r, env, excel):
 		"""翼支付放款通知接口"""
 		data = excel_table_byname(excel, 'loan_notice')
@@ -112,14 +108,18 @@ class TestYzfTp:
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=env,
 			product="pintic"
 		)
 		print("返回信息:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
-		assert (json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		assert json.loads(rep.text)['resultCode'] == int(data[0]['msgCode'])
 
+	@allure.title("翼支付放款同步")
+	@pytest.mark.asset
+	@pytest.mark.comp
+	@pytest.mark.comp_repay
 	def test_2_loanasset(self, r, env, excel):
 		"""翼支付进件放款同步接口"""
 		global period
@@ -138,7 +138,7 @@ class TestYzfTp:
 			}
 		)
 
-		for i in range(0, 96):
+		for i in range(96):
 			period = param['repaymentPlanList'][i]['period']
 			param['repaymentPlanList'][i].update(
 				{
@@ -146,7 +146,7 @@ class TestYzfTp:
 					"planPayDate": Common.get_repaydate(period=period)[period - 1]
 				}
 			)
-		for i in range(0, 48):
+		for i in range(48):
 			period = param['repaymentPlanList'][i]['period']
 			param['feePlanList'][i].update(
 				{
@@ -162,17 +162,20 @@ class TestYzfTp:
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=env,
 			product="pintic"
 		)
 		print("响应信息:%s" % rep)
 		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
-		assert (json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		assert json.loads(rep.text)['resultCode'] == int(data[0]['msgCode'])
 
 	# @unittest.skip("-")
 	# @unittest.skipUnless(sys.argv[4] == "compensation", "-")
+	@allure.title("翼支付代偿")
+	@pytest.mark.comp
+	@pytest.mark.comp_repay
 	def test_3_compensation(self, r, env, excel):
 		"""翼支付12期代偿一期"""
 		data = excel_table_byname(excel, 'compensation')
@@ -241,17 +244,19 @@ class TestYzfTp:
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=env,
 			product="pintic"
 		)
 		print("响应信息:%s" % rep)
 		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
-		assert (json.loads(rep.text)['resultCode'], data[0]['msgCode'])
+		assert json.loads(rep.text)['resultCode'] == data[0]['msgCode']
 
 	# @unittest.skip("-")
 	# @unittest.skipUnless(sys.argv[4] == "compensation_after_repay", "-")
+	@allure.title("翼支付代偿后还款")
+	@pytest.mark.comp_repay
 	def test_4_after_comp_repay(self, r, env, excel):
 		"""翼支付代偿后还款"""
 		global period, plan_pay_type, plan_list_detail
@@ -274,7 +279,7 @@ class TestYzfTp:
 		}
 		fee_3003 = Common.get_random('serviceSn')
 		fee_3002 = Common.get_random('serviceSn')
-		for i in range(0, len(param['repaymentDetailList'])):
+		for i in range(len(param['repaymentDetailList'])):
 			plan_pay_type = plan_type[param['repaymentDetailList'][i]['repaymentPlanType']]
 			plan_catecory = param['repaymentDetailList'][i]['planCategory']
 			asset_plan_owner = param['repaymentDetailList'][i]['assetPlanOwner']
@@ -379,7 +384,7 @@ class TestYzfTp:
 						"period": period
 					}
 				)
-		for i in range(0, len(param['repaymentPlanList'])):
+		for i in range(len(param['repaymentPlanList'])):
 			plan_list_pay_type = plan_type[param['repaymentPlanList'][i]['repaymentPlanType']]
 			plan_list_asset_plan_owner = param['repaymentPlanList'][i]['assetPlanOwner']
 			if plan_list_asset_plan_owner == 'financePartner':
@@ -416,7 +421,7 @@ class TestYzfTp:
 						"period": period
 					}
 				)
-		for i in range(0, len(param['feePlanList'])):
+		for i in range(len(param['feePlanList'])):
 			if param['feePlanList'][i]['feeCategory'] == 3003:
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r.get("yzf_projectId"),
@@ -467,15 +472,15 @@ class TestYzfTp:
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=env,
 			product="pintic"
 		)
 		print("响应信息:%s" % rep)
 		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
-		assert (json.loads(rep.text)['resultCode'], data[0]['msgCode'])
-		assert (json.loads(rep.text)['content']['message'], "交易成功")
+		assert json.loads(rep.text)['resultCode'] == data[0]['msgCode']
+		assert json.loads(rep.text)['content']['message'] == "交易成功"
 
 
 if __name__ == '__main__':

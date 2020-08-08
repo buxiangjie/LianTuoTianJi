@@ -10,7 +10,8 @@ import os
 import json
 import time
 import sys
-import warnings
+import allure
+import pytest
 
 from common.common_func import Common
 from log.logger import Logger
@@ -23,25 +24,21 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 logger = Logger(logger="test_yzf_repayment_tp").getlog()
 
 
-class YzfRepayment(unittest.TestCase):
+@allure.feature("翼支付还款流程")
+class TestYzfRepayment:
 
-	@classmethod
-	def setUpClass(cls):
-		cls.env = sys.argv[3]
-		file = Config().get_item('File', 'yzf_repayment_case_file')
-		cls.r = Common.conn_redis(cls.env)
-		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
+	@staticmethod
+	@pytest.fixture(scope="session")
+	def get_type(business_type):
+		return business_type
 
-	@classmethod
-	def tearDownClass(cls):
-		pass
-
-	def test_0_approved(self):
+	@allure.title("翼支付进件接口")
+	def test_0_approved(self, excel, env, r):
 		"""翼支付进件同意接口"""
-		data = excel_table_byname(self.excel, 'approved')
+		data = excel_table_byname(excel, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
-		Common.p2p_get_userinfo("yzf_repayment", self.env)
-		self.r.mset(
+		Common.p2p_get_userinfo("yzf_repayment", env)
+		r.mset(
 			{
 				"yzf_repayment_sourceProjectId": Common.get_random("sourceProjectId"),
 				"yzf_repayment_sourceUserId": Common.get_random("userid"),
@@ -51,20 +48,20 @@ class YzfRepayment(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceProjectId": self.r.get("yzf_repayment_sourceProjectId"),
-				"sourceUserId": self.r.get("yzf_repayment_sourceUserId"),
-				"transactionId": self.r.get("yzf_repayment_transactionId")
+				"sourceProjectId": r.get("yzf_repayment_sourceProjectId"),
+				"sourceUserId": r.get("yzf_repayment_sourceUserId"),
+				"transactionId": r.get("yzf_repayment_transactionId")
 			}
 		)
 		param['applyInfo'].update({"applyTime": Common.get_time("-")})
 		param['personalInfo'].update(
 			{
-				"cardNum": self.r.get("yzf_repayment_cardNum"),
-				"custName": self.r.get("yzf_repayment_custName"),
-				"phone": self.r.get("yzf_repayment_phone")
+				"cardNum": r.get("yzf_repayment_cardNum"),
+				"custName": r.get("yzf_repayment_custName"),
+				"phone": r.get("yzf_repayment_phone")
 			}
 		)
-		param['cardInfo'].update({"bankPhone": self.r.get("yzf_repayment_phone")})
+		param['cardInfo'].update({"bankPhone": r.get("yzf_repayment_phone")})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -72,33 +69,34 @@ class YzfRepayment(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
-			enviroment=self.env,
+			data=json.dumps(param, ensure_ascii=False),
+			enviroment=env,
 			product="pintic"
 		)
 		print("响应信息:%s" % rep)
 		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
-		self.r.set("yzf_repayment_projectId", json.loads(rep.text)['content']['projectId'])
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		r.set("yzf_repayment_projectId", json.loads(rep.text)['content']['projectId'])
+		assert json.loads(rep.text)['resultCode'] == int(data[0]['msgCode'])
 
-	def test_1_loan_notice(self):
+	@allure.title("翼支付放款通知接口")
+	def test_1_loan_notice(self, excel, env, r):
 		"""翼支付放款通知接口"""
 		GetSqlData.change_project_audit_status(
-			project_id=self.r.get('yzf_repayment_projectId'),
-			enviroment=self.r.get("env")
+			project_id=r.get('yzf_repayment_projectId'),
+			enviroment=env
 		)
-		data = excel_table_byname(self.excel, 'loan_notice')
+		data = excel_table_byname(excel, 'loan_notice')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceProjectId": self.r.get("yzf_repayment_sourceProjectId"),
-				"sourceUserId": self.r.get("yzf_repayment_sourceUserId"),
-				"projectId": self.r.get("yzf_repayment_projectId"),
+				"sourceProjectId": r.get("yzf_repayment_sourceProjectId"),
+				"sourceUserId": r.get("yzf_repayment_sourceUserId"),
+				"projectId": r.get("yzf_repayment_projectId"),
 				"serviceSn": "SaasL-" + Common.get_random("serviceSn"),
-				"id": self.r.get("yzf_repayment_cardNum"),
-				"bankPhone": self.r.get("yzf_repayment_phone"),
+				"id": r.get("yzf_repayment_cardNum"),
+				"bankPhone": r.get("yzf_repayment_phone"),
 				"loanTime": Common.get_time("-")
 			}
 		)
@@ -110,25 +108,26 @@ class YzfRepayment(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
-			enviroment=self.env,
+			data=json.dumps(param, ensure_ascii=False),
+			enviroment=env,
 			product="pintic"
 		)
 		print("返回信息:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		assert json.loads(rep.text)['resultCode'] == int(data[0]['msgCode'])
 
-	def test_2_loanasset(self):
+	@allure.title("翼支付放款同步接口")
+	def test_2_loanasset(self, excel, env, r):
 		"""翼支付进件放款同步接口"""
 		global period
-		data = excel_table_byname(self.excel, 'loan_asset')
+		data = excel_table_byname(excel, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data("data", "yzf_tp.json")
 		repaydate = Common.get_repaydate(24)
 		param['asset'].update(
 			{
-				"projectId": self.r.get("yzf_repayment_projectId"),
-				"sourceProjectId": self.r.get("yzf_repayment_sourceProjectId"),
+				"projectId": r.get("yzf_repayment_projectId"),
+				"sourceProjectId": r.get("yzf_repayment_sourceProjectId"),
 				"transactionId": "Apollo" + Common.get_random("transactionId"),
 				"repaymentDay": Common.get_time("day").split('-')[1],
 				"firstRepaymentDate": repaydate[0],
@@ -136,14 +135,14 @@ class YzfRepayment(unittest.TestCase):
 				"loanTime": Common.get_time("-")
 			}
 		)
-		for i in range(0, 96):
+		for i in range(96):
 			param['repaymentPlanList'][i].update(
 				{
 					"sourcePlanId": Common.get_random("sourceProjectId"),
 					"planPayDate": repaydate[param['repaymentPlanList'][i]['period'] - 1]
 				}
 			)
-		for i in range(0, 48):
+		for i in range(48):
 			param['feePlanList'][i].update(
 				{
 					"sourcePlanId": Common.get_random("sourceProjectId"),
@@ -157,29 +156,30 @@ class YzfRepayment(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
-			enviroment=self.env,
+			data=json.dumps(param, ensure_ascii=False),
+			enviroment=env,
 			product="pintic"
 		)
 		print("响应信息:%s" % rep)
 		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		assert json.loads(rep.text)['resultCode'] == int(data[0]['msgCode'])
 
-	def test_3_repayment_one_period(self):
+	@allure.title("翼支付还款接口")
+	def test_3_repayment_one_period(self, excel, env, r):
 		"""翼支付还款一期"""
 		time.sleep(5)
-		data = excel_table_byname(self.excel, 'repayment')
+		data = excel_table_byname(excel, 'repayment')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		success_amount = GetSqlData.get_user_repayment_amount(
-			enviroment=self.env,
-			project_id=self.r.get("yzf_repayment_projectId"),
+			enviroment=env,
+			project_id=r.get("yzf_repayment_projectId"),
 			period=param['repaymentDetailList'][0]['period']
 		)
 		param['repayment'].update(
 			{
-				"projectId": self.r.get("yzf_repayment_projectId"),
+				"projectId": r.get("yzf_repayment_projectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"payTime": Common.get_time("-"),
 				"sourceCreateTime": Common.get_time("-"),
@@ -192,15 +192,15 @@ class YzfRepayment(unittest.TestCase):
 			"Fee": "3"
 		}
 		repaydate = Common.get_repaydate(24)
-		for i in range(0, len(param['repaymentDetailList'])):
+		for i in range(len(param['repaymentDetailList'])):
 			plan_pay_type = plan_type[param['repaymentDetailList'][i]['repaymentPlanType']]
 			plan_catecory = param['repaymentDetailList'][i]['planCategory']
 			asset_plan_owner = param['repaymentDetailList'][i]['assetPlanOwner']
 			if asset_plan_owner == "foundPartner":
 				if plan_catecory == 1 or plan_catecory == 2:
 					repayment_detail = GetSqlData.get_repayment_detail(
-						project_id=self.r.get("yzf_repayment_projectId"),
-						enviroment=self.env,
+						project_id=r.get("yzf_repayment_projectId"),
+						enviroment=env,
 						period=param['repaymentDetailList'][i]['period'],
 						repayment_plan_type=plan_pay_type
 					)
@@ -215,8 +215,8 @@ class YzfRepayment(unittest.TestCase):
 					)
 				else:
 					plan_list_detail = GetSqlData.get_user_repayment_detail(
-						project_id=self.r.get("yzf_repayment_projectId"),
-						enviroment=self.env,
+						project_id=r.get("yzf_repayment_projectId"),
+						enviroment=env,
 						period=param['repaymentDetailList'][i]['period'],
 						repayment_plan_type=3,
 						feecategory=param['repaymentDetailList'][i]['planCategory']
@@ -232,8 +232,8 @@ class YzfRepayment(unittest.TestCase):
 					)
 			elif asset_plan_owner == "financePartner":
 				user_repayment_detail = GetSqlData.get_user_repayment_detail(
-					project_id=self.r.get("yzf_repayment_projectId"),
-					enviroment=self.env,
+					project_id=r.get("yzf_repayment_projectId"),
+					enviroment=env,
 					period=param['repaymentDetailList'][i]['period'],
 					repayment_plan_type=plan_pay_type
 				)
@@ -248,13 +248,13 @@ class YzfRepayment(unittest.TestCase):
 				)
 			else:
 				pass
-		for i in range(0, len(param['repaymentPlanList'])):
+		for i in range(len(param['repaymentPlanList'])):
 			plan_list_pay_type = plan_type[param['repaymentPlanList'][i]['repaymentPlanType']]
 			plan_list_asset_plan_owner = param['repaymentPlanList'][i]['assetPlanOwner']
 			if plan_list_asset_plan_owner == 'financePartner':
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
-					project_id=self.r.get("yzf_repayment_projectId"),
-					enviroment=self.env,
+					project_id=r.get("yzf_repayment_projectId"),
+					enviroment=env,
 					period=param['repaymentPlanList'][i]['period'],
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -269,8 +269,8 @@ class YzfRepayment(unittest.TestCase):
 				)
 			elif plan_list_asset_plan_owner == 'foundPartner':
 				plan_list_detail = GetSqlData.get_repayment_detail(
-					project_id=self.r.get("yzf_repayment_projectId"),
-					enviroment=self.env,
+					project_id=r.get("yzf_repayment_projectId"),
+					enviroment=env,
 					period=param['repaymentPlanList'][i]['period'],
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -283,10 +283,10 @@ class YzfRepayment(unittest.TestCase):
 						"payTime": Common.get_time("-")
 					}
 				)
-		for i in range(0, len(param['feePlanList'])):
+		for i in range(len(param['feePlanList'])):
 			plan_list_detail = GetSqlData.get_user_repayment_detail(
-				project_id=self.r.get("yzf_repayment_projectId"),
-				enviroment=self.env,
+				project_id=r.get("yzf_repayment_projectId"),
+				enviroment=env,
 				period=param['feePlanList'][i]['period'],
 				repayment_plan_type=3,
 				feecategory=param['feePlanList'][i]['feeCategory']
@@ -305,16 +305,16 @@ class YzfRepayment(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
-			enviroment=self.env,
+			data=json.dumps(param, ensure_ascii=False),
+			enviroment=env,
 			product="pintic"
 		)
 		print("响应信息:%s" % rep)
 		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], data[0]['msgCode'])
-		self.assertEqual(json.loads(rep.text)['content']['message'], "交易成功")
+		assert json.loads(rep.text)['resultCode'] == data[0]['msgCode']
+		assert json.loads(rep.text)['content']['message'] == "交易成功"
 
 
 if __name__ == '__main__':
-	unittest.main()
+	pytest.main()

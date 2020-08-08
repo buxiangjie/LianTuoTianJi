@@ -20,6 +20,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.
 @pytest.fixture(scope="session")
 @allure.step("定义excel文件路径")
 def excel():
-	file = Config().get_item('File', 'yzf_case_file')
+	file = Config().get_item('File', 'yzf_repayment_case_file')
 	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 	return excel

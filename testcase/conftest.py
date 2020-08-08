@@ -11,7 +11,6 @@ import sys
 import os
 
 from common.common_func import Common
-from config.configer import Config
 
 # 把当前目录的父目录加到sys.path中
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
@@ -19,7 +18,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.
 
 def pytest_addoption(parser):
 	parser.addoption("--env", default="test", help="script run enviroment")
-	parser.addoption("--types", default="-")
 
 
 @pytest.fixture(scope="session")
@@ -28,10 +26,6 @@ def env(request):
 
 
 @pytest.fixture(scope="session")
-def types(request):
-	return request.config.getoption("--types")
-
-
-@pytest.fixture(scope="session")
+@allure.step("连接Redis")
 def r(env):
 	return Common.conn_redis(env)
