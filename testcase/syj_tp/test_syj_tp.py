@@ -72,7 +72,7 @@ class SyjTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -110,7 +110,7 @@ class SyjTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -150,7 +150,7 @@ class SyjTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -176,7 +176,7 @@ class SyjTp(unittest.TestCase):
 				"loanTime": Common.get_time("-")
 			}
 		)
-		for i in range(0, len(param['repaymentPlanList'])):
+		for i in range(len(param['repaymentPlanList'])):
 			param['repaymentPlanList'][i].update(
 				{
 					"sourcePlanId": Common.get_random("sourceProjectId"),
@@ -190,7 +190,7 @@ class SyjTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -269,7 +269,7 @@ class SyjTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -435,7 +435,7 @@ class SyjTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)

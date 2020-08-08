@@ -71,7 +71,7 @@ class YzfRepaymentAdvance(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -107,7 +107,7 @@ class YzfRepaymentAdvance(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -140,7 +140,7 @@ class YzfRepaymentAdvance(unittest.TestCase):
 				"loanTime": Common.get_time("-")
 			}
 		)
-		for i in range(0, period * 4):
+		for i in range(period * 4):
 			param['repaymentPlanList'][i].update(
 				{
 					"sourcePlanId": Common.get_random("sourceProjectId"),
@@ -155,7 +155,7 @@ class YzfRepaymentAdvance(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -265,7 +265,7 @@ class YzfRepaymentAdvance(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)

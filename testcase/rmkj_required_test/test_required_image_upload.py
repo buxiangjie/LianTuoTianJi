@@ -33,7 +33,7 @@ class ImageUpload(unittest.TestCase):
         param = json.loads(data['param'])
         headers = json.loads(data['headers'])
         rep = Common.response(faceaddr=data['url'], headers=headers,
-                              data=json.dumps(param, ensure_ascii=False).encode('utf-8'), product='cloudloan',
+                              data=json.dumps(param, ensure_ascii=False), product='cloudloan',
                               enviroment=self.env)
         print("响应结果:%s" % rep)
         print("返回信息:%s" % rep.text)

@@ -81,7 +81,7 @@ class NewRomaTp(unittest.TestCase):
 			headers = json.loads(data[0]['headers'])
 		rep = Common.response(
 			faceaddr=data[0]['url'], headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -116,7 +116,7 @@ class NewRomaTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -147,7 +147,7 @@ class NewRomaTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -171,7 +171,7 @@ class NewRomaTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -199,7 +199,7 @@ class NewRomaTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -256,7 +256,7 @@ class NewRomaTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -286,7 +286,7 @@ class NewRomaTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -318,7 +318,7 @@ class NewRomaTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -353,7 +353,7 @@ class NewRomaTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -386,7 +386,7 @@ class NewRomaTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -412,7 +412,7 @@ class NewRomaTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -438,7 +438,7 @@ class NewRomaTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -474,7 +474,7 @@ class NewRomaTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -493,7 +493,7 @@ class NewRomaTp(unittest.TestCase):
 				"accountId": Common.get_random("transactionId")
 			}
 		)
-		for i in range(0, len(param['resultList'])):
+		for i in range(len(param['resultList'])):
 			param['resultList'][i]['businessDate'] = Common.get_time('day')
 		if len(data[0]['headers']) == 0:
 			headers = None
@@ -502,7 +502,7 @@ class NewRomaTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)

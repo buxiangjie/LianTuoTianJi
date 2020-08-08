@@ -27,12 +27,8 @@ logger = Logger(logger="test_yzf_repayment_tp").getlog()
 @allure.feature("翼支付还款流程")
 class TestYzfRepayment:
 
-	@staticmethod
-	@pytest.fixture(scope="session")
-	def get_type(business_type):
-		return business_type
-
 	@allure.title("翼支付进件接口")
+	@pytest.mark.asset
 	def test_0_approved(self, excel, env, r):
 		"""翼支付进件同意接口"""
 		data = excel_table_byname(excel, 'approved')
@@ -80,6 +76,7 @@ class TestYzfRepayment:
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['msgCode'])
 
 	@allure.title("翼支付放款通知接口")
+	@pytest.mark.asset
 	def test_1_loan_notice(self, excel, env, r):
 		"""翼支付放款通知接口"""
 		GetSqlData.change_project_audit_status(
@@ -117,6 +114,7 @@ class TestYzfRepayment:
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['msgCode'])
 
 	@allure.title("翼支付放款同步接口")
+	@pytest.mark.asset
 	def test_2_loanasset(self, excel, env, r):
 		"""翼支付进件放款同步接口"""
 		global period
@@ -166,6 +164,7 @@ class TestYzfRepayment:
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['msgCode'])
 
 	@allure.title("翼支付还款接口")
+	@pytest.mark.asset
 	def test_3_repayment_one_period(self, excel, env, r):
 		"""翼支付还款一期"""
 		time.sleep(5)

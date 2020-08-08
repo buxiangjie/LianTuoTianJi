@@ -72,7 +72,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -110,7 +110,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -144,7 +144,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 				"loanTime": Common.get_time("-")
 			}
 		)
-		for i in range(0, period * 4):
+		for i in range(period * 4):
 			param['repaymentPlanList'][i].update(
 				{
 					"sourcePlanId": Common.get_random("sourceProjectId"),
@@ -158,7 +158,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -190,7 +190,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 			"Interest": "2"
 		}
 
-		for detail in range(0, len(param['repaymentDetailList'])):
+		for detail in range(len(param['repaymentDetailList'])):
 			param['repaymentDetailList'][detail].update(
 				{
 					"sourceRepaymentDetailId": Common.get_random("serviceSn"),
@@ -199,7 +199,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 					"thisPayAmount": param['repayment']['successAmount']
 				}
 			)
-		for y in range(0, len(param['repaymentPlanList'])):
+		for y in range(len(param['repaymentPlanList'])):
 			plan_pay_type_plan = plan_type.get(param['repaymentPlanList'][y]['repaymentPlanType'])
 			repayment_detail_plan = GetSqlData.get_repayment_detail(
 				project_id=self.r.get("nqh_periods_same_day_return_projectId"),
@@ -228,7 +228,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -269,7 +269,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 					"successAmount": success_amount
 				}
 			)
-			for i in range(0, len(param['repaymentDetailList'])):
+			for i in range(len(param['repaymentDetailList'])):
 				plan_pay_type = plan_type.get(param['repaymentDetailList'][i]['repaymentPlanType'])
 				repayment_detail = GetSqlData.get_repayment_detail(
 					project_id=self.r.get("nqh_periods_same_day_return_projectId"),
@@ -287,7 +287,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 						"payTime": Common.get_time("-")
 					}
 				)
-			for y in range(0, len(param['repaymentPlanList'])):
+			for y in range(len(param['repaymentPlanList'])):
 				plan_pay_type_plan = plan_type.get(param['repaymentPlanList'][y]['repaymentPlanType'])
 				repayment_detail_plan = GetSqlData.get_repayment_detail(
 					project_id=self.r.get("nqh_periods_same_day_return_projectId"),
@@ -316,7 +316,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 			rep = Common.response(
 				faceaddr=data[0]['url'],
 				headers=headers,
-				data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+				data=json.dumps(param, ensure_ascii=False),
 				enviroment=self.env,
 				product="pintic"
 			)

@@ -10,7 +10,6 @@ import os
 import json
 import time
 import sys
-import warnings
 
 from common.common_func import Common
 from log.logger import Logger
@@ -72,7 +71,7 @@ class NqhRepayment(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -109,7 +108,7 @@ class NqhRepayment(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -135,14 +134,14 @@ class NqhRepayment(unittest.TestCase):
 				"loanTime": Common.get_time("-")
 			}
 		)
-		for i in range(0, len(param['repaymentPlanList'])):
+		for i in range(len(param['repaymentPlanList'])):
 			param['repaymentPlanList'][i].update(
 				{
 					"sourcePlanId": Common.get_random("sourceProjectId"),
 					"planPayDate": repaymentdate[param['repaymentPlanList'][i]['period'] - 1]
 				}
 			)
-		for i in range(0, len(param['feePlanList'])):
+		for i in range(len(param['feePlanList'])):
 			param['feePlanList'][i].update(
 				{
 					"sourcePlanId": Common.get_random("sourceProjectId"),
@@ -156,7 +155,7 @@ class NqhRepayment(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -185,7 +184,7 @@ class NqhRepayment(unittest.TestCase):
 			"Interest": "2",
 			"Fee": "3"
 		}
-		for i in range(0, len(param['repaymentDetailList'])):
+		for i in range(len(param['repaymentDetailList'])):
 			plan_pay_type = plan_type[param['repaymentDetailList'][i]['repaymentPlanType']]
 			plan_catecory = param['repaymentDetailList'][i]['planCategory']
 			asset_plan_owner = param['repaymentDetailList'][i]['assetPlanOwner']
@@ -232,7 +231,7 @@ class NqhRepayment(unittest.TestCase):
 				)
 			else:
 				pass
-		for i in range(0, len(param['repaymentPlanList'])):
+		for i in range(len(param['repaymentPlanList'])):
 			plan_list_pay_type = plan_type[param['repaymentPlanList'][i]['repaymentPlanType']]
 			plan_list_asset_plan_owner = param['repaymentPlanList'][i]['assetPlanOwner']
 			if plan_list_asset_plan_owner == 'financePartner':
@@ -263,7 +262,7 @@ class NqhRepayment(unittest.TestCase):
 						"payTime": Common.get_time("-")
 					}
 				)
-		for i in range(0, len(param['feePlanList'])):
+		for i in range(len(param['feePlanList'])):
 			param['feePlanList'][i].update(
 				{
 					"sourcePlanId": Common.get_random("serviceSn"),
@@ -278,7 +277,7 @@ class NqhRepayment(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
