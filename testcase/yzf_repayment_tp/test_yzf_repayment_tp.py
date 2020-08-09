@@ -26,12 +26,14 @@ logger = Logger(logger="test_yzf_repayment_tp").getlog()
 
 @allure.feature("翼支付还款流程")
 class TestYzfRepayment:
+	file = Config().get_item('File', 'yzf_repayment_case_file')
+	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@allure.title("翼支付进件接口")
 	@pytest.mark.asset
-	def test_0_approved(self, excel, env, r):
+	def test_0_approved(self, env, r):
 		"""翼支付进件同意接口"""
-		data = excel_table_byname(excel, 'approved')
+		data = excel_table_byname(self.excel, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo("yzf_repayment", env)
 		r.mset(
@@ -77,13 +79,13 @@ class TestYzfRepayment:
 
 	@allure.title("翼支付放款通知接口")
 	@pytest.mark.asset
-	def test_1_loan_notice(self, excel, env, r):
+	def test_1_loan_notice(self, env, r):
 		"""翼支付放款通知接口"""
 		GetSqlData.change_project_audit_status(
 			project_id=r.get('yzf_repayment_projectId'),
 			enviroment=env
 		)
-		data = excel_table_byname(excel, 'loan_notice')
+		data = excel_table_byname(self.excel, 'loan_notice')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -115,10 +117,10 @@ class TestYzfRepayment:
 
 	@allure.title("翼支付放款同步接口")
 	@pytest.mark.asset
-	def test_2_loanasset(self, excel, env, r):
+	def test_2_loanasset(self, env, r):
 		"""翼支付进件放款同步接口"""
 		global period
-		data = excel_table_byname(excel, 'loan_asset')
+		data = excel_table_byname(self.excel, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data("data", "yzf_tp.json")
 		repaydate = Common.get_repaydate(24)
@@ -165,10 +167,10 @@ class TestYzfRepayment:
 
 	@allure.title("翼支付还款接口")
 	@pytest.mark.asset
-	def test_3_repayment_one_period(self, excel, env, r):
+	def test_3_repayment_one_period(self, env, r):
 		"""翼支付还款一期"""
 		time.sleep(5)
-		data = excel_table_byname(excel, 'repayment')
+		data = excel_table_byname(self.excel, 'repayment')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		success_amount = GetSqlData.get_user_repayment_amount(

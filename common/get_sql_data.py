@@ -186,13 +186,7 @@ class GetSqlData(object):
 		conn = GetSqlData.conn_database(enviroment)
 		try:
 			cur = conn.cursor()
-			create_time = Common.get_not_now_time("before", "minutes", 10)
-			# sql = f"""
-			# 	UPDATE sandbox_saas.credit
-			# 	set credit_status=1,credit_step=4,audit_result='APPROVE',
-			# 	audit_amount=300000,tot_amount=300000,available_amount=300000
-			# 	WHERE id={credit_id};
-			# 	"""
+			create_time = Common.get_new_time("before", "minutes", 10)
 			sql = f"""update sandbox_saas.credit set create_time='{create_time}' where id='{credit_id}';"""
 			cur.execute(sql)
 			conn.commit()

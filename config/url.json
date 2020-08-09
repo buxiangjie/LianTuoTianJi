@@ -1,4 +1,9 @@
 {
+  "pay": {
+    "test": "http://test-rongpay-deduction-busi.igfax.net",
+    "qa": "http://api-qa1.cloudloan.com:11070",
+    "online": "https://rongpay-api.cloudloan.com"
+  },
   "pintic": {
     "dev": "http://192.168.8.88:9011",
     "test": "http://39.107.43.201:9011",

@@ -14,6 +14,9 @@ from log.logger import Logger
 from common.open_excel import excel_table_byname
 from config.configer import Config
 
+# 把当前目录的父目录加到sys.path中
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
+
 logger = Logger(logger="roma_credit_apply_null").getlog()
 
 
@@ -23,11 +26,9 @@ class RomaCreditApplyNull(unittest.TestCase):
 		os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + \
 			Config().get_item('File', 'new_roma_required_case_file')
 	excel_data = excel_table_byname(excel, 'credit_apply_data_null')
-	globals()['param'] = excel_data[0]['param']
-	globals()['url'] = excel_data[0]['url']
-	globals()['headers'] = excel_data[0]['headers']
-
-	# globals()['ls'] = []
+	param = excel_data[0]['param']
+	url = excel_data[0]['url']
+	headers = excel_data[0]['headers']
 
 	def setUp(self):
 		self.env = sys.argv[3]
@@ -40,31 +41,31 @@ class RomaCreditApplyNull(unittest.TestCase):
 		global key, value
 		print("接口名称:%s" % data['casename'])
 		case = data['casename']
-		param = json.loads(globals()['param'])
+		param = json.loads(self.param)
 		key = str(case).split("空")[1].split(".")[0]
 		value = str(case).split("空")[1].split(".")[1]
 		if "List" in key:
-			param[key][0][value] = ''
+			param[key][0][value] = None
 		elif "已婚" in str(case).split("空")[0]:
 			param['personal']['maritalStatus'] = 1
-			param[key][value] = ''
+			param[key][value] = None
 		elif "无合同" in str(case).split("空")[0]:
 			param['orderDetail']['isHasContract'] = 'N'
-			param[key][value] = ''
+			param[key][value] = None
 		elif "无企业" in str(case).split("空")[0]:
 			param['orderDetail']['hasCompany'] = 'N'
-			param[key][value] = ''
+			param[key][value] = None
 		else:
-			param[key][value] = ''
-		if len(globals()['headers']) == 0:
+			param[key][value] = None
+		if len(self.headers) == 0:
 			headers = None
 		else:
-			headers = json.loads(globals()['headers'])
+			headers = json.loads(self.headers)
 		rep = Common.response(
-			faceaddr=globals()['url'],
+			faceaddr=self.url,
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product='roma',
+			product='cloudloan',
 			enviroment=self.env
 		)
 		print("响应结果:%s" % rep)
