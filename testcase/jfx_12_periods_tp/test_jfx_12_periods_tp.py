@@ -55,7 +55,9 @@ class Jfx12PeriodTp(unittest.TestCase):
 			{
 				"cardNum": self.r.get('jfx_12_periods_cardNum'),
 				"custName": self.r.get('jfx_12_periods_custName'),
-				"phone": self.r.get('jfx_12_periods_phone')
+				"phone": self.r.get('jfx_12_periods_phone'),
+				"isDoctor": 0,
+				"applicantClinicRelationship": 1
 			}
 		)
 		param['applyInfo'].update({"applyTime": self.cm.get_time()})
@@ -66,7 +68,11 @@ class Jfx12PeriodTp(unittest.TestCase):
 				"transactionId": self.r.get('jfx_12_periods_transactionId')
 			}
 		)
-
+		# del param["imageInfo"]["businessLicense"] #营业执照
+		del param["imageInfo"]["medicalPracticeCertificate"]  # 本人医师执业证书
+		del param["imageInfo"]["medicalInstitutionLicense"]  # 医疗机构执业许可证
+		del param["imageInfo"]["shareholderCertificate"]  # 股东证明
+		del param["imageInfo"]["authorizationCertificate"]  # 授权证明
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
