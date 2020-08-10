@@ -18,7 +18,6 @@
 - data:存放了各种json文件，网络上爬下的数据，接口用例所用到数据
 - common：封装了用例中需要调用的请求、redis连接、数据库连接、读取Excel/json文件等
 - config：配置文件以及配置文件操作相关
-- drivers：存放了selenium需要调用到的浏览器驱动
 - HtmlReport：测试报告
 - log：日志相关的封装
 - test_report：测试报告输出文件
