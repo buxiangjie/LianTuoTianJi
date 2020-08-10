@@ -195,14 +195,16 @@ class Jfx3PeriodTp(unittest.TestCase):
 		param['applyInfo'].update(
 			{
 				"applyTime": Common.get_time(),
-				"applyAmount": 84920.00
+				"applyAmount": 84920.00,
+				"applyTerm": 6
 			}
 		)
 		param['loanInfo'].update(
 			{
 				"loanAmount": 84920.00,
 				"assetInterestRate": 0.158156,
-				"userInterestRate": 0.158156
+				"userInterestRate": 0.158156,
+				"loanTerm": 6
 			}
 		)
 		param['cardInfo'].update(

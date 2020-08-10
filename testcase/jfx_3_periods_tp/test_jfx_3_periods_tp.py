@@ -190,7 +190,18 @@ class Jfx3PeriodTp(unittest.TestCase):
 				"phone": self.r.get('jfx_3_periods_phone')
 			}
 		)
-		param['applyInfo'].update({"applyTime": Common.get_time()})
+		param['applyInfo'].update(
+			{
+				"applyTime": Common.get_time(),
+				"applyTerm": 3,
+
+			}
+		)
+		param['loanInfo'].update(
+			{
+				"loanTerm": 3
+			}
+		)
 		param['cardInfo'].update(
 			{
 				"bankNameSub": "建设银行",

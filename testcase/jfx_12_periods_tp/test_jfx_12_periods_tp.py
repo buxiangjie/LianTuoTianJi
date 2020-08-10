@@ -195,7 +195,21 @@ class Jfx12PeriodTp(unittest.TestCase):
 				"phone": self.r.get('jfx_12_periods_phone')
 			}
 		)
-		param['applyInfo'].update({"applyTime": self.cm.get_time()})
+		param['applyInfo'].update(
+			{
+				"applyTime": Common.get_time(),
+				"applyAmount": 84920.00,
+				"applyTerm": 12
+			}
+		)
+		param['loanInfo'].update(
+			{
+				"loanAmount": 84920.00,
+				"assetInterestRate": 0.158156,
+				"userInterestRate": 0.158156,
+				"loanTerm": 12
+			}
+		)
 		param['cardInfo'].update(
 			{
 				"bankNameSub": "招商银行",
