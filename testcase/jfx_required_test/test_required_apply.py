@@ -22,12 +22,7 @@ class CreditApply(unittest.TestCase):
 	file = Config().get_item('File', 'jfx_required_case_file')
 	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 	excel_data = excel_table_byname(excel, 'credit_apply_data')
-
-	def setUp(self):
-		self.env = 'qa'
-
-	def tearDown(self):
-		pass
+	env = 'qa'
 
 	@ddt.data(*excel_data)
 	def test_credit_apply(self, data):
@@ -40,7 +35,7 @@ class CreditApply(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -48,7 +43,6 @@ class CreditApply(unittest.TestCase):
 		print("返回信息:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		self.assertEqual(str(json.loads(rep.text)['resultCode']), data['resultCode'])
-	# self.assertIn(str(data['casename']).split("-")[2], json.loads(rep.text)['errMsg'])
 
 
 if __name__ == '__main__':

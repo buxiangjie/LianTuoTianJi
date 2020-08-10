@@ -75,7 +75,7 @@ class Kkd3Tp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			enviroment=self.env
 		)
@@ -106,7 +106,7 @@ class Kkd3Tp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			enviroment=self.env
 		)
@@ -137,7 +137,7 @@ class Kkd3Tp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			enviroment=self.env
 		)
@@ -168,7 +168,7 @@ class Kkd3Tp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			enviroment=self.env
 		)
@@ -199,7 +199,7 @@ class Kkd3Tp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			enviroment=self.env
 		)
@@ -221,7 +221,7 @@ class Kkd3Tp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			enviroment=self.env
 		)
@@ -251,7 +251,7 @@ class Kkd3Tp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			enviroment=self.env
 		)
@@ -280,7 +280,7 @@ class Kkd3Tp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			enviroment=self.env
 		)
@@ -311,7 +311,7 @@ class Kkd3Tp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			enviroment=self.env
 		)
@@ -342,7 +342,7 @@ class Kkd3Tp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			enviroment=self.env
 		)
@@ -370,7 +370,7 @@ class Kkd3Tp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			enviroment=self.env
 		)
@@ -403,7 +403,7 @@ class Kkd3Tp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			enviroment=self.env
 		)
@@ -462,7 +462,7 @@ class Kkd3Tp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			enviroment=self.env
 		)
@@ -516,7 +516,7 @@ class Kkd3Tp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			enviroment=self.env
 		)
@@ -547,7 +547,7 @@ class Kkd3Tp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			enviroment=self.env
 		)
@@ -577,7 +577,7 @@ class Kkd3Tp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			enviroment=self.env
 		)
@@ -615,7 +615,7 @@ class Kkd3Tp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="gateway"
 		)

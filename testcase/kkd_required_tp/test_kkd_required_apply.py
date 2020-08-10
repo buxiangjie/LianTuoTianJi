@@ -30,12 +30,6 @@ class KkdApply(unittest.TestCase):
 		cls.headers = KkdApply.excel_data[0]['headers']
 		cls.url = KkdApply.excel_data[0]['url']
 
-	def setUp(self):
-		pass
-
-	def tearDown(self):
-		pass
-
 	@ddt.data(*excel_data)
 	def test_apply(self, data):
 		global key, value
@@ -55,7 +49,7 @@ class KkdApply(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=self.url,
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product='cloudloan',
 			enviroment=self.env
 		)

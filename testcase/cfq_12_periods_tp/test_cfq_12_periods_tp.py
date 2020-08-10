@@ -37,7 +37,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 
 	def test_100_approved(self):
 		"""橙分期进件同意接口"""
-		excel = self.excel + Config().Get_Item('File', 'cfq_12_periods_case_file')
+		excel = self.excel + Config().get_item('File', 'cfq_12_periods_case_file')
 		data = excel_table_byname(excel, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
@@ -91,7 +91,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -112,7 +112,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			project_id=self.r.get("cfq_12_periods_projectId"),
 			enviroment=self.env
 		)
-		excel = self.excel + Config().Get_Item('File', 'cfq_12_periods_case_file')
+		excel = self.excel + Config().get_item('File', 'cfq_12_periods_case_file')
 		data = excel_table_byname(excel, 'query_audit_status')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
@@ -130,7 +130,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -140,7 +140,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 
 	def test_101_loan_notice(self):
 		"""橙分期放款通知接口"""
-		excel = self.excel + Config().Get_Item('File', 'cfq_12_periods_case_file')
+		excel = self.excel + Config().get_item('File', 'cfq_12_periods_case_file')
 		data = excel_table_byname(excel, 'loan_notice')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
@@ -163,7 +163,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -174,7 +174,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 	def test_102_loanasset(self):
 		"""橙分期进件放款同步接口"""
 		global period
-		excel = self.excel + Config().Get_Item('File', 'cfq_12_periods_case_file')
+		excel = self.excel + Config().get_item('File', 'cfq_12_periods_case_file')
 		data = excel_table_byname(excel, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
@@ -210,7 +210,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -222,7 +222,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 	# @unittest.skip("-")
 	def test_103_sign_borrow(self):
 		"""上传借款协议"""
-		excel = self.excel + Config().Get_Item('File', 'cfq_12_periods_case_file')
+		excel = self.excel + Config().get_item('File', 'cfq_12_periods_case_file')
 		data = excel_table_byname(excel, 'contract_sign')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'cfq_sign_borrow.json')
@@ -243,7 +243,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="pintic",
 			enviroment=self.env
 		)
@@ -258,7 +258,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 	def test_104_repayment(self):
 		"""橙分期12期还款一期"""
 		global period, plan_pay_type, plan_list_detail
-		excel = self.excel + Config().Get_Item('File', 'cfq_12_periods_case_file')
+		excel = self.excel + Config().get_item('File', 'cfq_12_periods_case_file')
 		data = excel_table_byname(excel, 'repayment')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
@@ -386,7 +386,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -401,7 +401,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 	def test_105_settle_in_advance_phase_one(self):
 		"""橙分期在第一期提前结清"""
 		global period
-		excel = self.excel + Config().Get_Item('File', 'cfq_12_periods_case_file')
+		excel = self.excel + Config().get_item('File', 'cfq_12_periods_case_file')
 		data = excel_table_byname(excel, 'settle_in_advance')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common().get_json_data('data', 'cfq_12_periods_settle_in_advance_phase_one.json')
@@ -514,7 +514,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			rep = Common.response(
 				faceaddr=data[0]['url'],
 				headers=headers,
-				data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+				data=json.dumps(param, ensure_ascii=False),
 				enviroment=self.env,
 				product="pintic"
 			)
@@ -529,7 +529,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 	def test_106_settle_in_advance_phase_two(self):
 		"""橙分期在第二期提前结清"""
 		global period, plan_list_detail
-		excel = self.excel + Config().Get_Item('File', 'cfq_12_periods_case_file')
+		excel = self.excel + Config().get_item('File', 'cfq_12_periods_case_file')
 		data = excel_table_byname(excel, 'settle_in_advance')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common().get_json_data('data', 'cfq_12_periods_settle_in_advance_phase_two.json')
@@ -644,7 +644,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -658,7 +658,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 	@unittest.skip("-")
 	def test_107_compensation(self):
 		"""橙分期12期代偿一期"""
-		excel = self.excel + Config().Get_Item('File', 'cfq_12_periods_case_file')
+		excel = self.excel + Config().get_item('File', 'cfq_12_periods_case_file')
 		data = excel_table_byname(excel, 'compensation')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
@@ -720,7 +720,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -732,7 +732,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 	@unittest.skip("-")
 	def test_108_repurchase(self):
 		"""橙分期12期回购一期"""
-		excel = self.excel + Config().Get_Item('File', 'cfq_12_periods_case_file')
+		excel = self.excel + Config().get_item('File', 'cfq_12_periods_case_file')
 		data = excel_table_byname(excel, 'repurchase')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
@@ -784,7 +784,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -797,7 +797,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 	def test_109_after_comp_repay(self):
 		"""橙分期12期代偿后还款"""
 		global period, plan_pay_type, plan_list_detail
-		excel = self.excel + Config().Get_Item('File', 'cfq_12_periods_case_file')
+		excel = self.excel + Config().get_item('File', 'cfq_12_periods_case_file')
 		data = excel_table_byname(excel, 'after_comp_repay')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
@@ -948,7 +948,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)

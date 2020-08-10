@@ -45,7 +45,7 @@ class JfqPorjectNull(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=self.url,
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product='cloudloan',
 			enviroment=self.env
 		)
@@ -84,7 +84,7 @@ class JfqPorject(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=self.url,
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product='cloudloan',
 			enviroment=self.env
 		)

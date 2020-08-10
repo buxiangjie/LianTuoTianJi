@@ -27,7 +27,7 @@ class JfxTp(unittest.TestCase):
 	@classmethod
 	def setUpClass(cls):
 		cls.cm = Common()
-		cls.env = sys.argv[3]
+		cls.env = 'qa'
 		cls.sql = GetSqlData()
 		cls.r = cls.cm.conn_redis(enviroment=cls.env)
 		file = Config().get_item('File', 'jfx_case_file')
@@ -69,8 +69,11 @@ class JfxTp(unittest.TestCase):
 		)
 		param["entityInfo"]["enterpriseCertificateNum"] = Common.get_random("transactionId")
 		param["entityInfo"]["enterpriseCertificateType"] = 1
-		# del param["imageInfo"]["businessLicense"]
-		# del param["imageInfo"]["medicalPracticeCertificate"]
+		# del param["imageInfo"]["businessLicense"] #营业执照
+		del param["imageInfo"]["medicalPracticeCertificate"] #本人医师执业证书
+		del param["imageInfo"]["medicalInstitutionLicense"] #医疗机构执业许可证
+		del param["imageInfo"]["shareholderCertificate"] #股东证明
+		del param["imageInfo"]["authorizationCertificate"] #授权证明
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -79,7 +82,7 @@ class JfxTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -118,7 +121,7 @@ class JfxTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -144,7 +147,7 @@ class JfxTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -171,7 +174,7 @@ class JfxTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -197,10 +200,22 @@ class JfxTp(unittest.TestCase):
 			{
 				"cardNum": self.r.get('jfx_cardNum'),
 				"custName": self.r.get('jfx_custName'),
-				"phone": self.r.get('jfx_phone')
+				"phone": self.r.get('jfx_phone'),
+				"isDoctor": 0,
+				"applicantClinicRelationship": 1
 			}
 		)
-		param['applyInfo'].update({"applyTime": self.cm.get_time()})
+		param['applyInfo'].update(
+			{
+				"applyTime": self.cm.get_time(),
+				"applyAmount": 300000.00
+			}
+		)
+		param['loanInfo'].update(
+			{
+				"loanAmount": 300000.00
+			}
+		)
 		param['cardInfo'].update(
 			{
 				"bankNameSub": "建设银行",
@@ -217,7 +232,7 @@ class JfxTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -249,7 +264,7 @@ class JfxTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -280,7 +295,7 @@ class JfxTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -311,7 +326,7 @@ class JfxTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -343,7 +358,7 @@ class JfxTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -370,7 +385,7 @@ class JfxTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="cloudloan"
 		)
@@ -391,7 +406,7 @@ class JfxTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -401,8 +416,8 @@ class JfxTp(unittest.TestCase):
 		self.assertEqual(int(data[0]['resultCode']), json.loads(rep.text)['resultCode'])
 		self.r.set("jfx_repayment_plan", json.dumps(json.loads(rep.text)['content']['repaymentPlanList']))
 
-	@unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
-	# @unittest.skip("11")
+	# @unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
+	@unittest.skip("11")
 	def test_112_repayment(self):
 		"""还款流水推送"""
 		data = excel_table_byname(self.excel, 'repayment')
@@ -440,7 +455,7 @@ class JfxTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="cloudloan"
 		)
@@ -449,8 +464,8 @@ class JfxTp(unittest.TestCase):
 		logger.info("返回信息:%s" % rep.text)
 		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
 
-	@unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
-	# @unittest.skip("11")
+	# @unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
+	@unittest.skip("11")
 	def test_113_capital_flow(self):
 		"""资金流水推送"""
 		data = excel_table_byname(self.excel, 'cash_push')
@@ -480,7 +495,7 @@ class JfxTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="cloudloan"
 		)

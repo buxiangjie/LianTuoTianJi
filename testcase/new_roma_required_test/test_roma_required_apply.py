@@ -23,24 +23,17 @@ class RomaCreditApply(unittest.TestCase):
 		os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + \
 			Config().get_item('File', 'new_roma_required_case_file')
 	excel_data = excel_table_byname(excel, 'credit_apply_data_new')
-	globals()['param'] = excel_data[0]['param']
-	globals()['url'] = excel_data[0]['url']
-	globals()['headers'] = excel_data[0]['headers']
-
-	# globals()['ls'] = []
-
-	def setUp(self):
-		self.env = 'test'
-
-	def tearDown(self):
-		pass
+	param = excel_data[0]['param']
+	url = excel_data[0]['url']
+	headers = excel_data[0]['headers']
+	env = 'test'
 
 	@ddt.data(*excel_data)
 	def test_credit_apply(self, data):
 		global key, value
 		print("接口名称:%s" % data['casename'])
 		case = data['casename']
-		param = json.loads(globals()['param'])
+		param = json.loads(self.param)
 		key = str(case).split("项")[1].split(".")[0]
 		value = str(case).split("项")[1].split(".")[1]
 		aim = 0
@@ -60,12 +53,12 @@ class RomaCreditApply(unittest.TestCase):
 				del param[key][value]
 			else:
 				del param[key][0][value]
-		if len(globals()['headers']) == 0:
+		if len(self.headers) == 0:
 			headers = None
 		else:
-			headers = json.loads(globals()['headers'])
+			headers = json.loads(self.headers)
 		rep = Common.response(
-			faceaddr=globals()['url'],
+			faceaddr=self.url,
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product='cloudloan',

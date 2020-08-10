@@ -10,7 +10,6 @@ import os
 import json
 import time
 import sys
-import warnings
 
 from common.common_func import Common
 from log.logger import Logger
@@ -74,7 +73,7 @@ class JqhRepayment(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -111,7 +110,7 @@ class JqhRepayment(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -152,7 +151,7 @@ class JqhRepayment(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)
@@ -275,7 +274,7 @@ class JqhRepayment(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="pintic"
 		)

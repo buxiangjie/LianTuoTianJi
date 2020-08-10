@@ -27,7 +27,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 	def setUpClass(cls):
 		cls.env = sys.argv[3]
 		cls.r = Common.conn_redis(enviroment=cls.env)
-		file = Config().get_item('File', 'jfx_6_periods_case_file')
+		file = Config().get_item('File', 'jfx_mul_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@classmethod
@@ -70,7 +70,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -104,7 +104,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -132,7 +132,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -163,7 +163,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -221,7 +221,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -253,7 +253,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -284,7 +284,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -315,7 +315,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -348,7 +348,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -378,7 +378,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="cloudloan"
 		)
@@ -399,7 +399,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -448,7 +448,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="cloudloan"
 		)
@@ -502,7 +502,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 			rep = Common.response(
 				faceaddr=data[0]['url'],
 				headers=headers,
-				data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+				data=json.dumps(param, ensure_ascii=False),
 				enviroment=self.env,
 				product="cloudloan"
 			)
@@ -541,7 +541,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="cloudloan"
 		)

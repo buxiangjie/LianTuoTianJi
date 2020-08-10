@@ -30,7 +30,7 @@ class Jfx12PeriodTp(unittest.TestCase):
 		cls.env = 'qa'
 		cls.sql = GetSqlData()
 		cls.r = cls.cm.conn_redis(enviroment=cls.env)
-		file = Config().get_item('File', 'jfx_12_periods_case_file')
+		file = Config().get_item('File', 'jfx_mul_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@classmethod
@@ -74,7 +74,7 @@ class Jfx12PeriodTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -108,7 +108,7 @@ class Jfx12PeriodTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -135,7 +135,7 @@ class Jfx12PeriodTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -166,7 +166,7 @@ class Jfx12PeriodTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -212,7 +212,7 @@ class Jfx12PeriodTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -244,7 +244,7 @@ class Jfx12PeriodTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -275,7 +275,7 @@ class Jfx12PeriodTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -306,7 +306,7 @@ class Jfx12PeriodTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -338,7 +338,7 @@ class Jfx12PeriodTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -367,7 +367,7 @@ class Jfx12PeriodTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="cloudloan"
 		)
@@ -388,7 +388,7 @@ class Jfx12PeriodTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			enviroment=self.env
 		)
@@ -437,7 +437,7 @@ class Jfx12PeriodTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="cloudloan"
 		)
@@ -487,7 +487,7 @@ class Jfx12PeriodTp(unittest.TestCase):
 			rep = self.cm.response(
 				faceaddr=data[0]['url'],
 				headers=headers,
-				data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+				data=json.dumps(param, ensure_ascii=False),
 				enviroment=self.env,
 				product="cloudloan"
 			)
@@ -523,7 +523,7 @@ class Jfx12PeriodTp(unittest.TestCase):
 		rep = self.cm.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=json.dumps(param, ensure_ascii=False).encode('utf-8'),
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
 			product="cloudloan"
 		)
