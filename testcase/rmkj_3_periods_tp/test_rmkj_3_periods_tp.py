@@ -37,7 +37,7 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	def test_100_apply(self, r, env):
-		"""进件"""
+		"""进件申请"""
 		data = excel_table_byname(self.excel, 'apply')
 		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo('rmkj_3_periods', env)
@@ -99,7 +99,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
 		projectId = json.loads(rep.text)['content']['projectId']
 		r.set('rmkj_3_periods_projectId', projectId)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
@@ -139,8 +138,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("进件结果查询")
@@ -178,8 +175,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 		assert json.loads(rep.text)['content']['auditStatus'] == 2
 
@@ -218,8 +213,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		r.set("rmkj_3_periods_contractId", json.loads(rep.text)['content']['contractId'])
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
@@ -258,8 +251,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("上传医疗美容图片")
@@ -288,8 +279,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("合同结果查询")
@@ -327,8 +316,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		rep.text['content'] = "太长隐藏了~~"
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("预签约")
@@ -374,8 +361,6 @@ class TestRmkj3Tp:
 			product='pay',
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		r.set("rmkj_3_periods_signTaskId", json.loads(rep.text)['data']['signTaskId'])
 		assert json.loads(rep.text)['code'] == int(data[0]['resultCode'])
 
@@ -412,8 +397,6 @@ class TestRmkj3Tp:
 			product='pay',
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['code'] == int(data[0]['resultCode'])
 		assert json.loads(rep.text)['data']['status'] == 3
 
@@ -450,8 +433,6 @@ class TestRmkj3Tp:
 			product='pay',
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['code'] == int(data[0]['resultCode'])
 		assert json.loads(rep.text)['data']['status'] == 3
 
@@ -499,8 +480,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("放款前还款计划试算")
@@ -536,8 +515,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("放款申请")
@@ -579,8 +556,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 		# 修改支付表中的品钛返回code
 		time.sleep(8)
@@ -616,8 +591,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 		assert json.loads(rep.text)['content']['projectLoanStatus'] == 3
 
@@ -652,8 +625,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		r.set("rmkj_3_periods_repayment_plan", json.dumps(json.loads(rep.text)['content']['repaymentPlanList']))
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
@@ -688,8 +659,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		r.set(
 			"rmkj_3_periods_early_settlement_repayment_plan",
 			json.dumps(json.loads(rep.text)['content']['repaymentPlanList'])
@@ -726,8 +695,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		r.set(
 			"rmkj_3_periods_refunds_repayment_plan",
 			json.dumps(json.loads(rep.text)['content']['repaymentPlanList'])
@@ -782,8 +749,6 @@ class TestRmkj3Tp:
 			product="gateway",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		r.set("rmkj_3_periods_deductionTaskId", json.loads(rep.text)['content']['deductionTaskId'])
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
@@ -839,9 +804,9 @@ class TestRmkj3Tp:
 				product="cloudloan",
 				enviroment=env
 			)
-			print("响应信息:%s" % rep)
 
-			logger.info("返回信息:%s" % rep.text)
+
+
 			r.set("rmkj_3_periods_deductionTaskId", json.loads(rep.text)['content']['deductionTaskId'])
 			assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 			time.sleep(5)
@@ -890,8 +855,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		r.set("rmkj_3_periods_deductionTaskId", json.loads(rep.text)['content']['deductionTaskId'])
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
@@ -927,8 +890,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
 	# @unittest.skipUnless(sys.argv[4] == "repayment" or sys.argv[4] == "early_settlement", "-")
@@ -955,8 +916,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
 	# @unittest.skipUnless(sys.argv[4] == "repayment_offline", "-")
@@ -1012,8 +971,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
 	# @unittest.skipUnless(sys.argv[4] == "early_settlement_offline", "-")
@@ -1068,8 +1025,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
 	# @unittest.skipUnless(sys.argv[4] == "refunds", "-")
@@ -1123,8 +1078,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
 
