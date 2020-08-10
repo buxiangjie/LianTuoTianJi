@@ -100,7 +100,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		projectId = json.loads(rep.text)['content']['projectId']
 		r.set('rmkj_3_periods_projectId', projectId)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
@@ -141,7 +140,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
@@ -181,7 +179,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 		assert json.loads(rep.text)['content']['auditStatus'] == 2
@@ -222,7 +219,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		r.set("rmkj_3_periods_contractId", json.loads(rep.text)['content']['contractId'])
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
@@ -263,7 +259,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
@@ -294,7 +289,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
@@ -334,7 +328,6 @@ class TestRmkj3Tp:
 		)
 		rep.text['content'] = "太长隐藏了~~"
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
@@ -382,7 +375,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		r.set("rmkj_3_periods_signTaskId", json.loads(rep.text)['data']['signTaskId'])
 		assert json.loads(rep.text)['code'] == int(data[0]['resultCode'])
@@ -421,7 +413,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['code'] == int(data[0]['resultCode'])
 		assert json.loads(rep.text)['data']['status'] == 3
@@ -460,7 +451,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['code'] == int(data[0]['resultCode'])
 		assert json.loads(rep.text)['data']['status'] == 3
@@ -510,7 +500,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
@@ -548,7 +537,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
@@ -592,7 +580,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 		# 修改支付表中的品钛返回code
@@ -630,7 +617,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 		assert json.loads(rep.text)['content']['projectLoanStatus'] == 3
@@ -667,7 +653,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		r.set("rmkj_3_periods_repayment_plan", json.dumps(json.loads(rep.text)['content']['repaymentPlanList']))
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
@@ -704,7 +689,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		r.set(
 			"rmkj_3_periods_early_settlement_repayment_plan",
@@ -743,7 +727,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		r.set(
 			"rmkj_3_periods_refunds_repayment_plan",
@@ -800,7 +783,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		r.set("rmkj_3_periods_deductionTaskId", json.loads(rep.text)['content']['deductionTaskId'])
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
@@ -858,7 +840,7 @@ class TestRmkj3Tp:
 				enviroment=env
 			)
 			print("响应信息:%s" % rep)
-			print("返回json:%s" % rep.text)
+
 			logger.info("返回信息:%s" % rep.text)
 			r.set("rmkj_3_periods_deductionTaskId", json.loads(rep.text)['content']['deductionTaskId'])
 			assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
@@ -909,7 +891,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		r.set("rmkj_3_periods_deductionTaskId", json.loads(rep.text)['content']['deductionTaskId'])
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
@@ -947,7 +928,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
@@ -976,7 +956,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
@@ -1034,7 +1013,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
@@ -1091,7 +1069,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
@@ -1147,7 +1124,6 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
 		assert json.loads(rep.text)['resultCode'] == int(data[0]['resultCode'])
 
