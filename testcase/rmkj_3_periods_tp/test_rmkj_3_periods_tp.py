@@ -332,6 +332,7 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
+		rep.text['content'] = "太长隐藏了~~"
 		print("响应信息:%s" % rep)
 		print("返回json:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
