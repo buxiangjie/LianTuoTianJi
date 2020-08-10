@@ -99,9 +99,9 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		projectId = json.loads(rep)['content']['projectId']
+		projectId = rep['content']['projectId']
 		r.set('rmkj_3_periods_projectId', projectId)
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("上传借款授信协议")
 	@allure.severity("blocker")
@@ -138,7 +138,7 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("进件结果查询")
 	@allure.severity("trivial")
@@ -175,8 +175,8 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
-		assert json.loads(rep)['content']['auditStatus'] == 2
+		assert rep['resultCode'] == int(data[0]['resultCode'])
+		assert rep['content']['auditStatus'] == 2
 
 	@allure.title("上传借款协议")
 	@allure.severity("blocker")
@@ -213,8 +213,8 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		r.set("rmkj_3_periods_contractId", json.loads(rep)['content']['contractId'])
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+		r.set("rmkj_3_periods_contractId", rep['content']['contractId'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("上传还款计划文件")
 	@allure.severity("minor")
@@ -251,7 +251,7 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("上传医疗美容图片")
 	@allure.severity("trivial")
@@ -279,7 +279,7 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("合同结果查询")
 	@allure.severity("trivial")
@@ -316,7 +316,7 @@ class TestRmkj3Tp:
 			enviroment=env
 		)
 		rep['content'] = "太长隐藏了~~"
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("预签约")
 	@allure.severity("blocker")
@@ -361,8 +361,8 @@ class TestRmkj3Tp:
 			product='pay',
 			enviroment=env
 		)
-		r.set("rmkj_3_periods_signTaskId", json.loads(rep)['data']['signTaskId'])
-		assert json.loads(rep)['code'] == int(data[0]['resultCode'])
+		r.set("rmkj_3_periods_signTaskId", rep['data']['signTaskId'])
+		assert rep['code'] == int(data[0]['resultCode'])
 
 	@allure.title("确认签约")
 	@allure.severity("blocker")
@@ -397,8 +397,8 @@ class TestRmkj3Tp:
 			product='pay',
 			enviroment=env
 		)
-		assert json.loads(rep)['code'] == int(data[0]['resultCode'])
-		assert json.loads(rep)['data']['status'] == 3
+		assert rep['code'] == int(data[0]['resultCode'])
+		assert rep['data']['status'] == 3
 
 	@allure.title("绑卡结果查询")
 	@allure.severity("normal")
@@ -433,8 +433,8 @@ class TestRmkj3Tp:
 			product='pay',
 			enviroment=env
 		)
-		assert json.loads(rep)['code'] == int(data[0]['resultCode'])
-		assert json.loads(rep)['data']['status'] == 3
+		assert rep['code'] == int(data[0]['resultCode'])
+		assert rep['data']['status'] == 3
 
 	@allure.title("还款卡推送")
 	@allure.severity("blocker")
@@ -480,7 +480,7 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("放款前还款计划试算")
 	@allure.severity("normal")
@@ -515,7 +515,7 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("放款申请")
 	@allure.severity("blocker")
@@ -556,7 +556,7 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 		# 修改支付表中的品钛返回code
 		time.sleep(8)
 		GetSqlData.change_pay_status(
@@ -591,8 +591,8 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
-		assert json.loads(rep)['content']['projectLoanStatus'] == 3
+		assert rep['resultCode'] == int(data[0]['resultCode'])
+		assert rep['content']['projectLoanStatus'] == 3
 
 	@allure.title("还款计划查询")
 	@allure.severity("blocker")
@@ -625,8 +625,8 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		r.set("rmkj_3_periods_repayment_plan", json.dumps(json.loads(rep)['content']['repaymentPlanList']))
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+		r.set("rmkj_3_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
 	# @unittest.skip("跳过")
@@ -661,9 +661,9 @@ class TestRmkj3Tp:
 		)
 		r.set(
 			"rmkj_3_periods_early_settlement_repayment_plan",
-			json.dumps(json.loads(rep)['content']['repaymentPlanList'])
+			json.dumps(rep['content']['repaymentPlanList'])
 		)
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	# @unittest.skipUnless(sys.argv[4] == "refunds", "-")
 	# @unittest.skip("跳过")
@@ -697,9 +697,9 @@ class TestRmkj3Tp:
 		)
 		r.set(
 			"rmkj_3_periods_refunds_repayment_plan",
-			json.dumps(json.loads(rep)['content']['repaymentPlanList'])
+			json.dumps(rep['content']['repaymentPlanList'])
 		)
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	# @unittest.skipUnless(sys.argv[4] == "repayment", "-")
 	# @unittest.skip("跳过")
@@ -749,8 +749,8 @@ class TestRmkj3Tp:
 			product="gateway",
 			enviroment=env
 		)
-		r.set("rmkj_3_periods_deductionTaskId", json.loads(rep)['content']['deductionTaskId'])
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+		r.set("rmkj_3_periods_deductionTaskId", rep['content']['deductionTaskId'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	# @unittest.skip("跳过")
 	# @unittest.skipUnless(sys.argv[4] == "all_periods", "-")
@@ -807,8 +807,8 @@ class TestRmkj3Tp:
 
 
 
-			r.set("rmkj_3_periods_deductionTaskId", json.loads(rep)['content']['deductionTaskId'])
-			assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+			r.set("rmkj_3_periods_deductionTaskId", rep['content']['deductionTaskId'])
+			assert rep['resultCode'] == int(data[0]['resultCode'])
 			time.sleep(5)
 
 	# @unittest.skip("跳过")
@@ -855,8 +855,8 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		r.set("rmkj_3_periods_deductionTaskId", json.loads(rep)['content']['deductionTaskId'])
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+		r.set("rmkj_3_periods_deductionTaskId", rep['content']['deductionTaskId'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	# @unittest.skipUnless(sys.argv[4] == "offline_partial", "-")
 	# @unittest.skip("跳过")
@@ -890,7 +890,7 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	# @unittest.skipUnless(sys.argv[4] == "repayment" or sys.argv[4] == "early_settlement", "-")
 	# @unittest.skip("跳过")
@@ -916,7 +916,7 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	# @unittest.skipUnless(sys.argv[4] == "repayment_offline", "-")
 	# @unittest.skip("跳过")
@@ -971,7 +971,7 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	# @unittest.skipUnless(sys.argv[4] == "early_settlement_offline", "-")
 	# @unittest.skip("跳过")
@@ -1025,7 +1025,7 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	# @unittest.skipUnless(sys.argv[4] == "refunds", "-")
 	# @unittest.skip("跳过")
@@ -1078,7 +1078,7 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		assert json.loads(rep)['resultCode'] == int(data[0]['resultCode'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 
 if __name__ == '__main__':
