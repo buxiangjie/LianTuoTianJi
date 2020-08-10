@@ -315,7 +315,6 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			enviroment=env
 		)
-		rep['content'] = "太长隐藏了~~"
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("预签约")
