@@ -71,11 +71,8 @@ class TestYzfRepayment:
 			enviroment=env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		r.set("yzf_repayment_projectId", json.loads(rep.text)['content']['projectId'])
-		assert json.loads(rep.text)['resultCode'] == int(data[0]['msgCode'])
+		r.set("yzf_repayment_projectId", rep['content']['projectId'])
+		assert rep['resultCode'] == int(data[0]['msgCode'])
 
 	@allure.title("翼支付放款通知接口")
 	@pytest.mark.asset
@@ -111,9 +108,7 @@ class TestYzfRepayment:
 			enviroment=env,
 			product="pintic"
 		)
-		print("返回信息:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		assert json.loads(rep.text)['resultCode'] == int(data[0]['msgCode'])
+		assert rep['resultCode'] == int(data[0]['msgCode'])
 
 	@allure.title("翼支付放款同步接口")
 	@pytest.mark.asset
@@ -160,10 +155,7 @@ class TestYzfRepayment:
 			enviroment=env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		assert json.loads(rep.text)['resultCode'] == int(data[0]['msgCode'])
+		assert rep['resultCode'] == int(data[0]['msgCode'])
 
 	@allure.title("翼支付还款接口")
 	@pytest.mark.asset
@@ -310,11 +302,8 @@ class TestYzfRepayment:
 			enviroment=env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		assert json.loads(rep.text)['resultCode'] == data[0]['msgCode']
-		assert json.loads(rep.text)['content']['message'] == "交易成功"
+		assert rep['resultCode'] == data[0]['msgCode']
+		assert rep['content']['message'] == "交易成功"
 
 
 if __name__ == '__main__':

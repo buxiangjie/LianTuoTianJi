@@ -111,7 +111,6 @@ class TestYzfTp:
 			enviroment=env,
 			product="pintic"
 		)
-		print("返回信息:%s" % rep.text)
 		assert rep['resultCode'] == int(data[0]['msgCode'])
 
 	@allure.title("翼支付放款同步")
