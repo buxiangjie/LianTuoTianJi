@@ -326,7 +326,6 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
-	@pytest.mark.settle
 	def test_106_sign(self, r, env):
 		"""预签约"""
 		data = excel_table_byname(self.excel, 'sign')
@@ -371,6 +370,7 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
+	@pytest.mark.settle
 	def test_107_confirm(self, r, env):
 		"""确认签约"""
 		data = excel_table_byname(self.excel, 'confirm')
