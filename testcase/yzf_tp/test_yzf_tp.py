@@ -73,11 +73,8 @@ class TestYzfTp:
 			enviroment=env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		r.set("yzf_projectId", json.loads(rep.text)['content']['projectId'])
-		assert json.loads(rep.text)['resultCode'] == int(data[0]['msgCode'])
+		r.set("yzf_projectId", rep['content']['projectId'])
+		assert rep['resultCode'] == int(data[0]['msgCode'])
 		GetSqlData.change_project_audit_status(
 			project_id=r.get('yzf_projectId'),
 			enviroment=env
@@ -115,8 +112,7 @@ class TestYzfTp:
 			product="pintic"
 		)
 		print("返回信息:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		assert json.loads(rep.text)['resultCode'] == int(data[0]['msgCode'])
+		assert rep['resultCode'] == int(data[0]['msgCode'])
 
 	@allure.title("翼支付放款同步")
 	@pytest.mark.asset
@@ -168,10 +164,7 @@ class TestYzfTp:
 			enviroment=env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		assert json.loads(rep.text)['resultCode'] == int(data[0]['msgCode'])
+		assert rep['resultCode'] == int(data[0]['msgCode'])
 
 	# @unittest.skip("-")
 	# @unittest.skipUnless(sys.argv[4] == "compensation", "-")
@@ -250,10 +243,7 @@ class TestYzfTp:
 			enviroment=env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		assert json.loads(rep.text)['resultCode'] == data[0]['msgCode']
+		assert rep['resultCode'] == data[0]['msgCode']
 
 	# @unittest.skip("-")
 	# @unittest.skipUnless(sys.argv[4] == "compensation_after_repay", "-")
@@ -478,11 +468,8 @@ class TestYzfTp:
 			enviroment=env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		assert json.loads(rep.text)['resultCode'] == data[0]['msgCode']
-		assert json.loads(rep.text)['content']['message'] == "交易成功"
+		assert rep['resultCode'] == data[0]['msgCode']
+		assert rep['content']['message'] == "交易成功"
 
 
 if __name__ == '__main__':

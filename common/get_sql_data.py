@@ -245,9 +245,10 @@ class GetSqlData(object):
 		"""放款申请后调用，查询放款状态是否成功"""
 		global res
 		print("开始检查放款步骤")
-		time.sleep(4)
+		time.sleep(5)
+		Common.trigger_task("projectLoanReparationJob", enviroment)
 		if GetSqlData().check_loan_result(enviroment, project_id) == -1:
-			print("放款状态不正确，未申请放款成功")
+			raise Exception("放款状态不正确，未申请放款成功")
 		else:
 			try:
 				version = 1
@@ -262,7 +263,7 @@ class GetSqlData(object):
 					if res != 1:
 						print(f"当前loan_result为:{res};当前循环次数为:{version}")
 						version += 1
-						time.sleep(10)
+						time.sleep(5)
 			except Exception as e:
 				raise e
 

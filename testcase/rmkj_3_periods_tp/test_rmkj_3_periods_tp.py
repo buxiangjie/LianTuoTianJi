@@ -744,8 +744,8 @@ class TestRmkj3Tp:
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
-			product="gateway",
+			data=json.dumps(param, ensure_ascii=False),
+			product="cloudloan",
 			enviroment=env
 		)
 		r.set("rmkj_3_periods_deductionTaskId", rep['content']['deductionTaskId'])

@@ -18,5 +18,9 @@
     "dev": "192.168.8.88:9018/busi-api",
     "test": "http://172.17.205.187:9018/busi-api",
     "qa": "https://qa-gateway.cloudloan.com/busi-api"
+  },
+  "job": {
+    "test": "http://39.107.43.201:9024/jobs/trigger/",
+    "qa": "http://api-qa1.cloudloan.com:9024/jobs/trigger/"
   }
 }
