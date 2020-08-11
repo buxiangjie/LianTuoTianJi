@@ -111,7 +111,6 @@ class GetSqlData(object):
 			}
 		try:
 			conn = pymysql.connect(**config)
-			# conn = mysql.connector.connect(**config)
 			return conn
 		except Exception as e:
 			raise e
@@ -254,14 +253,14 @@ class GetSqlData(object):
 				version = 1
 				while GetSqlData().check_loan_result(enviroment, project_id) != 1:
 					if version > 100:
-						print(f"循环{version - 1}次未查询到放款成功状态，判断为放款失败")
+						logger.info(f"循环{version - 1}次未查询到放款成功状态，判断为放款失败")
 						break
 					res = GetSqlData().check_loan_result(enviroment, project_id)
 					if res == 0:
-						print(f"当前loan_result为:{res};放款失败")
+						logger.info(f"当前loan_result为:{res};放款失败")
 						break
 					if res != 1:
-						print(f"当前loan_result为:{res};当前循环次数为:{version}")
+						logger.info(f"当前loan_result为:{res};当前循环次数为:{version}")
 						version += 1
 						time.sleep(5)
 			except Exception as e:
