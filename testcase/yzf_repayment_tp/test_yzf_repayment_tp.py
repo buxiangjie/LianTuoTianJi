@@ -30,7 +30,7 @@ class TestYzfRepayment:
 	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@allure.title("翼支付进件接口")
-	@pytest.mark.asset
+	@pytest.mark.repayment
 	def test_0_approved(self, env, r):
 		"""翼支付进件同意接口"""
 		data = excel_table_byname(self.excel, 'approved')
@@ -75,7 +75,7 @@ class TestYzfRepayment:
 		assert rep['resultCode'] == int(data[0]['msgCode'])
 
 	@allure.title("翼支付放款通知接口")
-	@pytest.mark.asset
+	@pytest.mark.repayment
 	def test_1_loan_notice(self, env, r):
 		"""翼支付放款通知接口"""
 		GetSqlData.change_project_audit_status(
@@ -111,7 +111,7 @@ class TestYzfRepayment:
 		assert rep['resultCode'] == int(data[0]['msgCode'])
 
 	@allure.title("翼支付放款同步接口")
-	@pytest.mark.asset
+	@pytest.mark.repayment
 	def test_2_loanasset(self, env, r):
 		"""翼支付进件放款同步接口"""
 		global period
@@ -158,7 +158,7 @@ class TestYzfRepayment:
 		assert rep['resultCode'] == int(data[0]['msgCode'])
 
 	@allure.title("翼支付还款接口")
-	@pytest.mark.asset
+	@pytest.mark.repayment
 	def test_3_repayment_one_period(self, env, r):
 		"""翼支付还款一期"""
 		time.sleep(5)
