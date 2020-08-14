@@ -21,11 +21,12 @@ def pytest_addoption(parser):
 
 
 @pytest.fixture(scope="session")
+@allure.step("接收外部参数判断运行环境")
 def env(request):
 	return request.config.getoption("--env")
 
 
 @pytest.fixture(scope="session")
-@allure.step("连接Redis")
+@allure.step("连接与环境对应的Redis")
 def r(env):
 	return Common.conn_redis(env)
