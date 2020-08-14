@@ -9,6 +9,9 @@ import os
 import json
 import sys
 import time
+import allure
+import pytest
+
 from common.common_func import Common
 from log.logger import Logger
 from common.open_excel import excel_table_byname
@@ -20,25 +23,22 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 logger = Logger(logger="test_kkd_12_periods_tp").getlog()
 
 
-class Kkd12Tp(unittest.TestCase):
+@allure.feature("卡卡贷12期")
+class TestKkd12Tp:
+	file = Config().get_item('File', 'kkd_case_file')
+	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
-	@classmethod
-	def setUpClass(cls):
-		cls.env = sys.argv[3]
-		cls.r = Common.conn_redis(enviroment=cls.env)
-		file = Config().get_item('File', 'kkd_case_file')
-		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
-
-	@classmethod
-	def tearDownClass(cls):
-		pass
-
-	def test_100_apply(self):
-		"""进件"""
+	@allure.title("进件申请")
+	@allure.severity("blocker")
+	@pytest.mark.asset
+	@pytest.mark.offline_repay
+	@pytest.mark.offline_settle_in_advance
+	def test_100_apply(self, r, env):
+		"""进件申请"""
 		data = excel_table_byname(self.excel, 'apply')
 		print("接口名称:%s" % data[0]['casename'])
-		Common.p2p_get_userinfo('kkd_12_periods', self.env)
-		self.r.mset(
+		Common.p2p_get_userinfo('kkd_12_periods', env)
+		r.mset(
 			{
 				"kkd_12_periods_sourceUserId": Common.get_random('userid'),
 				"kkd_12_periods_transactionId": Common.get_random('transactionId'),
@@ -49,16 +49,16 @@ class Kkd12Tp(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceProjectId": self.r.get('kkd_12_periods_sourceProjectId'),
-				"sourceUserId": self.r.get('kkd_12_periods_sourceUserId'),
-				"transactionId": self.r.get('kkd_12_periods_transactionId')
+				"sourceProjectId": r.get('kkd_12_periods_sourceProjectId'),
+				"sourceUserId": r.get('kkd_12_periods_sourceUserId'),
+				"transactionId": r.get('kkd_12_periods_transactionId')
 			}
 		)
 		param['personalInfo'].update(
 			{
-				"cardNum": self.r.get('kkd_12_periods_cardNum'),
-				"custName": self.r.get('kkd_12_periods_custName'),
-				"phone": self.r.get('kkd_12_periods_phone')
+				"cardNum": r.get('kkd_12_periods_cardNum'),
+				"custName": r.get('kkd_12_periods_custName'),
+				"phone": r.get('kkd_12_periods_phone')
 			}
 		)
 		param['applyInfo'].update(
@@ -78,27 +78,29 @@ class Kkd12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		projectId = json.loads(rep.text)['content']['projectId']
-		self.r.set('kkd_12_periods_projectId', projectId)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		r.set('kkd_12_periods_projectId', rep['content']['projectId'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	def test_101_sign_credit(self):
-		"""上传授信协议"""
+	@allure.title("上传进件授信协议")
+	@allure.severity("normal")
+	@pytest.mark.asset
+	@pytest.mark.offline_repay
+	@pytest.mark.offline_settle_in_advance
+	def test_101_sign_credit(self, r, env):
+		"""上传进件授信协议"""
 		data = excel_table_byname(self.excel, 'contract_sign')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'kkd_sign_credit.json')
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
-				"sourceUserId": self.r.get('kkd_12_periods_sourceUserId'),
+				"sourceUserId": r.get('kkd_12_periods_sourceUserId'),
 				"contractType": 5,
 				"sourceContractId": Common.get_random('userid'),
-				"transactionId": self.r.get('kkd_12_periods_transactionId'),
-				"associationId": self.r.get('kkd_12_periods_projectId')
+				"transactionId": r.get('kkd_12_periods_transactionId'),
+				"associationId": r.get('kkd_12_periods_projectId')
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -110,26 +112,28 @@ class Kkd12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	def test_102_query_apply_result(self):
+	@allure.title("进件结果查询")
+	@allure.severity("normal")
+	@pytest.mark.asset
+	@pytest.mark.offline_repay
+	@pytest.mark.offline_settle_in_advance
+	def test_102_query_apply_result(self, r, env):
 		"""进件结果查询"""
 		GetSqlData.change_project_audit_status(
-			project_id=self.r.get('kkd_12_periods_projectId'),
-			enviroment=self.env
+			project_id=r.get('kkd_12_periods_projectId'),
+			enviroment=env
 		)
 		data = excel_table_byname(self.excel, 'query_apply_result')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceProjectId": self.r.get('kkd_12_periods_sourceProjectId'),
-				"projectId": self.r.get('kkd_12_periods_projectId')
+				"sourceProjectId": r.get('kkd_12_periods_sourceProjectId'),
+				"projectId": r.get('kkd_12_periods_projectId')
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -141,15 +145,17 @@ class Kkd12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
-		self.assertEqual(json.loads(rep.text)['content']['auditStatus'], 2)
+		assert rep['resultCode'] == int(data[0]['resultCode'])
+		assert rep['content']['auditStatus'] == 2
 
-	def test_103_sign_borrow(self):
+	@allure.title("上传借款授信协议")
+	@allure.severity("normal")
+	@pytest.mark.asset
+	@pytest.mark.offline_repay
+	@pytest.mark.offline_settle_in_advance
+	def test_103_sign_borrow(self, r, env):
 		"""上传借款协议"""
 		data = excel_table_byname(self.excel, 'contract_sign')
 		print("接口名称:%s" % data[0]['casename'])
@@ -157,10 +163,10 @@ class Kkd12Tp(unittest.TestCase):
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
-				"sourceUserId": self.r.get('kkd_12_periods_sourceUserId'),
+				"sourceUserId": r.get('kkd_12_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
-				"transactionId": self.r.get('kkd_12_periods_transactionId'),
-				"associationId": self.r.get('kkd_12_periods_projectId')
+				"transactionId": r.get('kkd_12_periods_transactionId'),
+				"associationId": r.get('kkd_12_periods_projectId')
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -172,15 +178,17 @@ class Kkd12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.r.set("kkd_12_periods_contractId", json.loads(rep.text)['content']['contractId'])
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		r.set("kkd_12_periods_contractId", rep['content']['contractId'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	def test_104_sign_guarantee(self):
+	@allure.title("上传担保函")
+	@allure.severity("normal")
+	@pytest.mark.asset
+	@pytest.mark.offline_repay
+	@pytest.mark.offline_settle_in_advance
+	def test_104_sign_guarantee(self, r, env):
 		"""上传担保函"""
 		data = excel_table_byname(self.excel, 'contract_sign')
 		print("接口名称:%s" % data[0]['casename'])
@@ -188,10 +196,10 @@ class Kkd12Tp(unittest.TestCase):
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
-				"sourceUserId": self.r.get('kkd_12_periods_sourceUserId'),
+				"sourceUserId": r.get('kkd_12_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
-				"transactionId": self.r.get('kkd_12_periods_transactionId'),
-				"associationId": self.r.get('kkd_12_periods_projectId')
+				"transactionId": r.get('kkd_12_periods_transactionId'),
+				"associationId": r.get('kkd_12_periods_projectId')
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -203,19 +211,21 @@ class Kkd12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	def test_105_image_upload(self):
+	@allure.title("上传医疗美容图片")
+	@allure.severity("trivial")
+	@pytest.mark.asset
+	@pytest.mark.offline_repay
+	@pytest.mark.offline_settle_in_advance
+	def test_105_image_upload(self, r, env):
 		"""上传医疗美容图片"""
 		data = excel_table_byname(self.excel, 'image_upload')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
-		param.update({"associationId": self.r.get('kkd_12_periods_projectId')})
+		param.update({"associationId": r.get('kkd_12_periods_projectId')})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -225,25 +235,27 @@ class Kkd12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	def test_106_contact_query(self):
+	@allure.title("签章结果查询")
+	@allure.severity("blocker")
+	@pytest.mark.asset
+	@pytest.mark.offline_repay
+	@pytest.mark.offline_settle_in_advance
+	def test_106_contact_query(self, r, env):
 		"""合同结果查询:获取签章后的借款协议"""
 		data = excel_table_byname(self.excel, 'contract_query')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"associationId": self.r.get('kkd_12_periods_projectId'),
+				"associationId": r.get('kkd_12_periods_projectId'),
 				"serviceSn": Common.get_random("serviceSn"),
 				"requestTime": Common.get_time("-"),
-				"sourceUserId": self.r.get("kkd_12_periods_sourceUserId"),
-				"contractId": self.r.get("kkd_12_periods_contractId")
+				"sourceUserId": r.get("kkd_12_periods_sourceUserId"),
+				"contractId": r.get("kkd_12_periods_contractId")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -255,24 +267,26 @@ class Kkd12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	def test_107_calculate(self):
+	@allure.title("还款计划试算")
+	@allure.severity("normal")
+	@pytest.mark.asset
+	@pytest.mark.offline_repay
+	@pytest.mark.offline_settle_in_advance
+	def test_107_calculate(self, r, env):
 		"""还款计划试算（未放款）:正常还款"""
 		data = excel_table_byname(self.excel, 'calculate')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceUserId": self.r.get("kkd_12_periods_sourceUserId"),
-				"transactionId": self.r.get("kkd_12_periods_sourceProjectId"),
-				"sourceProjectId": self.r.get("kkd_12_periods_sourceProjectId"),
-				"projectId": self.r.get("kkd_12_periods_projectId")
+				"sourceUserId": r.get("kkd_12_periods_sourceUserId"),
+				"transactionId": r.get("kkd_12_periods_sourceProjectId"),
+				"sourceProjectId": r.get("kkd_12_periods_sourceProjectId"),
+				"projectId": r.get("kkd_12_periods_projectId")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -284,26 +298,28 @@ class Kkd12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	def test_108_loan_pfa(self):
+	@allure.title("放款申请")
+	@allure.severity("blocker")
+	@pytest.mark.asset
+	@pytest.mark.offline_repay
+	@pytest.mark.offline_settle_in_advance
+	def test_108_loan_pfa(self, r, env):
 		"""放款申请"""
 		data = excel_table_byname(self.excel, 'loan_pfa')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
-		self.r.set("kkd_12_periods_loan_serviceSn", Common.get_random("serviceSn"))
+		r.set("kkd_12_periods_loan_serviceSn", Common.get_random("serviceSn"))
 		param.update(
 			{
-				"sourceProjectId": self.r.get("kkd_12_periods_sourceProjectId"),
-				"projectId": self.r.get("kkd_12_periods_projectId"),
-				"sourceUserId": self.r.get("kkd_12_periods_sourceUserId"),
-				"serviceSn": self.r.get("kkd_12_periods_loan_serviceSn"),
-				"id": self.r.get('kkd_12_periods_cardNum')
+				"sourceProjectId": r.get("kkd_12_periods_sourceProjectId"),
+				"projectId": r.get("kkd_12_periods_projectId"),
+				"sourceUserId": r.get("kkd_12_periods_sourceUserId"),
+				"serviceSn": r.get("kkd_12_periods_loan_serviceSn"),
+				"id": r.get('kkd_12_periods_cardNum')
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -315,26 +331,28 @@ class Kkd12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 		# 修改支付表中的品钛返回code
 		time.sleep(8)
 		GetSqlData.change_pay_status(
-			enviroment=self.env,
-			project_id=self.r.get('kkd_12_periods_projectId')
+			enviroment=env,
+			project_id=r.get('kkd_12_periods_projectId')
 		)
 
-	def test_109_loan_query(self):
+	@allure.title("放款结果查询")
+	@allure.severity("blocker")
+	@pytest.mark.asset
+	@pytest.mark.offline_repay
+	@pytest.mark.offline_settle_in_advance
+	def test_109_loan_query(self, r, env):
 		"""放款结果查询"""
-		GetSqlData.loan_set(enviroment=self.env, project_id=self.r.get('kkd_12_periods_projectId'))
+		GetSqlData.loan_set(enviroment=env, project_id=r.get('kkd_12_periods_projectId'))
 		data = excel_table_byname(self.excel, 'pfa_query')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
-		param.update({"serviceSn": self.r.get("kkd_12_periods_loan_serviceSn")})
+		param.update({"serviceSn": r.get("kkd_12_periods_loan_serviceSn")})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -344,23 +362,25 @@ class Kkd12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
-		self.assertEqual(json.loads(rep.text)['content']['projectLoanStatus'], 3)
+		assert rep['resultCode'] == int(data[0]['resultCode'])
+		assert rep['content']['projectLoanStatus'] == 3
 
-	def test_110_query_repayment_plan(self):
+	@allure.title("还款计划查询")
+	@allure.severity("blocker")
+	@pytest.mark.asset
+	@pytest.mark.offline_repay
+	@pytest.mark.offline_settle_in_advance
+	def test_110_query_repayment_plan(self, r, env):
 		"""国投云贷还款计划查询"""
 		data = excel_table_byname(self.excel, 'query_repayment_plan')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"transactionId": self.r.get("kkd_12_periods_sourceProjectId"),
-				"projectId": self.r.get("kkd_12_periods_projectId")
+				"transactionId": r.get("kkd_12_periods_sourceProjectId"),
+				"projectId": r.get("kkd_12_periods_projectId")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -372,27 +392,27 @@ class Kkd12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.r.set("kkd_12_periods_repayment_plan", json.dumps(json.loads(rep.text)['content']['repaymentPlanList']))
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		r.set("kkd_12_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	@unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
+	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
 	# @unittest.skip("跳过")
-	def test_111_calculate(self):
+	@allure.title("提前结清试算")
+	@allure.severity("blocker")
+	@pytest.mark.offline_settle_in_advance
+	def test_111_calculate(self, r, env):
 		"""还款计划试算:提前结清"""
 		data = excel_table_byname(self.excel, 'calculate')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceUserId": self.r.get("kkd_12_periods_sourceUserId"),
-				"transactionId": self.r.get("kkd_12_periods_sourceProjectId"),
-				"sourceProjectId": self.r.get("kkd_12_periods_sourceProjectId"),
-				"projectId": self.r.get("kkd_12_periods_projectId"),
+				"sourceUserId": r.get("kkd_12_periods_sourceUserId"),
+				"transactionId": r.get("kkd_12_periods_sourceProjectId"),
+				"sourceProjectId": r.get("kkd_12_periods_sourceProjectId"),
+				"projectId": r.get("kkd_12_periods_projectId"),
 				"businessType": 2
 			}
 		)
@@ -405,32 +425,32 @@ class Kkd12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.r.set(
+		r.set(
 			"kkd_12_periods_early_settlement_repayment_plan",
-			json.dumps(json.loads(rep.text)['content']['repaymentPlanList'])
+			json.dumps(rep['content']['repaymentPlanList'])
 		)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	@unittest.skipUnless(sys.argv[4] == "repayment_offline", "-")
+	# @unittest.skipUnless(sys.argv[4] == "repayment_offline", "-")
 	# @unittest.skip("跳过")
-	def test_112_offline_repay_repayment(self):
+	@allure.title("线下还款流水推送")
+	@allure.severity("blocker")
+	@pytest.mark.offline_repay
+	def test_112_offline_repay_repayment(self, r, env):
 		"""线下还款流水推送：正常还一期"""
 		data = excel_table_byname(self.excel, 'offline_repay')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		period = 1
 		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=self.r.get("kkd_12_periods_projectId"),
-			enviroment=self.env,
+			project_id=r.get("kkd_12_periods_projectId"),
+			enviroment=env,
 			period=period,
 			repayment_plan_type=1
 		)
-		repayment_plan_list = self.r.get("kkd_12_periods_repayment_plan")
+		repayment_plan_list = r.get("kkd_12_periods_repayment_plan")
 		success_amount = 0.00
 		repayment_detail_list = []
 		for i in json.loads(repayment_plan_list):
@@ -444,9 +464,9 @@ class Kkd12Tp(unittest.TestCase):
 				repayment_detail_list.append(plan_detail)
 		param.update(
 			{
-				"projectId": self.r.get("kkd_12_periods_projectId"),
-				"transactionId": self.r.get("kkd_12_periods_sourceProjectId"),
-				"sourceProjectId": self.r.get("kkd_12_periods_sourceProjectId"),
+				"projectId": r.get("kkd_12_periods_projectId"),
+				"transactionId": r.get("kkd_12_periods_sourceProjectId"),
+				"sourceProjectId": r.get("kkd_12_periods_sourceProjectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"planPayDate": str(plan_pay_date['plan_pay_date']),
 				"successAmount": success_amount,
@@ -464,27 +484,27 @@ class Kkd12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	@unittest.skipUnless(sys.argv[4] == "early_settlement_offline", "-")
+	# @unittest.skipUnless(sys.argv[4] == "early_settlement_offline", "-")
 	# @unittest.skip("跳过")
-	def test_113_offline_repay_early_settlement(self):
+	@allure.title("提前结清")
+	@allure.severity("blocker")
+	@pytest.mark.offline_settle_in_advance
+	def test_113_offline_repay_early_settlement(self, r, env):
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.excel, 'offline_repay')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=self.r.get("kkd_12_periods_projectId"),
-			enviroment=self.env,
+			project_id=r.get("kkd_12_periods_projectId"),
+			enviroment=env,
 			period=1,
 			repayment_plan_type=1
 		)
-		repayment_plan_list = self.r.get("kkd_12_periods_early_settlement_repayment_plan")
+		repayment_plan_list = r.get("kkd_12_periods_early_settlement_repayment_plan")
 		success_amount = 0.00
 		repayment_detail_list = []
 		for i in json.loads(repayment_plan_list):
@@ -497,9 +517,9 @@ class Kkd12Tp(unittest.TestCase):
 			repayment_detail_list.append(plan_detail)
 		param.update(
 			{
-				"projectId": self.r.get("kkd_12_periods_projectId"),
-				"transactionId": self.r.get("kkd_12_periods_sourceProjectId"),
-				"sourceProjectId": self.r.get("kkd_12_periods_sourceProjectId"),
+				"projectId": r.get("kkd_12_periods_projectId"),
+				"transactionId": r.get("kkd_12_periods_sourceProjectId"),
+				"sourceProjectId": r.get("kkd_12_periods_sourceProjectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"planPayDate": plan_pay_date['plan_pay_date'],
 				"successAmount": success_amount,
@@ -518,15 +538,14 @@ class Kkd12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	@unittest.skip("-")
-	def test_114_debt_transfer(self):
+	# @unittest.skip("-")
+	@allure.title("上传债转涵")
+	@allure.severity("blocker")
+	def test_114_debt_transfer(self, r, env):
 		"""上传债转函"""
 		data = excel_table_byname(self.excel, 'contract_sign')
 		print("接口名称:%s" % data[0]['casename'])
@@ -534,10 +553,10 @@ class Kkd12Tp(unittest.TestCase):
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
-				"sourceUserId": self.r.get('kkd_12_periods_sourceUserId'),
+				"sourceUserId": r.get('kkd_12_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
-				"transactionId": self.r.get('kkd_12_periods_transactionId'),
-				"associationId": self.r.get('kkd_12_periods_projectId')
+				"transactionId": r.get('kkd_12_periods_transactionId'),
+				"associationId": r.get('kkd_12_periods_projectId')
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -549,14 +568,11 @@ class Kkd12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			enviroment=env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.r.set("kkd_12_periods_contractId", json.loads(rep.text)['content']['contractId'])
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		r.set("kkd_12_periods_contractId", rep['content']['contractId'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 
 if __name__ == '__main__':
-	unittest.main()
+	pytest.main()
