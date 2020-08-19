@@ -63,10 +63,7 @@ class RomaCreditApplyNull(unittest.TestCase):
 			product='cloudloan',
 			enviroment=self.env
 		)
-		print("响应结果:%s" % rep)
-		print("返回信息:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data['resultCode']))
 
 
 if __name__ == '__main__':

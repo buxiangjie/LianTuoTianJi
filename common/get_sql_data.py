@@ -20,95 +20,15 @@ logger = Logger(logger="SqlData").getlog()
 class GetSqlData(object):
 
 	@staticmethod
-	def conn_database(enviroment='python', source='saas'):
+	def conn_database(enviroment, source='saas'):
 		"""
 		数据库连接
 		:param source: str
 		:type enviroment:str
 		"""
-		global config, conn
-		if enviroment == 'python':
-			config = {
-				'host': Config().get_item('Database', 'host'),
-				'user': Config().get_item('Database', 'user'),
-				'password': Config().get_item('Database', 'password'),
-				'port': int(Config().get_item('Database', 'port')),
-				'db': Config().get_item('Database', 'db'),
-				'charset': 'utf8',
-				'cursorclass': pymysql.cursors.DictCursor
-			}
-		elif enviroment == 'test':
-			if source == 'saas':
-				config = {
-					'host': Config().get_item('test_database', 'host'),
-					'user': Config().get_item('test_database', 'user'),
-					'password': Config().get_item('test_database', 'password'),
-					'port': int(Config().get_item('test_database', 'port')),
-					'db': Config().get_item('test_database', 'db'),
-					'charset': 'utf8',
-					'cursorclass': pymysql.cursors.DictCursor
-				}
-			elif source == 'steamrunner':
-				config = {
-					'host': Config().get_item('test_database', 'host'),
-					'user': Config().get_item('test_database', 'user'),
-					'password': Config().get_item('test_database', 'password'),
-					'port': int(Config().get_item('test_database', 'port')),
-					'db': "sandbox_saas_steamrunner",
-					'charset': 'utf8',
-					'cursorclass': pymysql.cursors.DictCursor
-				}
-			else:
-				config = {
-					'host': Config().get_item('pay_test_database', 'host'),
-					'user': Config().get_item('pay_test_database', 'user'),
-					'password': Config().get_item('pay_test_database', 'password'),
-					'port': int(Config().get_item('pay_test_database', 'port')),
-					'db': Config().get_item('pay_test_database', 'db'),
-					'charset': 'utf8',
-					'cursorclass': pymysql.cursors.DictCursor
-				}
-		elif enviroment == 'qa':
-			if source == 'saas':
-				config = {
-					'host': Config().get_item('qa_database', 'host'),
-					'user': Config().get_item('qa_database', 'user'),
-					'password': Config().get_item('qa_database', 'password'),
-					'port': int(Config().get_item('qa_database', 'port')),
-					'db': Config().get_item('qa_database', 'db'),
-					'charset': 'utf8',
-					'cursorclass': pymysql.cursors.DictCursor
-				}
-			elif source == 'steamrunner':
-				config = {
-					'host': Config().get_item('qa_database', 'host'),
-					'user': Config().get_item('qa_database', 'user'),
-					'password': Config().get_item('qa_database', 'password'),
-					'port': int(Config().get_item('qa_database', 'port')),
-					'db': 'sandbox_saas_steamrunner',
-					'charset': 'utf8',
-					'cursorclass': pymysql.cursors.DictCursor
-				}
-		elif enviroment == 'pay':
-			config = {
-				'host': Config().get_item('pay_test_database', 'host'),
-				'user': Config().get_item('pay_test_database', 'user'),
-				'password': Config().get_item('pay_test_database', 'password'),
-				'port': int(Config().get_item('pay_test_database', 'port')),
-				'db': Config().get_item('pay_test_database', 'db'),
-				'charset': 'utf8',
-				'cursorclass': pymysql.cursors.DictCursor
-			}
-		elif enviroment == 'prod':
-			config = {
-				'host': Config().get_item('prod_database', 'host'),
-				'user': Config().get_item('prod_database', 'user'),
-				'password': Config().get_item('prod_database', 'password'),
-				'port': int(Config().get_item('prod_database', 'port')),
-				'db': Config().get_item('prod_database', 'db'),
-				'charset': 'utf8',
-				'cursorclass': pymysql.cursors.DictCursor
-			}
+		yaml_data = Common.get_yaml_data("config", "database.yaml")
+		config = yaml_data[enviroment][source]
+		config["cursorclass"] = pymysql.cursors.DictCursor
 		try:
 			conn = pymysql.connect(**config)
 			return conn
@@ -630,7 +550,6 @@ class GetSqlData(object):
 				conn.commit()
 				cur.close()
 				conn.close()
-				return "修改进件状态为审核通过"
 			except Exception as e:
 				cur.close()
 				conn.close()

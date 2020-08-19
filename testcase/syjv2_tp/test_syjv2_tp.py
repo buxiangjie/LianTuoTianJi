@@ -11,7 +11,7 @@ import os
 import json
 import time
 import sys
-import warnings
+
 from common.common_func import Common
 from log.logger import Logger
 from common.open_excel import excel_table_byname
@@ -27,7 +27,7 @@ class Syjv2Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = sys.argv[3]
+		cls.env = "qa"
 		cls.r = Common.conn_redis(enviroment=cls.env)
 		file = Config().get_item('File', 'syjv2_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
@@ -77,12 +77,9 @@ class Syjv2Tp(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.r.set('syjv2_projectId', json.loads(rep.text)['content']['projectId'])
-		self.assertEqual(int(data[0]['msgCode']), json.loads(rep.text)['resultCode'])
-		self.assertEqual("交易成功", json.loads(rep.text)['content']['message'], "进件失败")
+		self.r.set('syjv2_projectId', rep['content']['projectId'])
+		self.assertEqual(int(data[0]['msgCode']), rep['resultCode'])
+		self.assertEqual("交易成功", rep['content']['message'], "进件失败")
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('syjv2_projectId'),
 			enviroment=self.env
@@ -119,11 +116,8 @@ class Syjv2Tp(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['msgCode']), json.loads(rep.text)['resultCode'])
-		self.assertEqual("交易成功", json.loads(rep.text)['content']['message'], "放款申请失败")
+		self.assertEqual(int(data[0]['msgCode']), rep['resultCode'])
+		self.assertEqual("交易成功", rep['content']['message'], "放款申请失败")
 		GetSqlData.change_pay_status(
 			project_id=self.r.get('syjv2_projectId'),
 			enviroment=self.env
@@ -154,11 +148,8 @@ class Syjv2Tp(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['msgCode']), json.loads(rep.text)['resultCode'])
-		self.assertEqual("SUCCESS", json.loads(rep.text)['content']['loanStatus'], "放款失败")
+		self.assertEqual(int(data[0]['msgCode']), rep['resultCode'])
+		self.assertEqual("SUCCESS", rep['content']['loanStatus'], "放款失败")
 
 	def test_103_loanasset(self):
 		"""随意借V2进件放款同步接口"""
@@ -194,14 +185,11 @@ class Syjv2Tp(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['msgCode']), json.loads(rep.text)['resultCode'])
-		self.assertEqual("交易成功", json.loads(rep.text)['content']['message'], "资产同步失败")
+		self.assertEqual(int(data[0]['msgCode']), rep['resultCode'])
+		self.assertEqual("交易成功", rep['content']['message'], "资产同步失败")
 
 	# @unittest.skip("-")
-	@unittest.skipUnless(sys.argv[4] == 'repayment', "条件成立时执行")
+	# @unittest.skipUnless(sys.argv[4] == 'repayment', "条件成立时执行")
 	def test_104_repayment_one_period(self):
 		"""随意借V2还款一期"""
 		data = excel_table_byname(self.excel, 'repayment')
@@ -299,14 +287,11 @@ class Syjv2Tp(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], data[0]['msgCode'])
-		self.assertEqual(json.loads(rep.text)['content']['message'], "交易成功")
+		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
+		self.assertEqual(rep['content']['message'], "交易成功")
 
 	# @unittest.skip("-")
-	@unittest.skipUnless(sys.argv[4] in ('compensation', 'after_comp_repay'), "条件成立时执行")
+	# @unittest.skipUnless(sys.argv[4] in ('compensation', 'after_comp_repay'), "条件成立时执行")
 	def test_106_compensation(self):
 		"""随意借V2代偿一期"""
 		data = excel_table_byname(self.excel, 'compensation')
@@ -378,13 +363,10 @@ class Syjv2Tp(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], data[0]['msgCode'])
+		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
 
 	# @unittest.skip("-")
-	@unittest.skipUnless(sys.argv[4] == 'after_comp_repay', "条件成立时执行")
+	# @unittest.skipUnless(sys.argv[4] == 'after_comp_repay', "条件成立时执行")
 	def test_107_after_comp_repay(self):
 		"""随意借V2代偿后还款"""
 		global period, plan_pay_type, plan_list_detail
@@ -550,11 +532,8 @@ class Syjv2Tp(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], data[0]['msgCode'])
-		self.assertEqual(json.loads(rep.text)['content']['message'], "交易成功")
+		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
+		self.assertEqual(rep['content']['message'], "交易成功")
 
 
 if __name__ == '__main__':

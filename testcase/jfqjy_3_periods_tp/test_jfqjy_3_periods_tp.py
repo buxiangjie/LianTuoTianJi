@@ -89,9 +89,9 @@ class Jfqjy3Tp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		projectId = json.loads(rep.text)['content']['projectId']
+		projectId = rep['content']['projectId']
 		self.r.set('jfqjy_3_periods_projectId', projectId)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	def test_101_sign_credit(self):
 		"""上传授信协议"""
@@ -119,7 +119,7 @@ class Jfqjy3Tp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	def test_102_query_apply_result(self):
 		"""进件结果查询"""
@@ -147,8 +147,8 @@ class Jfqjy3Tp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
-		self.assertEqual(json.loads(rep.text)['content']['auditStatus'], 2)
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['content']['auditStatus'], 2)
 
 	def test_103_sign_borrow(self):
 		"""上传借款协议"""
@@ -175,8 +175,8 @@ class Jfqjy3Tp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		self.r.set("jfqjy_3_periods_contractId", json.loads(rep.text)['content']['contractId'])
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.r.set("jfqjy_3_periods_contractId", rep['content']['contractId'])
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	@unittest.skip("-")
 	def test_105_image_upload(self):
@@ -196,7 +196,7 @@ class Jfqjy3Tp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	def test_106_contact_query(self):
 		"""合同结果查询:获取签章后的借款协议"""
@@ -223,7 +223,7 @@ class Jfqjy3Tp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	def test_107_calculate(self):
 		"""还款计划试算（未放款）:正常还款"""
@@ -249,7 +249,7 @@ class Jfqjy3Tp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	def test_108_loan_pfa(self):
 		"""放款申请"""
@@ -279,7 +279,7 @@ class Jfqjy3Tp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		# 修改支付表中的品钛返回code
 		time.sleep(8)
 		GetSqlData.change_pay_status(
@@ -305,8 +305,8 @@ class Jfqjy3Tp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
-		self.assertEqual(json.loads(rep.text)['content']['projectLoanStatus'], 3)
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['content']['projectLoanStatus'], 3)
 
 	def test_110_query_repayment_plan(self):
 		"""国投云贷还款计划查询"""
@@ -330,8 +330,8 @@ class Jfqjy3Tp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		self.r.set("jfqjy_3_periods_repayment_plan", json.dumps(json.loads(rep.text)['content']['repaymentPlanList']))
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.r.set("jfqjy_3_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
 	# @unittest.skip("跳过")
@@ -362,9 +362,9 @@ class Jfqjy3Tp(unittest.TestCase):
 		)
 		self.r.set(
 			"jfqjy_3_periods_early_settlement_repayment_plan",
-			json.dumps(json.loads(rep.text)['content']['repaymentPlanList'])
+			json.dumps(rep['content']['repaymentPlanList'])
 		)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
 	# @unittest.skip("跳过")
@@ -395,9 +395,9 @@ class Jfqjy3Tp(unittest.TestCase):
 		)
 		self.r.set(
 			"jfqjy_3_periods_return_repayment_plan",
-			json.dumps(json.loads(rep.text)['content']['repaymentPlanList'])
+			json.dumps(rep['content']['repaymentPlanList'])
 		)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	# @unittest.skipUnless(sys.argv[4] == "repayment_offline", "-")
 	@unittest.skip("跳过")
@@ -449,7 +449,7 @@ class Jfqjy3Tp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	# @unittest.skipUnless(sys.argv[4] == "early_settlement_offline", "-")
 	@unittest.skip("跳过")
@@ -500,7 +500,7 @@ class Jfqjy3Tp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	@unittest.skip("-")
 	def test_116_return(self):
@@ -550,7 +550,7 @@ class Jfqjy3Tp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	@unittest.skip("-")
 	def test_117_capital_flow(self):
@@ -588,7 +588,7 @@ class Jfqjy3Tp(unittest.TestCase):
 			product="gateway"
 		)
 		print("返回json:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 
 if __name__ == '__main__':

@@ -77,12 +77,9 @@ class SyjRepayment(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.r.set("syj_repayment_projectId", json.loads(rep.text)['content']['projectId'])
-		self.assertEqual(int(data[0]['msgCode']), json.loads(rep.text)['resultCode'])
-		self.assertEqual("交易成功", json.loads(rep.text)['content']['message'], "进件失败")
+		self.r.set("syj_repayment_projectId", rep['content']['projectId'])
+		self.assertEqual(int(data[0]['msgCode']), rep['resultCode'])
+		self.assertEqual("交易成功", rep['content']['message'], "进件失败")
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('syj_repayment_projectId'),
 			enviroment=self.env
@@ -115,15 +112,12 @@ class SyjRepayment(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['msgCode']), json.loads(rep.text)['resultCode'])
-		self.assertEqual("交易成功", json.loads(rep.text)['content']['message'], "放款申请失败")
+		self.assertEqual(int(data[0]['msgCode']), rep['resultCode'])
+		self.assertEqual("交易成功", rep['content']['message'], "放款申请失败")
 
 	def test_2_query_loan_status(self):
 		"""随意借放款结果查询接口"""
-		time.sleep(8)
+		time.sleep(5)
 		GetSqlData.change_pay_status(self.env, self.r.get("syj_repayment_projectId"))
 		GetSqlData.loan_set(self.env, self.r.get("syj_repayment_projectId"))
 		data = excel_table_byname(self.excel, 'query_loan_status')
@@ -148,16 +142,11 @@ class SyjRepayment(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['msgCode']), json.loads(rep.text)['resultCode'])
-		self.assertEqual("SUCCESS", json.loads(rep.text)['content']['loanStatus'], "放款失败")
+		self.assertEqual(int(data[0]['msgCode']), rep['resultCode'])
+		self.assertEqual("SUCCESS", rep['content']['loanStatus'], "放款失败")
 
 	def test_3_loanasset(self):
 		"""随意借进件放款同步接口"""
-		global period
-		time.sleep(5)
 		data = excel_table_byname(self.excel, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
@@ -190,11 +179,8 @@ class SyjRepayment(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['msgCode']), json.loads(rep.text)['resultCode'])
-		self.assertEqual("交易成功", json.loads(rep.text)['content']['message'], "资产同步失败")
+		self.assertEqual(int(data[0]['msgCode']), rep['resultCode'])
+		self.assertEqual("交易成功", rep['content']['message'], "资产同步失败")
 
 	def test_4_repayment_one_period(self):
 		"""随意借还款一期"""
@@ -276,11 +262,8 @@ class SyjRepayment(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], data[0]['msgCode'])
-		self.assertEqual(json.loads(rep.text)['content']['message'], "交易成功")
+		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
+		self.assertEqual(rep['content']['message'], "交易成功")
 
 
 if __name__ == '__main__':

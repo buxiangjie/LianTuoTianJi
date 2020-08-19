@@ -27,7 +27,7 @@ class NewRomaTp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = sys.argv[3]
+		cls.env = 'qa'
 		cls.r = Common.conn_redis(enviroment=cls.env)
 		file = Config().get_item('File', 'new_roma_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
@@ -86,18 +86,15 @@ class NewRomaTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		creditId = json.loads(rep.text)['content']['creditId']
-		userId = json.loads(rep.text)['content']['userId']
+		creditId = rep['content']['creditId']
+		userId = rep['content']['userId']
 		self.r.mset(
 			{
 				"new_roma_creditId": creditId,
 				"new_roma_userId": userId
 			}
 		)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	def test_101_upload_image(self):
 		"""图片上传：授信"""
@@ -121,10 +118,7 @@ class NewRomaTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	def test_1011_sign_credit(self):
 		"""上传授信协议"""
@@ -152,10 +146,7 @@ class NewRomaTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	def test_102_query_result(self):
 		"""授信结果查询"""
@@ -176,10 +167,7 @@ class NewRomaTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	def test_103_query_user_amount(self):
 		"""用户额度查询"""
@@ -204,10 +192,7 @@ class NewRomaTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		GetSqlData.check_user_amount(
 			user_id=self.r.get('new_roma_userId'),
 			enviroment=self.env
@@ -261,10 +246,8 @@ class NewRomaTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		self.r.set('new_roma_projectId', json.loads(rep.text)['content']['projectId'])
-		self.assertEqual(int(data[0]['resultCode']), json.loads(rep.text)['resultCode'])
+		self.r.set('new_roma_projectId', rep['content']['projectId'])
+		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('new_roma_projectId'),
 			enviroment=self.env)
@@ -291,11 +274,8 @@ class NewRomaTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['resultCode']), json.loads(rep.text)['resultCode'])
-		self.assertEqual(json.loads(rep.text)['content']['auditStatus'], 2)
+		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
+		self.assertEqual(rep['content']['auditStatus'], 2)
 
 	def test_106_contract_sign(self):
 		"""上传借款合同"""
@@ -323,10 +303,7 @@ class NewRomaTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['resultCode']), json.loads(rep.text)['resultCode'])
+		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 
 	def test_107_pfa(self):
 		"""放款"""
@@ -358,10 +335,7 @@ class NewRomaTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['resultCode']), json.loads(rep.text)['resultCode'])
+		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 		time.sleep(8)
 		# 修改支付表中的品钛返回code
 		GetSqlData.change_pay_status(
@@ -391,10 +365,7 @@ class NewRomaTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['resultCode']), json.loads(rep.text)['resultCode'])
+		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 
 	def test_109_query_repayment_plan(self):
 		"""还款计划查询"""
@@ -417,10 +388,7 @@ class NewRomaTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['resultCode']), json.loads(rep.text)['resultCode'])
+		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 
 	def test_110_pre_clear_calculate(self):
 		"""还款计划试算"""
@@ -443,10 +411,7 @@ class NewRomaTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['resultCode']), json.loads(rep.text)['resultCode'])
+		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 
 	# @unittest.skipUnless(sys.argv[4] == "offline_partial", "-")
 	@unittest.skip("跳过")
@@ -479,10 +444,7 @@ class NewRomaTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	@unittest.skip("-")
 	def test_112_push_reconciliation_result(self):
@@ -507,10 +469,7 @@ class NewRomaTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['resultCode']), json.loads(rep.text)['resultCode'])
+		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 
 
 if __name__ == '__main__':

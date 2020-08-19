@@ -1,0 +1,51 @@
+test:
+  saas:
+    host: 39.107.43.201
+    user: root
+    password: dJ_xw2ve_Dc9_1OiY3
+    port: 9919
+    db: sandbox_saas
+
+  steamrunner:
+    host: 39.107.43.201
+    user: root
+    password: dJ_xw2ve_Dc9_1OiY3
+    port: 9919
+    db: sandbox_saas_steamrunner
+
+  pay:
+    host: 47.94.212.153
+    user: root
+    password: dJ_xw2ve_Dc9_1OiY3
+    port: 9919
+    db: ifc_eridanus
+
+qa:
+  saas:
+    host: 47.95.198.135
+    user: sandbox
+    password: TxHT29VMfn4ZJ6VU!
+    port: 3306
+    db: sandbox_saas
+
+  steamrunner:
+    host: 47.95.198.135
+    user: sandbox
+    password: TxHT29VMfn4ZJ6VU!
+    port: 3306
+    db: sandbox_saas_steamrunner
+
+  pay:
+    host: 47.94.212.153
+    user: root
+    password: dJ_xw2ve_Dc9_1OiY3
+    port: 9919
+    db: ifc_eridanus
+
+prod:
+  saas:
+    host: rr-2ze577m0237nzl5fb.mysql.rds.aliyuncs.com
+    user: ceshi_read
+    password: Iu&rzyFBf2r4
+    port: 3306
+    db: saas_zhtb

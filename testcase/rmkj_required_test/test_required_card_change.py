@@ -35,9 +35,7 @@ class CardChange(unittest.TestCase):
         rep = Common.response(faceaddr=data['url'], headers=headers,
                               data=json.dumps(param, ensure_ascii=False), product='cloudloan',
                               enviroment=self.env)
-        print("响应结果:%s" % rep)
-        print("返回信息:%s" % rep.text)
-        self.assertEqual(int(json.loads(rep.text)['resultCode']), data['resultCode'])
+        self.assertEqual(int(rep['resultCode']), data['resultCode'])
 
 
 if __name__ == '__main__':

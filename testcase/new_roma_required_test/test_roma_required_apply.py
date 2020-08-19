@@ -8,7 +8,7 @@ import unittest
 import os
 import json
 import ddt
-import sys
+
 from common.common_func import Common
 from log.logger import Logger
 from common.open_excel import excel_table_byname
@@ -64,10 +64,7 @@ class RomaCreditApply(unittest.TestCase):
 			product='cloudloan',
 			enviroment=self.env
 		)
-		print("响应结果:%s" % rep)
-		print("返回信息:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data['resultCode']))
 
 
 if __name__ == '__main__':
