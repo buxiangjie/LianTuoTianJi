@@ -121,7 +121,7 @@ class GetSqlData(object):
 	def credit_set(enviroment: str, credit_id: str) -> str:
 		"""授信时调用，根据环境判断是否需要等待补偿"""
 		global step
-		print("开始检查授信步骤")
+		logger.info("开始检查授信步骤")
 		if Config().get_item("Switch", "credit") == "1":
 			# GetSqlData.change_credit_step(enviroment, credit_id)
 			GetSqlData.change_credit_status(enviroment, credit_id)
@@ -130,15 +130,15 @@ class GetSqlData(object):
 		version = 1
 		while status != 4:
 			if version > 10:
-				print("授信未成功")
+				logger.info("授信未成功")
 				break
 			step = GetSqlData().check_credit_step(enviroment, credit_id)
 			if step != 4:
-				print(f"当前授信步骤为:{step:d};当前循环次数为:{version:d}")
+				logger.info(f"当前授信步骤为:{step:d};当前循环次数为:{version:d}")
 				version += 1
 				time.sleep(10)
 			elif step == 4:
-				print("当前授信已完成,可以进行下个步骤!")
+				logger.info("当前授信已完成,可以进行下个步骤!")
 				status = 4
 
 	@staticmethod

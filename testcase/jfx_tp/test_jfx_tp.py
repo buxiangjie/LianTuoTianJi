@@ -26,7 +26,7 @@ class JfxTp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = 'qa'
+		cls.env = 'test'
 		cls.r = Common.conn_redis(enviroment=cls.env)
 		file = Config().get_item('File', 'jfx_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
@@ -76,7 +76,6 @@ class JfxTp(unittest.TestCase):
 			headers = None
 		else:
 			headers = json.loads(data[0]['headers'])
-		headers["X-TBC-SKIP-SIGN"] = "true"
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
@@ -122,12 +121,12 @@ class JfxTp(unittest.TestCase):
 
 	def test_102_query_result(self):
 		"""授信结果查询"""
+		data = excel_table_byname(self.excel, 'credit_query_result')
+		print("接口名称:%s" % data[0]['casename'])
 		GetSqlData.credit_set(
 			enviroment=self.env,
 			credit_id=self.r.get("jfx_creditId")
 		)
-		data = excel_table_byname(self.excel, 'credit_query_result')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update({"creditId": self.r.get('jfx_creditId')})
 		if len(data[0]['headers']) == 0:
@@ -340,10 +339,10 @@ class JfxTp(unittest.TestCase):
 			enviroment=self.env,
 			project_id=self.r.get('jfx_projectId')
 		)
-		GetSqlData.loan_set(enviroment=self.env, project_id=self.r.get('jfx_projectId'))
 
 	def test_109_pfa_query(self):
 		"""放款结果查询"""
+		GetSqlData.loan_set(enviroment=self.env, project_id=self.r.get('jfx_projectId'))
 		data = excel_table_byname(self.excel, 'pfa_query')
 		param = json.loads(data[0]['param'])
 		param.update({"serviceSn": self.r.get('jfx_pfa_serviceSn')})
