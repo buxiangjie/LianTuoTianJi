@@ -89,8 +89,7 @@ class Jfqjy3Tp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		projectId = rep['content']['projectId']
-		self.r.set('jfqjy_3_periods_projectId', projectId)
+		self.r.set('jfqjy_3_periods_projectId', rep['content']['projectId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	def test_101_sign_credit(self):
@@ -583,13 +582,35 @@ class Jfqjy3Tp(unittest.TestCase):
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=self.env,
-			product="gateway"
+			product="cloudloan"
 		)
-		print("返回json:%s" % rep.text)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
+	# @unittest.skip("-")
+	def test_118_project_cancel(self):
+		"""进件取消"""
+		data = excel_table_byname(self.excel, 'project_cancel')
+		param = json.loads(data[0]['param'])
+		param.update(
+			{
+				"projectId": self.r.get("jfqjy_3_periods_projectId"),
+				"sourceProjectId": self.r.get("jfqjy_3_periods_sourceProjectId")
+			}
+		)
+		if len(data[0]['headers']) == 0:
+			headers = None
+		else:
+			headers = json.loads(data[0]['headers'])
+		rep = Common.response(
+			faceaddr=data[0]['url'],
+			headers=headers,
+			data=json.dumps(param, ensure_ascii=False),
+			enviroment=self.env,
+			product="cloudloan"
+		)
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 if __name__ == '__main__':
 	unittest.main()

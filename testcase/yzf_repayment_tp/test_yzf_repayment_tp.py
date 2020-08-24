@@ -114,7 +114,6 @@ class TestYzfRepayment:
 	@pytest.mark.repayment
 	def test_2_loanasset(self, env, r):
 		"""翼支付进件放款同步接口"""
-		global period
 		data = excel_table_byname(self.excel, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data("data", "yzf_tp.json")

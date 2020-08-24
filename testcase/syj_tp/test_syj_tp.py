@@ -27,7 +27,7 @@ class SyjTp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = sys.argv[3]
+		cls.env = "test"
 		file = Config().get_item('File', 'syj_case_file')
 		cls.r = Common.conn_redis(cls.env)
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
@@ -61,10 +61,9 @@ class SyjTp(unittest.TestCase):
 			{
 				"cardNum": self.r.get("syj_cardNum"),
 				"custName": self.r.get("syj_custName"),
-				"phone": self.r.get("syj_phone")
+				"phone": Common.get_random("phone")
 			}
 		)
-		param['cardInfo'].update({"bankPhone": self.r["syj_phone"]})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -86,7 +85,6 @@ class SyjTp(unittest.TestCase):
 
 	def test_101_loan(self):
 		"""随意借放款接口"""
-		time.sleep(5)
 		data = excel_table_byname(self.excel, 'loan')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
@@ -120,7 +118,7 @@ class SyjTp(unittest.TestCase):
 
 	def test_102_query_loan_status(self):
 		"""随意借放款结果查询接口"""
-		time.sleep(8)
+		time.sleep(5)
 		GetSqlData.change_pay_status(
 			project_id=self.r.get("syj_projectId"),
 			enviroment=self.env
@@ -189,7 +187,7 @@ class SyjTp(unittest.TestCase):
 		self.assertEqual("交易成功", rep['content']['message'], "资产同步失败")
 
 	# @unittest.skip("-")
-	@unittest.skipUnless(sys.argv[4] == "compensation", "-")
+	# @unittest.skipUnless(sys.argv[4] == "compensation", "-")
 	def test_3_compensation(self):
 		"""随意借代偿一期"""
 		data = excel_table_byname(self.excel, 'compensation')
@@ -263,8 +261,8 @@ class SyjTp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
 
-	# @unittest.skip("-")
-	@unittest.skipUnless(sys.argv[4] == "after_comp_repay", "-")
+	@unittest.skip("-")
+	# @unittest.skipUnless(sys.argv[4] == "after_comp_repay", "-")
 	def test_4_after_comp_repay(self):
 		"""随意借代偿后还款"""
 		global period, plan_pay_type, plan_list_detail

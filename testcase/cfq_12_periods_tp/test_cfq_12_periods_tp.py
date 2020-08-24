@@ -26,7 +26,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = 'qa'
+		cls.env = 'test'
 		cls.sql = GetSqlData()
 		cls.r = Common.conn_redis(enviroment=cls.env)
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -95,11 +95,8 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.r.set("cfq_12_periods_projectId", json.loads(rep.text)['content']['projectId'])
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		self.r.set("cfq_12_periods_projectId", rep['content']['projectId'])
+		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 		# 修改进件审核状态
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get("cfq_12_periods_projectId"),
@@ -134,9 +131,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("返回信息:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
 	def test_101_loan_notice(self):
 		"""橙分期放款通知接口"""
@@ -167,9 +162,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("返回信息:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
 	def test_102_loanasset(self):
 		"""橙分期进件放款同步接口"""
@@ -214,10 +207,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
 	# @unittest.skip("-")
 	def test_103_sign_borrow(self):
@@ -247,11 +237,8 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			product="pintic",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.r.set("cfq_12_periods_contractId", json.loads(rep.text)['content']['contractId'])
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.r.set("cfq_12_periods_contractId", rep['content']['contractId'])
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	@unittest.skip("-")
 	# @unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
@@ -390,11 +377,8 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], data[0]['msgCode'])
-		self.assertEqual(json.loads(rep.text)['content']['message'], "交易成功")
+		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
+		self.assertEqual(rep['content']['message'], "交易成功")
 
 	# @unittest.skipUnless(sys.argv[4] == "advance_phase_one", "条件成立时执行")
 	@unittest.skip("-")
@@ -518,12 +502,10 @@ class Cfq12PeriodsTp(unittest.TestCase):
 				enviroment=self.env,
 				product="pintic"
 			)
-			print("响应信息:%s" % rep)
-			print("返回json:%s" % rep.text)
-			logger.info("返回信息:%s" % rep.text)
-			self.assertEqual(json.loads(rep.text)['resultCode'], data[0]['msgCode'])
-			self.assertEqual(json.loads(rep.text)['content']['message'], "交易成功")
-			self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+
+			self.assertEqual(rep['resultCode'], data[0]['msgCode'])
+			self.assertEqual(rep['content']['message'], "交易成功")
+			self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
 	@unittest.skip("-")
 	def test_106_settle_in_advance_phase_two(self):
@@ -648,12 +630,9 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], data[0]['msgCode'])
-		self.assertEqual(json.loads(rep.text)['content']['message'], "交易成功")
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
+		self.assertEqual(rep['content']['message'], "交易成功")
+		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
 	@unittest.skip("-")
 	def test_107_compensation(self):
@@ -724,10 +703,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], data[0]['msgCode'])
+		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
 
 	@unittest.skip("-")
 	def test_108_repurchase(self):
@@ -788,10 +764,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], data[0]['msgCode'])
+		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
 
 	@unittest.skip("-")
 	def test_109_after_comp_repay(self):
@@ -952,11 +925,8 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			enviroment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], data[0]['msgCode'])
-		self.assertEqual(json.loads(rep.text)['content']['message'], "交易成功")
+		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
+		self.assertEqual(rep['content']['message'], "交易成功")
 
 
 if __name__ == '__main__':

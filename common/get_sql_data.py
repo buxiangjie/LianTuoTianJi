@@ -163,7 +163,7 @@ class GetSqlData(object):
 	def loan_set(enviroment: str, project_id: str) -> str:
 		"""放款申请后调用，查询放款状态是否成功"""
 		global res
-		print("开始检查放款步骤")
+		logger.info("开始检查放款步骤")
 		time.sleep(5)
 		Common.trigger_task("projectLoanReparationJob", enviroment)
 		if GetSqlData().check_loan_result(enviroment, project_id) == -1:
