@@ -21,6 +21,6 @@
   },
   "job": {
     "test": "http://39.107.43.201:9024/jobs/trigger/",
-    "qa": "http://api-qa1.cloudloan.com:9024/jobs/trigger/"
+    "qa": "http://172.17.205.169:9024/jobs/trigger/"
   }
 }

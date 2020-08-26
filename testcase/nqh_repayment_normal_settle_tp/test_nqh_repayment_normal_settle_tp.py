@@ -25,7 +25,7 @@ class NqhRepaymentNormalSettle(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = "test"
+		cls.env = "qa"
 		cls.r = Common.conn_redis(cls.env)
 		file = Config().get_item('File', 'nqh_repayment_normal_settle_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
