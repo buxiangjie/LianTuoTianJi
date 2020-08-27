@@ -6,11 +6,13 @@
 @describe: 翼支付提前结清
 """
 import unittest
-import warnings
 import os
 import json
 import time
 import sys
+import pytest
+import allure
+
 from common.common_func import Common
 from log.logger import Logger
 from common.open_excel import excel_table_byname
@@ -22,26 +24,21 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 logger = Logger(logger="test_yzf_repayment_advance_tp").getlog()
 
 
-class YzfRepaymentAdvance(unittest.TestCase):
+@allure.feature("翼支付提前结清")
+class TestYzfRepaymentAdvance:
+	file = Config().get_item('File', 'yzf_repayment_advance_case_file')
+	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
-	@classmethod
-	def setUpClass(cls):
-		cls.env = sys.argv[3]
-		file = Config().get_item('File', 'yzf_repayment_advance_case_file')
-		cls.r = Common.conn_redis(cls.env)
-		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
-
-	@classmethod
-	def tearDownClass(cls):
-		pass
-
-	def test_0_approved(self):
+	@allure.title("翼支付进件")
+	@allure.severity("blocker")
+	@pytest.mark.offline_settle_in_advance
+	def test_0_approved(self, r, env):
 		"""翼支付进件同意接口"""
 		data = excel_table_byname(self.excel, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
-		Common.p2p_get_userinfo('yzf_repayment_advance', self.env)
+		Common.p2p_get_userinfo('yzf_repayment_advance', env)
 		param = json.loads(data[0]['param'])
-		self.r.mset(
+		r.mset(
 			{
 				"yzf_repayment_advance_sourceProjectId": Common.get_random("sourceProjectId"),
 				"yzf_repayment_advance_sourceUserId": Common.get_random("userid"),
@@ -50,20 +47,20 @@ class YzfRepaymentAdvance(unittest.TestCase):
 		)
 		param.update(
 			{
-				"sourceProjectId": self.r.get("yzf_repayment_advance_sourceProjectId"),
-				"sourceUserId": self.r.get("yzf_repayment_advance_sourceUserId"),
-				"transactionId": self.r.get("yzf_repayment_advance_transactionId")
+				"sourceProjectId": r.get("yzf_repayment_advance_sourceProjectId"),
+				"sourceUserId": r.get("yzf_repayment_advance_sourceUserId"),
+				"transactionId": r.get("yzf_repayment_advance_transactionId")
 			}
 		)
 		param['applyInfo'].update({"applyTime": Common.get_time("-")})
 		param['personalInfo'].update(
 			{
-				"cardNum": self.r.get("yzf_repayment_advance_cardNum"),
-				"custName": self.r.get("yzf_repayment_advance_custName"),
-				"phone": self.r.get("yzf_repayment_advance_phone")
+				"cardNum": r.get("yzf_repayment_advance_cardNum"),
+				"custName": r.get("yzf_repayment_advance_custName"),
+				"phone": r.get("yzf_repayment_advance_phone")
 			}
 		)
-		param['cardInfo'].update({"bankPhone": self.r.get("yzf_repayment_advance_phone")})
+		param['cardInfo'].update({"bankPhone": r.get("yzf_repayment_advance_phone")})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -72,31 +69,31 @@ class YzfRepaymentAdvance(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			enviroment=env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.r.set("yzf_repayment_advance_projectId", json.loads(rep.text)['content']['projectId'])
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
-		GetSqlData.change_project_audit_status(self.r['yzf_repayment_advance_projectId'], self.env)
+		r.set("yzf_repayment_advance_projectId", rep['content']['projectId'])
+		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
+		GetSqlData.change_project_audit_status(r['yzf_repayment_advance_projectId'], env)
 
-	def test_1_loan_notice(self):
+	@allure.title("翼支付放款通知")
+	@allure.severity("blocker")
+	@pytest.mark.offline_settle_in_advance
+	def test_1_loan_notice(self, r, env):
 		"""翼支付放款通知接口"""
 		data = excel_table_byname(self.excel, 'loan_notice')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
-		self.r["yzf_repayment_advance_loan_time"] = Common.get_time("-")
+		r["yzf_repayment_advance_loan_time"] = Common.get_time("-")
 		param.update(
 			{
-				"sourceProjectId": self.r.get("yzf_repayment_advance_sourceProjectId"),
-				"sourceUserId": self.r.get("yzf_repayment_advance_sourceUserId"),
-				"projectId": self.r.get("yzf_repayment_advance_projectId"),
+				"sourceProjectId": r.get("yzf_repayment_advance_sourceProjectId"),
+				"sourceUserId": r.get("yzf_repayment_advance_sourceUserId"),
+				"projectId": r.get("yzf_repayment_advance_projectId"),
 				"serviceSn": "SaasL-" + Common.get_random("serviceSn"),
-				"id": self.r.get("yzf_repayment_advance_cardNum"),
-				"bankPhone": self.r.get("yzf_repayment_advance_phone"),
-				"loanTime": self.r.get("yzf_repayment_advance_loan_time")
+				"id": r.get("yzf_repayment_advance_cardNum"),
+				"bankPhone": r.get("yzf_repayment_advance_phone"),
+				"loanTime": r.get("yzf_repayment_advance_loan_time")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -108,14 +105,15 @@ class YzfRepaymentAdvance(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			enviroment=env,
 			product="pintic"
 		)
-		print("返回信息:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
-	def test_2_loanasset(self):
+	@allure.title("翼支付进件放款同步")
+	@allure.severity("blocker")
+	@pytest.mark.offline_settle_in_advance
+	def test_2_loanasset(self, r, env):
 		"""翼支付进件放款同步接口"""
 		global period
 		data = excel_table_byname(self.excel, 'loan_asset')
@@ -131,8 +129,8 @@ class YzfRepaymentAdvance(unittest.TestCase):
 			period = 12
 		param['asset'].update(
 			{
-				"projectId": self.r.get("yzf_repayment_advance_projectId"),
-				"sourceProjectId": self.r.get("yzf_repayment_advance_sourceProjectId"),
+				"projectId": r.get("yzf_repayment_advance_projectId"),
+				"sourceProjectId": r.get("yzf_repayment_advance_sourceProjectId"),
 				"transactionId": "Apollo" + Common.get_random("transactionId"),
 				"repaymentDay": Common.get_time("day").split('-')[1],
 				"firstRepaymentDate": Common.get_repaydate(period)[0],
@@ -156,22 +154,22 @@ class YzfRepaymentAdvance(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			enviroment=env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
-	def test_3_repayment_settle_in_advance(self):
+	@allure.title("翼支付提前结清")
+	@allure.severity("blocker")
+	@pytest.mark.offline_settle_in_advance
+	def test_3_repayment_settle_in_advance(self, r, env):
 		"""翼支付提前结清"""
 		data = excel_table_byname(self.excel, 'repayment')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common().get_json_data('data', 'yzf_settle_in_advance.json')
 		param['repayment'].update(
 			{
-				"projectId": self.r.get("yzf_repayment_advance_projectId"),
+				"projectId": r.get("yzf_repayment_advance_projectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"payTime": Common.get_time("-"),
 				"sourceCreateTime": Common.get_time("-"),
@@ -193,8 +191,8 @@ class YzfRepaymentAdvance(unittest.TestCase):
 			)
 			if i['repaymentPlanType'] == 'Principal':
 				this_pay_amount = GetSqlData.get_all_repayment_amount(
-					enviroment=self.env,
-					project_id=self.r.get("yzf_repayment_advance_projectId")
+					enviroment=env,
+					project_id=r.get("yzf_repayment_advance_projectId")
 				)
 				i.update(
 					{
@@ -213,20 +211,20 @@ class YzfRepaymentAdvance(unittest.TestCase):
 				i.update(
 					{
 						"curAmount": GetSqlData.get_all_repayment_amount(
-							enviroment=self.env,
-							project_id=self.r.get("yzf_repayment_advance_projectId")
+							enviroment=env,
+							project_id=r.get("yzf_repayment_advance_projectId")
 						),
 						"payAmount": GetSqlData.get_all_repayment_amount(
-							enviroment=self.env,
-							project_id=self.r.get("yzf_repayment_advance_projectId")
+							enviroment=env,
+							project_id=r.get("yzf_repayment_advance_projectId")
 						)
 					}
 				)
 			else:
 				if i['assetPlanOwner'] == 'financePartner':
 					plan_list_detail = GetSqlData.get_user_repayment_detail(
-						project_id=self.r.get("yzf_repayment_advance_projectId"),
-						enviroment=self.env, period=i['period'],
+						project_id=r.get("yzf_repayment_advance_projectId"),
+						enviroment=env, period=i['period'],
 						repayment_plan_type=plan_type[i['repaymentPlanType']]
 					)
 					i.update(
@@ -239,8 +237,8 @@ class YzfRepaymentAdvance(unittest.TestCase):
 					)
 				elif i['assetPlanOwner'] == 'foundPartner':
 					plan_list_detail = GetSqlData.get_repayment_detail(
-						project_id=self.r.get("yzf_repayment_advance_projectId"),
-						enviroment=self.env, period=i['period'],
+						project_id=r.get("yzf_repayment_advance_projectId"),
+						enviroment=env, period=i['period'],
 						repayment_plan_type=plan_type[i['repaymentPlanType']]
 					)
 					i.update(
@@ -266,16 +264,13 @@ class YzfRepaymentAdvance(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			enviroment=env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], data[0]['msgCode'])
-		self.assertEqual(json.loads(rep.text)['content']['message'], "交易成功")
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
+		self.assertEqual(rep['content']['message'], "交易成功")
+		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
 
 if __name__ == '__main__':
-	unittest.main()
+	pytest.main()
