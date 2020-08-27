@@ -288,9 +288,9 @@ class Jfqjy3Tp(unittest.TestCase):
 
 	def test_109_loan_query(self):
 		"""放款结果查询"""
-		GetSqlData.loan_set(enviroment=self.env, project_id=self.r.get('jfqjy_3_periods_projectId'))
 		data = excel_table_byname(self.excel, 'pfa_query')
 		print("接口名称:%s" % data[0]['casename'])
+		GetSqlData.loan_set(enviroment=self.env, project_id=self.r.get('jfqjy_3_periods_projectId'))
 		param = json.loads(data[0]['param'])
 		param.update({"serviceSn": self.r.get("jfqjy_3_periods_loan_serviceSn")})
 		if len(data[0]['headers']) == 0:
@@ -588,7 +588,7 @@ class Jfqjy3Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	# @unittest.skip("-")
+	@unittest.skip("-")
 	def test_118_project_cancel(self):
 		"""进件取消"""
 		data = excel_table_byname(self.excel, 'project_cancel')
