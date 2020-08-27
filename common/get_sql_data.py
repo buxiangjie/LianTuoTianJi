@@ -255,8 +255,7 @@ class GetSqlData(object):
 		"""
 		# noinspection PyGlobalUndefined
 		global cur, conn, plan_table, sql, msg
-		conn = GetSqlData.conn_database(enviroment)
-		cur = conn.cursor()
+
 		try:
 			asset_id = GetSqlData.get_asset_id(enviroment, project_id)
 			if repayment_plan_type in ["1", "2"]:
@@ -267,6 +266,8 @@ class GetSqlData(object):
 					and period = {str(period)}
 					and repayment_plan_type = {str(repayment_plan_type)};
 					"""
+				conn = GetSqlData.conn_database(enviroment)
+				cur = conn.cursor()
 			elif feecategory == 3003:
 				plan_table = 'user_fee_plan_0' + GetSqlData.get_sub_table(enviroment, asset_id)
 				sql = f"""
@@ -274,12 +275,16 @@ class GetSqlData(object):
 					where asset_id = {str(asset_id)} 
 					and period = {str(period)} and fee_category = {str(repayment_plan_type)};
 					"""
+				conn = GetSqlData.conn_database(enviroment)
+				cur = conn.cursor()
 			else:
 				plan_table = 'fee_plan_0' + GetSqlData.get_sub_table(enviroment, asset_id)
 				sql = f"""
 					select plan_pay_date,rest_amount,cur_amount,source_plan_id from {plan_table} 
 					where asset_id = {str(asset_id)} and period = {str(period)} and fee_category = {feecategory};
 					"""
+			conn = GetSqlData.conn_database(enviroment)
+			cur = conn.cursor()
 			cur.execute(sql)
 			msg = cur.fetchone()
 			return msg

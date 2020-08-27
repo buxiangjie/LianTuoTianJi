@@ -27,7 +27,7 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = "test"
+		cls.env = "qa"
 		file = Config().get_item('File', 'yzf_repayment_normal_settle_case_file')
 		cls.r = Common.conn_redis(cls.env)
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
@@ -274,7 +274,7 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 				else:
 					pass
 			for p in param['repaymentPlanList']:
-				plan_list_pay_type = p['repaymentPlanType']
+				plan_list_pay_type = plan_type[p['repaymentPlanType']]
 				plan_list_asset_plan_owner = p['assetPlanOwner']
 				if plan_list_asset_plan_owner == 'financePartner':
 					plan_list_detail = GetSqlData.get_user_repayment_detail(
