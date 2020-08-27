@@ -41,7 +41,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 		data = excel_table_byname(excel, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
-		Common.p2p_get_userinfo("cfq_12_periods_return", self.env)
+		Common.p2p_get_userinfo("cfq_tp", self.env)
 		self.r.mset(
 			{
 				"cfq_12_periods_return_sourceProjectId": Common.get_random("sourceProjectId"),

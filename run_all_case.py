@@ -19,12 +19,12 @@ from config.configer import Config
 logger = Logger(logger="run_all_case").getlog()
 
 
-def all_case(dirs: str):
+def all_case(dirs: str, file):
 	"""批量添加用例到测试套件"""
 	case_dir = Config().get_item(section="CaseFile", option=dirs)
 	logger.info("用例执行文件夹%s" % case_dir)
 	cases = unittest.TestSuite()
-	discover = unittest.defaultTestLoader.discover(case_dir, pattern="test_*.py", top_level_dir=None)
+	discover = unittest.defaultTestLoader.discover(case_dir, pattern=file, top_level_dir=None)
 
 	for test_suit in discover:
 		for test_case in test_suit:
