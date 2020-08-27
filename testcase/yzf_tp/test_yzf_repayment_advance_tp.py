@@ -73,7 +73,7 @@ class TestYzfRepaymentAdvance:
 			product="pintic"
 		)
 		r.set("yzf_repayment_advance_projectId", rep['content']['projectId'])
-		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
+		assert rep['resultCode'] == int(data[0]['msgCode'])
 		GetSqlData.change_project_audit_status(r['yzf_repayment_advance_projectId'], env)
 
 	@allure.title("翼支付放款通知")
@@ -108,7 +108,7 @@ class TestYzfRepaymentAdvance:
 			enviroment=env,
 			product="pintic"
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
+		assert rep['resultCode'] == int(data[0]['msgCode'])
 
 	@allure.title("翼支付进件放款同步")
 	@allure.severity("blocker")
@@ -157,7 +157,7 @@ class TestYzfRepaymentAdvance:
 			enviroment=env,
 			product="pintic"
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
+		assert rep['resultCode'] == int(data[0]['msgCode'])
 
 	@allure.title("翼支付提前结清")
 	@allure.severity("blocker")
@@ -267,9 +267,9 @@ class TestYzfRepaymentAdvance:
 			enviroment=env,
 			product="pintic"
 		)
-		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
-		self.assertEqual(rep['content']['message'], "交易成功")
-		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
+		assert rep['resultCode'] == data[0]['msgCode']
+		assert rep['content']['message'] == "交易成功"
+		assert rep['resultCode'] == int(data[0]['msgCode'])
 
 
 if __name__ == '__main__':
