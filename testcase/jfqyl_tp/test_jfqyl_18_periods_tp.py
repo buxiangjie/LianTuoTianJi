@@ -636,6 +636,7 @@ class TestJfqyl18Tp:
 		param.update(
 			{
 				"serviceSn": Common.get_random("serviceSn"),
+				"productCode": "FQ_JK_JFQYL",
 				"projectId": r.get("jfqyl_18_periods_projectId"),
 				"sourceProjectId": r.get("jfqyl_18_periods_sourceProjectId"),
 				"repaymentPlanId": Common.get_random("sourceProjectId"),
