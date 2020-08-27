@@ -218,7 +218,7 @@ class TestDdq12Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.skip("跳过")
+	@pytest.mark.skip("跳过")
 	def test_105_image_upload(self, r, env):
 		"""上传图片"""
 		data = excel_table_byname(self.excel, 'image_upload')
