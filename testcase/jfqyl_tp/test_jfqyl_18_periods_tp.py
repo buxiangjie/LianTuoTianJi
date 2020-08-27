@@ -652,7 +652,7 @@ class TestJfqyl18Tp:
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			enviroment=env,
 			product="cloudloan"
 		)
