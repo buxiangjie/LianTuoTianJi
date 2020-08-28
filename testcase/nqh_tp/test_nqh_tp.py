@@ -5,7 +5,6 @@
 @date:
 @describe:拿去花流程
 """
-import unittest
 import os
 import json
 import time
@@ -190,6 +189,7 @@ class TestNqhTp:
 				}
 			)
 		for i in param['repaymentPlanList']:
+			# noinspection PyGlobalUndefined
 			global plan_list_detail, plan_pay_type
 			plan_pay_type = {
 				"Principal": "1",
