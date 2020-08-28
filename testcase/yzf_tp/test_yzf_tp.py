@@ -30,7 +30,7 @@ class TestYzfTp:
 	@allure.title("翼支付进件接口")
 	@pytest.mark.asset
 	@pytest.mark.comp
-	@pytest.mark.comp_repay
+	@pytest.mark.repay_comp
 	def test_0_approved(self, env, r):
 		"""翼支付进件同意接口"""
 		data = excel_table_byname(self.excel, 'approved')
@@ -83,7 +83,7 @@ class TestYzfTp:
 	@allure.title("翼支付放款通知")
 	@pytest.mark.asset
 	@pytest.mark.comp
-	@pytest.mark.comp_repay
+	@pytest.mark.repay_comp
 	def test_1_loan_notice(self, r, env):
 		"""翼支付放款通知接口"""
 		data = excel_table_byname(self.excel, 'loan_notice')
@@ -116,7 +116,7 @@ class TestYzfTp:
 	@allure.title("翼支付放款同步")
 	@pytest.mark.asset
 	@pytest.mark.comp
-	@pytest.mark.comp_repay
+	@pytest.mark.repay_comp
 	def test_2_loanasset(self, r, env):
 		"""翼支付进件放款同步接口"""
 		global period
@@ -169,7 +169,7 @@ class TestYzfTp:
 	# @unittest.skipUnless(sys.argv[4] == "compensation", "-")
 	@allure.title("翼支付代偿")
 	@pytest.mark.comp
-	@pytest.mark.comp_repay
+	@pytest.mark.repay_comp
 	def test_3_compensation(self, r, env):
 		"""翼支付12期代偿一期"""
 		data = excel_table_byname(self.excel, 'compensation')
@@ -247,11 +247,12 @@ class TestYzfTp:
 	# @unittest.skip("-")
 	# @unittest.skipUnless(sys.argv[4] == "compensation_after_repay", "-")
 	@allure.title("翼支付代偿后还款")
-	@pytest.mark.comp_repay
-	def test_4_after_comp_repay(self, r, env):
+	@pytest.mark.repay_comp
+	def test_4_after_repay_comp(self, r, env):
 		"""翼支付代偿后还款"""
+		# noinspection PyGlobalUndefined
 		global period, plan_pay_type, plan_list_detail
-		data = excel_table_byname(self.excel, 'after_comp_repay')
+		data = excel_table_byname(self.excel, 'after_repay_comp')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		period = 1

@@ -274,7 +274,7 @@ class TestNqhTp:
 	@allure.title("拿去花代偿后还款")
 	@allure.severity("blocker")
 	@pytest.mark.repay_comp
-	def test_4_after_comp_repay(self, env, r):
+	def test_4_after_repay_comp(self, env, r):
 		"""拿去花代偿后还款"""
 		# noinspection PyGlobalUndefined
 		global period, plan_pay_type, plan_list_detail
