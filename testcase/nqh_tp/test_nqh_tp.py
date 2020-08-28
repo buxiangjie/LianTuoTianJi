@@ -31,7 +31,6 @@ class TestNqhTp:
 	@allure.title("拿去花进件")
 	@allure.severity("blocker")
 	@pytest.mark.asset
-	@pytest.mark.offline_repay
 	@pytest.mark.comp
 	@pytest.mark.comp_repay
 	def test_0_approved(self, env, r):
@@ -84,7 +83,6 @@ class TestNqhTp:
 	@allure.title("拿去花放款通知")
 	@allure.severity("blocker")
 	@pytest.mark.asset
-	@pytest.mark.offline_repay
 	@pytest.mark.comp
 	@pytest.mark.comp_repay
 	def test_1_loan_notice(self, env, r):
@@ -120,7 +118,6 @@ class TestNqhTp:
 	@allure.title("拿去花放款同步")
 	@allure.severity("blocker")
 	@pytest.mark.asset
-	@pytest.mark.offline_repay
 	@pytest.mark.comp
 	@pytest.mark.comp_repay
 	def test_2_loan_asset(self, env, r):
