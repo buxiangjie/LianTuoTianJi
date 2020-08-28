@@ -244,8 +244,6 @@ class TestYzfTp:
 		)
 		assert rep['resultCode'] == data[0]['msgCode']
 
-	# @unittest.skip("-")
-	# @unittest.skipUnless(sys.argv[4] == "compensation_after_repay", "-")
 	@allure.title("翼支付代偿后还款")
 	@pytest.mark.comp_repay
 	def test_4_after_comp_repay(self, r, env):
