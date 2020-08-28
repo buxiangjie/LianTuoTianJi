@@ -10,6 +10,8 @@ import os
 import json
 import time
 import sys
+import allure
+import pytest
 
 from common.common_func import Common
 from log.logger import Logger
@@ -22,26 +24,24 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 logger = Logger(logger="test_nqh_tp").getlog()
 
 
-class NqhTp(unittest.TestCase):
+@allure.feature("拿去花流程")
+class TestNqhTp:
+	file = Config().get_item('File', 'nqh_case_file')
+	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
-	@classmethod
-	def setUpClass(cls):
-		cls.env = sys.argv[3]
-		file = Config().get_item('File', 'nqh_case_file')
-		cls.r = Common.conn_redis(cls.env)
-		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
-
-	@classmethod
-	def tearDownClass(cls):
-		pass
-
-	def test_0_approved(self):
+	@allure.title("拿去花进件")
+	@allure.severity("blocker")
+	@pytest.mark.asset
+	@pytest.mark.offline_repay
+	@pytest.mark.comp
+	@pytest.mark.repay_comp
+	def test_0_approved(self, env, r):
 		"""拿去花进件同意接口"""
 		data = excel_table_byname(self.excel, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
-		Common.p2p_get_userinfo("nqh", self.env)
-		self.r.mset(
+		Common.p2p_get_userinfo("nqh", env)
+		r.mset(
 			{
 				"nqh_sourceProjectId": Common.get_random("sourceProjectId"),
 				"nqh_sourceUserId": Common.get_random("userid"),
@@ -50,21 +50,20 @@ class NqhTp(unittest.TestCase):
 		)
 		param.update(
 			{
-				"sourceProjectId": self.r.get("nqh_sourceProjectId"),
-				"sourceUserId": self.r.get("nqh_sourceUserId"),
-				"transactionId": self.r.get("nqh_transactionId")
+				"sourceProjectId": r.get("nqh_sourceProjectId"),
+				"sourceUserId": r.get("nqh_sourceUserId"),
+				"transactionId": r.get("nqh_transactionId")
 			}
 		)
 		param['applyInfo'].update({"applyTime": Common.get_time("-")})
 		param['personalInfo'].update(
 			{
-				"cardNum": self.r.get("nqh_cardNum"),
-				"custName": self.r.get("nqh_custName"),
-				"phone": self.r.get("nqh_phone")
+				"cardNum": r.get("nqh_cardNum"),
+				"custName": r.get("nqh_custName"),
+				"phone": r.get("nqh_phone")
 			}
 		)
-		param['cardInfo'].update({"bankPhone": self.r.get("nqh_phone")})
-		del param['personalInfo']['phone']
+		param['cardInfo'].update({"bankPhone": r.get("nqh_phone")})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -73,32 +72,35 @@ class NqhTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			enviroment=env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.r.set("nqh_projectId", json.loads(rep.text)['content']['projectId'])
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		r.set("nqh_projectId", rep['content']['projectId'])
+		assert rep['resultCode'] == int(data[0]['msgCode'])
 		GetSqlData.change_project_audit_status(
-			project_id=self.r.get('nqh_projectId'),
-			enviroment=self.env
+			project_id=r.get('nqh_projectId'),
+			enviroment=env
 		)
 
-	def test_1_loan_notice(self):
+	@allure.title("拿去花放款通知")
+	@allure.severity("blocker")
+	@pytest.mark.asset
+	@pytest.mark.offline_repay
+	@pytest.mark.comp
+	@pytest.mark.repay_comp
+	def test_1_loan_notice(self, env, r):
 		"""拿去花放款通知接口"""
 		data = excel_table_byname(self.excel, 'loan_notice')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceProjectId": self.r.get("nqh_sourceProjectId"),
-				"sourceUserId": self.r.get("nqh_sourceUserId"),
-				"projectId": self.r.get("nqh_projectId"),
+				"sourceProjectId": r.get("nqh_sourceProjectId"),
+				"sourceUserId": r.get("nqh_sourceUserId"),
+				"projectId": r.get("nqh_projectId"),
 				"serviceSn": "SaasL-" + Common.get_random("serviceSn"),
-				"id": self.r.get("nqh_cardNum"),
-				"bankPhone": self.r.get("nqh_phone"),
+				"id": r.get("nqh_cardNum"),
+				"bankPhone": r.get("nqh_phone"),
 				"loanTime": Common.get_time("-")
 			}
 		)
@@ -111,14 +113,18 @@ class NqhTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			enviroment=env,
 			product="pintic"
 		)
-		print("返回信息:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		assert rep['resultCode'] == int(data[0]['msgCode'])
 
-	def test_2_loan_asset(self):
+	@allure.title("拿去花放款同步")
+	@allure.severity("blocker")
+	@pytest.mark.asset
+	@pytest.mark.offline_repay
+	@pytest.mark.comp
+	@pytest.mark.repay_comp
+	def test_2_loan_asset(self, env, r):
 		"""拿去花进件放款同步接口"""
 		time.sleep(5)
 		data = excel_table_byname(self.excel, 'loan_asset')
@@ -126,8 +132,8 @@ class NqhTp(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		param['asset'].update(
 			{
-				"projectId": self.r.get("nqh_projectId"),
-				"sourceProjectId": self.r.get("nqh_sourceProjectId"),
+				"projectId": r.get("nqh_projectId"),
+				"sourceProjectId": r.get("nqh_sourceProjectId"),
 				"transactionId": "Apollo" + Common.get_random("transactionId"),
 				"repaymentDay": Common.get_time("day").split('-')[1],
 				"firstRepaymentDate": Common.get_repaydate(6)[0],
@@ -150,25 +156,23 @@ class NqhTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			enviroment=env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		assert rep['resultCode'] == int(data[0]['msgCode'])
 
-	# @unittest.skip("skip")
-	@unittest.skipUnless(sys.argv[4] == "repayment", "-")
-	def test_3_repayment(self):
+	@allure.title("拿去花还款")
+	@allure.severity("blocker")
+	@pytest.mark.offline_repay
+	def test_3_repayment(self, env, r):
 		"""还款流水推送"""
 		data = excel_table_byname(self.excel, 'repayment')
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"projectId": self.r.get('nqh_projectId'),
-				"transactionId": self.r.get('nqh_transactionId'),
-				"sourceProjectId": self.r.get('nqh_sourceProjectId'),
+				"projectId": r.get('nqh_projectId'),
+				"transactionId": r.get('nqh_transactionId'),
+				"sourceProjectId": r.get('nqh_sourceProjectId'),
 				"sourcePlanId": Common.get_random('sourceProjectId'),
 				"sourceRepaymentId": Common.get_random("transactionId"),
 				"planPayDate": Common.get_time('-'),
@@ -185,24 +189,23 @@ class NqhTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			enviroment=env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		assert rep['resultCode'] == int(data[0]['msgCode'])
 
-	# @unittest.skip("-")
-	@unittest.skipUnless(sys.argv[4] == "compensation", "-")
-	def test_3_compensation(self):
+	@allure.title("拿去花代偿")
+	@allure.severity("blocker")
+	@pytest.mark.comp
+	@pytest.mark.repay_comp
+	def test_3_compensation(self, env, r):
 		"""拿去花代偿一期"""
 		data = excel_table_byname(self.excel, 'compensation')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['assetSwapInfo'].update(
 			{
-				"projectId": self.r['nqh_projectId'],
+				"projectId": r['nqh_projectId'],
 				"sourceApplyId": Common.get_random("serviceSn"),
 				"actionTime": Common.get_time("-"),
 				"sourceCreateTime": Common.get_time("-")
@@ -211,7 +214,7 @@ class NqhTp(unittest.TestCase):
 		for i in param['assetSwapDetailList']:
 			i.update(
 				{
-					"projectId": self.r['nqh_sourceProjectId'],
+					"projectId": r['nqh_sourceProjectId'],
 					"sourceDetailId": Common.get_random("serviceSn"),
 					"sourceSwapId": Common.get_random("serviceSn"),
 					"sourceRelatedPlanId": Common.get_random("serviceSn"),
@@ -227,15 +230,15 @@ class NqhTp(unittest.TestCase):
 			}
 			if i['assetPlanOwner'] == "foundPartner":
 				plan_list_detail = GetSqlData.get_repayment_detail(
-					project_id=self.r['nqh_projectId'],
-					enviroment=self.env,
+					project_id=r['nqh_projectId'],
+					enviroment=env,
 					period=i['period'],
 					repayment_plan_type=plan_pay_type.get(i['repaymentPlanType'])
 				)
 			elif i['assetPlanOwner'] == "financePartner":
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
-					project_id=self.r['nqh_projectId'],
-					enviroment=self.env,
+					project_id=r['nqh_projectId'],
+					enviroment=env,
 					period=i['period'],
 					repayment_plan_type=plan_pay_type.get(i['repaymentPlanType'])
 				)
@@ -263,18 +266,17 @@ class NqhTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			enviroment=env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], data[0]['msgCode'])
+		assert rep['resultCode'] == data[0]['msgCode']
 
-	# @unittest.skip("-")
-	@unittest.skipUnless(sys.argv[4] == "compensation_after_repay", "-")
-	def test_4_after_comp_repay(self):
+	@allure.title("拿去花代偿后还款")
+	@allure.severity("blocker")
+	@pytest.mark.repay_comp
+	def test_4_after_comp_repay(self, env, r):
 		"""拿去花代偿后还款"""
+		# noinspection PyGlobalUndefined
 		global period, plan_pay_type, plan_list_detail
 		data = excel_table_byname(self.excel, 'after_comp_repay')
 		print("接口名称:%s" % data[0]['casename'])
@@ -282,7 +284,7 @@ class NqhTp(unittest.TestCase):
 		period = 1
 		param['repayment'].update(
 			{
-				"projectId": self.r['nqh_projectId'],
+				"projectId": r['nqh_projectId'],
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"payTime": Common.get_time("-"),
 				"sourceCreateTime": Common.get_time("-"),
@@ -300,8 +302,8 @@ class NqhTp(unittest.TestCase):
 			if asset_plan_owner == "foundPartner":
 				if plan_catecory == 1 or plan_catecory == 2:
 					repayment_detail = GetSqlData.get_repayment_detail(
-						project_id=self.r['nqh_projectId'],
-						enviroment=self.env,
+						project_id=r['nqh_projectId'],
+						enviroment=env,
 						period=period,
 						repayment_plan_type=plan_pay_type
 					)
@@ -317,8 +319,8 @@ class NqhTp(unittest.TestCase):
 					)
 				else:
 					fee_detail = GetSqlData.get_user_repayment_detail(
-						project_id=self.r['nqh_projectId'],
-						enviroment=self.env,
+						project_id=r['nqh_projectId'],
+						enviroment=env,
 						period=period,
 						repayment_plan_type=plan_type,
 						feecategory=plan_catecory
@@ -346,8 +348,8 @@ class NqhTp(unittest.TestCase):
 					)
 				else:
 					user_repayment_detail = GetSqlData.get_user_repayment_detail(
-						project_id=self.r['nqh_projectId'],
-						enviroment=self.env,
+						project_id=r['nqh_projectId'],
+						enviroment=env,
 						period=period,
 						repayment_plan_type=plan_pay_type
 					)
@@ -367,8 +369,8 @@ class NqhTp(unittest.TestCase):
 			plan_list_asset_plan_owner = i['assetPlanOwner']
 			if plan_list_asset_plan_owner == 'financePartner':
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
-					project_id=self.r['nqh_projectId'],
-					enviroment=self.env,
+					project_id=r['nqh_projectId'],
+					enviroment=env,
 					period=period,
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -382,8 +384,8 @@ class NqhTp(unittest.TestCase):
 				)
 			elif plan_list_asset_plan_owner == 'foundPartner':
 				plan_list_detail = GetSqlData.get_repayment_detail(
-					project_id=self.r['nqh_projectId'],
-					enviroment=self.env,
+					project_id=r['nqh_projectId'],
+					enviroment=env,
 					period=i['period'],
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -398,8 +400,8 @@ class NqhTp(unittest.TestCase):
 		for i in param['feePlanList']:
 			if i['feeCategory'] != 3001:
 				user_fee = GetSqlData.get_repayment_detail(
-					project_id=self.r.get("nqh_projectId"),
-					enviroment=self.env,
+					project_id=r.get("nqh_projectId"),
+					enviroment=env,
 					period=i['period'],
 					repayment_plan_type=1,
 				)
@@ -412,8 +414,8 @@ class NqhTp(unittest.TestCase):
 				)
 			else:
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
-					project_id=self.r.get("nqh_projectId"),
-					enviroment=self.env,
+					project_id=r.get("nqh_projectId"),
+					enviroment=env,
 					period=i['period'],
 					repayment_plan_type=3,
 					feecategory=i['feeCategory']
@@ -433,15 +435,12 @@ class NqhTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			enviroment=env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], data[0]['msgCode'])
-		self.assertEqual(json.loads(rep.text)['content']['message'], "交易成功")
+		assert rep['resultCode'] == data[0]['msgCode']
+		assert rep['content']['message'] == "交易成功"
 
 
 if __name__ == '__main__':
-	unittest.main()
+	pytest.main()

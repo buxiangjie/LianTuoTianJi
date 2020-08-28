@@ -27,7 +27,7 @@ class SyjTp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = "test"
+		cls.env = "qa"
 		file = Config().get_item('File', 'syj_case_file')
 		cls.r = Common.conn_redis(cls.env)
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file

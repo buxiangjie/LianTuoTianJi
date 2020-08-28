@@ -118,16 +118,17 @@ class Syjv2Tp(unittest.TestCase):
 		)
 		self.assertEqual(int(data[0]['msgCode']), rep['resultCode'])
 		self.assertEqual("交易成功", rep['content']['message'], "放款申请失败")
+
+
+	def test_102_query_loan_status(self):
+		"""随意借V2放款结果查询接口"""
+		data = excel_table_byname(self.excel, 'query_loan_status')
+		print("接口名称:%s" % data[0]['casename'])
 		GetSqlData.change_pay_status(
 			project_id=self.r.get('syjv2_projectId'),
 			enviroment=self.env
 		)
-
-	def test_102_query_loan_status(self):
-		"""随意借V2放款结果查询接口"""
 		GetSqlData.loan_set(self.env, self.r.get('syjv2_projectId'))
-		data = excel_table_byname(self.excel, 'query_loan_status')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
