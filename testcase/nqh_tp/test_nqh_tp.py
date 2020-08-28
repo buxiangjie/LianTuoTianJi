@@ -34,7 +34,7 @@ class TestNqhTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.comp
-	@pytest.mark.repay_comp
+	@pytest.mark.comp_repay
 	def test_0_approved(self, env, r):
 		"""拿去花进件同意接口"""
 		data = excel_table_byname(self.excel, 'approved')
@@ -87,7 +87,7 @@ class TestNqhTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.comp
-	@pytest.mark.repay_comp
+	@pytest.mark.comp_repay
 	def test_1_loan_notice(self, env, r):
 		"""拿去花放款通知接口"""
 		data = excel_table_byname(self.excel, 'loan_notice')
@@ -123,7 +123,7 @@ class TestNqhTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.comp
-	@pytest.mark.repay_comp
+	@pytest.mark.comp_repay
 	def test_2_loan_asset(self, env, r):
 		"""拿去花进件放款同步接口"""
 		time.sleep(5)
@@ -197,7 +197,7 @@ class TestNqhTp:
 	@allure.title("拿去花代偿")
 	@allure.severity("blocker")
 	@pytest.mark.comp
-	@pytest.mark.repay_comp
+	@pytest.mark.comp_repay
 	def test_3_compensation(self, env, r):
 		"""拿去花代偿一期"""
 		data = excel_table_byname(self.excel, 'compensation')
@@ -273,8 +273,8 @@ class TestNqhTp:
 
 	@allure.title("拿去花代偿后还款")
 	@allure.severity("blocker")
-	@pytest.mark.repay_comp
-	def test_4_after_repay_comp(self, env, r):
+	@pytest.mark.comp_repay
+	def test_4_after_comp_repay(self, env, r):
 		"""拿去花代偿后还款"""
 		# noinspection PyGlobalUndefined
 		global period, plan_pay_type, plan_list_detail
