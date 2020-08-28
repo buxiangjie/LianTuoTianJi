@@ -161,39 +161,6 @@ class TestNqhTp:
 		)
 		assert rep['resultCode'] == int(data[0]['msgCode'])
 
-	@allure.title("拿去花还款")
-	@allure.severity("blocker")
-	@pytest.mark.offline_repay
-	def test_3_repayment(self, env, r):
-		"""还款流水推送"""
-		data = excel_table_byname(self.excel, 'repayment')
-		param = json.loads(data[0]['param'])
-		param.update(
-			{
-				"projectId": r.get('nqh_projectId'),
-				"transactionId": r.get('nqh_transactionId'),
-				"sourceProjectId": r.get('nqh_sourceProjectId'),
-				"sourcePlanId": Common.get_random('sourceProjectId'),
-				"sourceRepaymentId": Common.get_random("transactionId"),
-				"planPayDate": Common.get_time('-'),
-				"payTime": Common.get_time("-")
-			}
-		)
-		for i in param['repaymentDetailList']:
-			i.update({"sourceRepaymentDetailId": Common.get_random("serviceSn")})
-		if len(data[0]['headers']) == 0:
-			headers = None
-		else:
-			headers = json.loads(data[0]['headers'])
-		rep = Common.response(
-			faceaddr=data[0]['url'],
-			headers=headers,
-			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
-			product="pintic"
-		)
-		assert rep['resultCode'] == int(data[0]['msgCode'])
-
 	@allure.title("拿去花代偿")
 	@allure.severity("blocker")
 	@pytest.mark.comp
