@@ -529,34 +529,31 @@ class TestJfx12PeriodTp:
 		data = excel_table_byname(self.excel, 'repayment')
 		param = json.loads(data[0]['param'])
 		for per in range(1, 13):
-			success_amount = GetSqlData.get_repayment_amount(
-				project_id=r.get("jfx_12_periods_projectId"),
-				enviroment=env,
-				period=per)
+			repayment_plan_list = r.get("jfx_12_periods_repayment_plan")
+			success_amount = 0.00
+			repayment_detail_list = []
+			for i in json.loads(repayment_plan_list):
+				if i['period'] == per:
+					plan_detail = {
+						"sourceRepaymentDetailId": Common.get_random("transactionId"),
+						"payAmount": i['restAmount'],
+						"planCategory": i['repaymentPlanType']
+					}
+					success_amount = round(success_amount + plan_detail.get("payAmount"), 2)
+					repayment_detail_list.append(plan_detail)
 			param.update(
 				{
-					"projectId": r.get('jfx_12_periods_projectId'),
-					"transactionId": r.get('jfx_12_periods_transactionId'),
-					"sourceProjectId": r.get('jfx_12_periods_sourceProjectId'),
-					"sourcePlanId": Common.get_random('sourceProjectId'),
-					"sourceRepaymentId": Common.get_random("transactionId"),
-					"planPayDate": Common.get_repaydate(12)[per - 1],
-					"payTime": Common.get_time('-'),
-					"successAmount": float(success_amount),
+					"sourceRequestId": Common.get_random("requestNum"),
+					"projectId": r.get("jfx_12_periods_projectId"),
+					"sourceProjectId": r.get("jfx_12_periods_sourceProjectId"),
+					"sourceUserId": r.get("jfx_12_periods_sourceUserId"),
+					"serviceSn": Common.get_random("serviceSn"),
+					"payTime": Common.get_time("-"),
+					"successAmount": success_amount,
 					"period": per
 				}
 			)
-			for i in param['repaymentDetailList']:
-				pay_detail = GetSqlData.get_repayment_detail(
-					project_id=r.get('jfx_12_periods_projectId'),
-					enviroment=env, period=per,
-					repayment_plan_type=i['planCategory'])
-				i.update(
-					{
-						"sourceRepaymentDetailId": Common.get_random("serviceSn"),
-						"payAmount": float(pay_detail.get("cur_amount"))
-					}
-				)
+			param['repaymentDetailList'] = repayment_detail_list
 			if len(data[0]['headers']) == 0:
 				headers = None
 			else:

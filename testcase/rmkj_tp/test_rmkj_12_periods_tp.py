@@ -226,48 +226,111 @@ class Rmkj12Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	def test_106_sign(self):
-		"""预签约"""
-		data = excel_table_byname(self.excel, 'sign')
+	# def test_106_sign(self):
+	# 	"""预签约"""
+	# 	data = excel_table_byname(self.excel, 'sign')
+	# 	print("接口名称:%s" % data[0]['casename'])
+	# 	param = json.loads(data[0]['param'])
+	# 	param.update(
+	# 		{
+	# 			"requestId": Common.get_random("serviceSn"),
+	# 			"requestTime": Common.get_time("-"),
+	# 			"sourceUserId": self.r.get("rmkj_12_periods_sourceUserId"),
+	# 			"name": self.r.get("rmkj_12_periods_custName"),
+	# 			"cardNo": self.r.get("rmkj_12_periods_cardNum"),
+	# 			"bankNo": self.r.get("rmkj_12_periods_bankcard"),
+	# 			"mobile": self.r.get("rmkj_12_periods_phone")
+	# 		}
+	# 	)
+	# 	if len(data[0]['headers']) == 0:
+	# 		headers = None
+	# 	else:
+	# 		headers = json.loads(data[0]['headers'])
+	# 	rep = Common.response(
+	# 		faceaddr=data[0]['url'],
+	# 		headers=headers,
+	# 		data=json.dumps(param, ensure_ascii=False),
+	# 		product='pay',
+	# 		enviroment=self.env
+	# 	)
+	# 	self.r.set("rmkj_12_periods_signTaskId", rep['data']['signTaskId'])
+	# 	self.assertEqual(rep['code'], int(data[0]['resultCode']))
+
+	# def test_107_confirm(self):
+	# 	"""确认签约"""
+	# 	data = excel_table_byname(self.excel, 'confirm')
+	# 	print("接口名称:%s" % data[0]['casename'])
+	# 	param = Common.get_json_data("data", "rmkj_confirm.json")
+	# 	param.update(
+	# 		{
+	# 			"requestId": Common.get_random("serviceSn"),
+	# 			"requestTime": Common.get_time("-"),
+	# 			"sourceUserId": self.r.get("rmkj_12_periods_sourceUserId"),
+	# 			"signTaskId": self.r.get("rmkj_12_periods_signTaskId"),
+	# 			"smsCode": "849201"
+	# 		}
+	# 	)
+	# 	if len(data[0]['headers']) == 0:
+	# 		headers = None
+	# 	else:
+	# 		headers = json.loads(data[0]['headers'])
+	# 	rep = Common.response(
+	# 		faceaddr=data[0]['url'],
+	# 		headers=headers,
+	# 		data=json.dumps(param, ensure_ascii=False),
+	# 		product='pay',
+	# 		enviroment=self.env
+	# 	)
+	# 	self.assertEqual(rep['code'], int(data[0]['resultCode']))
+	# 	self.assertEqual(rep['data']['status'], 3)
+	#
+	# def test_108_query_sign(self):
+	# 	"""绑卡结果查询"""
+	# 	data = excel_table_byname(self.excel, 'query_sign')
+	# 	print("接口名称:%s" % data[0]['casename'])
+	# 	param = json.loads(data[0]['param'])
+	# 	param.update(
+	# 		{
+	# 			"requestId": Common.get_random("serviceSn"),
+	# 			"requestTime": Common.get_time("-"),
+	# 			"sourceUserId": self.r.get("rmkj_12_periods_sourceUserId"),
+	# 			"signTaskId": self.r.get("rmkj_12_periods_signTaskId")
+	# 		}
+	# 	)
+	# 	if len(data[0]['headers']) == 0:
+	# 		headers = None
+	# 	else:
+	# 		headers = json.loads(data[0]['headers'])
+	# 	rep = Common.response(
+	# 		faceaddr=data[0]['url'],
+	# 		headers=headers,
+	# 		data=json.dumps(param, ensure_ascii=False),
+	# 		product='pay',
+	# 		enviroment=self.env
+	# 	)
+	# 	self.assertEqual(rep['code'], int(data[0]['resultCode']))
+	# 	self.assertEqual(rep['data']['status'], 3)
+
+	def test_1088_deduction_share_sign(self):
+		"""协议支付号共享"""
+		data = excel_table_byname(self.excel, 'deduction_share_sign')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"requestId": Common.get_random("serviceSn"),
+				"serviceSn": Common.get_random("serviceSn"),
 				"requestTime": Common.get_time("-"),
 				"sourceUserId": self.r.get("rmkj_12_periods_sourceUserId"),
+				"transactionId": Common.get_random("transactionId"),
+				"sourceProjectId": self.r.get("rmkj_12_periods_sourceProjectId"),
+				"projectId": self.r.get("rmkj_12_periods_projectId"),
 				"name": self.r.get("rmkj_12_periods_custName"),
 				"cardNo": self.r.get("rmkj_12_periods_cardNum"),
 				"bankNo": self.r.get("rmkj_12_periods_bankcard"),
-				"mobile": self.r.get("rmkj_12_periods_phone")
-			}
-		)
-		if len(data[0]['headers']) == 0:
-			headers = None
-		else:
-			headers = json.loads(data[0]['headers'])
-		rep = Common.response(
-			faceaddr=data[0]['url'],
-			headers=headers,
-			data=json.dumps(param, ensure_ascii=False),
-			product='pay',
-			enviroment=self.env
-		)
-		self.r.set("rmkj_12_periods_signTaskId", rep['data']['signTaskId'])
-		self.assertEqual(rep['code'], int(data[0]['resultCode']))
+				"bankPhone": self.r.get("rmkj_12_periods_phone"),
+				"signNo": Common.get_random("businessLicenseNo"),
+				"authLetterNo": Common.get_random("transactionId")
 
-	def test_107_confirm(self):
-		"""确认签约"""
-		data = excel_table_byname(self.excel, 'confirm')
-		print("接口名称:%s" % data[0]['casename'])
-		param = Common.get_json_data("data", "rmkj_confirm.json")
-		param.update(
-			{
-				"requestId": Common.get_random("serviceSn"),
-				"requestTime": Common.get_time("-"),
-				"sourceUserId": self.r.get("rmkj_12_periods_sourceUserId"),
-				"signTaskId": self.r.get("rmkj_12_periods_signTaskId"),
-				"smsCode": "849201"
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -278,38 +341,10 @@ class Rmkj12Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product='pay',
+			product="cloudloan",
 			enviroment=self.env
 		)
-		self.assertEqual(rep['code'], int(data[0]['resultCode']))
-		self.assertEqual(rep['data']['status'], 3)
-
-	def test_108_query_sign(self):
-		"""绑卡结果查询"""
-		data = excel_table_byname(self.excel, 'query_sign')
-		print("接口名称:%s" % data[0]['casename'])
-		param = json.loads(data[0]['param'])
-		param.update(
-			{
-				"requestId": Common.get_random("serviceSn"),
-				"requestTime": Common.get_time("-"),
-				"sourceUserId": self.r.get("rmkj_12_periods_sourceUserId"),
-				"signTaskId": self.r.get("rmkj_12_periods_signTaskId")
-			}
-		)
-		if len(data[0]['headers']) == 0:
-			headers = None
-		else:
-			headers = json.loads(data[0]['headers'])
-		rep = Common.response(
-			faceaddr=data[0]['url'],
-			headers=headers,
-			data=json.dumps(param, ensure_ascii=False),
-			product='pay',
-			enviroment=self.env
-		)
-		self.assertEqual(rep['code'], int(data[0]['resultCode']))
-		self.assertEqual(rep['data']['status'], 3)
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	def test_109_card_change(self):
 		"""还款卡推送"""
@@ -727,7 +762,7 @@ class Rmkj12Tp(unittest.TestCase):
 				"transactionId": self.r.get("rmkj_12_periods_sourceProjectId"),
 				"sourceProjectId": self.r.get("rmkj_12_periods_sourceProjectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
-				"planPayDate": plan_pay_date['plan_pay_date'],
+				"planPayDate": str(plan_pay_date['plan_pay_date']),
 				"successAmount": success_amount,
 				"repayType": 2,
 				"period": json.loads(repayment_plan_list)[0]['period']
