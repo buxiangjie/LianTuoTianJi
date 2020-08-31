@@ -627,8 +627,6 @@ class TestRmkj3Tp:
 		r.set("rmkj_3_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
-	# @unittest.skip("跳过")
 	@allure.title("提前结清试算")
 	@allure.severity("blocker")
 	@pytest.mark.settle_in_advance
@@ -804,14 +802,10 @@ class TestRmkj3Tp:
 				enviroment=env
 			)
 
-
-
 			r.set("rmkj_3_periods_deductionTaskId", rep['content']['deductionTaskId'])
 			assert rep['resultCode'] == int(data[0]['resultCode'])
 			time.sleep(5)
 
-	# @unittest.skip("跳过")
-	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
 	@allure.title("主动还款-提前全部结清")
 	@allure.severity("blocker")
 	@pytest.mark.settle_in_advance
@@ -891,8 +885,6 @@ class TestRmkj3Tp:
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	# @unittest.skipUnless(sys.argv[4] == "repayment" or sys.argv[4] == "early_settlement", "-")
-	# @unittest.skip("跳过")
 	@allure.title("主动还款结果查询")
 	@allure.severity("blocker")
 	@pytest.mark.repayment
@@ -917,8 +909,6 @@ class TestRmkj3Tp:
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	# @unittest.skipUnless(sys.argv[4] == "repayment_offline", "-")
-	# @unittest.skip("跳过")
 	@allure.title("线下还款一期")
 	@allure.severity("blocker")
 	@pytest.mark.offline_repay

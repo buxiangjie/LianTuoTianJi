@@ -508,7 +508,7 @@ class TestJfx12PeriodTp:
 					project_id=r.get('jfx_12_periods_projectId'),
 					enviroment=env, period=per,
 					repayment_plan_type=i['planCategory'])
-				param['repaymentDetailList'][i].update(
+				i.update(
 					{
 						"sourceRepaymentDetailId": Common.get_random("serviceSn"),
 						"payAmount": float(pay_detail.get("cur_amount"))
