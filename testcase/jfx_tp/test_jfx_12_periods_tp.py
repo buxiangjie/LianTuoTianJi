@@ -523,7 +523,7 @@ class TestJfx12PeriodTp:
 
 	@allure.title("全部结清")
 	@allure.severity("blocker")
-	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.settle
 	def test_113_repayment(self, r, env):
 		"""还款流水推送:全部结清"""
 		data = excel_table_byname(self.excel, 'repayment')
