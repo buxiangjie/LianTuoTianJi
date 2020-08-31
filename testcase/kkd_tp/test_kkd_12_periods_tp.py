@@ -215,13 +215,14 @@ class TestKkd12Tp:
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	@allure.title("上传医疗美容图片")
+	@allure.title("上传图片")
 	@allure.severity("trivial")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.skip
 	def test_105_image_upload(self, r, env):
-		"""上传医疗美容图片"""
+		"""上传图片"""
 		data = excel_table_byname(self.excel, 'image_upload')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
