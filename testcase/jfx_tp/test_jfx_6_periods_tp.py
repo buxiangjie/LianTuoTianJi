@@ -25,7 +25,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = sys.argv[3]
+		cls.env = "qa"
 		cls.r = Common.conn_redis(enviroment=cls.env)
 		file = Config().get_item('File', 'jfx_mul_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
@@ -74,18 +74,15 @@ class Jfx3PeriodTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		creditId = json.loads(rep.text)['content']['creditId']
-		userId = json.loads(rep.text)['content']['userId']
+		creditId = rep['content']['creditId']
+		userId = rep['content']['userId']
 		self.r.mset(
 			{
 				"jfx_6_periods_creditId": creditId,
 				"jfx_6_periods_userId": userId
 			}
 		)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	def test_101_query_result(self):
 		"""授信结果查询"""
@@ -108,11 +105,8 @@ class Jfx3PeriodTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['resultCode']), json.loads(rep.text)['resultCode'])
-		self.assertEqual(json.loads(rep.text)['content']['creditStatus'], 1)
+		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
+		self.assertEqual(rep['content']['creditStatus'], 1)
 
 	def test_102_query_user_amount(self):
 		"""用户额度查询"""
@@ -136,10 +130,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['resultCode']), json.loads(rep.text)['resultCode'])
+		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 
 	def test_103_sign_credit(self):
 		"""上传授信协议"""
@@ -167,10 +158,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['resultCode']), json.loads(rep.text)['resultCode'])
+		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 
 	def test_104_project_apply(self):
 		"""进件"""
@@ -227,11 +215,8 @@ class Jfx3PeriodTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		projectId = json.loads(rep.text)['content']['projectId']
-		self.r.set('jfx_6_periods_projectId', projectId)
-		self.assertEqual(int(data[0]['resultCode']), json.loads(rep.text)['resultCode'])
+		self.r.set('jfx_6_periods_projectId', rep['content']['projectId'])
+		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 
 	def test_105_query_apply_result(self):
 		"""进件结果查询"""
@@ -259,10 +244,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['resultCode']), json.loads(rep.text)['resultCode'])
+		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 
 	def test_106_sign_credit(self):
 		"""上传授信协议"""
@@ -290,10 +272,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['resultCode']), json.loads(rep.text)['resultCode'])
+		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 
 	def test_107_contract_sign(self):
 		"""上传借款合同"""
@@ -321,10 +300,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['resultCode']), json.loads(rep.text)['resultCode'])
+		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 
 	def test_108_pfa(self):
 		"""放款"""
@@ -354,10 +330,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['resultCode']), json.loads(rep.text)['resultCode'])
+		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 		time.sleep(8)
 		GetSqlData.change_pay_status(
 			enviroment=self.env,
@@ -384,10 +357,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 			enviroment=self.env,
 			product="cloudloan"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	def test_110_query_repaymentplan(self):
 		"""还款计划查询"""
@@ -405,14 +375,11 @@ class Jfx3PeriodTp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(int(data[0]['resultCode']), json.loads(rep.text)['resultCode'])
-		self.r.set("jfx_6_periods_repayment_plan", json.dumps(json.loads(rep.text)['content']['repaymentPlanList']))
+		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
+		self.r.set("jfx_6_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
-	@unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
-	# @unittest.skip("11")
+	# @unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
+	@unittest.skip("11")
 	def test_112_repayment(self):
 		"""还款流水推送"""
 		data = excel_table_byname(self.excel, 'repayment')
@@ -454,13 +421,10 @@ class Jfx3PeriodTp(unittest.TestCase):
 			enviroment=self.env,
 			product="cloudloan"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	# @unittest.skip("1")
-	@unittest.skipUnless(sys.argv[4] == "early_repayment", "条件成立时执行")
+	@unittest.skip("1")
+	# @unittest.skipUnless(sys.argv[4] == "early_repayment", "条件成立时执行")
 	def test_113_repayment(self):
 		"""还款流水推送:提前全部结清"""
 		data = excel_table_byname(self.excel, 'repayment')
@@ -508,13 +472,11 @@ class Jfx3PeriodTp(unittest.TestCase):
 				enviroment=self.env,
 				product="cloudloan"
 			)
-			print("响应信息:%s" % rep)
-			print("返回json:%s" % rep.text)
-			logger.info("返回信息:%s" % rep.text)
-			self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
 
-	@unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
-	# @unittest.skip("11")
+			self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+
+	# @unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
+	@unittest.skip("11")
 	def test_114_capital_flow(self):
 		"""资金流水推送"""
 		data = excel_table_byname(self.excel, 'cash_push')
@@ -547,10 +509,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 			enviroment=self.env,
 			product="cloudloan"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 
 if __name__ == '__main__':

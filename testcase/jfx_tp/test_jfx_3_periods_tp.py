@@ -10,6 +10,7 @@ import os
 import json
 import time
 import sys
+
 from common.common_func import Common
 from log.logger import Logger
 from common.open_excel import excel_table_byname
@@ -25,7 +26,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = sys.argv[3]
+		cls.env = "qa"
 		cls.r = Common.conn_redis(enviroment=cls.env)
 		file = Config().get_item('File', 'jfx_mul_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
@@ -405,8 +406,8 @@ class Jfx3PeriodTp(unittest.TestCase):
 		self.assertEqual(int(data[0]['resultCode']), json.loads(rep.text)['resultCode'])
 		self.r.set("jfx_3_periods_repayment_plan", json.dumps(json.loads(rep.text)['content']['repaymentPlanList']))
 
-	@unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
-	# @unittest.skip("skip")
+	# @unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
+	@unittest.skip("skip")
 	def test_B_repayment(self):
 		"""还款流水推送"""
 		global plan_pay_date
@@ -457,8 +458,8 @@ class Jfx3PeriodTp(unittest.TestCase):
 		logger.info("返回信息:%s" % rep.text)
 		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
 
-	# @unittest.skip("1")
-	@unittest.skipUnless(sys.argv[4] == "early_repayment", "条件成立时执行")
+	@unittest.skip("1")
+	# @unittest.skipUnless(sys.argv[4] == "early_repayment", "条件成立时执行")
 	def test_B1_repayment(self):
 		"""还款流水推送:提前全部结清"""
 		data = excel_table_byname(self.excel, 'repayment')
@@ -509,8 +510,8 @@ class Jfx3PeriodTp(unittest.TestCase):
 			logger.info("返回信息:%s" % rep.text)
 			self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
 
-	@unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
-	# @unittest.skip("skip")
+	# @unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
+	@unittest.skip("skip")
 	def test_C_capital_flow(self):
 		"""资金流水推送"""
 		data = excel_table_byname(self.excel, 'cash_push')
@@ -547,8 +548,8 @@ class Jfx3PeriodTp(unittest.TestCase):
 		logger.info("返回信息:%s" % rep.text)
 		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
 
-	@unittest.skipUnless(sys.argv[4] == "offline_partial", "-")
-	# @unittest.skip("跳过")
+	# @unittest.skipUnless(sys.argv[4] == "offline_partial", "-")
+	@unittest.skip("跳过")
 	def test_D_offline_partial(self):
 		"""线下还款:部分还款"""
 		data = excel_table_byname(self.excel, 'offline_partial')
