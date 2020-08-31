@@ -22,6 +22,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 logger = Logger(logger="test_jfx_12_periods_tp").getlog()
 
+
 @allure.feature("金服侠12期")
 class TestJfx12PeriodTp:
 	file = Config().get_item('File', 'jfx_mul_case_file')
@@ -32,6 +33,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.settle
 	def test_100_credit_apply(self, r, env):
 		"""额度授信"""
 		data = excel_table_byname(self.excel, 'credit_apply_data')
@@ -92,6 +94,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.settle
 	def test_101_query_result(self, r, env):
 		"""授信结果查询"""
 		GetSqlData.credit_set(
@@ -120,6 +123,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.settle
 	def test_102_query_user_amount(self, r, env):
 		"""用户额度查询"""
 		data = excel_table_byname(self.excel, 'query_user_amount')
@@ -149,6 +153,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.settle
 	def test_103_sign_credit(self, r, env):
 		"""上传授信协议"""
 		data = excel_table_byname(self.excel, 'contract_sign')
@@ -182,6 +187,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.settle
 	def test_104_project_apply(self, r, env):
 		"""进件"""
 		data = excel_table_byname(self.excel, 'test_project')
@@ -245,6 +251,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.settle
 	def test_105_query_apply_result(self, r, env):
 		"""进件结果查询"""
 		GetSqlData.change_project_audit_status(
@@ -278,6 +285,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.settle
 	def test_106_sign_credit(self, r, env):
 		"""上传借款授信协议"""
 		data = excel_table_byname(self.excel, 'contract_sign')
@@ -311,6 +319,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.settle
 	def test_107_contract_sign(self, r, env):
 		"""上传借款合同"""
 		data = excel_table_byname(self.excel, 'contract_sign')
@@ -344,6 +353,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.settle
 	def test_108_pfa(self, r, env):
 		"""放款申请"""
 		data = excel_table_byname(self.excel, 'project_loan')
@@ -383,6 +393,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.settle
 	def test_109_pfa_query(self, r, env):
 		"""放款结果查询"""
 		GetSqlData.loan_set(
@@ -405,12 +416,47 @@ class TestJfx12PeriodTp:
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
+	@allure.title("提前结清试算")
+	@allure.severity("blocker")
+	@pytest.mark.offline_settle_in_advance
+	def test_110_early_settlement(self, r, env):
+		"""还款计划试算:提前结清"""
+		data = excel_table_byname(self.excel, 'calculate')
+		print("接口名称:%s" % data[0]['casename'])
+		param = json.loads(data[0]['param'])
+		param.update(
+			{
+				"sourceUserId": r.get("jfx_12_periods_sourceUserId"),
+				"transactionId": r.get("jfx_12_periods_sourceProjectId"),
+				"sourceProjectId": r.get("jfx_12_periods_sourceProjectId"),
+				"projectId": r.get("jfx_12_periods_projectId"),
+				"businessType": 2
+			}
+		)
+		if len(data[0]['headers']) == 0:
+			headers = None
+		else:
+			headers = json.loads(data[0]['headers'])
+		rep = Common.response(
+			faceaddr=data[0]['url'],
+			headers=headers,
+			data=json.dumps(param, ensure_ascii=False),
+			product="cloudloan",
+			enviroment=env
+		)
+		r.set(
+			"jfx_12_periods_early_settlement_repayment_plan",
+			json.dumps(rep['content']['repaymentPlanList'])
+		)
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+
 	@allure.title("还款计划查询")
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	def test_110_query_repaymentplan(self, r, env):
+	@pytest.mark.settle
+	def test_111_query_repaymentplan(self, r, env):
 		"""还款计划查询"""
 		data = excel_table_byname(self.excel, 'repayment_plan')
 		param = json.loads(data[0]['param'])
@@ -429,8 +475,6 @@ class TestJfx12PeriodTp:
 		assert int(data[0]['resultCode']) == rep['resultCode']
 		r.set("jfx_12_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
-	# # @unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
-	# @unittest.skip("1")
 	@allure.title("还款流水推送")
 	@allure.severity("blocker")
 	@pytest.mark.offline_repay
@@ -477,18 +521,17 @@ class TestJfx12PeriodTp:
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	# @unittest.skip("1")
-	# # @unittest.skipUnless(sys.argv[4] == "early_repayment", "满足条件执行")
-	@allure.title("提前全部结清")
+	@allure.title("全部结清")
 	@allure.severity("blocker")
 	@pytest.mark.offline_settle_in_advance
 	def test_113_repayment(self, r, env):
-		"""还款流水推送:提前全部结清"""
+		"""还款流水推送:全部结清"""
 		data = excel_table_byname(self.excel, 'repayment')
 		param = json.loads(data[0]['param'])
 		for per in range(1, 13):
 			success_amount = GetSqlData.get_repayment_amount(
-				project_id=r.get("jfx_12_periods_projectId"), enviroment=env,
+				project_id=r.get("jfx_12_periods_projectId"),
+				enviroment=env,
 				period=per)
 			param.update(
 				{
@@ -527,12 +570,61 @@ class TestJfx12PeriodTp:
 			)
 			assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	# # @unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
-	# @unittest.skip("1")
+	@allure.title("提前结清")
+	@allure.severity("normal")
+	@pytest.mark.offline_settle_in_advance
+	def test_114_offline_settle(self, r, env):
+		"""线下还款流水推送：提前全部结清"""
+		data = excel_table_byname(self.excel, 'offline_repay')
+		print("接口名称:%s" % data[0]['casename'])
+		param = json.loads(data[0]['param'])
+		plan_pay_date = GetSqlData.get_repayment_detail(
+			project_id=r.get("jfx_12_periods_projectId"),
+			enviroment=env,
+			period=1,
+			repayment_plan_type=1
+		)
+		repayment_plan_list = r.get("jfx_12_periods_early_settlement_repayment_plan")
+		success_amount = 0.00
+		repayment_detail_list = []
+		for i in json.loads(repayment_plan_list):
+			plan_detail = {
+				"sourceRepaymentDetailId": Common.get_random("transactionId"),
+				"payAmount": i['amount'],
+				"planCategory": i['repaymentPlanType']
+			}
+			success_amount = round(success_amount + plan_detail.get("payAmount"), 2)
+			repayment_detail_list.append(plan_detail)
+		param.update(
+			{
+				"projectId": r.get("jfx_12_periods_projectId"),
+				"transactionId": r.get("jfx_12_periods_sourceProjectId"),
+				"sourceProjectId": r.get("jfx_12_periods_sourceProjectId"),
+				"sourceRepaymentId": Common.get_random("sourceProjectId"),
+				"planPayDate": str(plan_pay_date['plan_pay_date']),
+				"successAmount": success_amount,
+				"repayType": 2,
+				"period": json.loads(repayment_plan_list)[0]['period']
+			}
+		)
+		param['repaymentDetailList'] = repayment_detail_list
+		if len(data[0]['headers']) == 0:
+			headers = None
+		else:
+			headers = json.loads(data[0]['headers'])
+		rep = Common.response(
+			faceaddr=data[0]['url'],
+			headers=headers,
+			data=json.dumps(param, ensure_ascii=False),
+			product="cloudloan",
+			enviroment=env
+		)
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+
 	@allure.title("资金流水推送")
 	@allure.severity("normal")
 	@pytest.mark.offline_repay
-	def test_114_capital_flow(self, r, env):
+	def test_115_capital_flow(self, r, env):
 		"""资金流水推送"""
 		data = excel_table_byname(self.excel, 'cash_push')
 		param = json.loads(data[0]['param'])
