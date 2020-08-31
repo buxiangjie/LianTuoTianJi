@@ -398,8 +398,6 @@ class TestKkd12Tp:
 		r.set("kkd_12_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
-	# @unittest.skip("跳过")
 	@allure.title("提前结清试算")
 	@allure.severity("blocker")
 	@pytest.mark.offline_settle_in_advance
@@ -434,8 +432,6 @@ class TestKkd12Tp:
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	# @unittest.skipUnless(sys.argv[4] == "repayment_offline", "-")
-	# @unittest.skip("跳过")
 	@allure.title("线下还款流水推送")
 	@allure.severity("blocker")
 	@pytest.mark.offline_repay
@@ -489,8 +485,6 @@ class TestKkd12Tp:
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	# @unittest.skipUnless(sys.argv[4] == "early_settlement_offline", "-")
-	# @unittest.skip("跳过")
 	@allure.title("提前结清")
 	@allure.severity("blocker")
 	@pytest.mark.offline_settle_in_advance
@@ -522,7 +516,7 @@ class TestKkd12Tp:
 				"transactionId": r.get("kkd_12_periods_sourceProjectId"),
 				"sourceProjectId": r.get("kkd_12_periods_sourceProjectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
-				"planPayDate": plan_pay_date['plan_pay_date'],
+				"planPayDate": str(plan_pay_date['plan_pay_date']),
 				"successAmount": success_amount,
 				"repayType": 2,
 				"period": json.loads(repayment_plan_list)[0]['period'],
@@ -543,7 +537,6 @@ class TestKkd12Tp:
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	# @unittest.skip("-")
 	@allure.title("上传债转涵")
 	@allure.severity("blocker")
 	def test_114_debt_transfer(self, r, env):
