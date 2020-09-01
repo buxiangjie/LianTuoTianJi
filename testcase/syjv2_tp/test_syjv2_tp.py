@@ -341,6 +341,7 @@ class TestSyjv2Tp:
 				"Principal": "1",
 				"Interest": "2"
 			}
+			plan_list_detail = {}
 			if i['assetPlanOwner'] == "foundPartner":
 				plan_list_detail = GetSqlData.get_repayment_detail(
 					project_id=r.get('syjv2_projectId'),
