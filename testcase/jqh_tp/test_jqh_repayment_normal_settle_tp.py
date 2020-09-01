@@ -155,7 +155,6 @@ class JqhRepaymentNormalSettle(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
-	# TODO: 脚本执行不通
 	def test_3_repayment_normal_settle(self):
 		"""借去花全部结清"""
 		time.sleep(5)

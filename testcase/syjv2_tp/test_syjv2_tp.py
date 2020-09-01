@@ -6,11 +6,11 @@
 @describe:随意借V2流程
 """
 
-import unittest
 import os
 import json
-import time
 import sys
+import allure
+import pytest
 
 from common.common_func import Common
 from log.logger import Logger
@@ -23,26 +23,24 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 logger = Logger(logger="test_syjv2_tp").getlog()
 
 
-class Syjv2Tp(unittest.TestCase):
+@allure.feature("随意借V2")
+class TestSyjv2Tp:
+	file = Config().get_item('File', 'syjv2_case_file')
+	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
-	@classmethod
-	def setUpClass(cls):
-		cls.env = "qa"
-		cls.r = Common.conn_redis(enviroment=cls.env)
-		file = Config().get_item('File', 'syjv2_case_file')
-		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
-
-	@classmethod
-	def tearDownClass(cls):
-		pass
-
-	def test_100_approved(self):
+	@allure.title("随意借进件")
+	@allure.severity("blocker")
+	@pytest.mark.asset
+	@pytest.mark.offline_repay
+	@pytest.mark.comp
+	@pytest.mark.comp_repay
+	def test_100_approved(self, r, env):
 		"""随意借V2进件同意接口"""
 		data = excel_table_byname(self.excel, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
-		Common.p2p_get_userinfo('syjv2', self.env)
+		Common.p2p_get_userinfo('syjv2', env)
 		param = json.loads(data[0]['param'])
-		self.r.mset(
+		r.mset(
 			{
 				"syjv2_sourceUserId": Common.get_random('userid'),
 				"syjv2_transactionId": Common.get_random('transactionId'),
@@ -52,20 +50,20 @@ class Syjv2Tp(unittest.TestCase):
 		)
 		param.update(
 			{
-				"sourceProjectId": self.r.get('syjv2_sourceProjectId'),
-				"sourceUserId": self.r.get('syjv2_sourceUserId'),
-				"transactionId": self.r.get('syjv2_transactionId')
+				"sourceProjectId": r.get('syjv2_sourceProjectId'),
+				"sourceUserId": r.get('syjv2_sourceUserId'),
+				"transactionId": r.get('syjv2_transactionId')
 			}
 		)
 		param['applyInfo'].update({"applyTime": Common.get_time("-")})
 		param['personalInfo'].update(
 			{
-				"cardNum": self.r.get('syjv2_cardNum'),
-				"custName": self.r.get('syjv2_custName'),
-				"phone": self.r.get('syjv2_phone')
+				"cardNum": r.get('syjv2_cardNum'),
+				"custName": r.get('syjv2_custName'),
+				"phone": r.get('syjv2_phone')
 			}
 		)
-		param['cardInfo'].update({"bankPhone": self.r.get('syjv2_phone')})
+		param['cardInfo'].update({"bankPhone": r.get('syjv2_phone')})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -74,35 +72,40 @@ class Syjv2Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			enviroment=env,
 			product="pintic"
 		)
-		self.r.set('syjv2_projectId', rep['content']['projectId'])
-		self.assertEqual(int(data[0]['msgCode']), rep['resultCode'])
-		self.assertEqual("交易成功", rep['content']['message'], "进件失败")
+		r.set('syjv2_projectId', rep['content']['projectId'])
+		assert (int(data[0]['msgCode']), rep['resultCode'])
+		assert ("交易成功", rep['content']['message'], "进件失败")
 		GetSqlData.change_project_audit_status(
-			project_id=self.r.get('syjv2_projectId'),
-			enviroment=self.env
-		)
-		GetSqlData.project_audit_status(
-			project_id=self.r.get('syjv2_projectId'),
-			enviroment=self.env
+			project_id=r.get('syjv2_projectId'),
+			enviroment=env
 		)
 
-	def test_101_loan(self):
+	@allure.title("随意借放款")
+	@allure.severity("blocker")
+	@pytest.mark.asset
+	@pytest.mark.offline_repay
+	@pytest.mark.comp
+	@pytest.mark.comp_repay
+	def test_101_loan(self, r, env):
 		"""随意借V2放款接口"""
-		time.sleep(5)
 		data = excel_table_byname(self.excel, 'loan')
 		print("接口名称:%s" % data[0]['casename'])
+		GetSqlData.project_audit_status(
+			project_id=r.get('syjv2_projectId'),
+			enviroment=env
+		)
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceProjectId": self.r.get('syjv2_sourceProjectId'),
-				"sourceUserId": self.r.get('syjv2_sourceUserId'),
-				"projectId": self.r.get('syjv2_projectId'),
+				"sourceProjectId": r.get('syjv2_sourceProjectId'),
+				"sourceUserId": r.get('syjv2_sourceUserId'),
+				"projectId": r.get('syjv2_projectId'),
 				"serviceSn": "SaasL-" + Common.get_random("serviceSn"),
-				"id": self.r.get("syjv2_cardNum"),
-				"bankPhone": self.r.get("syjv2_phone")
+				"id": r.get("syjv2_cardNum"),
+				"bankPhone": r.get("syjv2_phone")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -113,28 +116,33 @@ class Syjv2Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			enviroment=env,
 			product="pintic"
 		)
-		self.assertEqual(int(data[0]['msgCode']), rep['resultCode'])
-		self.assertEqual("交易成功", rep['content']['message'], "放款申请失败")
+		assert (int(data[0]['msgCode']), rep['resultCode'])
+		assert ("交易成功", rep['content']['message'], "放款申请失败")
 
-
-	def test_102_query_loan_status(self):
+	@allure.title("随意借放款结果查询")
+	@allure.severity("blocker")
+	@pytest.mark.asset
+	@pytest.mark.offline_repay
+	@pytest.mark.comp
+	@pytest.mark.comp_repay
+	def test_102_query_loan_status(self, r, env):
 		"""随意借V2放款结果查询接口"""
 		data = excel_table_byname(self.excel, 'query_loan_status')
 		print("接口名称:%s" % data[0]['casename'])
 		GetSqlData.change_pay_status(
-			project_id=self.r.get('syjv2_projectId'),
-			enviroment=self.env
+			project_id=r.get('syjv2_projectId'),
+			enviroment=env
 		)
-		GetSqlData.loan_set(self.env, self.r.get('syjv2_projectId'))
+		GetSqlData.loan_set(env, r.get('syjv2_projectId'))
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceProjectId": self.r.get('syjv2_sourceProjectId'),
-				"sourceUserId": self.r.get('syjv2_sourceUserId'),
-				"projectId": self.r.get('syjv2_projectId'),
+				"sourceProjectId": r.get('syjv2_sourceProjectId'),
+				"sourceUserId": r.get('syjv2_sourceUserId'),
+				"projectId": r.get('syjv2_projectId'),
 				"serviceSn": "SaasL-" + Common.get_random("serviceSn")
 			}
 		)
@@ -146,21 +154,27 @@ class Syjv2Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			enviroment=env,
 			product="pintic"
 		)
-		self.assertEqual(int(data[0]['msgCode']), rep['resultCode'])
-		self.assertEqual("SUCCESS", rep['content']['loanStatus'], "放款失败")
+		assert (int(data[0]['msgCode']), rep['resultCode'])
+		assert ("SUCCESS", rep['content']['loanStatus'], "放款失败")
 
-	def test_103_loanasset(self):
+	@allure.title("随意借放款同步")
+	@allure.severity("blocker")
+	@pytest.mark.asset
+	@pytest.mark.offline_repay
+	@pytest.mark.comp
+	@pytest.mark.comp_repay
+	def test_103_loanasset(self, r, env):
 		"""随意借V2进件放款同步接口"""
 		data = excel_table_byname(self.excel, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['asset'].update(
 			{
-				"projectId": self.r.get('syjv2_projectId'),
-				"sourceProjectId": self.r.get('syjv2_sourceProjectId'),
+				"projectId": r.get('syjv2_projectId'),
+				"sourceProjectId": r.get('syjv2_sourceProjectId'),
 				"transactionId": "Apollo" + Common.get_random("transactionId"),
 				"repaymentDay": Common.get_time("day").split('-')[1],
 				"firstRepaymentDate": Common.get_repaydate(6)[0],
@@ -183,22 +197,25 @@ class Syjv2Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			enviroment=env,
 			product="pintic"
 		)
-		self.assertEqual(int(data[0]['msgCode']), rep['resultCode'])
-		self.assertEqual("交易成功", rep['content']['message'], "资产同步失败")
+		assert (int(data[0]['msgCode']), rep['resultCode'])
+		assert ("交易成功", rep['content']['message'], "资产同步失败")
 
-	# @unittest.skip("-")
-	# @unittest.skipUnless(sys.argv[4] == 'repayment', "条件成立时执行")
-	def test_104_repayment_one_period(self):
+	@allure.title("随意借还款一期")
+	@allure.severity("blocker")
+	@pytest.mark.offline_repay
+	@pytest.mark.comp
+	@pytest.mark.comp_repay
+	def test_104_repayment_one_period(self, r, env):
 		"""随意借V2还款一期"""
 		data = excel_table_byname(self.excel, 'repayment')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['repayment'].update(
 			{
-				"projectId": self.r.get("syjv2_projectId"),
+				"projectId": r.get("syjv2_projectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"payTime": Common.get_time("-"),
 				"sourceCreateTime": Common.get_time("-")
@@ -208,15 +225,15 @@ class Syjv2Tp(unittest.TestCase):
 			"Principal": "1",
 			"Interest": "2"
 		}
-		for i in range(len(param['repaymentDetailList'])):
-			if param['repaymentDetailList'][i]['repaymentPlanType'] in ("1", "2"):
-				plan_pay_type = plan_type.get(param['repaymentDetailList'][i]['repaymentPlanType'])
+		for i in param['repaymentDetailList']:
+			if i['repaymentPlanType'] in ("1", "2"):
+				plan_pay_type = plan_type.get(i['repaymentPlanType'])
 				repayment_detail = GetSqlData.get_repayment_detail(
-					project_id=self.r.get("syjv2_projectId"),
-					enviroment=self.env,
-					period=param['repaymentDetailList'][i]['period'],
+					project_id=r.get("syjv2_projectId"),
+					enviroment=env,
+					period=i['period'],
 					repayment_plan_type=plan_pay_type)
-				param['repaymentDetailList'][i].update(
+				i.update(
 					{
 						"sourceRepaymentDetailId": Common.get_random("serviceSn"),
 						"sourceCreateTime": Common.get_time("-"),
@@ -226,11 +243,11 @@ class Syjv2Tp(unittest.TestCase):
 				)
 			else:
 				repayment_detail = GetSqlData.get_repayment_detail(
-					project_id=self.r.get("syjv2_projectId"),
-					enviroment=self.env,
-					period=param['repaymentDetailList'][i]['period'],
+					project_id=r.get("syjv2_projectId"),
+					enviroment=env,
+					period=i['period'],
 					repayment_plan_type=1)
-				param['repaymentDetailList'][i].update(
+				i.update(
 					{
 						"sourceRepaymentDetailId": Common.get_random("serviceSn"),
 						"sourceCreateTime": Common.get_time("-"),
@@ -238,14 +255,14 @@ class Syjv2Tp(unittest.TestCase):
 						"payTime": Common.get_time("-")
 					}
 				)
-		for y in range(len(param['repaymentPlanList'])):
-			plan_pay_type_plan = plan_type.get(param['repaymentPlanList'][y]['repaymentPlanType'])
+		for i in param['repaymentPlanList']:
+			plan_pay_type_plan = plan_type.get(i['repaymentPlanType'])
 			repayment_detail_plan = GetSqlData.get_repayment_detail(
-				project_id=self.r.get("syjv2_projectId"),
-				enviroment=self.env,
-				period=param['repaymentPlanList'][y]['period'],
+				project_id=r.get("syjv2_projectId"),
+				enviroment=env,
+				period=i['period'],
 				repayment_plan_type=plan_pay_type_plan)
-			param['repaymentPlanList'][y].update(
+			i.update(
 				{
 					"sourcePlanId": repayment_detail_plan.get('source_plan_id'),
 					"planPayDate": str(repayment_detail_plan.get('plan_pay_date')),
@@ -261,7 +278,7 @@ class Syjv2Tp(unittest.TestCase):
 			)
 		param['reliefApply'].update(
 			{
-				"projectId": self.r.get("syjv2_projectId"),
+				"projectId": r.get("syjv2_projectId"),
 				"reliefTime": Common.get_time("-"),
 				"sourceCreateTime": Common.get_time("-"),
 				"sourceReliefApplyId": Common.get_random("serviceSn")
@@ -285,22 +302,24 @@ class Syjv2Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			enviroment=env,
 			product="pintic"
 		)
-		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
-		self.assertEqual(rep['content']['message'], "交易成功")
+		assert (rep['resultCode'], data[0]['msgCode'])
+		assert (rep['content']['message'], "交易成功")
 
-	# @unittest.skip("-")
-	# @unittest.skipUnless(sys.argv[4] in ('compensation', 'after_comp_repay'), "条件成立时执行")
-	def test_106_compensation(self):
+	@allure.title("随意借代偿一期")
+	@allure.severity("blocker")
+	@pytest.mark.comp
+	@pytest.mark.comp_repay
+	def test_106_compensation(self, r, env):
 		"""随意借V2代偿一期"""
 		data = excel_table_byname(self.excel, 'compensation')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['assetSwapInfo'].update(
 			{
-				"projectId": self.r.get('syjv2_projectId'),
+				"projectId": r.get('syjv2_projectId'),
 				"sourceApplyId": Common.get_random("serviceSn"),
 				"actionTime": Common.get_time("-"),
 				"sourceCreateTime": Common.get_time("-")
@@ -309,7 +328,7 @@ class Syjv2Tp(unittest.TestCase):
 		for i in param['assetSwapDetailList']:
 			i.update(
 				{
-					"projectId": self.r.get('syjv2_sourceProjectId'),
+					"projectId": r.get('syjv2_sourceProjectId'),
 					"sourceDetailId": Common.get_random("serviceSn"),
 					"sourceSwapId": Common.get_random("serviceSn"),
 					"sourceRelatedPlanId": Common.get_random("serviceSn"),
@@ -318,22 +337,21 @@ class Syjv2Tp(unittest.TestCase):
 				}
 			)
 		for i in param['repaymentPlanList']:
-			global plan_list_detail, plan_pay_type
 			plan_pay_type = {
 				"Principal": "1",
 				"Interest": "2"
 			}
 			if i['assetPlanOwner'] == "foundPartner":
 				plan_list_detail = GetSqlData.get_repayment_detail(
-					project_id=self.r.get('syjv2_projectId'),
-					enviroment=self.env,
+					project_id=r.get('syjv2_projectId'),
+					enviroment=env,
 					period=i['period'],
 					repayment_plan_type=plan_pay_type.get(i['repaymentPlanType'])
 				)
 			elif i['assetPlanOwner'] == "financePartner":
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
-					project_id=self.r.get('syjv2_projectId'),
-					enviroment=self.env,
+					project_id=r.get('syjv2_projectId'),
+					enviroment=env,
 					period=i['period'],
 					repayment_plan_type=plan_pay_type.get(i['repaymentPlanType'])
 				)
@@ -361,23 +379,23 @@ class Syjv2Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			enviroment=env,
 			product="pintic"
 		)
-		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
+		assert (rep['resultCode'], data[0]['msgCode'])
 
-	# @unittest.skip("-")
-	# @unittest.skipUnless(sys.argv[4] == 'after_comp_repay', "条件成立时执行")
-	def test_107_after_comp_repay(self):
+	@allure.title("随意借代偿后还款")
+	@allure.severity("blocker")
+	@pytest.mark.comp_repay
+	def test_107_after_comp_repay(self, r, env):
 		"""随意借V2代偿后还款"""
-		global period, plan_pay_type, plan_list_detail
 		data = excel_table_byname(self.excel, 'after_comp_repay')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		period = 1
 		param['repayment'].update(
 			{
-				"projectId": self.r.get('syjv2_projectId'),
+				"projectId": r.get('syjv2_projectId'),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"payTime": Common.get_time("-"),
 				"sourceCreateTime": Common.get_time("-"),
@@ -395,8 +413,8 @@ class Syjv2Tp(unittest.TestCase):
 			if asset_plan_owner == "foundPartner":
 				if plan_catecory == 1 or plan_catecory == 2:
 					repayment_detail = GetSqlData.get_repayment_detail(
-						project_id=self.r.get('syjv2_projectId'),
-						enviroment=self.env,
+						project_id=r.get('syjv2_projectId'),
+						enviroment=env,
 						period=period,
 						repayment_plan_type=plan_pay_type
 					)
@@ -413,15 +431,15 @@ class Syjv2Tp(unittest.TestCase):
 					)
 				else:
 					plan_list_detail = GetSqlData.get_user_repayment_detail(
-						project_id=self.r.get('syjv2_projectId'),
-						enviroment=self.env,
+						project_id=r.get('syjv2_projectId'),
+						enviroment=env,
 						period=period,
 						repayment_plan_type=3,
 						feecategory=i['planCategory']
 					)
 					repayment_detail = GetSqlData.get_repayment_detail(
-						project_id=self.r.get('syjv2_projectId'),
-						enviroment=self.env,
+						project_id=r.get('syjv2_projectId'),
+						enviroment=env,
 						period=1,
 						repayment_plan_type=2
 					)
@@ -437,8 +455,8 @@ class Syjv2Tp(unittest.TestCase):
 			elif asset_plan_owner == "financePartner":
 				if plan_catecory == 1 or plan_catecory == 2:
 					user_repayment_detail = GetSqlData.get_user_repayment_detail(
-						project_id=self.r.get('syjv2_projectId'),
-						enviroment=self.env,
+						project_id=r.get('syjv2_projectId'),
+						enviroment=env,
 						period=period,
 						repayment_plan_type=plan_pay_type
 					)
@@ -455,8 +473,8 @@ class Syjv2Tp(unittest.TestCase):
 					)
 			else:
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
-					project_id=self.r.get('syjv2_projectId'),
-					enviroment=self.env,
+					project_id=r.get('syjv2_projectId'),
+					enviroment=env,
 					period=period,
 					repayment_plan_type=3,
 					feecategory=i['planCategory']
@@ -475,8 +493,8 @@ class Syjv2Tp(unittest.TestCase):
 			plan_list_asset_plan_owner = i['assetPlanOwner']
 			if plan_list_asset_plan_owner == 'financePartner':
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
-					project_id=self.r.get('syjv2_projectId'),
-					enviroment=self.env,
+					project_id=r.get('syjv2_projectId'),
+					enviroment=env,
 					period=period,
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -492,8 +510,8 @@ class Syjv2Tp(unittest.TestCase):
 				)
 			elif plan_list_asset_plan_owner == 'foundPartner':
 				plan_list_detail = GetSqlData.get_repayment_detail(
-					project_id=self.r.get('syjv2_projectId'),
-					enviroment=self.env,
+					project_id=r.get('syjv2_projectId'),
+					enviroment=env,
 					period=i['period'],
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -509,8 +527,8 @@ class Syjv2Tp(unittest.TestCase):
 				)
 		for i in param['feePlanList']:
 			plan_list_detail = GetSqlData.get_user_repayment_detail(
-				project_id=self.r.get("syjv2_projectId"),
-				enviroment=self.env,
+				project_id=r.get("syjv2_projectId"),
+				enviroment=env,
 				period=i['period'],
 				repayment_plan_type=3,
 				feecategory=i['feeCategory']
@@ -530,12 +548,12 @@ class Syjv2Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			enviroment=env,
 			product="pintic"
 		)
-		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
-		self.assertEqual(rep['content']['message'], "交易成功")
+		assert (rep['resultCode'], data[0]['msgCode'])
+		assert (rep['content']['message'], "交易成功")
 
 
 if __name__ == '__main__':
-	unittest.main()
+	pytest.main()
