@@ -88,7 +88,6 @@ class TestJqh:
 	@pytest.mark.comp_repay
 	def test_1_loan(self, r, env):
 		"""借去花放款接口"""
-		time.sleep(5)
 		data = excel_table_byname(self.excel, 'loan')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])

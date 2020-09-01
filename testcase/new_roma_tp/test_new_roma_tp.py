@@ -6,7 +6,6 @@
 @describe:新罗马车贷业务流程接口
 """
 
-import unittest
 import os
 import json
 import time
@@ -23,6 +22,7 @@ from common.get_sql_data import GetSqlData
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 logger = Logger(logger="test_new_roma_tp").getlog()
+
 
 @allure.feature("新罗马车贷")
 class TestNewRomaTp:
@@ -41,8 +41,7 @@ class TestNewRomaTp:
 			{
 				"new_roma_sourceUserId": Common.get_random('userid'),
 				"new_roma_transactionId": Common.get_random('transactionId'),
-				"new_roma_phone": Common.get_random('phone'),
-				"new_roma_firstCreditDate": Common.get_time("-"),
+				"new_roma_phone": Common.get_random('phone')
 			}
 		)
 		param = json.loads(data[0]['param'])
@@ -55,7 +54,7 @@ class TestNewRomaTp:
 		)
 		param['applyInfo'].update({"applyTime": Common.get_time()})
 		param['riskSuggestion'].update(
-			{"firstCreditDate": r.get('new_roma_firstCreditDate')})
+			{"firstCreditDate": Common.get_new_time("before", "days", 30)})
 		param.update(
 			{
 				"sourceUserId": r.get('new_roma_sourceUserId'),
