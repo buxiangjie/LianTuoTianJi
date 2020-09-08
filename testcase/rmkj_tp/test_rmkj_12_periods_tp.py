@@ -24,7 +24,7 @@ class Rmkj12Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = "qa"
+		cls.env = "test"
 		cls.r = Common.conn_redis(enviroment=cls.env)
 		file = Config().get_item('File', 'rmkj_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
@@ -311,41 +311,6 @@ class Rmkj12Tp(unittest.TestCase):
 		self.assertEqual(rep['code'], int(data[0]['resultCode']))
 		self.assertEqual(rep['data']['status'], 3)
 
-	# def test_1088_deduction_share_sign(self):
-	# 	"""协议支付号共享"""
-	# 	data = excel_table_byname(self.excel, 'deduction_share_sign')
-	# 	print("接口名称:%s" % data[0]['casename'])
-	# 	param = json.loads(data[0]['param'])
-	# 	param.update(
-	# 		{
-	# 			"serviceSn": Common.get_random("serviceSn"),
-	# 			"requestTime": Common.get_time("-"),
-	# 			"sourceUserId": self.r.get("rmkj_12_periods_sourceUserId"),
-	# 			"transactionId": Common.get_random("transactionId"),
-	# 			"sourceProjectId": self.r.get("rmkj_12_periods_sourceProjectId"),
-	# 			"projectId": self.r.get("rmkj_12_periods_projectId"),
-	# 			"name": self.r.get("rmkj_12_periods_custName"),
-	# 			"cardNo": self.r.get("rmkj_12_periods_cardNum"),
-	# 			"bankNo": self.r.get("rmkj_12_periods_bankcard"),
-	# 			"bankPhone": self.r.get("rmkj_12_periods_phone"),
-	# 			"signNo": Common.get_random("businessLicenseNo"),
-	# 			"authLetterNo": Common.get_random("transactionId")
-	#
-	# 		}
-	# 	)
-	# 	if len(data[0]['headers']) == 0:
-	# 		headers = None
-	# 	else:
-	# 		headers = json.loads(data[0]['headers'])
-	# 	rep = Common.response(
-	# 		faceaddr=data[0]['url'],
-	# 		headers=headers,
-	# 		data=json.dumps(param, ensure_ascii=False),
-	# 		product="cloudloan",
-	# 		enviroment=self.env
-	# 	)
-	# 	self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
-
 	def test_109_card_change(self):
 		"""还款卡推送"""
 		data = excel_table_byname(self.excel, 'card_change')
@@ -360,6 +325,43 @@ class Rmkj12Tp(unittest.TestCase):
 				"cardNo": self.r.get("rmkj_12_periods_cardNum"),
 				"mobile": self.r.get("rmkj_12_periods_phone"),
 				"bankNo": self.r.get("rmkj_12_periods_bankcard")
+			}
+		)
+		if len(data[0]['headers']) == 0:
+			headers = None
+		else:
+			headers = json.loads(data[0]['headers'])
+		rep = Common.response(
+			faceaddr=data[0]['url'],
+			headers=headers,
+			data=json.dumps(param, ensure_ascii=False),
+			product="cloudloan",
+			enviroment=self.env
+		)
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+
+	# @unittest.skip("-")
+	def test_1099_deduction_share_sign(self):
+		"""协议支付号共享"""
+		data = excel_table_byname(self.excel, 'deduction_share_sign')
+		print("接口名称:%s" % data[0]['casename'])
+		param = json.loads(data[0]['param'])
+		param.update(
+			{
+				"serviceSn": Common.get_random("serviceSn"),
+				"requestTime": Common.get_time("-"),
+				"sourceUserId": self.r.get("rmkj_12_periods_sourceUserId"),
+				"transactionId": Common.get_random("transactionId"),
+				"sourceProjectId": self.r.get("rmkj_12_periods_sourceProjectId"),
+				"projectId": self.r.get("rmkj_12_periods_projectId"),
+				"name": self.r.get("rmkj_12_periods_custName"),
+				"cardNo": self.r.get("rmkj_12_periods_cardNum"),
+				# "bankNo": "6217002200003225702",
+				"bankNo": self.r.get("rmkj_12_periods_bankcard"),
+				"bankPhone": self.r.get("rmkj_12_periods_phone"),
+				"signNo": Common.get_random("businessLicenseNo"),
+				"authLetterNo": Common.get_random("transactionId")
+
 			}
 		)
 		if len(data[0]['headers']) == 0:
