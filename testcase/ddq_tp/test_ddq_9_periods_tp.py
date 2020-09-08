@@ -272,6 +272,43 @@ class Ddq9Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
+	def test_1077_deduction_share_sign(self):
+		"""协议支付号共享"""
+		data = excel_table_byname(self.excel, 'deduction_share_sign')
+		print("接口名称:%s" % data[0]['casename'])
+		param = json.loads(data[0]['param'])
+		param.update(
+			{
+				"serviceSn": Common.get_random("serviceSn"),
+				"requestTime": Common.get_time("-"),
+				"sourceUserId": self.r.get("ddq_9_periods_sourceUserId"),
+				"transactionId": Common.get_random("transactionId"),
+				"sourceProjectId": self.r.get("ddq_9_periods_sourceProjectId"),
+				"projectId": self.r.get("ddq_9_periods_projectId"),
+				"name": self.r.get("ddq_9_periods_custName"),
+				"cardNo": self.r.get("ddq_9_periods_cardNum"),
+				# "bankNo": "6217002200003225702",
+				"bankNo": self.r.get("ddq_9_periods_bankcard"),
+				"bankPhone": self.r.get("ddq_9_periods_phone"),
+				"signNo": Common.get_random("businessLicenseNo"),
+				"authLetterNo": Common.get_random("transactionId"),
+				"productCode": "XJ_WX_DDQ"
+
+			}
+		)
+		if len(data[0]['headers']) == 0:
+			headers = None
+		else:
+			headers = json.loads(data[0]['headers'])
+		rep = Common.response(
+			faceaddr=data[0]['url'],
+			headers=headers,
+			data=json.dumps(param, ensure_ascii=False),
+			product="cloudloan",
+			enviroment=self.env
+		)
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+
 	def test_108_loan_pfa(self):
 		"""放款申请"""
 		data = excel_table_byname(self.excel, 'loan_pfa')

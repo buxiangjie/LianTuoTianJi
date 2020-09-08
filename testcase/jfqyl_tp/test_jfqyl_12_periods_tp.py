@@ -89,8 +89,7 @@ class Jfqyl12Tp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		projectId = rep['content']['projectId']
-		self.r.set('jfqyl_12_periods_projectId', projectId)
+		self.r.set('jfqyl_12_periods_projectId', rep['content']['projectId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	def test_101_sign_credit(self):
@@ -346,7 +345,8 @@ class Jfqyl12Tp(unittest.TestCase):
 				"transactionId": self.r.get("jfqyl_12_periods_sourceProjectId"),
 				"sourceProjectId": self.r.get("jfqyl_12_periods_sourceProjectId"),
 				"projectId": self.r.get("jfqyl_12_periods_projectId"),
-				"businessType": 2
+				"businessType": 2,
+				"repayTime": "2020-11-04 15:35:02"
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -485,7 +485,7 @@ class Jfqyl12Tp(unittest.TestCase):
 				"successAmount": success_amount,
 				"repayType": 2,
 				"period": repayment_plan_list[0]['period'],
-				"payTime": Common.get_time("-")
+				"payTime": "2020-11-04 15:35:02"
 			}
 		)
 		param['repaymentDetailList'] = repayment_detail_list
