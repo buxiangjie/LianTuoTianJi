@@ -766,8 +766,8 @@ class GetSqlData(object):
 		try:
 			conn = GetSqlData.conn_database("qa")
 			cur = conn.cursor()
-			sql = f"""update project_detail set audit_status=2,audit_result=1 where product_code in ("FQ_JK_JFQYL", "FQ_JK_JFQJY")"""
-			cur.execute(sql)
+			sql1 = f"""update project_detail set audit_status=2,audit_result=1 where product_code in ("FQ_JK_JFQYL", "FQ_JK_JFQJY")"""
+			cur.execute(sql1)
 			conn.commit()
 		except Exception as e:
 			raise e
@@ -785,6 +785,27 @@ class GetSqlData(object):
 			cur = conn.cursor()
 			sql = f"""update sandbox_saas_athena.risk_apply set audit_result='APPROVE',quota=300000,step='COMPLETED',return_code=2000 where apply_id='{apply_id}';"""
 			cur.execute(sql)
+			conn.commit()
+		except Exception as e:
+			raise e
+		finally:
+			cur.close()
+			conn.close()
+
+	@staticmethod
+	def change_loan_status(enviroment, project_id: tuple):
+		"""修改放款状态"""
+		# noinspection PyGlobalUndefined
+		global conn, cur, sql
+		try:
+			conn = GetSqlData.conn_database(enviroment)
+			cur = conn.cursor()
+			sql1 = f"""update sandbox_saas.project_detail set loan_result=2 where id in {project_id};"""
+			sql2 = f"""update sandbox_saas.project_loan_flow set loan_result=2 where project_id in {project_id}"""
+			sql3 = f"""update sandbox_saas.project_loan_record set loan_result=2 where project_id in {project_id}"""
+			cur.execute(sql1)
+			cur.execute(sql2)
+			cur.execute(sql3)
 			conn.commit()
 		except Exception as e:
 			raise e

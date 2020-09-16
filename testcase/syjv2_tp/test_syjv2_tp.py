@@ -93,7 +93,7 @@ class TestSyjv2Tp:
 		"""随意借V2放款接口"""
 		data = excel_table_byname(self.excel, 'loan')
 		print("接口名称:%s" % data[0]['casename'])
-		GetSqlData.project_audit_status(
+		GetSqlData.check_loan_result(
 			project_id=r.get('syjv2_projectId'),
 			enviroment=env
 		)

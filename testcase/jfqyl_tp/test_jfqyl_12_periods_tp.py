@@ -346,7 +346,7 @@ class Jfqyl12Tp(unittest.TestCase):
 				"sourceProjectId": self.r.get("jfqyl_12_periods_sourceProjectId"),
 				"projectId": self.r.get("jfqyl_12_periods_projectId"),
 				"businessType": 2,
-				"repayTime": "2020-11-04 15:35:02"
+				"repayTime": Common.get_time("-")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -369,7 +369,7 @@ class Jfqyl12Tp(unittest.TestCase):
 	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
 	# @unittest.skip("跳过")
 	def test_112_calculate(self):
-		"""还款计划试算:提前结清"""
+		"""还款计划试算:退货"""
 		data = excel_table_byname(self.excel, 'calculate')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
@@ -485,7 +485,7 @@ class Jfqyl12Tp(unittest.TestCase):
 				"successAmount": success_amount,
 				"repayType": 2,
 				"period": repayment_plan_list[0]['period'],
-				"payTime": "2020-11-04 15:35:02"
+				"payTime": Common.get_time("-")
 			}
 		)
 		param['repaymentDetailList'] = repayment_detail_list

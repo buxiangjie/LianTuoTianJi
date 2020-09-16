@@ -24,7 +24,7 @@ class Jfqjy9Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = "test"
+		cls.env = "qa"
 		cls.r = Common.conn_redis(enviroment=cls.env)
 		file = Config().get_item('File', 'jfq_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
@@ -77,7 +77,6 @@ class Jfqjy9Tp(unittest.TestCase):
 				"phone": self.r.get('jfqjy_9_periods_phone')
 			}
 		)
-		del param['personalInfo']['custName']
 		param['applyInfo'].update({"applyTime": Common.get_time("-")})
 		if len(data[0]['headers']) == 0:
 			headers = None
@@ -90,8 +89,7 @@ class Jfqjy9Tp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		projectId = rep['content']['projectId']
-		self.r.set('jfqjy_9_periods_projectId', projectId)
+		self.r.set('jfqjy_9_periods_projectId', rep['content']['projectId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	def test_101_sign_credit(self):
@@ -347,7 +345,8 @@ class Jfqjy9Tp(unittest.TestCase):
 				"transactionId": self.r.get("jfqjy_9_periods_sourceProjectId"),
 				"sourceProjectId": self.r.get("jfqjy_9_periods_sourceProjectId"),
 				"projectId": self.r.get("jfqjy_9_periods_projectId"),
-				"businessType": 2
+				"businessType": 2,
+				"repayTime": Common.get_time("-")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -370,7 +369,7 @@ class Jfqjy9Tp(unittest.TestCase):
 	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
 	# @unittest.skip("跳过")
 	def test_112_calculate(self):
-		"""还款计划试算:提前结清"""
+		"""还款计划试算:退货"""
 		data = excel_table_byname(self.excel, 'calculate')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
