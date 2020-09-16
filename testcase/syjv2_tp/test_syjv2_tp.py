@@ -11,6 +11,7 @@ import json
 import sys
 import allure
 import pytest
+import time
 
 from common.common_func import Common
 from log.logger import Logger
@@ -93,7 +94,7 @@ class TestSyjv2Tp:
 		"""随意借V2放款接口"""
 		data = excel_table_byname(self.excel, 'loan')
 		print("接口名称:%s" % data[0]['casename'])
-		GetSqlData.loan_set(
+		GetSqlData.project_audit_status(
 			project_id=r.get('syjv2_projectId'),
 			enviroment=env
 		)
@@ -132,6 +133,7 @@ class TestSyjv2Tp:
 		"""随意借V2放款结果查询接口"""
 		data = excel_table_byname(self.excel, 'query_loan_status')
 		print("接口名称:%s" % data[0]['casename'])
+		time.sleep(8)
 		GetSqlData.change_pay_status(
 			project_id=r.get('syjv2_projectId'),
 			enviroment=env

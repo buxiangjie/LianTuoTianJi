@@ -9,14 +9,11 @@ import time
 import random
 import os
 import sys
-import unittest
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 from common.get_sql_data import GetSqlData
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from config.configer import Config
-
 
 class Ob(object):
 	globals()['driver'] = ' '
@@ -79,22 +76,6 @@ class Ob(object):
 	@staticmethod
 	def thread_loan_job():
 		threading.Thread(target=Ob.loan_job).start()
-
-
-def all_case(dirr='cfq_12_periods_tp'):
-	"""批量添加用例到测试套件"""
-	case_dir = Config().get_item(section="CaseFile", option=dirr)
-	cases = unittest.TestSuite()
-	discover = unittest.defaultTestLoader.discover(case_dir, pattern="test_*.py", top_level_dir=None)
-
-	for test_suit in discover:
-		for test_case in test_suit:
-			cases.addTest(test_case)
-	return cases
-
-
-def runn():
-	unittest.TextTestRunner().run(all_case())
 
 
 if __name__ == '__main__':
