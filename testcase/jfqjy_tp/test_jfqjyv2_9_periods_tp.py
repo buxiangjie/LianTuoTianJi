@@ -25,7 +25,7 @@ class JfqjyV29Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = "qa"
+		cls.env = "test"
 		cls.r = Common.conn_redis(enviroment=cls.env)
 		file = Config().get_item('File', 'jfq_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
@@ -60,7 +60,7 @@ class JfqjyV29Tp(unittest.TestCase):
 				"applyTime": Common.get_time("-"),
 				"applyAmount": 33333.33,
 				"applyTerm": 9,
-				"productCode": "FQ_JK_JFQJYv2"
+				"productCode": "FQ_JK_JFQJYV2"
 			}
 		)
 		param['loanInfo'].update(
