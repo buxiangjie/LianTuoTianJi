@@ -15,6 +15,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from common.common_func import Common
 
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 class Ob(object):
 	globals()['driver'] = ' '
 
