@@ -196,7 +196,9 @@ class JfxTp(unittest.TestCase):
 		)
 		param['loanInfo'].update(
 			{
-				"loanAmount": 50000.00
+				"loanAmount": 50000.00,
+				"assetInterestRate": 0.14,
+				"userInterestRate": 0.2
 			}
 		)
 		param['cardInfo'].update(
@@ -379,7 +381,7 @@ class JfxTp(unittest.TestCase):
 		self.r.set("jfx_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
 	# @unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
-	@unittest.skip("11")
+	# @unittest.skip("11")
 	def test_112_repayment(self):
 		"""还款流水推送"""
 		data = excel_table_byname(self.excel, 'repayment')

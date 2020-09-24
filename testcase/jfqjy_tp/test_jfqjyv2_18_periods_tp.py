@@ -25,7 +25,7 @@ class JfqjyV218Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = "test"
+		cls.env = "qa"
 		cls.r = Common.conn_redis(enviroment=cls.env)
 		file = Config().get_item('File', 'jfq_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
@@ -68,7 +68,7 @@ class JfqjyV218Tp(unittest.TestCase):
 				"loanAmount": 33333.33,
 				"loanTerm": 18,
 				"assetInterestRate": 0.153,
-				"userInterestRate": 0.153
+				"userInterestRate": 0.083646
 			}
 		)
 		param['personalInfo'].update(

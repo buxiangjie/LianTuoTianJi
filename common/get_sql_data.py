@@ -575,15 +575,86 @@ class GetSqlData(object):
 		try:
 			conn = GetSqlData.conn_database(env)
 			cur = conn.cursor()
-			sql = f"""update sandbox_saas_steamrunner.sr_pay_order 
-					set code=2000 where 
-					project_id in
-					(select id from sandbox_saas.project_detail 
-					where product_code in
-					("XJ_JFX_YYDSIN","XJ_JFX_YYDMUL","FQ_RM_RMYM","XJ_ROMA_CAR","XJ_ROMA_CARV2","XJ_DX_SYJV2","XJ_DX_SYJ"));"""
-			cur.execute(sql)
+			sql1 = f"""UPDATE sandbox_saas.project_loan_record
+						SET loan_result = 2
+						WHERE project_id IN (
+								SELECT id
+								FROM sandbox_saas.project_detail
+								WHERE product_code IN (
+										'XJ_JFX_YYDSIN', 
+										'XJ_JFX_YYDMUL', 
+										'FQ_RM_RMYM', 
+										'XJ_ROMA_CAR', 
+										'XJ_ROMA_CARV2', 
+										'XJ_DX_SYJV2', 
+										'XJ_DX_SYJ', 
+										'FQ_JK_JFQYL', 
+										'FQ_JK_JFQYLV2', 
+										'FQ_JK_JFQJY', 
+										'FQ_JK_JFQJYV2'
+									)
+									AND project_detail.loan_result != 1
+						)
+						AND loan_result = 0;"""
+			sql2 = f"""UPDATE sandbox_saas_steamrunner.sr_pay_order
+						SET code = 2000
+						WHERE project_id IN (
+								SELECT id
+								FROM sandbox_saas.project_detail
+								WHERE product_code IN (
+									'XJ_JFX_YYDSIN', 
+									'XJ_JFX_YYDMUL', 
+									'FQ_RM_RMYM', 
+									'XJ_ROMA_CAR', 
+									'XJ_ROMA_CARV2', 
+									'XJ_DX_SYJV2', 
+									'XJ_DX_SYJ', 
+									'FQ_JK_JFQYL', 
+									'FQ_JK_JFQYLV2', 
+									'FQ_JK_JFQJY', 
+									'FQ_JK_JFQJYV2'
+								)
+								AND project_detail.loan_result != 1
+							);"""
+			sql3 = f"""UPDATE sandbox_saas.project_detail
+						SET loan_result = 2
+						WHERE product_code IN (
+								'XJ_JFX_YYDSIN', 
+								'XJ_JFX_YYDMUL', 
+								'FQ_RM_RMYM', 
+								'XJ_ROMA_CAR', 
+								'XJ_ROMA_CARV2', 
+								'XJ_DX_SYJV2', 
+								'XJ_DX_SYJ', 
+								'FQ_JK_JFQYL', 
+								'FQ_JK_JFQYLV2', 
+								'FQ_JK_JFQJY', 
+								'FQ_JK_JFQJYV2'
+							)
+							AND loan_result != 1;"""
+			sql4 = f"""UPDATE sandbox_saas.project_loan_flow
+						SET loan_result = 2
+						WHERE product_code IN (
+								'XJ_JFX_YYDSIN', 
+								'XJ_JFX_YYDMUL', 
+								'FQ_RM_RMYM', 
+								'XJ_ROMA_CAR', 
+								'XJ_ROMA_CARV2', 
+								'XJ_DX_SYJV2', 
+								'XJ_DX_SYJ', 
+								'FQ_JK_JFQYL', 
+								'FQ_JK_JFQYLV2', 
+								'FQ_JK_JFQJY', 
+								'FQ_JK_JFQJYV2'
+							)
+							AND loan_result != 1;"""
+			cur.execute(sql1)
+			cur.execute(sql2)
+			cur.execute(sql3)
+			cur.execute(sql4)
 			conn.commit()
 		except Exception as e:
+			conn.rollback()
 			raise e
 		finally:
 			cur.close()

@@ -89,8 +89,7 @@ class Jfqjy6Tp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		projectId = rep['content']['projectId']
-		self.r.set('jfqjy_6_periods_projectId', projectId)
+		self.r.set('jfqjy_6_periods_projectId', rep['content']['projectId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	def test_101_sign_credit(self):
