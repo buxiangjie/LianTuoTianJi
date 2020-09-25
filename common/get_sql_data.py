@@ -671,7 +671,7 @@ class GetSqlData(object):
 			sql = f"""select count(*) as c 
 					from sandbox_saas.project_detail 
 					where  product_code in("XJ_JFX_YYDSIN","XJ_JFX_YYDMUL","FQ_RM_RMYM") 
-					and loan_result=2;
+					and loan_result != 1;
 					"""
 			cur.execute(sql)
 			conn.commit()
