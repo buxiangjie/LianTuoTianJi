@@ -886,24 +886,3 @@ class GetSqlData(object):
 		finally:
 			cur.close()
 			conn.close()
-
-	@staticmethod
-	def change_loan_status(enviroment, project_id: tuple):
-		"""修改放款状态"""
-		# noinspection PyGlobalUndefined
-		global conn, cur, sql
-		try:
-			conn = GetSqlData.conn_database(enviroment)
-			cur = conn.cursor()
-			sql1 = f"""update sandbox_saas.project_detail set loan_result=2 where id in {project_id};"""
-			sql2 = f"""update sandbox_saas.project_loan_flow set loan_result=2 where project_id in {project_id}"""
-			sql3 = f"""update sandbox_saas.project_loan_record set loan_result=2 where project_id in {project_id}"""
-			cur.execute(sql1)
-			cur.execute(sql2)
-			cur.execute(sql3)
-			conn.commit()
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
