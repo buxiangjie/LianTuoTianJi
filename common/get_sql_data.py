@@ -591,7 +591,9 @@ class GetSqlData(object):
 										'FQ_JK_JFQYL', 
 										'FQ_JK_JFQYLV2', 
 										'FQ_JK_JFQJY', 
-										'FQ_JK_JFQJYV2'
+										'FQ_JK_JFQJYV2',
+										'XJ_WX_DDQ',
+										'XJ_WX_KKD'
 									)
 									AND project_detail.loan_result != 1
 						)
@@ -612,7 +614,9 @@ class GetSqlData(object):
 									'FQ_JK_JFQYL', 
 									'FQ_JK_JFQYLV2', 
 									'FQ_JK_JFQJY', 
-									'FQ_JK_JFQJYV2'
+									'FQ_JK_JFQJYV2',
+									'XJ_WX_DDQ',
+									'XJ_WX_KKD'
 								)
 								AND project_detail.loan_result != 1
 							);"""
@@ -629,7 +633,9 @@ class GetSqlData(object):
 								'FQ_JK_JFQYL', 
 								'FQ_JK_JFQYLV2', 
 								'FQ_JK_JFQJY', 
-								'FQ_JK_JFQJYV2'
+								'FQ_JK_JFQJYV2',
+								'XJ_WX_DDQ',
+								'XJ_WX_KKD'
 							)
 							AND loan_result != 1;"""
 			sql4 = f"""UPDATE sandbox_saas.project_loan_flow
@@ -645,7 +651,9 @@ class GetSqlData(object):
 								'FQ_JK_JFQYL', 
 								'FQ_JK_JFQYLV2', 
 								'FQ_JK_JFQJY', 
-								'FQ_JK_JFQJYV2'
+								'FQ_JK_JFQJYV2',
+								'XJ_WX_DDQ',
+								'XJ_WX_KKD'
 							)
 							AND loan_result != 1;"""
 			cur.execute(sql1)
@@ -662,7 +670,7 @@ class GetSqlData(object):
 
 	@staticmethod
 	def select_asset():
-		"""查询牙医贷、任买没有放款的资产数量"""
+		"""查询没有放款的资产数量"""
 		# noinspection PyGlobalUndefined
 		global cur, conn, sql
 		try:
@@ -681,7 +689,11 @@ class GetSqlData(object):
 								'FQ_JK_JFQYL', 
 								'FQ_JK_JFQYLV2', 
 								'FQ_JK_JFQJY', 
-								'FQ_JK_JFQJYV2'
+								'FQ_JK_JFQJYV2',
+								'XJ_WX_DDQ',
+								'XJ_WX_KKD',
+								'XJ_WX_DDQ',
+								'XJ_WX_KKD'
 							)
 							AND loan_result != 1;
 					"""
