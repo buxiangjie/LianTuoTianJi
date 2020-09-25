@@ -668,10 +668,22 @@ class GetSqlData(object):
 		try:
 			conn = GetSqlData.conn_database("qa")
 			cur = conn.cursor()
-			sql = f"""select count(*) as c 
-					from sandbox_saas.project_detail 
-					where  product_code in("XJ_JFX_YYDSIN","XJ_JFX_YYDMUL","FQ_RM_RMYM") 
-					and loan_result != 1;
+			sql = f"""SELECT COUNT(*) AS c
+						FROM sandbox_saas.project_detail
+						WHERE product_code IN (
+								'XJ_JFX_YYDSIN', 
+								'XJ_JFX_YYDMUL', 
+								'FQ_RM_RMYM', 
+								'XJ_ROMA_CAR', 
+								'XJ_ROMA_CARV2', 
+								'XJ_DX_SYJV2', 
+								'XJ_DX_SYJ', 
+								'FQ_JK_JFQYL', 
+								'FQ_JK_JFQYLV2', 
+								'FQ_JK_JFQJY', 
+								'FQ_JK_JFQJYV2'
+							)
+							AND loan_result != 1;
 					"""
 			cur.execute(sql)
 			conn.commit()
