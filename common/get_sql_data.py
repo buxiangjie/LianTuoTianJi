@@ -676,7 +676,7 @@ class GetSqlData(object):
 		try:
 			conn = GetSqlData.conn_database("qa")
 			cur = conn.cursor()
-			sql = f"""SELECT COUNT(DISTINCT project_id)
+			sql = f"""SELECT COUNT(DISTINCT project_id) AS c
 						FROM sandbox_saas.project_loan_flow
 						WHERE project_id IN (
 							SELECT id
