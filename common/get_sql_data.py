@@ -670,32 +670,36 @@ class GetSqlData(object):
 
 	@staticmethod
 	def select_asset():
-		"""查询没有放款的资产数量"""
+		"""查询没有放款成功的进件数量"""
 		# noinspection PyGlobalUndefined
 		global cur, conn, sql
 		try:
 			conn = GetSqlData.conn_database("qa")
 			cur = conn.cursor()
-			sql = f"""SELECT COUNT(*) AS c
-						FROM sandbox_saas.project_detail
-						WHERE product_code IN (
-								'XJ_JFX_YYDSIN', 
-								'XJ_JFX_YYDMUL', 
-								'FQ_RM_RMYM', 
-								'XJ_ROMA_CAR', 
-								'XJ_ROMA_CARV2', 
-								'XJ_DX_SYJV2', 
-								'XJ_DX_SYJ', 
-								'FQ_JK_JFQYL', 
-								'FQ_JK_JFQYLV2', 
-								'FQ_JK_JFQJY', 
-								'FQ_JK_JFQJYV2',
-								'XJ_WX_DDQ',
-								'XJ_WX_KKD',
-								'XJ_WX_DDQ',
-								'XJ_WX_KKD'
-							)
-							AND loan_result != 1;
+			sql = f"""SELECT COUNT(DISTINCT project_id)
+						FROM sandbox_saas.project_loan_flow
+						WHERE project_id IN (
+							SELECT id
+							FROM sandbox_saas.project_detail
+							WHERE product_code IN (
+									'XJ_JFX_YYDSIN', 
+									'XJ_JFX_YYDMUL', 
+									'FQ_RM_RMYM', 
+									'XJ_ROMA_CAR', 
+									'XJ_ROMA_CARV2', 
+									'XJ_DX_SYJV2', 
+									'XJ_DX_SYJ', 
+									'FQ_JK_JFQYL', 
+									'FQ_JK_JFQYLV2', 
+									'FQ_JK_JFQJY', 
+									'FQ_JK_JFQJYV2', 
+									'XJ_WX_DDQ', 
+									'XJ_WX_KKD', 
+									'XJ_WX_DDQ', 
+									'XJ_WX_KKD'
+								)
+								AND loan_result != 1
+						);
 					"""
 			cur.execute(sql)
 			conn.commit()
