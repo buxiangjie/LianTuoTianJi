@@ -44,6 +44,6 @@ class Ob(object):
 
 
 scheduler = BlockingScheduler()
-scheduler.add_job(Ob.loan_job, 'interval', seconds=15)
-scheduler.add_job(Ob.project_job, 'interval', seconds=20)
+scheduler.add_job(Ob.loan_job, 'interval', seconds=60)
+scheduler.add_job(Ob.project_job, 'interval', seconds=30)
 scheduler.start()
