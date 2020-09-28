@@ -17,10 +17,10 @@ from common.get_sql_data import GetSqlData
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-logger = Logger(logger="test_jfqyl_3_periods_tp").getlog()
+logger = Logger(logger="test_jfqylv2_3_periods_tp").getlog()
 
 
-class Jfqyl3Tp(unittest.TestCase):
+class Jfqylv23Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
@@ -37,21 +37,21 @@ class Jfqyl3Tp(unittest.TestCase):
 		"""进件"""
 		data = excel_table_byname(self.excel, 'apply')
 		print("接口名称:%s" % data[0]['casename'])
-		Common.p2p_get_userinfo('jfqyl_3_periods', self.env)
+		Common.p2p_get_userinfo('jfqylv2_3_periods', self.env)
 		self.r.mset(
 			{
-				"jfqyl_3_periods_sourceUserId": Common.get_random('userid'),
-				"jfqyl_3_periods_transactionId": Common.get_random('transactionId'),
-				"jfqyl_3_periods_phone": Common.get_random('phone'),
-				"jfqyl_3_periods_sourceProjectId": Common.get_random('sourceProjectId'),
+				"jfqylv2_3_periods_sourceUserId": Common.get_random('userid'),
+				"jfqylv2_3_periods_transactionId": Common.get_random('transactionId'),
+				"jfqylv2_3_periods_phone": Common.get_random('phone'),
+				"jfqylv2_3_periods_sourceProjectId": Common.get_random('sourceProjectId'),
 			}
 		)
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceProjectId": self.r.get('jfqyl_3_periods_sourceProjectId'),
-				"sourceUserId": self.r.get('jfqyl_3_periods_sourceUserId'),
-				"transactionId": self.r.get('jfqyl_3_periods_transactionId')
+				"sourceProjectId": self.r.get('jfqylv2_3_periods_sourceProjectId'),
+				"sourceUserId": self.r.get('jfqylv2_3_periods_sourceUserId'),
+				"transactionId": self.r.get('jfqylv2_3_periods_transactionId')
 			}
 		)
 		param['applyInfo'].update(
@@ -59,7 +59,7 @@ class Jfqyl3Tp(unittest.TestCase):
 				"applyTime": Common.get_time("-"),
 				"applyAmount": 33333.33,
 				"applyTerm": 3,
-				"productCode": "FQ_JK_JFQYL"
+				"productCode": "FQ_JK_JFQYLV2"
 			}
 		)
 		param['loanInfo'].update(
@@ -72,9 +72,9 @@ class Jfqyl3Tp(unittest.TestCase):
 		)
 		param['personalInfo'].update(
 			{
-				"cardNum": self.r.get('jfqyl_3_periods_cardNum'),
-				"custName": self.r.get('jfqyl_3_periods_custName'),
-				"phone": self.r.get('jfqyl_3_periods_phone')
+				"cardNum": self.r.get('jfqylv2_3_periods_cardNum'),
+				"custName": self.r.get('jfqylv2_3_periods_custName'),
+				"phone": self.r.get('jfqylv2_3_periods_phone')
 			}
 		)
 		param["cardInfo"]["accountProp"] = 1
@@ -89,7 +89,7 @@ class Jfqyl3Tp(unittest.TestCase):
 			product="gateway",
 			enviroment=self.env
 		)
-		self.r.set('jfqyl_3_periods_projectId', rep['content']['projectId'])
+		self.r.set('jfqylv2_3_periods_projectId', rep['content']['projectId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	@unittest.skip("-")
@@ -101,11 +101,11 @@ class Jfqyl3Tp(unittest.TestCase):
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
-				"sourceUserId": self.r.get('jfqyl_3_periods_sourceUserId'),
+				"sourceUserId": self.r.get('jfqylv2_3_periods_sourceUserId'),
 				"contractType": 5,
 				"sourceContractId": Common.get_random('userid'),
-				"transactionId": self.r.get('jfqyl_3_periods_transactionId'),
-				"associationId": self.r.get('jfqyl_3_periods_projectId')
+				"transactionId": self.r.get('jfqylv2_3_periods_transactionId'),
+				"associationId": self.r.get('jfqylv2_3_periods_projectId')
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -124,7 +124,7 @@ class Jfqyl3Tp(unittest.TestCase):
 	def test_102_query_apply_result(self):
 		"""进件结果查询"""
 		GetSqlData.change_project_audit_status(
-			project_id=self.r.get('jfqyl_3_periods_projectId'),
+			project_id=self.r.get('jfqylv2_3_periods_projectId'),
 			enviroment=self.env
 		)
 		data = excel_table_byname(self.excel, 'query_apply_result')
@@ -132,8 +132,8 @@ class Jfqyl3Tp(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceProjectId": self.r.get('jfqyl_3_periods_sourceProjectId'),
-				"projectId": self.r.get('jfqyl_3_periods_projectId')
+				"sourceProjectId": self.r.get('jfqylv2_3_periods_sourceProjectId'),
+				"projectId": self.r.get('jfqylv2_3_periods_projectId')
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -159,10 +159,10 @@ class Jfqyl3Tp(unittest.TestCase):
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
-				"sourceUserId": self.r.get('jfqyl_3_periods_sourceUserId'),
+				"sourceUserId": self.r.get('jfqylv2_3_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
-				"transactionId": self.r.get('jfqyl_3_periods_transactionId'),
-				"associationId": self.r.get('jfqyl_3_periods_projectId')
+				"transactionId": self.r.get('jfqylv2_3_periods_transactionId'),
+				"associationId": self.r.get('jfqylv2_3_periods_projectId')
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -176,7 +176,7 @@ class Jfqyl3Tp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		self.r.set("jfqyl_3_periods_contractId", json.loads(rep.text)['content']['contractId'])
+		self.r.set("jfqylv2_3_periods_contractId", json.loads(rep.text)['content']['contractId'])
 		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
 
 	@unittest.skip("-")
@@ -185,7 +185,7 @@ class Jfqyl3Tp(unittest.TestCase):
 		data = excel_table_byname(self.excel, 'image_upload')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
-		param.update({"associationId": self.r.get('jfqyl_3_periods_projectId')})
+		param.update({"associationId": self.r.get('jfqylv2_3_periods_projectId')})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -207,11 +207,11 @@ class Jfqyl3Tp(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"associationId": self.r.get('jfqyl_3_periods_projectId'),
+				"associationId": self.r.get('jfqylv2_3_periods_projectId'),
 				"serviceSn": Common.get_random("serviceSn"),
 				"requestTime": Common.get_time("-"),
-				"sourceUserId": self.r.get("jfqyl_3_periods_sourceUserId"),
-				"contractId": self.r.get("jfqyl_3_periods_contractId")
+				"sourceUserId": self.r.get("jfqylv2_3_periods_sourceUserId"),
+				"contractId": self.r.get("jfqylv2_3_periods_contractId")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -234,10 +234,10 @@ class Jfqyl3Tp(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceUserId": self.r.get("jfqyl_3_periods_sourceUserId"),
-				"transactionId": self.r.get("jfqyl_3_periods_sourceProjectId"),
-				"sourceProjectId": self.r.get("jfqyl_3_periods_sourceProjectId"),
-				"projectId": self.r.get("jfqyl_3_periods_projectId")
+				"sourceUserId": self.r.get("jfqylv2_3_periods_sourceUserId"),
+				"transactionId": self.r.get("jfqylv2_3_periods_sourceProjectId"),
+				"sourceProjectId": self.r.get("jfqylv2_3_periods_sourceProjectId"),
+				"projectId": self.r.get("jfqylv2_3_periods_projectId")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -258,15 +258,15 @@ class Jfqyl3Tp(unittest.TestCase):
 		data = excel_table_byname(self.excel, 'loan_pfa')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
-		self.r.set("jfqyl_3_periods_loan_serviceSn", Common.get_random("serviceSn"))
+		self.r.set("jfqylv2_3_periods_loan_serviceSn", Common.get_random("serviceSn"))
 		param.update(
 			{
-				"sourceProjectId": self.r.get("jfqyl_3_periods_sourceProjectId"),
-				"projectId": self.r.get("jfqyl_3_periods_projectId"),
-				"sourceUserId": self.r.get("jfqyl_3_periods_sourceUserId"),
-				"serviceSn": self.r.get("jfqyl_3_periods_loan_serviceSn"),
-				"id": self.r.get('jfqyl_3_periods_cardNum'),
-				"accountName": self.r.get("jfqyl_3_periods_custName"),
+				"sourceProjectId": self.r.get("jfqylv2_3_periods_sourceProjectId"),
+				"projectId": self.r.get("jfqylv2_3_periods_projectId"),
+				"sourceUserId": self.r.get("jfqylv2_3_periods_sourceUserId"),
+				"serviceSn": self.r.get("jfqylv2_3_periods_loan_serviceSn"),
+				"id": self.r.get('jfqylv2_3_periods_cardNum'),
+				"accountName": self.r.get("jfqylv2_3_periods_custName"),
 				"amount": 33333.33,
 				"accountProp": 1,
 				"idType": 10,
@@ -291,16 +291,16 @@ class Jfqyl3Tp(unittest.TestCase):
 		time.sleep(8)
 		GetSqlData.change_pay_status(
 			enviroment=self.env,
-			project_id=self.r.get('jfqyl_3_periods_projectId')
+			project_id=self.r.get('jfqylv2_3_periods_projectId')
 		)
 
 	def test_109_loan_query(self):
 		"""放款结果查询"""
-		GetSqlData.loan_set(enviroment=self.env, project_id=self.r.get('jfqyl_3_periods_projectId'))
+		GetSqlData.loan_set(enviroment=self.env, project_id=self.r.get('jfqylv2_3_periods_projectId'))
 		data = excel_table_byname(self.excel, 'pfa_query')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
-		param.update({"serviceSn": self.r.get("jfqyl_3_periods_loan_serviceSn")})
+		param.update({"serviceSn": self.r.get("jfqylv2_3_periods_loan_serviceSn")})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -322,8 +322,8 @@ class Jfqyl3Tp(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"transactionId": self.r.get("jfqyl_3_periods_sourceProjectId"),
-				"projectId": self.r.get("jfqyl_3_periods_projectId")
+				"transactionId": self.r.get("jfqylv2_3_periods_sourceProjectId"),
+				"projectId": self.r.get("jfqylv2_3_periods_projectId")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -337,7 +337,7 @@ class Jfqyl3Tp(unittest.TestCase):
 			product="cloudloan",
 			enviroment=self.env
 		)
-		self.r.set("jfqyl_3_periods_repayment_plan", json.dumps(json.loads(rep.text)['content']['repaymentPlanList']))
+		self.r.set("jfqylv2_3_periods_repayment_plan", json.dumps(json.loads(rep.text)['content']['repaymentPlanList']))
 		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
 
 	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
@@ -349,10 +349,10 @@ class Jfqyl3Tp(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceUserId": self.r.get("jfqyl_3_periods_sourceUserId"),
-				"transactionId": self.r.get("jfqyl_3_periods_sourceProjectId"),
-				"sourceProjectId": self.r.get("jfqyl_3_periods_sourceProjectId"),
-				"projectId": self.r.get("jfqyl_3_periods_projectId"),
+				"sourceUserId": self.r.get("jfqylv2_3_periods_sourceUserId"),
+				"transactionId": self.r.get("jfqylv2_3_periods_sourceProjectId"),
+				"sourceProjectId": self.r.get("jfqylv2_3_periods_sourceProjectId"),
+				"projectId": self.r.get("jfqylv2_3_periods_projectId"),
 				"businessType": 2
 			}
 		)
@@ -368,7 +368,7 @@ class Jfqyl3Tp(unittest.TestCase):
 			enviroment=self.env
 		)
 		self.r.set(
-			"jfqyl_3_periods_early_settlement_repayment_plan",
+			"jfqylv2_3_periods_early_settlement_repayment_plan",
 			json.dumps(json.loads(rep.text)['content']['repaymentPlanList'])
 		)
 		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
@@ -382,10 +382,10 @@ class Jfqyl3Tp(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceUserId": self.r.get("jfqyl_3_periods_sourceUserId"),
-				"transactionId": self.r.get("jfqyl_3_periods_sourceProjectId"),
-				"sourceProjectId": self.r.get("jfqyl_3_periods_sourceProjectId"),
-				"projectId": self.r.get("jfqyl_3_periods_projectId"),
+				"sourceUserId": self.r.get("jfqylv2_3_periods_sourceUserId"),
+				"transactionId": self.r.get("jfqylv2_3_periods_sourceProjectId"),
+				"sourceProjectId": self.r.get("jfqylv2_3_periods_sourceProjectId"),
+				"projectId": self.r.get("jfqylv2_3_periods_projectId"),
 				"businessType": 3
 			}
 		)
@@ -401,7 +401,7 @@ class Jfqyl3Tp(unittest.TestCase):
 			enviroment=self.env
 		)
 		self.r.set(
-			"jfqyl_3_periods_return_repayment_plan",
+			"jfqylv2_3_periods_return_repayment_plan",
 			json.dumps(json.loads(rep.text)['content']['repaymentPlanList'])
 		)
 		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
@@ -415,12 +415,12 @@ class Jfqyl3Tp(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		period = 1
 		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=self.r.get("jfqyl_3_periods_projectId"),
+			project_id=self.r.get("jfqylv2_3_periods_projectId"),
 			enviroment=self.env,
 			period=period,
 			repayment_plan_type=1
 		)
-		repayment_plan_list = self.r.get("jfqyl_3_periods_repayment_plan")
+		repayment_plan_list = self.r.get("jfqylv2_3_periods_repayment_plan")
 		success_amount = 0.00
 		repayment_detail_list = []
 		for i in json.loads(repayment_plan_list):
@@ -434,9 +434,9 @@ class Jfqyl3Tp(unittest.TestCase):
 				repayment_detail_list.append(plan_detail)
 		param.update(
 			{
-				"projectId": self.r.get("jfqyl_3_periods_projectId"),
-				"transactionId": self.r.get("jfqyl_3_periods_sourceProjectId"),
-				"sourceProjectId": self.r.get("jfqyl_3_periods_sourceProjectId"),
+				"projectId": self.r.get("jfqylv2_3_periods_projectId"),
+				"transactionId": self.r.get("jfqylv2_3_periods_sourceProjectId"),
+				"sourceProjectId": self.r.get("jfqylv2_3_periods_sourceProjectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"planPayDate": str(plan_pay_date['plan_pay_date']),
 				"successAmount": success_amount,
@@ -466,12 +466,12 @@ class Jfqyl3Tp(unittest.TestCase):
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=self.r.get("jfqyl_3_periods_projectId"),
+			project_id=self.r.get("jfqylv2_3_periods_projectId"),
 			enviroment=self.env,
 			period=1,
 			repayment_plan_type=1
 		)
-		repayment_plan_list = json.loads(self.r.get("jfqyl_3_periods_early_settlement_repayment_plan"))
+		repayment_plan_list = json.loads(self.r.get("jfqylv2_3_periods_early_settlement_repayment_plan"))
 		success_amount = 0.00
 		repayment_detail_list = []
 		for i in repayment_plan_list:
@@ -484,9 +484,9 @@ class Jfqyl3Tp(unittest.TestCase):
 			repayment_detail_list.append(plan_detail)
 		param.update(
 			{
-				"projectId": self.r.get("jfqyl_3_periods_projectId"),
-				"transactionId": self.r.get("jfqyl_3_periods_sourceProjectId"),
-				"sourceProjectId": self.r.get("jfqyl_3_periods_sourceProjectId"),
+				"projectId": self.r.get("jfqylv2_3_periods_projectId"),
+				"transactionId": self.r.get("jfqylv2_3_periods_sourceProjectId"),
+				"sourceProjectId": self.r.get("jfqylv2_3_periods_sourceProjectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"planPayDate": str(plan_pay_date['plan_pay_date']),
 				"successAmount": success_amount,
@@ -516,12 +516,12 @@ class Jfqyl3Tp(unittest.TestCase):
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=self.r.get("jfqyl_3_periods_projectId"),
+			project_id=self.r.get("jfqylv2_3_periods_projectId"),
 			enviroment=self.env,
 			period=1,
 			repayment_plan_type=1
 		)
-		repayment_plan_list = json.loads(self.r.get("jfqyl_3_periods_return_repayment_plan"))
+		repayment_plan_list = json.loads(self.r.get("jfqylv2_3_periods_return_repayment_plan"))
 		success_amount = 0.00
 		repayment_detail_list = []
 		for i in repayment_plan_list:
@@ -534,9 +534,9 @@ class Jfqyl3Tp(unittest.TestCase):
 			repayment_detail_list.append(plan_detail)
 		param.update(
 			{
-				"projectId": self.r.get("jfqyl_3_periods_projectId"),
-				"transactionId": self.r.get("jfqyl_3_periods_sourceProjectId"),
-				"sourceProjectId": self.r.get("jfqyl_3_periods_sourceProjectId"),
+				"projectId": self.r.get("jfqylv2_3_periods_projectId"),
+				"transactionId": self.r.get("jfqylv2_3_periods_sourceProjectId"),
+				"sourceProjectId": self.r.get("jfqylv2_3_periods_sourceProjectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"planPayDate": str(plan_pay_date['plan_pay_date']),
 				"successAmount": success_amount,
@@ -565,15 +565,15 @@ class Jfqyl3Tp(unittest.TestCase):
 		data = excel_table_byname(self.excel, 'cash_push')
 		param = json.loads(data[0]['param'])
 		success_amount = GetSqlData.get_repayment_amount(
-			project_id=self.r.get("jfqyl_3_periods_projectId"),
+			project_id=self.r.get("jfqylv2_3_periods_projectId"),
 			enviroment=self.env,
 			period=1
 		)
 		param.update(
 			{
 				"serviceSn": Common.get_random("serviceSn"),
-				"projectId": self.r.get("jfqyl_3_periods_projectId"),
-				"sourceProjectId": self.r.get("jfqyl_3_periods_sourceProjectId"),
+				"projectId": self.r.get("jfqylv2_3_periods_projectId"),
+				"sourceProjectId": self.r.get("jfqylv2_3_periods_sourceProjectId"),
 				"repaymentPlanId": Common.get_random("sourceProjectId"),
 				"sucessAmount": success_amount,
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
@@ -602,8 +602,8 @@ class Jfqyl3Tp(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"projectId": self.r.get("jfqyl_3_periods_projectId"),
-				"sourceProjectId": self.r.get("jfqyl_3_periods_sourceProjectId")
+				"projectId": self.r.get("jfqylv2_3_periods_projectId"),
+				"sourceProjectId": self.r.get("jfqylv2_3_periods_sourceProjectId")
 			}
 		)
 		if len(data[0]['headers']) == 0:
