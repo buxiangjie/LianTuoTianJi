@@ -60,7 +60,7 @@ class Jfqylv212Tp(unittest.TestCase):
 				"applyTime": Common.get_time("-"),
 				"applyAmount": 33333.33,
 				"applyTerm": 12,
-				"productCode": "FQ_JK_JFQYLv2"
+				"productCode": "FQ_JK_JFQYLV2"
 			}
 		)
 		param['loanInfo'].update(
@@ -68,7 +68,7 @@ class Jfqylv212Tp(unittest.TestCase):
 				"loanAmount": 33333.33,
 				"loanTerm": 12,
 				"assetInterestRate": 0.153,
-				"userInterestRate": 0.153
+				"userInterestRate": 0.084799
 			}
 		)
 		param['personalInfo'].update(

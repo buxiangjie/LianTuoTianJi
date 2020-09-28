@@ -38,7 +38,6 @@ class GetSqlData(object):
 	@staticmethod
 	def get_sub_table(enviroment, asset_id):
 		# noinspection PyGlobalUndefined
-		global table
 		if enviroment == "test":
 			table = str((asset_id % 8 + 1))
 		elif enviroment in ("qa", "prod"):
@@ -51,7 +50,6 @@ class GetSqlData(object):
 		检查授信步骤
 		"""
 		# noinspection PyGlobalUndefined
-		global conn, cur, sql
 		try:
 			conn = GetSqlData.conn_database(enviroment)
 			cur = conn.cursor()
@@ -69,7 +67,6 @@ class GetSqlData(object):
 	def change_credit_step(enviroment: str, credit_id: str) -> str:
 		"""修改罗马车贷/车置宝授信信息"""
 		# noinspection PyGlobalUndefined
-		global cur, conn, sql
 		conn = GetSqlData.conn_database(enviroment)
 		try:
 			cur = conn.cursor()
@@ -90,7 +87,6 @@ class GetSqlData(object):
 	def change_jfx_credit_step(enviroment: str, user_id: str) -> str:
 		"""修改牙医贷授信信息"""
 		# noinspection PyGlobalUndefined
-		global cur, conn, sql
 		conn = GetSqlData.conn_database(enviroment)
 		try:
 			cur = conn.cursor()
@@ -112,7 +108,6 @@ class GetSqlData(object):
 	def change_credit_status(enviroment: str, credit_id: str) -> str:
 		"""修改授信表状态与步骤"""
 		# noinspection PyGlobalUndefined
-		global cur, conn, sql
 		conn = GetSqlData.conn_database(enviroment)
 		try:
 			cur = conn.cursor()
@@ -131,7 +126,6 @@ class GetSqlData(object):
 	def credit_set(enviroment: str, credit_id: str) -> str:
 		"""授信时调用，根据环境判断是否需要等待补偿"""
 		# noinspection PyGlobalUndefined
-		global step
 		logger.info("开始检查授信步骤")
 		if Config().get_item("Switch", "credit") == "1":
 			# GetSqlData.change_credit_step(enviroment, credit_id)
@@ -156,7 +150,6 @@ class GetSqlData(object):
 	def check_loan_result(enviroment: str, project_id: str) -> str:
 		"""查询放款状态"""
 		# noinspection PyGlobalUndefined
-		global cur, conn, sql
 		try:
 			conn = GetSqlData.conn_database(enviroment)
 			cur = conn.cursor()
@@ -202,7 +195,6 @@ class GetSqlData(object):
 	def change_pay_status(enviroment: str, project_id: str):
 		"""修改steamrunner.pay_order的放款状态为成功"""
 		# noinspection PyGlobalUndefined
-		global cur, conn, sql
 		finish_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 		if Config().get_item("Switch", "loan") == '1':
 			logger.info("放款开关已关闭，走虚拟放款逻辑")
@@ -230,7 +222,6 @@ class GetSqlData(object):
 	def get_asset_id(enviroment: str, project_id: str) -> str:
 		"""获取资产id"""
 		# noinspection PyGlobalUndefined
-		global cur, conn, sql
 		try:
 			conn = GetSqlData.conn_database(enviroment)
 			cur = conn.cursor()
@@ -253,8 +244,7 @@ class GetSqlData(object):
 		剩余应还金额
 		:rtype:
 		"""
-		# noinspection PyGlobalUndefined
-		global cur, conn, plan_table, sql, msg
+		# noinspection PyGlobalUndefined, msg
 
 		try:
 			asset_id = GetSqlData.get_asset_id(enviroment, project_id)
@@ -298,7 +288,6 @@ class GetSqlData(object):
 	def get_user_repayment_amount(project_id: str, enviroment: str, period: str) -> str:
 		"""获取用户还款计划当期应还款总额"""
 		# noinspection PyGlobalUndefined
-		global cur, conn, plan_table, sql
 		try:
 			asset_id = GetSqlData.get_asset_id(enviroment, project_id)
 			plan_table = 'user_repayment_plan_0' + GetSqlData.get_sub_table(enviroment, asset_id)
@@ -321,7 +310,6 @@ class GetSqlData(object):
 	def get_repayment_amount(project_id: str, enviroment: str, period: str) -> str:
 		"""获取机构还款计划当期应还款总额"""
 		# noinspection PyGlobalUndefined
-		global cur, conn, plan_table, sql
 		try:
 			asset_id = GetSqlData.get_asset_id(enviroment, project_id)
 			plan_table = 'repayment_plan_0' + GetSqlData.get_sub_table(enviroment, asset_id)
@@ -344,7 +332,6 @@ class GetSqlData(object):
 	def get_all_repayment_amount(project_id: str, enviroment: str) -> str:
 		"""获取资产还款金额"""
 		# noinspection PyGlobalUndefined
-		global cur, conn, sql
 		try:
 			conn = GetSqlData.conn_database(enviroment)
 			cur = conn.cursor()
@@ -362,7 +349,6 @@ class GetSqlData(object):
 	def get_maturity(project_id: str, enviroment: str) -> str:
 		"""获取资产期数"""
 		# noinspection PyGlobalUndefined
-		global cur, conn, sql
 		try:
 			conn = GetSqlData.conn_database(enviroment)
 			cur = conn.cursor()
@@ -380,7 +366,6 @@ class GetSqlData(object):
 	def get_repayment_principal(project_id: str, enviroment: str, period: str) -> str:
 		"""获取机构还款计划应还本金"""
 		# noinspection PyGlobalUndefined
-		global cur, conn, plan_table, sql
 		try:
 			asset_id = GetSqlData.get_asset_id(enviroment, project_id)
 			plan_table = 'repayment_plan_0' + GetSqlData.get_sub_table(enviroment, asset_id)
@@ -406,7 +391,6 @@ class GetSqlData(object):
 	def get_debt_amount(project_id, enviroment):
 		"""获取资产剩余应还本金"""
 		# noinspection PyGlobalUndefined
-		global cur, conn, sql
 		try:
 			asset_id = GetSqlData.get_asset_id(enviroment, project_id)
 			conn = GetSqlData.conn_database(enviroment)
@@ -431,7 +415,6 @@ class GetSqlData(object):
 		:rtype: object
 		"""
 		# noinspection PyGlobalUndefined
-		global cur, conn, plan_table, sql
 		try:
 			asset_id = GetSqlData.get_asset_id(enviroment, project_id)
 			plan_table = 'repayment_plan_0' + GetSqlData.get_sub_table(enviroment, asset_id)
@@ -472,8 +455,7 @@ class GetSqlData(object):
 	@staticmethod
 	def user_amount(user_id, enviroment):
 		"""查询用户可用额度"""
-		# noinspection PyGlobalUndefined
-		global cur, conn, sql, availableAmount
+		# noinspection PyGlobalUndefined, availableAmount
 		try:
 			conn = GetSqlData.conn_database(enviroment)
 			cur = conn.cursor()
@@ -490,8 +472,7 @@ class GetSqlData(object):
 	@staticmethod
 	def project_audit_status(project_id: str, enviroment: str) -> int:
 		"""查询进件审核状态"""
-		# noinspection PyGlobalUndefined
-		global cur, conn, sql, audit_status
+		# noinspection PyGlobalUndefined, audit_status
 		try:
 			conn = GetSqlData.conn_database(enviroment)
 			cur = conn.cursor()
@@ -530,7 +511,6 @@ class GetSqlData(object):
 	def change_project_audit_status(project_id: str, enviroment: str) -> str:
 		"""修改进件审核状态为通过"""
 		# noinspection PyGlobalUndefined
-		global cur, conn, sql
 		if Config().get_item("Switch", "project") == '1':
 			logger.info("风控已关闭，走虚拟进件风控逻辑")
 			try:
@@ -552,7 +532,6 @@ class GetSqlData(object):
 	def check_project_audit_status(project_id: str, enviroment: str) -> int:
 		"""查询进件审核状态"""
 		# noinspection PyGlobalUndefined
-		global cur, conn, sql
 		try:
 			conn = GetSqlData.conn_database(enviroment)
 			cur = conn.cursor()
@@ -571,7 +550,6 @@ class GetSqlData(object):
 	def loan_sql(env):
 		"""修改steamrunner放款状态"""
 		# noinspection PyGlobalUndefined
-		global cur, conn, sql
 		try:
 			conn = GetSqlData.conn_database(env)
 			cur = conn.cursor()
@@ -637,7 +615,7 @@ class GetSqlData(object):
 								'XJ_WX_DDQ',
 								'XJ_WX_KKD'
 							)
-							AND loan_result != 1;"""
+							AND loan_result != 1 AND audit_result = 1;"""
 			sql4 = f"""UPDATE sandbox_saas.project_loan_flow
 						SET loan_result = 2
 						WHERE product_code IN (
@@ -672,7 +650,6 @@ class GetSqlData(object):
 	def select_asset():
 		"""查询没有放款成功的进件数量"""
 		# noinspection PyGlobalUndefined
-		global cur, conn, sql
 		try:
 			conn = GetSqlData.conn_database("qa")
 			cur = conn.cursor()
@@ -715,7 +692,6 @@ class GetSqlData(object):
 	def get_current_period(project_id, enviroment):
 		"""获取资产当前发生期"""
 		# noinspection PyGlobalUndefined
-		global cur, conn, plan_table, sql
 		try:
 			asset_id = GetSqlData.get_asset_id(enviroment, project_id)
 			plan_table = 'repayment_plan_0' + GetSqlData.get_sub_table(enviroment, asset_id)
@@ -740,7 +716,6 @@ class GetSqlData(object):
 	def get_prod_project_id(asset_id):
 		"""获取进件ID"""
 		# noinspection PyGlobalUndefined
-		global conn, cur, sql
 		try:
 			conn = GetSqlData.conn_database('prod')
 			cur = conn.cursor()
@@ -758,7 +733,6 @@ class GetSqlData(object):
 	def get_contact_id(project_id):
 		"""获取合同ID"""
 		# noinspection PyGlobalUndefined
-		global conn, cur, sql
 		try:
 			conn = GetSqlData.conn_database('prod')
 			cur = conn.cursor()
@@ -776,7 +750,6 @@ class GetSqlData(object):
 	def like_asset_id(asset_id, enviroment):
 		"""资产ID模糊查询"""
 		# noinspection PyGlobalUndefined
-		global conn, cur, sql
 		try:
 			conn = GetSqlData.conn_database(enviroment)
 			cur = conn.cursor()
@@ -794,7 +767,6 @@ class GetSqlData(object):
 	def asset_count(enviroment):
 		"""查询资产ID"""
 		# noinspection PyGlobalUndefined
-		global conn, cur, sql
 		try:
 			conn = GetSqlData.conn_database(enviroment)
 			cur = conn.cursor()
@@ -814,8 +786,7 @@ class GetSqlData(object):
 	@staticmethod
 	def repayment_plan(asset_id: str, enviroment: str) -> int:
 		"""查询机构还款计划条数"""
-		# noinspection PyGlobalUndefined
-		global conn, cur, sql, plan_table
+		# noinspection PyGlobalUndefined, plan_table
 		try:
 			conn = GetSqlData.conn_database(enviroment)
 			plan_table = 'repayment_plan_0' + GetSqlData.get_sub_table(enviroment, asset_id)
@@ -837,7 +808,6 @@ class GetSqlData(object):
 		用于Job
 		"""
 		# noinspection PyGlobalUndefined
-		global conn, cur, sql
 		try:
 			conn = GetSqlData.conn_database("qa")
 			cur = conn.cursor()
@@ -861,7 +831,6 @@ class GetSqlData(object):
 		用于Job
 		"""
 		# noinspection PyGlobalUndefined
-		global conn, cur, sql
 		try:
 			conn = GetSqlData.conn_database("qa")
 			cur = conn.cursor()
@@ -878,7 +847,6 @@ class GetSqlData(object):
 	def change_athena_status(enviroment, apply_id):
 		"""修改Athena数据状态"""
 		# noinspection PyGlobalUndefined
-		global conn, cur, sql
 		try:
 			conn = GetSqlData.conn_database(enviroment)
 			cur = conn.cursor()

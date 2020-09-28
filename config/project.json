@@ -274,10 +274,10 @@
     "name": "jfqyl_24_periods_custName",
     "card": "jfqyl_24_periods_bankcard"
   },
-  "jfqylv2_9_periods": {
-    "id": "jfqylv2_9_periods_cardNum",
-    "name": "jfqylv2_9_periods_custName",
-    "card": "jfqylv2_9_periods_bankcard"
+  "jfqylv2_12_periods": {
+    "id": "jfqylv2_12_periods_cardNum",
+    "name": "jfqylv2_12_periods_custName",
+    "card": "jfqylv2_12_periods_bankcard"
   },
   "jfqjyv2_9_periods": {
     "id": "jfqjyv2_9_periods_cardNum",
