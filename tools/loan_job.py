@@ -4,7 +4,6 @@
 @date:
 @describe:
 """
-import time
 import random
 import os
 import sys
@@ -44,6 +43,6 @@ class Ob(object):
 
 
 scheduler = BlockingScheduler()
-scheduler.add_job(Ob.loan_job, 'interval', seconds=60)
-scheduler.add_job(Ob.project_job, 'interval', seconds=30)
+scheduler.add_job(Ob.loan_job, 'interval', seconds=30, max_instances=1)
+scheduler.add_job(Ob.project_job, 'interval', seconds=11, max_instances=1)
 scheduler.start()
