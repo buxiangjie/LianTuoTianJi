@@ -599,23 +599,35 @@ class GetSqlData(object):
 								AND project_detail.loan_result != 1
 							);"""
 			sql3 = f"""UPDATE sandbox_saas.project_detail
-						SET loan_result = 2
-						WHERE product_code IN (
-								'XJ_JFX_YYDSIN', 
-								'XJ_JFX_YYDMUL', 
-								'FQ_RM_RMYM', 
-								'XJ_ROMA_CAR', 
-								'XJ_ROMA_CARV2', 
-								'XJ_DX_SYJV2', 
-								'XJ_DX_SYJ', 
-								'FQ_JK_JFQYL', 
-								'FQ_JK_JFQYLV2', 
-								'FQ_JK_JFQJY', 
-								'FQ_JK_JFQJYV2',
-								'XJ_WX_DDQ',
-								'XJ_WX_KKD'
-							)
-							AND loan_result != 1 AND audit_result = 1;"""
+					SET loan_result = 2
+					WHERE id IN (
+							SELECT a.project_id
+							FROM (
+								SELECT project_id
+								FROM sandbox_saas.project_loan_flow
+								WHERE project_id IN (
+									SELECT id
+									FROM sandbox_saas.project_detail
+									WHERE (product_code IN (
+											'XJ_JFX_YYDSIN', 
+											'XJ_JFX_YYDMUL', 
+											'FQ_RM_RMYM', 
+											'XJ_ROMA_CAR', 
+											'XJ_ROMA_CARV2', 
+											'XJ_DX_SYJV2', 
+											'XJ_DX_SYJ', 
+											'FQ_JK_JFQYL', 
+											'FQ_JK_JFQYLV2', 
+											'FQ_JK_JFQJY', 
+											'FQ_JK_JFQJYV2', 
+											'XJ_WX_DDQ', 
+											'XJ_WX_KKD'
+										)
+										AND loan_result != 1
+										AND audit_result = 1)
+								)
+							) a
+						);"""
 			sql4 = f"""UPDATE sandbox_saas.project_loan_flow
 						SET loan_result = 2
 						WHERE product_code IN (
@@ -811,7 +823,26 @@ class GetSqlData(object):
 		try:
 			conn = GetSqlData.conn_database("qa")
 			cur = conn.cursor()
-			sql = f"""select id from project_detail where product_code in ("FQ_JK_JFQYL", "FQ_JK_JFQJY") and audit_status !=2"""
+			sql = f"""SELECT id
+					FROM project_detail
+					WHERE product_code IN (
+							'XJ_JFX_YYDSIN', 
+							'XJ_JFX_YYDMUL', 
+							'FQ_RM_RMYM', 
+							'XJ_ROMA_CAR', 
+							'XJ_ROMA_CARV2', 
+							'XJ_DX_SYJV2', 
+							'XJ_DX_SYJ', 
+							'FQ_JK_JFQYL', 
+							'FQ_JK_JFQYLV2', 
+							'FQ_JK_JFQJY', 
+							'FQ_JK_JFQJYV2', 
+							'XJ_WX_DDQ', 
+							'XJ_WX_KKD', 
+							'XJ_WX_DDQ', 
+							'XJ_WX_KKD'
+						)
+						AND audit_status != 2"""
 			cur.execute(sql)
 			ids = cur.fetchall()
 			idss = []
