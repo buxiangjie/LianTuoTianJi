@@ -10,6 +10,7 @@ import sys
 import os
 
 from common.common_func import Common
+from typing import Optional
 from config.configer import Config
 from log.logger import Logger
 
@@ -885,6 +886,31 @@ class GetSqlData(object):
 			cur.execute(sql)
 			conn.commit()
 		except Exception as e:
+			raise e
+		finally:
+			cur.close()
+			conn.close()
+
+	@staticmethod
+	def change_repayment_plan_date(enviroment: str, period: int, date: str, project_id: int):
+		"""修改还款计划天数"""
+		assetId = GetSqlData.get_asset_id(enviroment, project_id)
+		plan_table = 'repayment_plan_0' + GetSqlData.get_sub_table(enviroment, assetId)
+		try:
+			conn = GetSqlData.conn_database(enviroment)
+			cur = conn.cursor()
+			sql = f"""
+					update sandbox_saas.{plan_table}
+					set plan_pay_date='{date}'
+					where asset_id={assetId}
+						and period={period}
+						and repayment_status=1;
+				"""
+			print(sql)
+			cur.execute(sql)
+			conn.commit()
+		except Exception as e:
+			conn.rollback()
 			raise e
 		finally:
 			cur.close()

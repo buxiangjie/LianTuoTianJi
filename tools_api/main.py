@@ -31,17 +31,17 @@ class OverdueItem(BaseModel):
 
 @app.post("/overdue/change", name="修改还款计划为逾期")
 def change_overdue(item: OverdueItem):
-	# if item.asset_id:
-	# 	assetId = item.asset_id
-	# elif item.project_id:
-		# assetId = GetSqlData.get_asset_id(enviroment=item.enviroment, project_id=item.project_id)
-	# else:
-		# return {"code": 5000, "error":"project_id和asset_id必须有一个!"}
-	pers = list(range(1,item.period))
+	pers = list(range(1,item.period+1))
 	count = item.period
 	for per in pers:
-		date = str(datetime.datetime.now() - relativedelta(months=count)).split(" ")[0]
+		if item.start_date:
+			date = str(item.start_date - relativedelta(months=count)).split(" ")[0]
+		else:
+			date = str(datetime.datetime.now() - relativedelta(months=count)).split(" ")[0]
+		print(date)
+		print(item)
 		GetSqlData.change_repayment_plan_date(item.enviroment,per,date,item.project_id)
+		count -= 1
 
 if __name__ == '__main__':
-	uvicorn.run(app="main:app", host="192.168.1.115", port=8817, reload=True)
+	uvicorn.run(app="main:app", host="192.168.1.108", port=8817, reload=True)
