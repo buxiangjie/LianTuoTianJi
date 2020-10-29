@@ -906,7 +906,6 @@ class GetSqlData(object):
 						and period={period}
 						and repayment_status=1;
 				"""
-			print(sql)
 			cur.execute(sql)
 			conn.commit()
 		except Exception as e:

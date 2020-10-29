@@ -4,7 +4,6 @@
 @date:2020-10-18 13:37:00
 @describe: 
 """
-import uvicorn
 import sys
 import os
 import datetime
@@ -33,15 +32,14 @@ class OverdueItem(BaseModel):
 def change_overdue(item: OverdueItem):
 	pers = list(range(1,item.period+1))
 	count = item.period
-	for per in pers:
-		if item.start_date:
-			date = str(item.start_date - relativedelta(months=count)).split(" ")[0]
-		else:
-			date = str(datetime.datetime.now() - relativedelta(months=count)).split(" ")[0]
-		print(date)
-		print(item)
-		GetSqlData.change_repayment_plan_date(item.enviroment,per,date,item.project_id)
-		count -= 1
-
-if __name__ == '__main__':
-	uvicorn.run(app="main:app", host="192.168.1.108", port=8817, reload=True)
+	try:
+		for per in pers:
+			if item.start_date:
+				date = str(item.start_date - relativedelta(months=count)).split(" ")[0]
+			else:
+				date = str(datetime.datetime.now() - relativedelta(months=count)).split(" ")[0]
+			GetSqlData.change_repayment_plan_date(item.enviroment,per,date,item.project_id)
+			count -= 1
+		return {"code": 2000, "msg":"执行成功"}
+	except Exception as e:
+		return {"code": 5000, "msg": str(e)}
