@@ -28,7 +28,7 @@ class OverdueItem(BaseModel):
 	period: int
 	start_date: Optional[date] = None
 
-@app.post("/overdue/change", name="修改还款计划为逾期111")
+@app.post("/overdue/change", name="修改还款计划为逾期")
 def change_overdue(item: OverdueItem):
 	pers = list(range(1,item.period+1))
 	count = item.period
