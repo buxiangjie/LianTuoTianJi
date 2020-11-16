@@ -1,6 +1,6 @@
 {
   "pay": {
-    "test": "http://test-rongpay-deduction-busi.igfax.net",
+    "test": "http://test-rongpay-deduction-busi.cloudloan.com",
     "qa": "http://api-qa1.cloudloan.com:11070",
     "online": "https://rongpay-api.cloudloan.com"
   },
