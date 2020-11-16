@@ -24,9 +24,9 @@ class Ddq9Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = 'qa'
+		cls.env = 'test'
 		cls.r = Common.conn_redis(enviroment=cls.env)
-		file = Config().get_item('File', 'kkd_case_file')
+		file = Config().get_item('File', 'ddq_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@classmethod
@@ -300,14 +300,46 @@ class Ddq9Tp(unittest.TestCase):
 			headers = None
 		else:
 			headers = json.loads(data[0]['headers'])
+		headers["X-TBC-SKIP-SIGN"] = 'true'
+		headers["X-TBC-SKIP-ENCRYPT"] = 'true'
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="cloudloan",
+			product="gateway",
 			enviroment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		self.r.set("ddq_9_periods_signId", rep['content']['signId'])
+
+	def test_1078_rong_pay_upload(self):
+		"""委托划扣协议上传"""
+		data = excel_table_byname(self.excel, 'upload')
+		print("接口名称:%s" % data[0]['casename'])
+		param = Common.get_json_data('data', 'rong_pay_upload.json')
+		param.update(
+			{
+				"associationId": self.r.get("ddq_9_periods_signId"),
+				"requestId": Common.get_random("serviceSn"),
+				"sourceContractId": Common.get_random("serviceSn"),
+				"sourceUserId": self.r.get("ddq_9_periods_sourceUserId")
+
+			}
+		)
+		if len(data[0]['headers']) == 0:
+			headers = None
+		else:
+			headers = json.loads(data[0]['headers'])
+		headers["X-TBC-SKIP-SIGN"] = 'true'
+		headers["X-TBC-SKIP-ENCRYPT"] = 'true'
+		rep = Common.response(
+			faceaddr=data[0]['url'],
+			headers=headers,
+			data=json.dumps(param, ensure_ascii=False),
+			product="gateway",
+			enviroment=self.env
+		)
+		self.assertEqual(rep['code'], int(data[0]['resultCode']))
 
 	def test_108_loan_pfa(self):
 		"""放款申请"""
