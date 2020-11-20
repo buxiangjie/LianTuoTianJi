@@ -352,11 +352,13 @@ class TestRmkj3Tp:
 			headers = None
 		else:
 			headers = json.loads(data[0]['headers'])
+		headers["X-TBC-SKIP-SIGN"] = 'true'
+		headers["X-TBC-SKIP-ENCRYPT"] = 'true'
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product='pay',
+			product='gateway',
 			enviroment=env
 		)
 		r.set("rmkj_3_periods_signTaskId", rep['data']['signTaskId'])
@@ -389,11 +391,13 @@ class TestRmkj3Tp:
 			headers = None
 		else:
 			headers = json.loads(data[0]['headers'])
+		headers["X-TBC-SKIP-SIGN"] = 'true'
+		headers["X-TBC-SKIP-ENCRYPT"] = 'true'
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product='pay',
+			product='gateway',
 			enviroment=env
 		)
 		assert rep['code'] == int(data[0]['resultCode'])
@@ -425,11 +429,13 @@ class TestRmkj3Tp:
 			headers = None
 		else:
 			headers = json.loads(data[0]['headers'])
+		headers["X-TBC-SKIP-SIGN"] = 'true'
+		headers["X-TBC-SKIP-ENCRYPT"] = 'true'
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product='pay',
+			product='gateway',
 			enviroment=env
 		)
 		assert rep['code'] == int(data[0]['resultCode'])
