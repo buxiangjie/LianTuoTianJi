@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 """
 @auth:卜祥杰
-@date:2019-10-22 09:39:00
+@date:2019-10-22 09:39:001
 @describe: 任买医美九期进件-放款流程
 """
 import unittest
@@ -720,7 +720,7 @@ class Rmkj9Tp(unittest.TestCase):
 		repayment_plan_list = self.r.get("rmkj_9_periods_repayment_plan")
 		success_amount = 0.00
 		repayment_detail_list = []
-		period = 1
+		period = 8
 		for i in json.loads(repayment_plan_list):
 			if i['period'] == period:
 				plan_detail = {
