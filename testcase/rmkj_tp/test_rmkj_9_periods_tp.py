@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 """
 @auth:卜祥杰
-@date:2019-10-22 09:39:001
+@date:2019-10-22 09:39:00
 @describe: 任买医美九期进件-放款流程
 """
 import unittest
