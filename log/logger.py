@@ -24,7 +24,6 @@ class Logger(object):
 		log_name = log_path + rq + '.log'
 
 		if not os.path.exists(log_path):
-			print(os.path.exists(log_path))
 			os.mkdir(log_path)
 
 		fh = logging.FileHandler(log_name)
