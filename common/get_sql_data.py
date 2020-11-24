@@ -10,12 +10,12 @@ import sys
 import os
 
 from common.common_func import Common
-from typing import Optional
+from log.ulog import Ulog
 from config.configer import Config
 from log.logger import Logger
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-logger = Logger(logger="SqlData").getlog()
+logger = Ulog().getlog()
 
 
 class GetSqlData(object):

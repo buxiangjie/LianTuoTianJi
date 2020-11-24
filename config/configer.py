@@ -29,7 +29,6 @@ class Config(object):
 			with open(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/config/config.ini", "w+",
 					  encoding='utf-8') as f:
 				self.cf.write(f)
-			f.close()
 			return "修改成功"
 		except Exception as e:
 			raise e
@@ -42,7 +41,6 @@ class Config(object):
 			with open(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/config/config.ini", "w+",
 					  encoding='utf-8') as f:
 				self.cf.write(f)
-			f.close()
 			return "添加成功"
 		except Exception as e:
 			raise e
