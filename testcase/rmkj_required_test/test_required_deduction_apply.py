@@ -34,7 +34,7 @@ class DeductionApply(unittest.TestCase):
         headers = json.loads(data['headers'])
         rep = Common.response(faceaddr=data['url'], headers=headers,
                               data=json.dumps(param, ensure_ascii=False), product='cloudloan',
-                              enviroment=self.env)
+                              environment=self.env)
         self.assertEqual(int(rep['resultCode']), data['resultCode'])
 
 

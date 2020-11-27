@@ -73,12 +73,9 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
 		self.r.set("nqh_periods_same_day_return_projectId", json.loads(rep.text)['content']['projectId'])
 		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
 
@@ -89,7 +86,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('nqh_periods_same_day_return_projectId'),
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.set("nqh_periods_same_day_return_loan_time", Common.get_time("-"))
 		param.update(
@@ -111,7 +108,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		print("返回信息:%s" % rep.text)
@@ -159,12 +156,9 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
 		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
 
 	def test_3_repayment_one_period(self):
@@ -174,7 +168,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		success_amount = GetSqlData.get_all_repayment_amount(
-			enviroment=self.env,
+			environment=self.env,
 			project_id=self.r.get("nqh_periods_same_day_return_projectId")) - 600
 		param['repayment'].update(
 			{
@@ -203,7 +197,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 			plan_pay_type_plan = plan_type.get(param['repaymentPlanList'][y]['repaymentPlanType'])
 			repayment_detail_plan = GetSqlData.get_repayment_detail(
 				project_id=self.r.get("nqh_periods_same_day_return_projectId"),
-				enviroment=self.env,
+				environment=self.env,
 				period=param['repaymentPlanList'][y]['period'],
 				repayment_plan_type=plan_pay_type_plan
 			)
@@ -229,12 +223,9 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
 		self.assertEqual(json.loads(rep.text)['resultCode'], data[0]['msgCode'])
 		self.assertEqual(json.loads(rep.text)['content']['message'], "交易成功")
 
@@ -251,13 +242,13 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 			}
 			repayment = GetSqlData.get_repayment_detail(
 				project_id=self.r.get("nqh_periods_same_day_return_projectId"),
-				enviroment=self.env,
+				environment=self.env,
 				period=per,
 				repayment_plan_type="1"
 			)
 			success_amount = GetSqlData.get_repayment_amount(
 				project_id=self.r.get("nqh_periods_same_day_return_projectId"),
-				enviroment=self.env,
+				environment=self.env,
 				period=per
 			)
 			param['repayment'].update(
@@ -273,7 +264,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 				plan_pay_type = plan_type.get(param['repaymentDetailList'][i]['repaymentPlanType'])
 				repayment_detail = GetSqlData.get_repayment_detail(
 					project_id=self.r.get("nqh_periods_same_day_return_projectId"),
-					enviroment=self.env,
+					environment=self.env,
 					period=per,
 					repayment_plan_type=plan_pay_type
 				)
@@ -291,7 +282,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 				plan_pay_type_plan = plan_type.get(param['repaymentPlanList'][y]['repaymentPlanType'])
 				repayment_detail_plan = GetSqlData.get_repayment_detail(
 					project_id=self.r.get("nqh_periods_same_day_return_projectId"),
-					enviroment=self.env,
+					environment=self.env,
 					period=param['repaymentPlanList'][y]['period'],
 					repayment_plan_type=plan_pay_type_plan
 				)
@@ -317,12 +308,10 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 				faceaddr=data[0]['url'],
 				headers=headers,
 				data=json.dumps(param, ensure_ascii=False),
-				enviroment=self.env,
+				environment=self.env,
 				product="pintic"
 			)
-			print("响应信息:%s" % rep)
-			print("返回json:%s" % rep.text)
-			logger.info("返回信息:%s" % rep.text)
+
 			self.assertEqual(json.loads(rep.text)['resultCode'], data[0]['msgCode'])
 			self.assertEqual(json.loads(rep.text)['content']['message'], "交易成功")
 

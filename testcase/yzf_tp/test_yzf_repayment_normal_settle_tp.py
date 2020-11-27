@@ -73,14 +73,14 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.r.set("yzf_repayment_normal_settle_projectId", rep['content']['projectId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('yzf_repayment_normal_settle_projectId'),
-			enviroment=self.env
+			environment=self.env
 		)
 
 	def test_1_loan_notice(self):
@@ -108,7 +108,7 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
@@ -155,7 +155,7 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
@@ -168,7 +168,7 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		for per in range(1, 25):
 			success_amount = GetSqlData.get_user_repayment_amount(
-				enviroment=self.env,
+				environment=self.env,
 				project_id=self.r.get("yzf_repayment_normal_settle_projectId"),
 				period=per
 			)
@@ -193,7 +193,7 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 					if plan_catecory == 1 or plan_catecory == 2:
 						repayment_detail = GetSqlData.get_repayment_detail(
 							project_id=self.r.get("yzf_repayment_normal_settle_projectId"),
-							enviroment=self.env,
+							environment=self.env,
 							period=per,
 							repayment_plan_type=plan_pay_type
 						)
@@ -212,13 +212,13 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 							if plan_catecory == 2002:
 								repayment_detail = GetSqlData.get_repayment_detail(
 									project_id=self.r.get("yzf_repayment_normal_settle_projectId"),
-									enviroment=self.env,
+									environment=self.env,
 									period=24,
 									repayment_plan_type=2
 								)
 								user_repayment_detail = GetSqlData.get_user_repayment_detail(
 									project_id=self.r.get("yzf_repayment_normal_settle_projectId"),
-									enviroment=self.env,
+									environment=self.env,
 									period=24,
 									repayment_plan_type=2
 								)
@@ -257,7 +257,7 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 				elif asset_plan_owner == "financePartner":
 					user_repayment_detail = GetSqlData.get_user_repayment_detail(
 						project_id=self.r.get("yzf_repayment_normal_settle_projectId"),
-						enviroment=self.env,
+						environment=self.env,
 						period=per,
 						repayment_plan_type=plan_pay_type
 					)
@@ -279,7 +279,7 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 				if plan_list_asset_plan_owner == 'financePartner':
 					plan_list_detail = GetSqlData.get_user_repayment_detail(
 						project_id=self.r.get("yzf_repayment_normal_settle_projectId"),
-						enviroment=self.env,
+						environment=self.env,
 						period=per,
 						repayment_plan_type=plan_list_pay_type
 					)
@@ -296,7 +296,7 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 				elif plan_list_asset_plan_owner == 'foundPartner':
 					plan_list_detail = GetSqlData.get_repayment_detail(
 						project_id=self.r.get("yzf_repayment_normal_settle_projectId"),
-						enviroment=self.env,
+						environment=self.env,
 						period=per,
 						repayment_plan_type=plan_list_pay_type
 					)
@@ -318,7 +318,7 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 				faceaddr=data[0]['url'],
 				headers=headers,
 				data=json.dumps(param, ensure_ascii=False),
-				enviroment=self.env,
+				environment=self.env,
 				product="pintic"
 			)
 

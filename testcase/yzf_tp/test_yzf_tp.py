@@ -70,14 +70,14 @@ class TestYzfTp:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		r.set("yzf_projectId", rep['content']['projectId'])
 		assert rep['resultCode'] == int(data[0]['msgCode'])
 		GetSqlData.change_project_audit_status(
 			project_id=r.get('yzf_projectId'),
-			enviroment=env
+			environment=env
 		)
 
 	@allure.title("翼支付放款通知")
@@ -108,7 +108,7 @@ class TestYzfTp:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert rep['resultCode'] == int(data[0]['msgCode'])
@@ -160,7 +160,7 @@ class TestYzfTp:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert rep['resultCode'] == int(data[0]['msgCode'])
@@ -203,7 +203,7 @@ class TestYzfTp:
 			if i['assetPlanOwner'] == "foundPartner":
 				plan_list_detail = GetSqlData.get_repayment_detail(
 					project_id=r.get("yzf_projectId"),
-					enviroment=env,
+					environment=env,
 					period=i['period'],
 					repayment_plan_type=plan_pay_type.get(i['repaymentPlanType']),
 
@@ -211,7 +211,7 @@ class TestYzfTp:
 			elif i['assetPlanOwner'] == "financePartner":
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r.get("yzf_projectId"),
-					enviroment=env,
+					environment=env,
 					period=i['period'],
 					repayment_plan_type=plan_pay_type.get(i['repaymentPlanType'])
 				)
@@ -239,7 +239,7 @@ class TestYzfTp:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert rep['resultCode'] == data[0]['msgCode']
@@ -277,7 +277,7 @@ class TestYzfTp:
 				if plan_catecory == 1 or plan_catecory == 2:
 					repayment_detail = GetSqlData.get_repayment_detail(
 						project_id=r.get("yzf_projectId"),
-						enviroment=env,
+						environment=env,
 						period=period,
 						repayment_plan_type=plan_pay_type
 					)
@@ -295,7 +295,7 @@ class TestYzfTp:
 				elif plan_catecory == 3002:
 					repayment_detail = GetSqlData.get_repayment_detail(
 						project_id=r.get("yzf_projectId"),
-						enviroment=env,
+						environment=env,
 						period=period,
 						repayment_plan_type=2
 					)
@@ -312,7 +312,7 @@ class TestYzfTp:
 				else:
 					plan_list_detail = GetSqlData.get_user_repayment_detail(
 						project_id=r.get("yzf_projectId"),
-						enviroment=env,
+						environment=env,
 						period=period,
 						repayment_plan_type=plan_pay_type,
 						feecategory=param['repaymentDetailList'][i]['planCategory']
@@ -331,7 +331,7 @@ class TestYzfTp:
 				if plan_catecory == 1 or plan_catecory == 2:
 					user_repayment_detail = GetSqlData.get_user_repayment_detail(
 						project_id=r.get("yzf_projectId"),
-						enviroment=env,
+						environment=env,
 						period=period,
 						repayment_plan_type=plan_pay_type
 					)
@@ -359,7 +359,7 @@ class TestYzfTp:
 			else:
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r.get("yzf_projectId"),
-					enviroment=env,
+					environment=env,
 					period=period,
 					repayment_plan_type=3,
 					feecategory=param['repaymentDetailList'][i]['planCategory']
@@ -380,7 +380,7 @@ class TestYzfTp:
 			if plan_list_asset_plan_owner == 'financePartner':
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r.get("yzf_projectId"),
-					enviroment=env,
+					environment=env,
 					period=period,
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -397,7 +397,7 @@ class TestYzfTp:
 			elif plan_list_asset_plan_owner == 'foundPartner':
 				plan_list_detail = GetSqlData.get_repayment_detail(
 					project_id=r.get("yzf_projectId"),
-					enviroment=env,
+					environment=env,
 					period=param['repaymentPlanList'][i]['period'],
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -415,7 +415,7 @@ class TestYzfTp:
 			if param['feePlanList'][i]['feeCategory'] == 3003:
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r.get("yzf_projectId"),
-					enviroment=env,
+					environment=env,
 					period=param['feePlanList'][i]['period'],
 					repayment_plan_type="3"
 				)
@@ -429,7 +429,7 @@ class TestYzfTp:
 			elif param['feePlanList'][i]['feeCategory'] == 3002:
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r.get("yzf_projectId"),
-					enviroment=env,
+					environment=env,
 					period=param['feePlanList'][i]['period'],
 					repayment_plan_type="3"
 				)
@@ -443,7 +443,7 @@ class TestYzfTp:
 			else:
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r.get("yzf_projectId"),
-					enviroment=env,
+					environment=env,
 					period=param['feePlanList'][i]['period'],
 					repayment_plan_type="3",
 					feecategory=param['feePlanList'][i]['feeCategory']
@@ -463,7 +463,7 @@ class TestYzfTp:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert rep['resultCode'] == data[0]['msgCode']

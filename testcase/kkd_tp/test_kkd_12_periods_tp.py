@@ -78,7 +78,7 @@ class TestKkd12Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		r.set('kkd_12_periods_projectId', rep['content']['projectId'])
 		assert rep['resultCode'] == int(data[0]['resultCode'])
@@ -112,7 +112,7 @@ class TestKkd12Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
@@ -125,7 +125,7 @@ class TestKkd12Tp:
 		"""进件结果查询"""
 		GetSqlData.change_project_audit_status(
 			project_id=r.get('kkd_12_periods_projectId'),
-			enviroment=env
+			environment=env
 		)
 		data = excel_table_byname(self.excel, 'query_apply_result')
 		print("接口名称:%s" % data[0]['casename'])
@@ -145,7 +145,7 @@ class TestKkd12Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 		assert rep['content']['auditStatus'] == 2
@@ -178,7 +178,7 @@ class TestKkd12Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		r.set("kkd_12_periods_contractId", rep['content']['contractId'])
 		assert rep['resultCode'] == int(data[0]['resultCode'])
@@ -211,7 +211,7 @@ class TestKkd12Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
@@ -236,7 +236,7 @@ class TestKkd12Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
@@ -268,7 +268,7 @@ class TestKkd12Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
@@ -299,7 +299,7 @@ class TestKkd12Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
@@ -332,13 +332,13 @@ class TestKkd12Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 		# 修改支付表中的品钛返回code
 		time.sleep(8)
 		GetSqlData.change_pay_status(
-			enviroment=env,
+			environment=env,
 			project_id=r.get('kkd_12_periods_projectId')
 		)
 
@@ -349,7 +349,7 @@ class TestKkd12Tp:
 	@pytest.mark.offline_settle_in_advance
 	def test_109_loan_query(self, r, env):
 		"""放款结果查询"""
-		GetSqlData.loan_set(enviroment=env, project_id=r.get('kkd_12_periods_projectId'))
+		GetSqlData.loan_set(environment=env, project_id=r.get('kkd_12_periods_projectId'))
 		data = excel_table_byname(self.excel, 'pfa_query')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
@@ -363,7 +363,7 @@ class TestKkd12Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 		assert rep['content']['projectLoanStatus'] == 3
@@ -393,7 +393,7 @@ class TestKkd12Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		r.set("kkd_12_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 		assert rep['resultCode'] == int(data[0]['resultCode'])
@@ -424,7 +424,7 @@ class TestKkd12Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		r.set(
 			"kkd_12_periods_early_settlement_repayment_plan",
@@ -443,7 +443,7 @@ class TestKkd12Tp:
 		period = 1
 		plan_pay_date = GetSqlData.get_repayment_detail(
 			project_id=r.get("kkd_12_periods_projectId"),
-			enviroment=env,
+			environment=env,
 			period=period,
 			repayment_plan_type=1
 		)
@@ -481,7 +481,7 @@ class TestKkd12Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
@@ -495,7 +495,7 @@ class TestKkd12Tp:
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
 			project_id=r.get("kkd_12_periods_projectId"),
-			enviroment=env,
+			environment=env,
 			period=1,
 			repayment_plan_type=1
 		)
@@ -533,7 +533,7 @@ class TestKkd12Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
@@ -562,7 +562,7 @@ class TestKkd12Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		r.set("kkd_12_periods_contractId", rep['content']['contractId'])
 		assert rep['resultCode'] == int(data[0]['resultCode'])

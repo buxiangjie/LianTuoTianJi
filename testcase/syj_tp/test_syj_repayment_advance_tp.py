@@ -73,7 +73,7 @@ class SyjRepaymentAdvance(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		print("响应信息:%s" % rep)
@@ -107,7 +107,7 @@ class SyjRepaymentAdvance(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		print("响应信息:%s" % rep)
@@ -138,7 +138,7 @@ class SyjRepaymentAdvance(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		print("响应信息:%s" % rep)
@@ -190,7 +190,7 @@ class SyjRepaymentAdvance(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		print("响应信息:%s" % rep)
@@ -206,7 +206,7 @@ class SyjRepaymentAdvance(unittest.TestCase):
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		success_amount = GetSqlData.get_repayment_amount(
-			enviroment=self.env,
+			environment=self.env,
 			project_id=self.r.get("syj_repayment_advance_projectId"),
 			period=param['repaymentDetailList'][0]['period']
 		)
@@ -227,7 +227,7 @@ class SyjRepaymentAdvance(unittest.TestCase):
 			plan_pay_type = plan_type.get(i['repaymentPlanType'])
 			repayment_detail = GetSqlData.get_repayment_detail(
 				project_id=self.r.get("syj_repayment_advance_projectId"),
-				enviroment=self.env,
+				environment=self.env,
 				period=i['period'],
 				repayment_plan_type=plan_pay_type
 			)
@@ -244,7 +244,7 @@ class SyjRepaymentAdvance(unittest.TestCase):
 			plan_pay_type_plan = plan_type.get(y['repaymentPlanType'])
 			repayment_detail_plan = GetSqlData.get_repayment_detail(
 				project_id=self.r.get("syj_repayment_advance_projectId"),
-				enviroment=self.env,
+				environment=self.env,
 				period=y['period'],
 				repayment_plan_type=plan_pay_type_plan
 			)
@@ -265,7 +265,7 @@ class SyjRepaymentAdvance(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		print("响应信息:%s" % rep)

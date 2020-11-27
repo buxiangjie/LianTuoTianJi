@@ -73,7 +73,7 @@ class TestSyjv2Tp:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		r.set('syjv2_projectId', rep['content']['projectId'])
@@ -81,7 +81,7 @@ class TestSyjv2Tp:
 		assert ("交易成功", rep['content']['message'], "进件失败")
 		GetSqlData.change_project_audit_status(
 			project_id=r.get('syjv2_projectId'),
-			enviroment=env
+			environment=env
 		)
 
 	@allure.title("随意借放款")
@@ -96,7 +96,7 @@ class TestSyjv2Tp:
 		print("接口名称:%s" % data[0]['casename'])
 		GetSqlData.project_audit_status(
 			project_id=r.get('syjv2_projectId'),
-			enviroment=env
+			environment=env
 		)
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -117,7 +117,7 @@ class TestSyjv2Tp:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert (int(data[0]['msgCode']), rep['resultCode'])
@@ -136,7 +136,7 @@ class TestSyjv2Tp:
 		time.sleep(8)
 		GetSqlData.change_pay_status(
 			project_id=r.get('syjv2_projectId'),
-			enviroment=env
+			environment=env
 		)
 		GetSqlData.loan_set(env, r.get('syjv2_projectId'))
 		param = json.loads(data[0]['param'])
@@ -156,7 +156,7 @@ class TestSyjv2Tp:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert (int(data[0]['msgCode']), rep['resultCode'])
@@ -199,7 +199,7 @@ class TestSyjv2Tp:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert (int(data[0]['msgCode']), rep['resultCode'])
@@ -232,7 +232,7 @@ class TestSyjv2Tp:
 				plan_pay_type = plan_type.get(i['repaymentPlanType'])
 				repayment_detail = GetSqlData.get_repayment_detail(
 					project_id=r.get("syjv2_projectId"),
-					enviroment=env,
+					environment=env,
 					period=i['period'],
 					repayment_plan_type=plan_pay_type)
 				i.update(
@@ -246,7 +246,7 @@ class TestSyjv2Tp:
 			else:
 				repayment_detail = GetSqlData.get_repayment_detail(
 					project_id=r.get("syjv2_projectId"),
-					enviroment=env,
+					environment=env,
 					period=i['period'],
 					repayment_plan_type=1)
 				i.update(
@@ -261,7 +261,7 @@ class TestSyjv2Tp:
 			plan_pay_type_plan = plan_type.get(i['repaymentPlanType'])
 			repayment_detail_plan = GetSqlData.get_repayment_detail(
 				project_id=r.get("syjv2_projectId"),
-				enviroment=env,
+				environment=env,
 				period=i['period'],
 				repayment_plan_type=plan_pay_type_plan)
 			i.update(
@@ -304,7 +304,7 @@ class TestSyjv2Tp:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert (rep['resultCode'], data[0]['msgCode'])
@@ -347,14 +347,14 @@ class TestSyjv2Tp:
 			if i['assetPlanOwner'] == "foundPartner":
 				plan_list_detail = GetSqlData.get_repayment_detail(
 					project_id=r.get('syjv2_projectId'),
-					enviroment=env,
+					environment=env,
 					period=i['period'],
 					repayment_plan_type=plan_pay_type.get(i['repaymentPlanType'])
 				)
 			elif i['assetPlanOwner'] == "financePartner":
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r.get('syjv2_projectId'),
-					enviroment=env,
+					environment=env,
 					period=i['period'],
 					repayment_plan_type=plan_pay_type.get(i['repaymentPlanType'])
 				)
@@ -382,7 +382,7 @@ class TestSyjv2Tp:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert (rep['resultCode'], data[0]['msgCode'])
@@ -417,7 +417,7 @@ class TestSyjv2Tp:
 				if plan_catecory == 1 or plan_catecory == 2:
 					repayment_detail = GetSqlData.get_repayment_detail(
 						project_id=r.get('syjv2_projectId'),
-						enviroment=env,
+						environment=env,
 						period=period,
 						repayment_plan_type=plan_pay_type
 					)
@@ -435,14 +435,14 @@ class TestSyjv2Tp:
 				else:
 					plan_list_detail = GetSqlData.get_user_repayment_detail(
 						project_id=r.get('syjv2_projectId'),
-						enviroment=env,
+						environment=env,
 						period=period,
 						repayment_plan_type=3,
 						feecategory=i['planCategory']
 					)
 					repayment_detail = GetSqlData.get_repayment_detail(
 						project_id=r.get('syjv2_projectId'),
-						enviroment=env,
+						environment=env,
 						period=1,
 						repayment_plan_type=2
 					)
@@ -459,7 +459,7 @@ class TestSyjv2Tp:
 				if plan_catecory == 1 or plan_catecory == 2:
 					user_repayment_detail = GetSqlData.get_user_repayment_detail(
 						project_id=r.get('syjv2_projectId'),
-						enviroment=env,
+						environment=env,
 						period=period,
 						repayment_plan_type=plan_pay_type
 					)
@@ -477,7 +477,7 @@ class TestSyjv2Tp:
 			else:
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r.get('syjv2_projectId'),
-					enviroment=env,
+					environment=env,
 					period=period,
 					repayment_plan_type=3,
 					feecategory=i['planCategory']
@@ -497,7 +497,7 @@ class TestSyjv2Tp:
 			if plan_list_asset_plan_owner == 'financePartner':
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r.get('syjv2_projectId'),
-					enviroment=env,
+					environment=env,
 					period=period,
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -514,7 +514,7 @@ class TestSyjv2Tp:
 			elif plan_list_asset_plan_owner == 'foundPartner':
 				plan_list_detail = GetSqlData.get_repayment_detail(
 					project_id=r.get('syjv2_projectId'),
-					enviroment=env,
+					environment=env,
 					period=i['period'],
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -531,7 +531,7 @@ class TestSyjv2Tp:
 		for i in param['feePlanList']:
 			plan_list_detail = GetSqlData.get_user_repayment_detail(
 				project_id=r.get("syjv2_projectId"),
-				enviroment=env,
+				environment=env,
 				period=i['period'],
 				repayment_plan_type=3,
 				feecategory=i['feeCategory']
@@ -551,7 +551,7 @@ class TestSyjv2Tp:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert (rep['resultCode'], data[0]['msgCode'])

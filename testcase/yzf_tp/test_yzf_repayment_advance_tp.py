@@ -69,7 +69,7 @@ class TestYzfRepaymentAdvance:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		r.set("yzf_repayment_advance_projectId", rep['content']['projectId'])
@@ -105,7 +105,7 @@ class TestYzfRepaymentAdvance:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert rep['resultCode'] == int(data[0]['msgCode'])
@@ -154,7 +154,7 @@ class TestYzfRepaymentAdvance:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert rep['resultCode'] == int(data[0]['msgCode'])
@@ -191,7 +191,7 @@ class TestYzfRepaymentAdvance:
 			)
 			if i['repaymentPlanType'] == 'Principal':
 				this_pay_amount = GetSqlData.get_all_repayment_amount(
-					enviroment=env,
+					environment=env,
 					project_id=r.get("yzf_repayment_advance_projectId")
 				)
 				i.update(
@@ -211,11 +211,11 @@ class TestYzfRepaymentAdvance:
 				i.update(
 					{
 						"curAmount": GetSqlData.get_all_repayment_amount(
-							enviroment=env,
+							environment=env,
 							project_id=r.get("yzf_repayment_advance_projectId")
 						),
 						"payAmount": GetSqlData.get_all_repayment_amount(
-							enviroment=env,
+							environment=env,
 							project_id=r.get("yzf_repayment_advance_projectId")
 						)
 					}
@@ -224,7 +224,7 @@ class TestYzfRepaymentAdvance:
 				if i['assetPlanOwner'] == 'financePartner':
 					plan_list_detail = GetSqlData.get_user_repayment_detail(
 						project_id=r.get("yzf_repayment_advance_projectId"),
-						enviroment=env, period=i['period'],
+						environment=env, period=i['period'],
 						repayment_plan_type=plan_type[i['repaymentPlanType']]
 					)
 					i.update(
@@ -238,7 +238,7 @@ class TestYzfRepaymentAdvance:
 				elif i['assetPlanOwner'] == 'foundPartner':
 					plan_list_detail = GetSqlData.get_repayment_detail(
 						project_id=r.get("yzf_repayment_advance_projectId"),
-						enviroment=env, period=i['period'],
+						environment=env, period=i['period'],
 						repayment_plan_type=plan_type[i['repaymentPlanType']]
 					)
 					i.update(
@@ -264,7 +264,7 @@ class TestYzfRepaymentAdvance:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert rep['resultCode'] == data[0]['msgCode']

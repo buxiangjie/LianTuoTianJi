@@ -20,8 +20,7 @@ sys.path.append(rootPath)
 
 
 def dl():
-	global re, cws
-	excel = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + Config().Get_Item('File', 'xindalu')
+	excel = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + Config().get_item('File', 'xindalu')
 	data = excel_table_byname(excel, by_name='Sheet2')
 	name = []
 	idcard = []
@@ -116,7 +115,7 @@ def dl():
 			re = requests.post(url="https://decision.igfax.com/decision/sync/get", headers=header,
 							   data=json.dumps(param, ensure_ascii=False).encode('utf-8'))
 		except Exception as e:
-			print(str(e))
+			raise e
 		rep = json.loads(re.text)
 		resu = rep['decisionResult']['result']
 		sc = rep['decisionResult']['score']

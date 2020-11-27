@@ -36,7 +36,7 @@ class Apply(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product='cloudloan',
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(int(rep['resultCode']), data['resultCode'])
 

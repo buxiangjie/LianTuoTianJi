@@ -73,7 +73,7 @@ class JqhRepaymentNormalSettle(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.r.set("jqh_repayment_normal_settle_projectId", rep['content']['projectId'])
@@ -103,7 +103,7 @@ class JqhRepaymentNormalSettle(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
@@ -150,7 +150,7 @@ class JqhRepaymentNormalSettle(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
@@ -163,7 +163,7 @@ class JqhRepaymentNormalSettle(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		for per in range(1, 7):
 			amount = GetSqlData.get_repayment_amount(
-				enviroment=self.env,
+				environment=self.env,
 				project_id=self.r.get("jqh_repayment_normal_settle_projectId"),
 				period=per
 			)
@@ -188,7 +188,7 @@ class JqhRepaymentNormalSettle(unittest.TestCase):
 					if plan_catecory == 1 or plan_catecory == 2:
 						repayment_detail = GetSqlData.get_repayment_detail(
 							project_id=self.r.get("jqh_repayment_normal_settle_projectId"),
-							enviroment=self.env, period=param['repaymentDetailList'][i]['period'],
+							environment=self.env, period=param['repaymentDetailList'][i]['period'],
 							repayment_plan_type=plan_pay_type)
 						param['repaymentDetailList'][i].update(
 							{
@@ -211,7 +211,7 @@ class JqhRepaymentNormalSettle(unittest.TestCase):
 				elif asset_plan_owner == "financePartner":
 					user_repayment_detail = GetSqlData.get_user_repayment_detail(
 						project_id=self.r.get("jqh_repayment_normal_settle_projectId"),
-						enviroment=self.env, period=param['repaymentDetailList'][i]['period'],
+						environment=self.env, period=param['repaymentDetailList'][i]['period'],
 						repayment_plan_type=plan_pay_type)
 					param['repaymentDetailList'][i].update(
 						{
@@ -230,7 +230,7 @@ class JqhRepaymentNormalSettle(unittest.TestCase):
 				if plan_list_asset_plan_owner == 'financePartner':
 					plan_list_detail = GetSqlData.get_user_repayment_detail(
 						project_id=self.r.get("jqh_repayment_normal_settle_projectId"),
-						enviroment=self.env, period=param['repaymentPlanList'][i]['period'],
+						environment=self.env, period=param['repaymentPlanList'][i]['period'],
 						repayment_plan_type=plan_list_pay_type)
 					param['repaymentPlanList'][i].update(
 						{
@@ -244,7 +244,7 @@ class JqhRepaymentNormalSettle(unittest.TestCase):
 				elif plan_list_asset_plan_owner == 'foundPartner':
 					plan_list_detail = GetSqlData.get_repayment_detail(
 						project_id=self.r.get("jqh_repayment_normal_settle_projectId"),
-						enviroment=self.env, period=param['repaymentPlanList'][i]['period'],
+						environment=self.env, period=param['repaymentPlanList'][i]['period'],
 						repayment_plan_type=plan_list_pay_type)
 					param['repaymentPlanList'][i].update(
 						{
@@ -263,7 +263,7 @@ class JqhRepaymentNormalSettle(unittest.TestCase):
 				faceaddr=data[0]['url'],
 				headers=headers,
 				data=json.dumps(param, ensure_ascii=False),
-				enviroment=self.env,
+				environment=self.env,
 				product="pintic"
 			)
 			self.assertEqual(rep['resultCode'], data[0]['msgCode'])

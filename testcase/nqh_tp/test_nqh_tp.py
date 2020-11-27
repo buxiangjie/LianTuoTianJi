@@ -70,14 +70,14 @@ class TestNqhTp:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		r.set("nqh_projectId", rep['content']['projectId'])
 		assert rep['resultCode'] == int(data[0]['msgCode'])
 		GetSqlData.change_project_audit_status(
 			project_id=r.get('nqh_projectId'),
-			enviroment=env
+			environment=env
 		)
 
 	@allure.title("拿去花放款通知")
@@ -110,7 +110,7 @@ class TestNqhTp:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert rep['resultCode'] == int(data[0]['msgCode'])
@@ -152,7 +152,7 @@ class TestNqhTp:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert rep['resultCode'] == int(data[0]['msgCode'])
@@ -195,14 +195,14 @@ class TestNqhTp:
 			if i['assetPlanOwner'] == "foundPartner":
 				plan_list_detail = GetSqlData.get_repayment_detail(
 					project_id=r['nqh_projectId'],
-					enviroment=env,
+					environment=env,
 					period=i['period'],
 					repayment_plan_type=plan_pay_type.get(i['repaymentPlanType'])
 				)
 			elif i['assetPlanOwner'] == "financePartner":
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r['nqh_projectId'],
-					enviroment=env,
+					environment=env,
 					period=i['period'],
 					repayment_plan_type=plan_pay_type.get(i['repaymentPlanType'])
 				)
@@ -230,7 +230,7 @@ class TestNqhTp:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert rep['resultCode'] == data[0]['msgCode']
@@ -267,7 +267,7 @@ class TestNqhTp:
 				if plan_catecory == 1 or plan_catecory == 2:
 					repayment_detail = GetSqlData.get_repayment_detail(
 						project_id=r['nqh_projectId'],
-						enviroment=env,
+						environment=env,
 						period=period,
 						repayment_plan_type=plan_pay_type
 					)
@@ -284,7 +284,7 @@ class TestNqhTp:
 				else:
 					fee_detail = GetSqlData.get_user_repayment_detail(
 						project_id=r['nqh_projectId'],
-						enviroment=env,
+						environment=env,
 						period=period,
 						repayment_plan_type=plan_type,
 						feecategory=plan_catecory
@@ -313,7 +313,7 @@ class TestNqhTp:
 				else:
 					user_repayment_detail = GetSqlData.get_user_repayment_detail(
 						project_id=r['nqh_projectId'],
-						enviroment=env,
+						environment=env,
 						period=period,
 						repayment_plan_type=plan_pay_type
 					)
@@ -334,7 +334,7 @@ class TestNqhTp:
 			if plan_list_asset_plan_owner == 'financePartner':
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r['nqh_projectId'],
-					enviroment=env,
+					environment=env,
 					period=period,
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -349,7 +349,7 @@ class TestNqhTp:
 			elif plan_list_asset_plan_owner == 'foundPartner':
 				plan_list_detail = GetSqlData.get_repayment_detail(
 					project_id=r['nqh_projectId'],
-					enviroment=env,
+					environment=env,
 					period=i['period'],
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -365,7 +365,7 @@ class TestNqhTp:
 			if i['feeCategory'] != 3001:
 				user_fee = GetSqlData.get_repayment_detail(
 					project_id=r.get("nqh_projectId"),
-					enviroment=env,
+					environment=env,
 					period=i['period'],
 					repayment_plan_type=1,
 				)
@@ -379,7 +379,7 @@ class TestNqhTp:
 			else:
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r.get("nqh_projectId"),
-					enviroment=env,
+					environment=env,
 					period=i['period'],
 					repayment_plan_type=3,
 					feecategory=i['feeCategory']
@@ -399,7 +399,7 @@ class TestNqhTp:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert rep['resultCode'] == data[0]['msgCode']

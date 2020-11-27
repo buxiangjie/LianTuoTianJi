@@ -11,7 +11,6 @@ import os
 import json
 import time
 import sys
-import warnings
 
 from common.common_func import Common
 from log.logger import Logger
@@ -74,7 +73,7 @@ class SyjRepayment(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.r.set("syj_repayment_projectId", rep['content']['projectId'])
@@ -82,7 +81,7 @@ class SyjRepayment(unittest.TestCase):
 		self.assertEqual("交易成功", rep['content']['message'], "进件失败")
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('syj_repayment_projectId'),
-			enviroment=self.env
+			environment=self.env
 		)
 
 	def test_1_loan(self):
@@ -109,7 +108,7 @@ class SyjRepayment(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.assertEqual(int(data[0]['msgCode']), rep['resultCode'])
@@ -139,7 +138,7 @@ class SyjRepayment(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.assertEqual(int(data[0]['msgCode']), rep['resultCode'])
@@ -176,7 +175,7 @@ class SyjRepayment(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.assertEqual(int(data[0]['msgCode']), rep['resultCode'])
@@ -205,7 +204,7 @@ class SyjRepayment(unittest.TestCase):
 				plan_pay_type = plan_type.get(i['repaymentPlanType'])
 				repayment_detail = GetSqlData.get_repayment_detail(
 					project_id=self.r.get("syj_repayment_projectId"),
-					enviroment=self.env,
+					environment=self.env,
 					period=i['period'],
 					repayment_plan_type=plan_pay_type
 				)
@@ -231,7 +230,7 @@ class SyjRepayment(unittest.TestCase):
 			plan_pay_type_plan = plan_type.get(y['repaymentPlanType'])
 			repayment_detail_plan = GetSqlData.get_repayment_detail(
 				project_id=self.r.get("syj_repayment_projectId"),
-				enviroment=self.env,
+				environment=self.env,
 				period=y['period'],
 				repayment_plan_type=plan_pay_type_plan
 			)
@@ -259,7 +258,7 @@ class SyjRepayment(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.assertEqual(rep['resultCode'], data[0]['msgCode'])

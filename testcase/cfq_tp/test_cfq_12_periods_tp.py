@@ -28,7 +28,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 	def setUpClass(cls):
 		cls.env = 'test'
 		cls.sql = GetSqlData()
-		cls.r = Common.conn_redis(enviroment=cls.env)
+		cls.r = Common.conn_redis(environment=cls.env)
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 	@classmethod
@@ -92,7 +92,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.r.set("cfq_12_periods_projectId", rep['content']['projectId'])
@@ -100,14 +100,14 @@ class Cfq12PeriodsTp(unittest.TestCase):
 		# 修改进件审核状态
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get("cfq_12_periods_projectId"),
-			enviroment=self.env
+			environment=self.env
 		)
 
 	def test_101_query_audit_status(self):
 		"""橙分期进件审核结果查询"""
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get("cfq_12_periods_projectId"),
-			enviroment=self.env
+			environment=self.env
 		)
 		excel = self.excel + Config().get_item('File', 'cfq_12_periods_case_file')
 		data = excel_table_byname(excel, 'query_audit_status')
@@ -128,7 +128,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
@@ -159,7 +159,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
@@ -204,7 +204,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
@@ -235,7 +235,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="pintic",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.set("cfq_12_periods_contractId", rep['content']['contractId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -257,7 +257,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 				"payTime": Common.get_time("-"),
 				"sourceCreateTime": Common.get_time("-"),
 				"successAmount": float(GetSqlData.get_user_repayment_amount(
-					enviroment=self.env,
+					environment=self.env,
 					project_id=self.r.get("cfq_12_periods_projectId"),
 					period=period)
 				)
@@ -277,7 +277,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 				if plan_catecory == 1 or plan_catecory == 2:
 					repayment_detail = GetSqlData.get_repayment_detail(
 						project_id=self.r.get("cfq_12_periods_projectId"),
-						enviroment=self.env,
+						environment=self.env,
 						period=period,
 						repayment_plan_type=plan_pay_type
 					)
@@ -294,7 +294,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 				else:
 					plan_list_detail = GetSqlData.get_user_repayment_detail(
 						project_id=self.r.get("cfq_12_periods_projectId"),
-						enviroment=self.env,
+						environment=self.env,
 						period=period,
 						repayment_plan_type=3,
 						feecategory=param['repaymentDetailList'][i]['planCategory']
@@ -312,7 +312,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			elif asset_plan_owner == "financePartner":
 				user_repayment_detail = GetSqlData.get_user_repayment_detail(
 					project_id=self.r.get("cfq_12_periods_projectId"),
-					enviroment=self.env,
+					environment=self.env,
 					period=period,
 					repayment_plan_type=plan_pay_type
 				)
@@ -334,7 +334,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			if plan_list_asset_plan_owner == 'financePartner':
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=self.r.get("cfq_12_periods_projectId"),
-					enviroment=self.env,
+					environment=self.env,
 					period=period,
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -351,7 +351,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			elif plan_list_asset_plan_owner == 'foundPartner':
 				plan_list_detail = GetSqlData.get_repayment_detail(
 					project_id=self.r.get("cfq_12_periods_projectId"),
-					enviroment=self.env,
+					environment=self.env,
 					period=param['repaymentPlanList'][i]['period'],
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -374,7 +374,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
@@ -394,7 +394,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 		debt_amount = float(GetSqlData.get_debt_amount(self.r.get("cfq_12_periods_projectId"), self.env))
 		# 当期利息
 		rest_interest = float(GetSqlData.get_user_repayment_detail(
-			project_id=self.r.get("cfq_12_periods_projectId"), enviroment=self.env, period=period,
+			project_id=self.r.get("cfq_12_periods_projectId"), environment=self.env, period=period,
 			repayment_plan_type="2"
 		).get("rest_amount"))
 		param['repayment'].update(
@@ -424,7 +424,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 				i.update(
 					{
 						"thisPayAmount": GetSqlData.get_all_repayment_amount(
-							enviroment=self.env,
+							environment=self.env,
 							project_id=self.r.get("cfq_12_periods_projectId")
 						)
 					}
@@ -460,7 +460,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 				if i['assetPlanOwner'] == 'financePartner':
 					plan_list_detail = GetSqlData.get_user_repayment_detail(
 						project_id=self.r.get("cfq_12_periods_projectId"),
-						enviroment=self.env, period=i['period'],
+						environment=self.env, period=i['period'],
 						repayment_plan_type=plan_type[i['repaymentPlanType']])
 					i.update(
 						{
@@ -473,7 +473,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 				elif i['assetPlanOwner'] == 'foundPartner':
 					plan_list_detail = GetSqlData.get_repayment_detail(
 						project_id=self.r.get("cfq_12_periods_projectId"),
-						enviroment=self.env, period=i['period'],
+						environment=self.env, period=i['period'],
 						repayment_plan_type=plan_type[i['repaymentPlanType']])
 					i.update(
 						{
@@ -499,7 +499,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 				faceaddr=data[0]['url'],
 				headers=headers,
 				data=json.dumps(param, ensure_ascii=False),
-				enviroment=self.env,
+				environment=self.env,
 				product="pintic"
 			)
 
@@ -521,7 +521,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			GetSqlData.get_debt_amount(self.r.get("cfq_12_periods_projectId"), self.env))
 		# 当期利息
 		rest_interest = float(GetSqlData.get_user_repayment_detail(
-			project_id=self.r.get("cfq_12_periods_projectId"), enviroment=self.env, period=period,
+			project_id=self.r.get("cfq_12_periods_projectId"), environment=self.env, period=period,
 			repayment_plan_type="2"
 		).get("rest_amount"))
 		param['repayment'].update(
@@ -585,7 +585,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 				if i['assetPlanOwner'] == 'financePartner':
 					plan_list_detail = GetSqlData.get_user_repayment_detail(
 						project_id=self.r.get("cfq_12_periods_projectId"),
-						enviroment=self.env, period=i['period'],
+						environment=self.env, period=i['period'],
 						repayment_plan_type=plan_type[i['repaymentPlanType']])
 					i.update(
 						{
@@ -598,7 +598,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 				elif i['assetPlanOwner'] == 'foundPartner':
 					plan_list_detail = GetSqlData.get_repayment_detail(
 						project_id=self.r.get("cfq_12_periods_projectId"),
-						enviroment=self.env, period=i['period'],
+						environment=self.env, period=i['period'],
 						repayment_plan_type=plan_type[i['repaymentPlanType']])
 					i.update(
 						{
@@ -627,7 +627,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
@@ -669,12 +669,12 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			if i['assetPlanOwner'] == "foundPartner":
 				plan_list_detail = GetSqlData.get_repayment_detail(
 					project_id=self.r.get("cfq_12_periods_projectId"),
-					enviroment=self.env, period=i['period'],
+					environment=self.env, period=i['period'],
 					repayment_plan_type=plan_pay_type.get(i['repaymentPlanType']))
 			elif i['assetPlanOwner'] == "financePartner":
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=self.r.get("cfq_12_periods_projectId"),
-					enviroment=self.env, period=i['period'],
+					environment=self.env, period=i['period'],
 					repayment_plan_type=plan_pay_type.get(i['repaymentPlanType']))
 			i.update(
 				{
@@ -700,7 +700,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
@@ -740,12 +740,12 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			if i['assetPlanOwner'] == "foundPartner":
 				plan_list_detail = GetSqlData.get_repayment_detail(
 					project_id=self.r.get("cfq_12_periods_projectId"),
-					enviroment=self.env, period=i['period'],
+					environment=self.env, period=i['period'],
 					repayment_plan_type=plan_pay_type.get(i['repaymentPlanType']))
 			elif i['assetPlanOwner'] == "financePartner":
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=self.r.get("cfq_12_periods_projectId"),
-					enviroment=self.env, period=i['period'],
+					environment=self.env, period=i['period'],
 					repayment_plan_type=plan_pay_type.get(i['repaymentPlanType']))
 			i.update(
 				{
@@ -761,7 +761,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
@@ -796,7 +796,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 				if plan_catecory == 1 or plan_catecory == 2:
 					repayment_detail = GetSqlData.get_repayment_detail(
 						project_id=self.r.get("cfq_12_periods_projectId"),
-						enviroment=self.env,
+						environment=self.env,
 						period=period,
 						repayment_plan_type=plan_pay_type
 					)
@@ -813,7 +813,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 				else:
 					plan_list_detail = GetSqlData.get_user_repayment_detail(
 						project_id=self.r.get("cfq_12_periods_projectId"),
-						enviroment=self.env,
+						environment=self.env,
 						period=period,
 						repayment_plan_type=3,
 						feecategory=param['repaymentDetailList'][i]['planCategory']
@@ -831,7 +831,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 				if plan_catecory == 1 or plan_catecory == 2:
 					user_repayment_detail = GetSqlData.get_user_repayment_detail(
 						project_id=self.r.get("cfq_12_periods_projectId"),
-						enviroment=self.env,
+						environment=self.env,
 						period=period,
 						repayment_plan_type=plan_pay_type
 					)
@@ -848,7 +848,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			else:
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=self.r.get("cfq_12_periods_projectId"),
-					enviroment=self.env,
+					environment=self.env,
 					period=period,
 					repayment_plan_type=3,
 					feecategory=param['repaymentDetailList'][i]['planCategory']
@@ -868,7 +868,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			if plan_list_asset_plan_owner == 'financePartner':
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=self.r.get("cfq_12_periods_projectId"),
-					enviroment=self.env,
+					environment=self.env,
 					period=period,
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -885,7 +885,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			elif plan_list_asset_plan_owner == 'foundPartner':
 				plan_list_detail = GetSqlData.get_repayment_detail(
 					project_id=self.r.get("cfq_12_periods_projectId"),
-					enviroment=self.env,
+					environment=self.env,
 					period=param['repaymentPlanList'][i]['period'],
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -902,7 +902,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 		for i in range(0, len(param['feePlanList'])):
 			plan_list_detail = GetSqlData.get_user_repayment_detail(
 				project_id=self.r.get("cfq_12_periods_projectId"),
-				enviroment=self.env,
+				environment=self.env,
 				period=param['feePlanList'][i]['period'],
 				repayment_plan_type=3,
 				feecategory=param['feePlanList'][i]['feeCategory']
@@ -922,7 +922,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		self.assertEqual(rep['resultCode'], data[0]['msgCode'])

@@ -33,7 +33,6 @@ class RomaCreditApplyNull(unittest.TestCase):
 
 	@ddt.data(*excel_data)
 	def test_credit_apply(self, data):
-		global key, value
 		print("接口名称:%s" % data['casename'])
 		case = data['casename']
 		param = json.loads(self.param)
@@ -61,7 +60,7 @@ class RomaCreditApplyNull(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product='cloudloan',
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data['resultCode']))
 

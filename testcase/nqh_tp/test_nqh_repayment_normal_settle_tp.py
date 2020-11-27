@@ -68,7 +68,7 @@ class TestNqhRepaymentNormalSettle:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		r.set("nqh_repayment_normal_settle_projectId", rep['content']['projectId'])
@@ -83,7 +83,7 @@ class TestNqhRepaymentNormalSettle:
 		print("接口名称:%s" % data[0]['casename'])
 		GetSqlData.change_project_audit_status(
 			project_id=r.get('nqh_repayment_normal_settle_projectId'),
-			enviroment=env
+			environment=env
 		)
 		param = json.loads(data[0]['param'])
 		r.set("nqh_repayment_normal_settle_loan_time", Common.get_time("-"))
@@ -106,7 +106,7 @@ class TestNqhRepaymentNormalSettle:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert rep['resultCode'] == int(data[0]['msgCode'])
@@ -154,7 +154,7 @@ class TestNqhRepaymentNormalSettle:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert rep['resultCode'] == int(data[0]['msgCode'])
@@ -175,12 +175,12 @@ class TestNqhRepaymentNormalSettle:
 			}
 			repayment = GetSqlData.get_repayment_detail(
 				project_id=r.get("nqh_repayment_normal_settle_projectId"),
-				enviroment=env,
+				environment=env,
 				period=per,
 				repayment_plan_type="1"
 			)
 			success_amount = GetSqlData.get_repayment_amount(
-				enviroment=env,
+				environment=env,
 				project_id=r.get("nqh_repayment_normal_settle_projectId"),
 				period=per
 			)
@@ -197,7 +197,7 @@ class TestNqhRepaymentNormalSettle:
 				plan_pay_type = plan_type.get(i['repaymentPlanType'])
 				repayment_detail = GetSqlData.get_repayment_detail(
 					project_id=r.get("nqh_repayment_normal_settle_projectId"),
-					enviroment=env,
+					environment=env,
 					period=per,
 					repayment_plan_type=plan_pay_type
 				)
@@ -216,7 +216,7 @@ class TestNqhRepaymentNormalSettle:
 				if y['assetPlanOwner'] == 'foundPartner':
 					repayment_detail_plan = GetSqlData.get_repayment_detail(
 						project_id=r.get("nqh_repayment_normal_settle_projectId"),
-						enviroment=env,
+						environment=env,
 						period=per,
 						repayment_plan_type=plan_pay_type_plan
 					)
@@ -233,7 +233,7 @@ class TestNqhRepaymentNormalSettle:
 				else:
 					repayment_detail_plan = GetSqlData.get_user_repayment_detail(
 						project_id=r.get("nqh_repayment_normal_settle_projectId"),
-						enviroment=env,
+						environment=env,
 						period=per,
 						repayment_plan_type=plan_pay_type_plan
 					)
@@ -255,7 +255,7 @@ class TestNqhRepaymentNormalSettle:
 				faceaddr=data[0]['url'],
 				headers=headers,
 				data=json.dumps(param, ensure_ascii=False),
-				enviroment=env,
+				environment=env,
 				product="pintic"
 			)
 			assert rep['resultCode'] == data[0]['msgCode']

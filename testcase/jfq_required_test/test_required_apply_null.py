@@ -34,7 +34,6 @@ class JfqPorjectNull(unittest.TestCase):
 
 	@ddt.data(*excel_data)
 	def test_project(self, data):
-		global key, value
 		print("接口名称:%s" % data['casename'])
 		case = data['casename']
 		param = json.loads(self.param)
@@ -47,12 +46,9 @@ class JfqPorjectNull(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product='cloudloan',
-			enviroment=self.env
+			environment=self.env
 		)
-		print("响应结果:%s" % rep)
-		print("返回信息:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data['resultCode']))
 
 
 @ddt.ddt
@@ -73,7 +69,6 @@ class JfqPorject(unittest.TestCase):
 
 	@ddt.data(*excel_data)
 	def test_project(self, data):
-		global key, value
 		print("接口名称:%s" % data['casename'])
 		case = data['casename']
 		param = json.loads(self.param)
@@ -86,12 +81,9 @@ class JfqPorject(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product='cloudloan',
-			enviroment=self.env
+			environment=self.env
 		)
-		print("响应结果:%s" % rep)
-		print("返回信息:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data['resultCode']))
 
 
 if __name__ == '__main__':

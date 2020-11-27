@@ -69,7 +69,7 @@ class TestNqhOnePeriodSameDayReturn:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		r.set("nqh_one_period_same_day_return_projectId", rep['content']['projectId'])
@@ -84,7 +84,7 @@ class TestNqhOnePeriodSameDayReturn:
 		print("接口名称:%s" % data[0]['casename'])
 		GetSqlData.change_project_audit_status(
 			project_id=r["nqh_one_period_same_day_return_projectId"],
-			enviroment=env
+			environment=env
 		)
 		param = json.loads(data[0]['param'])
 		r.set("nqh_one_period_same_day_return_loan_time", Common.get_time("-"))
@@ -107,7 +107,7 @@ class TestNqhOnePeriodSameDayReturn:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert rep['resultCode'] == int(data[0]['msgCode'])
@@ -159,7 +159,7 @@ class TestNqhOnePeriodSameDayReturn:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert rep['resultCode'] == int(data[0]['msgCode'])
@@ -174,7 +174,7 @@ class TestNqhOnePeriodSameDayReturn:
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		success_amount = GetSqlData.get_all_repayment_amount(
-			enviroment=env,
+			environment=env,
 			project_id=r.get("nqh_one_period_same_day_return_projectId"))
 		param['repayment'].update(
 			{
@@ -194,7 +194,7 @@ class TestNqhOnePeriodSameDayReturn:
 			plan_pay_type = plan_type.get(i['repaymentPlanType'])
 			repayment_detail = GetSqlData.get_repayment_detail(
 				project_id=r.get("nqh_one_period_same_day_return_projectId"),
-				enviroment=env, period=i['period'],
+				environment=env, period=i['period'],
 				repayment_plan_type=plan_pay_type)
 			i.update(
 				{
@@ -209,7 +209,7 @@ class TestNqhOnePeriodSameDayReturn:
 			plan_pay_type_plan = plan_type.get(y['repaymentPlanType'])
 			repayment_detail_plan = GetSqlData.get_repayment_detail(
 				project_id=r.get("nqh_one_period_same_day_return_projectId"),
-				enviroment=env, period=y['period'],
+				environment=env, period=y['period'],
 				repayment_plan_type=plan_pay_type_plan)
 			if plan_pay_type_plan == '1':
 				y.update(
@@ -237,7 +237,7 @@ class TestNqhOnePeriodSameDayReturn:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert rep['resultCode'] == data[0]['msgCode']
@@ -258,14 +258,14 @@ class TestNqhOnePeriodSameDayReturn:
 		}
 		repayment = GetSqlData.get_repayment_detail(
 			project_id=r.get("nqh_one_period_same_day_return_projectId"),
-			enviroment=env,
+			environment=env,
 			period=1,
 			repayment_plan_type="1"
 		)
 
 		success_amount = GetSqlData.get_repayment_amount(
 			project_id=r.get("nqh_one_period_same_day_return_projectId"),
-			enviroment=env, period=1
+			environment=env, period=1
 		)
 		param['repayment'].update(
 			{
@@ -280,7 +280,7 @@ class TestNqhOnePeriodSameDayReturn:
 			plan_pay_type = plan_type.get(i['repaymentPlanType'])
 			repayment_detail = GetSqlData.get_repayment_detail(
 				project_id=r.get("nqh_one_period_same_day_return_projectId"),
-				enviroment=env, period=1,
+				environment=env, period=1,
 				repayment_plan_type=plan_pay_type)
 			i.update(
 				{
@@ -296,7 +296,7 @@ class TestNqhOnePeriodSameDayReturn:
 			plan_pay_type_plan = plan_type.get(y['repaymentPlanType'])
 			repayment_detail_plan = GetSqlData.get_repayment_detail(
 				project_id=r.get("nqh_one_period_same_day_return_projectId"),
-				enviroment=env, period=y['period'],
+				environment=env, period=y['period'],
 				repayment_plan_type=plan_pay_type_plan)
 			y.update(
 				{
@@ -314,7 +314,7 @@ class TestNqhOnePeriodSameDayReturn:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert rep['resultCode'] == data[0]['msgCode']

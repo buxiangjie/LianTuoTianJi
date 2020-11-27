@@ -25,8 +25,8 @@ class Rmkj12Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = "qa"
-		cls.r = Common.conn_redis(enviroment=cls.env)
+		cls.env = "test"
+		cls.r = Common.conn_redis(environment=cls.env)
 		file = Config().get_item('File', 'rmkj_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
@@ -89,10 +89,10 @@ class Rmkj12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.set('rmkj_12_periods_projectId', rep['content']['projectId'])
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'], int(data[0]['resultCode'])
 
 	def test_101_sign_credit(self):
 		"""上传授信协议"""
@@ -118,16 +118,16 @@ class Rmkj12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'], int(data[0]['resultCode'])
 
 	def test_102_query_apply_result(self):
 		"""进件结果查询"""
 		time.sleep(4)
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('rmkj_12_periods_projectId'),
-			enviroment=self.env
+			environment=self.env
 		)
 		data = excel_table_byname(self.excel, 'query_apply_result')
 		print("接口名称:%s" % data[0]['casename'])
@@ -147,10 +147,10 @@ class Rmkj12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
-		self.assertEqual(rep['content']['auditStatus'], 2)
+		assert rep['resultCode'], int(data[0]['resultCode'])
+		assert rep['content']['auditStatus'], 2
 
 	def test_103_sign_borrow(self):
 		"""上传借款协议"""
@@ -176,10 +176,10 @@ class Rmkj12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.set("rmkj_12_periods_contractId", rep['content']['contractId'])
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'], int(data[0]['resultCode'])
 
 	def test_104_image_upload(self):
 		"""上传医疗美容图片"""
@@ -196,9 +196,9 @@ class Rmkj12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'], int(data[0]['resultCode'])
 
 	def test_105_contact_query(self):
 		"""合同结果查询:获取签章后的借款协议"""
@@ -223,9 +223,9 @@ class Rmkj12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'], int(data[0]['resultCode'])
 
 	def test_106_sign(self):
 		"""预签约"""
@@ -253,11 +253,11 @@ class Rmkj12Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product='pay',
-			enviroment=self.env
+			product='gateway',
+			environment=self.env
 		)
 		self.r.set("rmkj_12_periods_signTaskId", rep['data']['signTaskId'])
-		self.assertEqual(rep['code'], int(data[0]['resultCode']))
+		assert rep['code'], int(data[0]['resultCode'])
 
 	def test_107_confirm(self):
 		"""确认签约"""
@@ -284,10 +284,10 @@ class Rmkj12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product='gateway',
-			enviroment=self.env
+			environment=self.env
 		)
-		self.assertEqual(rep['code'], int(data[0]['resultCode']))
-		self.assertEqual(rep['data']['status'], 3)
+		assert rep['code'], int(data[0]['resultCode'])
+		assert rep['data']['status'], 3
 
 	def test_108_query_sign(self):
 		"""绑卡结果查询"""
@@ -306,15 +306,17 @@ class Rmkj12Tp(unittest.TestCase):
 			headers = None
 		else:
 			headers = json.loads(data[0]['headers'])
+		headers["X-TBC-SKIP-SIGN"] = 'true'
+		headers["X-TBC-SKIP-ENCRYPT"] = 'true'
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product='pay',
-			enviroment=self.env
+			product='gateway',
+			environment=self.env
 		)
-		self.assertEqual(rep['code'], int(data[0]['resultCode']))
-		self.assertEqual(rep['data']['status'], 3)
+		assert rep['code'], int(data[0]['resultCode'])
+		assert rep['data']['status'], 3
 
 	def test_109_card_change(self):
 		"""还款卡推送"""
@@ -329,9 +331,9 @@ class Rmkj12Tp(unittest.TestCase):
 				"name": self.r.get("rmkj_12_periods_custName"),
 				"cardNo": self.r.get("rmkj_12_periods_cardNum"),
 				"mobile": self.r.get("rmkj_12_periods_phone"),
-				# "bankNo": self.r.get("rmkj_12_periods_bankcard"),
-				"bankNo": "6217002200003225702",
-				"businessType": 2
+				"bankNo": self.r.get("rmkj_12_periods_bankcard"),
+				# "bankNo": "6217002200003225702",
+				"businessType": 1
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -343,46 +345,9 @@ class Rmkj12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
-
-	# @unittest.skip("-")
-	# def test_1099_deduction_share_sign(self):
-	# 	"""协议支付号共享"""
-	# 	data = excel_table_byname(self.excel, 'deduction_share_sign')
-	# 	print("接口名称:%s" % data[0]['casename'])
-	# 	param = json.loads(data[0]['param'])
-	# 	param.update(
-	# 		{
-	# 			"serviceSn": Common.get_random("serviceSn"),
-	# 			"requestTime": Common.get_time("-"),
-	# 			"sourceUserId": self.r.get("rmkj_12_periods_sourceUserId"),
-	# 			"transactionId": Common.get_random("transactionId"),
-	# 			"sourceProjectId": self.r.get("rmkj_12_periods_sourceProjectId"),
-	# 			"projectId": self.r.get("rmkj_12_periods_projectId"),
-	# 			"name": self.r.get("rmkj_12_periods_custName"),
-	# 			"cardNo": self.r.get("rmkj_12_periods_cardNum"),
-	# 			# "bankNo": "6217002200003225702",
-	# 			"bankNo": self.r.get("rmkj_12_periods_bankcard"),
-	# 			"bankPhone": self.r.get("rmkj_12_periods_phone"),
-	# 			"signNo": Common.get_random("businessLicenseNo"),
-	# 			"authLetterNo": Common.get_random("transactionId")
-	#
-	# 		}
-	# 	)
-	# 	if len(data[0]['headers']) == 0:
-	# 		headers = None
-	# 	else:
-	# 		headers = json.loads(data[0]['headers'])
-	# 	rep = Common.response(
-	# 		faceaddr=data[0]['url'],
-	# 		headers=headers,
-	# 		data=json.dumps(param, ensure_ascii=False),
-	# 		product="cloudloan",
-	# 		enviroment=self.env
-	# 	)
-	# 	self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'], int(data[0]['resultCode'])
 
 	def test_110_loan_pfa(self):
 		"""放款申请"""
@@ -407,19 +372,19 @@ class Rmkj12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'], int(data[0]['resultCode'])
 		# 修改支付表中的品钛返回code
 		time.sleep(8)
 		GetSqlData.change_pay_status(
-			enviroment=self.env,
+			environment=self.env,
 			project_id=self.r.get('rmkj_12_periods_projectId')
 		)
 
 	def test_111_loan_query(self):
 		"""放款结果查询"""
-		GetSqlData.loan_set(enviroment=self.env, project_id=self.r.get('rmkj_12_periods_projectId'))
+		GetSqlData.loan_set(environment=self.env, project_id=self.r.get('rmkj_12_periods_projectId'))
 		data = excel_table_byname(self.excel, 'pfa_query')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
@@ -433,10 +398,10 @@ class Rmkj12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
-		self.assertEqual(rep['content']['projectLoanStatus'], 3)
+		assert rep['resultCode'], int(data[0]['resultCode'])
+		assert rep['content']['projectLoanStatus'], 3
 
 	def test_112_query_repayment_plan(self):
 		"""国投云贷还款计划查询"""
@@ -458,9 +423,9 @@ class Rmkj12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'], int(data[0]['resultCode'])
 		self.r.set("rmkj_12_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
 	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
@@ -488,13 +453,13 @@ class Rmkj12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.set(
 			"rmkj_12_periods_early_settlement_repayment_plan",
 			json.dumps(rep['content']['repaymentPlanList'])
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'], int(data[0]['resultCode'])
 
 	# @unittest.skipUnless(sys.argv[4] == "refunds", "-")
 	# @unittest.skip("跳过")
@@ -521,13 +486,13 @@ class Rmkj12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.set(
 			"rmkj_12_periods_refunds_repayment_plan",
 			json.dumps(rep['content']['repaymentPlanList'])
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'], int(data[0]['resultCode'])
 
 	# @unittest.skipUnless(sys.argv[4] == "repayment", "-")
 	@unittest.skip("跳过")
@@ -571,10 +536,10 @@ class Rmkj12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.set("rmkj_12_periods_deductionTaskId", rep['content']['deductionTaskId'])
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'], int(data[0]['resultCode'])
 
 	@unittest.skip("跳过")
 	# @unittest.skipUnless(sys.argv[4] == "all_periods", "-")
@@ -586,7 +551,7 @@ class Rmkj12Tp(unittest.TestCase):
 		repayment_plan_list = self.r.get("rmkj_12_periods_repayment_plan")
 		maturity = GetSqlData.get_maturity(
 			project_id=self.r.get("rmkj_12_periods_projectId"),
-			enviroment=self.env
+			environment=self.env
 		)
 		for period in range(1, maturity + 1):
 			success_amount = 0.00
@@ -622,12 +587,11 @@ class Rmkj12Tp(unittest.TestCase):
 				headers=headers,
 				data=json.dumps(param, ensure_ascii=False)
 				, product="cloudloan",
-				enviroment=self.env
+				environment=self.env
 			)
 
-
 			self.r.set("rmkj_12_periods_deductionTaskId", rep['content']['deductionTaskId'])
-			self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+			assert rep['resultCode'], int(data[0]['resultCode'])
 
 	@unittest.skip("跳过")
 	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
@@ -670,10 +634,10 @@ class Rmkj12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.set("rmkj_12_periods_deductionTaskId", rep['content']['deductionTaskId'])
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'], int(data[0]['resultCode'])
 
 	# @unittest.skipUnless(sys.argv[4] in ("repayment", "early_settlement"), "-")
 	@unittest.skip("跳过")
@@ -692,9 +656,9 @@ class Rmkj12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'], int(data[0]['resultCode'])
 
 	# @unittest.skipUnless(sys.argv[4] == "repayment_offline", "-")
 	@unittest.skip("跳过")
@@ -704,7 +668,7 @@ class Rmkj12Tp(unittest.TestCase):
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=self.r.get("rmkj_12_periods_projectId"), enviroment=self.env, period=1,
+			project_id=self.r.get("rmkj_12_periods_projectId"), environment=self.env, period=1,
 			repayment_plan_type=1)
 		repayment_plan_list = self.r.get("rmkj_12_periods_repayment_plan")
 		success_amount = 0.00
@@ -740,9 +704,9 @@ class Rmkj12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'], int(data[0]['resultCode'])
 
 	# @unittest.skipUnless(sys.argv[4] == "early_settlement_offline", "-")
 	@unittest.skip("跳过")
@@ -752,7 +716,7 @@ class Rmkj12Tp(unittest.TestCase):
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=self.r.get("rmkj_12_periods_projectId"), enviroment=self.env, period=1,
+			project_id=self.r.get("rmkj_12_periods_projectId"), environment=self.env, period=1,
 			repayment_plan_type=1)
 		repayment_plan_list = self.r.get("rmkj_12_periods_early_settlement_repayment_plan")
 		success_amount = 0.00
@@ -787,9 +751,9 @@ class Rmkj12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'], int(data[0]['resultCode'])
 
 	# @unittest.skipUnless(sys.argv[4] == "refunds", "-")
 	@unittest.skip("跳过")
@@ -799,9 +763,9 @@ class Rmkj12Tp(unittest.TestCase):
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=self.r.get("rmkj_9_periods_projectId"), enviroment=self.env, period=1,
+			project_id=self.r.get("rmkj_12_periods_projectId"), environment=self.env, period=1,
 			repayment_plan_type=1)
-		repayment_plan_list = self.r.get("rmkj_9_periods_refunds_repayment_plan")
+		repayment_plan_list = self.r.get("rmkj_12_periods_refunds_repayment_plan")
 		success_amount = 0.00
 		repayment_detail_list = []
 		for i in json.loads(repayment_plan_list):
@@ -814,11 +778,11 @@ class Rmkj12Tp(unittest.TestCase):
 			repayment_detail_list.append(plan_detail)
 		param.update(
 			{
-				"projectId": self.r.get("rmkj_9_periods_projectId"),
-				"transactionId": self.r.get("rmkj_9_periods_sourceProjectId"),
-				"sourceProjectId": self.r.get("rmkj_9_periods_sourceProjectId"),
+				"projectId": self.r.get("rmkj_12_periods_projectId"),
+				"transactionId": self.r.get("rmkj_12_periods_sourceProjectId"),
+				"sourceProjectId": self.r.get("rmkj_12_periods_sourceProjectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
-				"planPayDate": plan_pay_date['plan_pay_date'],
+				"planPayDate": str(plan_pay_date['plan_pay_date']),
 				"successAmount": success_amount,
 				"repayType": 3,
 				"payTime": Common.get_time("-")
@@ -834,9 +798,9 @@ class Rmkj12Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 
 if __name__ == '__main__':

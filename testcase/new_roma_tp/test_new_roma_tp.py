@@ -79,7 +79,7 @@ class TestNewRomaTp:
 			faceaddr=data[0]['url'], headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		r.mset(
 			{
@@ -112,7 +112,7 @@ class TestNewRomaTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert (rep['resultCode'], int(data[0]['resultCode']))
 
@@ -143,7 +143,7 @@ class TestNewRomaTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert (rep['resultCode'], int(data[0]['resultCode']))
 
@@ -152,7 +152,7 @@ class TestNewRomaTp:
 	@pytest.mark.asset
 	def test_102_query_result(self, r, env):
 		"""授信结果查询"""
-		GetSqlData.credit_set(enviroment=env, credit_id=r.get("new_roma_creditId"))
+		GetSqlData.credit_set(environment=env, credit_id=r.get("new_roma_creditId"))
 		data = excel_table_byname(self.excel, 'credit_query_result')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
@@ -166,7 +166,7 @@ class TestNewRomaTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert (rep['resultCode'], int(data[0]['resultCode']))
 
@@ -194,12 +194,12 @@ class TestNewRomaTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert (rep['resultCode'], int(data[0]['resultCode']))
 		GetSqlData.check_user_amount(
 			user_id=r.get('new_roma_userId'),
-			enviroment=env
+			environment=env
 		)
 
 	@allure.title("进件申请")
@@ -251,7 +251,7 @@ class TestNewRomaTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		r.set('new_roma_projectId', rep['content']['projectId'])
 		assert (int(data[0]['resultCode']), rep['resultCode'])
@@ -265,7 +265,7 @@ class TestNewRomaTp:
 		print("接口名称:%s" % data[0]['casename'])
 		GetSqlData.change_project_audit_status(
 			project_id=r.get('new_roma_projectId'),
-			enviroment=env
+			environment=env
 		)
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -283,7 +283,7 @@ class TestNewRomaTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert (int(data[0]['resultCode']), rep['resultCode'])
 		assert (rep['content']['auditStatus'], 2)
@@ -315,7 +315,7 @@ class TestNewRomaTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert (int(data[0]['resultCode']), rep['resultCode'])
 
@@ -350,13 +350,13 @@ class TestNewRomaTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert (int(data[0]['resultCode']), rep['resultCode'])
 		time.sleep(8)
 		# 修改支付表中的品钛返回code
 		GetSqlData.change_pay_status(
-			enviroment=env,
+			environment=env,
 			project_id=r.get('new_roma_projectId')
 		)
 
@@ -365,7 +365,7 @@ class TestNewRomaTp:
 	@pytest.mark.asset
 	def test_108_query(self, r, env):
 		"""放款结果查询"""
-		GetSqlData.loan_set(enviroment=env, project_id=r.get('new_roma_projectId'))
+		GetSqlData.loan_set(environment=env, project_id=r.get('new_roma_projectId'))
 		data = excel_table_byname(self.excel, 'query')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
@@ -383,7 +383,7 @@ class TestNewRomaTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert (int(data[0]['resultCode']), rep['resultCode'])
 
@@ -409,7 +409,7 @@ class TestNewRomaTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert (int(data[0]['resultCode']), rep['resultCode'])
 
@@ -435,7 +435,7 @@ class TestNewRomaTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert (int(data[0]['resultCode']), rep['resultCode'])
 
@@ -467,7 +467,7 @@ class TestNewRomaTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert (rep['resultCode'], int(data[0]['resultCode']))
 
@@ -492,7 +492,7 @@ class TestNewRomaTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert (int(data[0]['resultCode']), rep['resultCode'])
 

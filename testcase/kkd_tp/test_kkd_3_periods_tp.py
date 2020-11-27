@@ -23,8 +23,8 @@ class Kkd3Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = sys.argv[3]
-		cls.r = Common.conn_redis(enviroment=cls.env)
+		cls.env = "qa"
+		cls.r = Common.conn_redis(environment=cls.env)
 		file = Config().get_item('File', 'kkd_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
@@ -76,14 +76,11 @@ class Kkd3Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
-			enviroment=self.env
+			product="cloudloan",
+			environment=self.env
 		)
-		response_data = json.loads(Common.dencrypt_response(rep.text))
-		print("返回json:%s" % response_data)
-		projectId = response_data['content']['projectId']
-		self.r.set('kkd_3_periods_projectId', projectId)
-		self.assertEqual(response_data['resultCode'], int(data[0]['resultCode']))
+		self.r.set('kkd_3_periods_projectId', rep['content']['projectId'])
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	def test_101_sign_credit(self):
 		"""上传授信协议"""
@@ -108,7 +105,7 @@ class Kkd3Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			enviroment=self.env
+			environment=self.env
 		)
 		response_data = json.loads(Common.dencrypt_response(rep.text))
 		print("返回json:%s" % response_data)
@@ -119,7 +116,7 @@ class Kkd3Tp(unittest.TestCase):
 		"""进件结果查询"""
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('kkd_3_periods_projectId'),
-			enviroment=self.env
+			environment=self.env
 		)
 		data = excel_table_byname(self.excel, 'query_apply_result')
 		print("接口名称:%s" % data[0]['casename'])
@@ -139,7 +136,7 @@ class Kkd3Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			enviroment=self.env
+			environment=self.env
 		)
 		response_data = json.loads(Common.dencrypt_response(rep.text))
 		print("返回json:%s" % response_data)
@@ -170,7 +167,7 @@ class Kkd3Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			enviroment=self.env
+			environment=self.env
 		)
 		response_data = json.loads(Common.dencrypt_response(rep.text))
 		print("返回json:%s" % response_data)
@@ -201,7 +198,7 @@ class Kkd3Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			enviroment=self.env
+			environment=self.env
 		)
 		response_data = json.loads(Common.dencrypt_response(rep.text))
 		print("返回json:%s" % response_data)
@@ -223,7 +220,7 @@ class Kkd3Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			enviroment=self.env
+			environment=self.env
 		)
 		response_data = json.loads(Common.dencrypt_response(rep.text))
 		print("返回json:%s" % response_data)
@@ -253,7 +250,7 @@ class Kkd3Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			enviroment=self.env
+			environment=self.env
 		)
 		response_data = json.loads(Common.dencrypt_response(rep.text))
 		print("返回json:%s" % response_data)
@@ -282,7 +279,7 @@ class Kkd3Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			enviroment=self.env
+			environment=self.env
 		)
 		response_data = json.loads(Common.dencrypt_response(rep.text))
 		print("返回json:%s" % response_data)
@@ -313,7 +310,7 @@ class Kkd3Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			enviroment=self.env
+			environment=self.env
 		)
 		response_data = json.loads(Common.dencrypt_response(rep.text))
 		print("返回json:%s" % response_data)
@@ -321,14 +318,14 @@ class Kkd3Tp(unittest.TestCase):
 		self.assertEqual(response_data['resultCode'], int(data[0]['resultCode']))
 		# 修改支付表中的品钛返回code
 		GetSqlData.change_pay_status(
-			enviroment=self.env,
+			environment=self.env,
 			project_id=self.r.get('kkd_3_periods_projectId')
 		)
 
 	def test_109_loan_query(self):
 		"""放款结果查询"""
 		GetSqlData.loan_set(
-			enviroment=self.env,
+			environment=self.env,
 			project_id=self.r.get('kkd_3_periods_projectId')
 		)
 		data = excel_table_byname(self.excel, 'pfa_query')
@@ -344,7 +341,7 @@ class Kkd3Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			enviroment=self.env
+			environment=self.env
 		)
 		response_data = json.loads(Common.dencrypt_response(rep.text))
 		print("返回json:%s" % response_data)
@@ -372,7 +369,7 @@ class Kkd3Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			enviroment=self.env
+			environment=self.env
 		)
 		response_data = json.loads(Common.dencrypt_response(rep.text))
 		print("返回json:%s" % response_data)
@@ -380,8 +377,8 @@ class Kkd3Tp(unittest.TestCase):
 		self.r.set("kkd_3_periods_repayment_plan", json.dumps(response_data['content']['repaymentPlanList']))
 		self.assertEqual(response_data['resultCode'], int(data[0]['resultCode']))
 
-	@unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
-	# @unittest.skip("跳过")
+	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
+	@unittest.skip("跳过")
 	def test_111_calculate(self):
 		"""还款计划试算:提前结清"""
 		data = excel_table_byname(self.excel, 'calculate')
@@ -405,7 +402,7 @@ class Kkd3Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			enviroment=self.env
+			environment=self.env
 		)
 		response_data = json.loads(Common.dencrypt_response(rep.text))
 		print("返回json:%s" % response_data)
@@ -416,8 +413,8 @@ class Kkd3Tp(unittest.TestCase):
 		)
 		self.assertEqual(response_data['resultCode'], int(data[0]['resultCode']))
 
-	@unittest.skipUnless(sys.argv[4] == "repayment_offline", "-")
-	# @unittest.skip("跳过")
+	# @unittest.skipUnless(sys.argv[4] == "repayment_offline", "-")
+	@unittest.skip("跳过")
 	def test_112_offline_repay_repayment(self):
 		"""线下还款流水推送：正常还一期"""
 		data = excel_table_byname(self.excel, 'offline_repay')
@@ -426,7 +423,7 @@ class Kkd3Tp(unittest.TestCase):
 		period = 1
 		plan_pay_date = GetSqlData.get_repayment_detail(
 			project_id=self.r.get("kkd_3_periods_projectId"),
-			enviroment=self.env,
+			environment=self.env,
 			period=period,
 			repayment_plan_type=1
 		)
@@ -464,15 +461,15 @@ class Kkd3Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			enviroment=self.env
+			environment=self.env
 		)
 		response_data = json.loads(Common.dencrypt_response(rep.text))
 		print("返回json:%s" % response_data)
 		logger.info("返回信息:%s" % response_data)
 		self.assertEqual(response_data['resultCode'], int(data[0]['resultCode']))
 
-	@unittest.skipUnless(sys.argv[4] == "early_settlement_offline", "-")
-	# @unittest.skip("跳过")
+	# @unittest.skipUnless(sys.argv[4] == "early_settlement_offline", "-")
+	@unittest.skip("跳过")
 	def test_113_offline_repay_early_settlement(self):
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.excel, 'offline_repay')
@@ -480,7 +477,7 @@ class Kkd3Tp(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
 			project_id=self.r.get("kkd_3_periods_projectId"),
-			enviroment=self.env,
+			environment=self.env,
 			period=1,
 			repayment_plan_type=1
 		)
@@ -518,7 +515,7 @@ class Kkd3Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			enviroment=self.env
+			environment=self.env
 		)
 		response_data = json.loads(Common.dencrypt_response(rep.text))
 		print("返回json:%s" % response_data)
@@ -549,7 +546,7 @@ class Kkd3Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			enviroment=self.env
+			environment=self.env
 		)
 		response_data = json.loads(Common.dencrypt_response(rep.text))
 		print("返回json:%s" % response_data)
@@ -579,7 +576,7 @@ class Kkd3Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			enviroment=self.env
+			environment=self.env
 		)
 		response_data = json.loads(Common.dencrypt_response(rep.text))
 		print("返回json:%s" % response_data)
@@ -593,7 +590,7 @@ class Kkd3Tp(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		success_amount = GetSqlData.get_repayment_amount(
 			project_id=self.r.get("kkd_3_periods_projectId"),
-			enviroment=self.env,
+			environment=self.env,
 			period=1
 		)
 		param.update(
@@ -616,7 +613,7 @@ class Kkd3Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="gateway"
 		)
 		response_data = json.loads(Common.dencrypt_response(rep.text))

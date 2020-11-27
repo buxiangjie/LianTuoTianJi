@@ -4,29 +4,27 @@
 @date:2020-05-12 11:26:00
 @describe: 卡卡贷6期
 """
-import unittest
-import os
-import json
 import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import unittest
+import json
 import time
 
 from common.common_func import Common
-from log.logger import Logger
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-logger = Logger(logger="test_kkd_6_periods_tp").getlog()
 
 
 class Kkd6Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = "qa"
-		cls.r = Common.conn_redis(enviroment=cls.env)
+		cls.env = "test"
+		cls.r = Common.conn_redis(environment=cls.env)
 		file = Config().get_item('File', 'kkd_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
@@ -79,7 +77,7 @@ class Kkd6Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.set('kkd_6_periods_projectId', rep['content']['projectId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -107,7 +105,7 @@ class Kkd6Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
@@ -115,7 +113,7 @@ class Kkd6Tp(unittest.TestCase):
 		"""进件结果查询"""
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('kkd_6_periods_projectId'),
-			enviroment=self.env
+			environment=self.env
 		)
 		data = excel_table_byname(self.excel, 'query_apply_result')
 		print("接口名称:%s" % data[0]['casename'])
@@ -135,7 +133,7 @@ class Kkd6Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		self.assertEqual(rep['content']['auditStatus'], 2)
@@ -163,7 +161,7 @@ class Kkd6Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.set("kkd_6_periods_contractId", rep['content']['contractId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -191,7 +189,7 @@ class Kkd6Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
@@ -211,7 +209,7 @@ class Kkd6Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
@@ -233,12 +231,14 @@ class Kkd6Tp(unittest.TestCase):
 			headers = None
 		else:
 			headers = json.loads(data[0]['headers'])
+		headers["X-TBC-SKIP-SIGN"] = 'true'
+		headers["X-TBC-SKIP-ENCRYPT"] = 'true'
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="cloudloan",
-			enviroment=self.env
+			product="gateway",
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
@@ -259,12 +259,14 @@ class Kkd6Tp(unittest.TestCase):
 			headers = None
 		else:
 			headers = json.loads(data[0]['headers'])
+		headers["X-TBC-SKIP-SIGN"] = 'true'
+		headers["X-TBC-SKIP-ENCRYPT"] = 'true'
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="cloudloan",
-			enviroment=self.env
+			product="gateway",
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
@@ -293,19 +295,19 @@ class Kkd6Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		# 修改支付表中的品钛返回code
 		time.sleep(8)
 		GetSqlData.change_pay_status(
-			enviroment=self.env,
+			environment=self.env,
 			project_id=self.r.get('kkd_6_periods_projectId')
 		)
 
 	def test_109_loan_query(self):
 		"""放款结果查询"""
-		GetSqlData.loan_set(enviroment=self.env, project_id=self.r.get('kkd_6_periods_projectId'))
+		GetSqlData.loan_set(environment=self.env, project_id=self.r.get('kkd_6_periods_projectId'))
 		data = excel_table_byname(self.excel, 'pfa_query')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
@@ -319,7 +321,7 @@ class Kkd6Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		self.assertEqual(rep['content']['projectLoanStatus'], 3)
@@ -344,41 +346,13 @@ class Kkd6Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.set("kkd_6_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	# @unittest.skipUnless(sys.argv[4] == "repayment", "-")
-	@unittest.skip("跳过")
-	def test_111_calculate(self):
-		"""还款计划试算（已放款）:正常还款"""
-		data = excel_table_byname(self.excel, 'calculate')
-		print("接口名称:%s" % data[0]['casename'])
-		param = json.loads(data[0]['param'])
-		param.update(
-			{
-				"sourceUserId": self.r.get("kkd_6_periods_sourceUserId"),
-				"transactionId": self.r.get("kkd_6_periods_sourceProjectId"),
-				"sourceProjectId": self.r.get("kkd_6_periods_sourceProjectId"),
-				"projectId": self.r.get("kkd_6_periods_projectId")
-			}
-		)
-		if len(data[0]['headers']) == 0:
-			headers = None
-		else:
-			headers = json.loads(data[0]['headers'])
-		rep = Common.response(
-			faceaddr=data[0]['url'],
-			headers=headers,
-			data=json.dumps(param, ensure_ascii=False),
-			product="cloudloan",
-			enviroment=self.env
-		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
-
 	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
-	@unittest.skip("跳过")
+	# @unittest.skip("跳过")
 	def test_112_calculate(self):
 		"""还款计划试算:提前结清"""
 		data = excel_table_byname(self.excel, 'calculate')
@@ -402,7 +376,7 @@ class Kkd6Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.set(
 			"kkd_6_periods_early_settlement_repayment_plan",
@@ -420,7 +394,7 @@ class Kkd6Tp(unittest.TestCase):
 		period = 1
 		plan_pay_date = GetSqlData.get_repayment_detail(
 			project_id=self.r.get("kkd_6_periods_projectId"),
-			enviroment=self.env,
+			environment=self.env,
 			period=period,
 			repayment_plan_type=1
 		)
@@ -458,7 +432,7 @@ class Kkd6Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
@@ -471,7 +445,7 @@ class Kkd6Tp(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
 			project_id=self.r.get("kkd_6_periods_projectId"),
-			enviroment=self.env,
+			environment=self.env,
 			period=1,
 			repayment_plan_type=1
 		).get("plan_pay_date")
@@ -509,7 +483,7 @@ class Kkd6Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
@@ -537,7 +511,7 @@ class Kkd6Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.set("kkd_6_periods_contractId", rep['content']['contractId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))

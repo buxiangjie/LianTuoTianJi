@@ -10,6 +10,9 @@ from loguru import logger
 
 
 class Ulog:
+	"""
+	初始化日志输出目录与规则
+	"""
 	def __init__(self):
 		log_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)) + '/logs/')
 		rq = '/' + time.strftime("%Y_%m_%d", time.localtime())

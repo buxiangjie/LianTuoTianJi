@@ -97,10 +97,9 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
-		projectId = rep['content']['projectId']
-		r.set('rmkj_3_periods_projectId', projectId)
+		r.set('rmkj_3_periods_projectId', rep['content']['projectId'])
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("上传借款授信协议")
@@ -136,7 +135,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
@@ -153,7 +152,7 @@ class TestRmkj3Tp:
 		"""进件结果查询"""
 		GetSqlData.change_project_audit_status(
 			project_id=r.get('rmkj_3_periods_projectId'),
-			enviroment=env
+			environment=env
 		)
 		data = excel_table_byname(self.excel, 'query_apply_result')
 		print("接口名称:%s" % data[0]['casename'])
@@ -173,7 +172,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 		assert rep['content']['auditStatus'] == 2
@@ -211,7 +210,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		r.set("rmkj_3_periods_contractId", rep['content']['contractId'])
 		assert rep['resultCode'] == int(data[0]['resultCode'])
@@ -249,7 +248,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
@@ -277,7 +276,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
@@ -313,7 +312,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
@@ -359,7 +358,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product='gateway',
-			enviroment=env
+			environment=env
 		)
 		r.set("rmkj_3_periods_signTaskId", rep['data']['signTaskId'])
 		assert rep['code'] == int(data[0]['resultCode'])
@@ -398,7 +397,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product='gateway',
-			enviroment=env
+			environment=env
 		)
 		assert rep['code'] == int(data[0]['resultCode'])
 		assert rep['data']['status'] == 3
@@ -436,7 +435,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product='gateway',
-			enviroment=env
+			environment=env
 		)
 		assert rep['code'] == int(data[0]['resultCode'])
 		assert rep['data']['status'] == 3
@@ -483,7 +482,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
@@ -518,7 +517,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
@@ -559,13 +558,13 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 		# 修改支付表中的品钛返回code
 		time.sleep(8)
 		GetSqlData.change_pay_status(
-			enviroment=env,
+			environment=env,
 			project_id=r.get('rmkj_3_periods_projectId')
 		)
 
@@ -580,7 +579,7 @@ class TestRmkj3Tp:
 	@pytest.mark.settle
 	def test_111_loan_query(self, r, env):
 		"""放款结果查询"""
-		GetSqlData.loan_set(enviroment=env, project_id=r.get('rmkj_3_periods_projectId'))
+		GetSqlData.loan_set(environment=env, project_id=r.get('rmkj_3_periods_projectId'))
 		data = excel_table_byname(self.excel, 'pfa_query')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
@@ -594,7 +593,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 		assert rep['content']['projectLoanStatus'] == 3
@@ -628,7 +627,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		r.set("rmkj_3_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 		assert rep['resultCode'] == int(data[0]['resultCode'])
@@ -660,7 +659,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		r.set(
 			"rmkj_3_periods_early_settlement_repayment_plan",
@@ -696,7 +695,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		r.set(
 			"rmkj_3_periods_refunds_repayment_plan",
@@ -750,7 +749,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		r.set("rmkj_3_periods_deductionTaskId", rep['content']['deductionTaskId'])
 		assert rep['resultCode'] == int(data[0]['resultCode'])
@@ -768,7 +767,7 @@ class TestRmkj3Tp:
 		repayment_plan_list = r.get("rmkj_3_periods_repayment_plan")
 		maturity = GetSqlData.get_maturity(
 			project_id=r.get("rmkj_3_periods_projectId"),
-			enviroment=env
+			environment=env
 		)
 		for period in range(maturity):
 			period = period + 1
@@ -805,7 +804,7 @@ class TestRmkj3Tp:
 				headers=headers,
 				data=json.dumps(param, ensure_ascii=False),
 				product="cloudloan",
-				enviroment=env
+				environment=env
 			)
 
 			r.set("rmkj_3_periods_deductionTaskId", rep['content']['deductionTaskId'])
@@ -852,7 +851,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		r.set("rmkj_3_periods_deductionTaskId", rep['content']['deductionTaskId'])
 		assert rep['resultCode'] == int(data[0]['resultCode'])
@@ -887,7 +886,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
@@ -911,7 +910,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
@@ -926,7 +925,7 @@ class TestRmkj3Tp:
 		period = 1
 		plan_pay_date = GetSqlData.get_repayment_detail(
 			project_id=r.get("rmkj_3_periods_projectId"),
-			enviroment=env,
+			environment=env,
 			period=period,
 			repayment_plan_type=1
 		)
@@ -964,7 +963,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
@@ -980,7 +979,7 @@ class TestRmkj3Tp:
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
 			project_id=r.get("rmkj_3_periods_projectId"),
-			enviroment=env,
+			environment=env,
 			period=1,
 			repayment_plan_type=1
 		)
@@ -1018,7 +1017,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
@@ -1034,7 +1033,7 @@ class TestRmkj3Tp:
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
 			project_id=r.get("rmkj_3_periods_projectId"),
-			enviroment=env,
+			environment=env,
 			period=1,
 			repayment_plan_type=1
 		)
@@ -1071,7 +1070,7 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=env
+			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 

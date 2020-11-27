@@ -28,7 +28,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 	def setUpClass(cls):
 		cls.env = sys.argv[3]
 		cls.sql = GetSqlData()
-		cls.r = Common.conn_redis(enviroment=cls.env)
+		cls.r = Common.conn_redis(environment=cls.env)
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 	@classmethod
@@ -78,7 +78,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		print("响应信息:%s" % rep)
@@ -89,14 +89,14 @@ class Cfq12PeriodsTp(unittest.TestCase):
 		# 修改进件审核状态
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get("cfq_12_periods_return_projectId"),
-			enviroment=self.env
+			environment=self.env
 		)
 
 	def test_101_query_audit_status(self):
 		"""橙分期进件审核结果查询"""
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get("cfq_12_periods_return_projectId"),
-			enviroment=self.env
+			environment=self.env
 		)
 		excel = self.excel + Config().get_item('File', 'cfq_12_periods_return_case_file')
 		data = excel_table_byname(excel, 'query_audit_status')
@@ -117,7 +117,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		print("返回信息:%s" % rep.text)
@@ -150,7 +150,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		print("返回信息:%s" % rep.text)
@@ -199,7 +199,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		print("响应信息:%s" % rep)

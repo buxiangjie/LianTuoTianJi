@@ -37,11 +37,8 @@ class CreditApply(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
-		print("响应结果:%s" % rep)
-		print("返回信息:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
 		self.assertEqual(str(json.loads(rep.text)['resultCode']), data['resultCode'])
 
 

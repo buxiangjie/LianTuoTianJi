@@ -347,7 +347,7 @@ class JfqjyV218Tp(unittest.TestCase):
 				"sourceProjectId": self.r.get("jfqjyv2_18_periods_sourceProjectId"),
 				"projectId": self.r.get("jfqjyv2_18_periods_projectId"),
 				"businessType": 2,
-				"repayTime": Common.get_time("-")
+				"repayTime": "2020-09-18 00:00:00" #Common.get_time("-")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -368,7 +368,7 @@ class JfqjyV218Tp(unittest.TestCase):
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
-	# @unittest.skip("跳过")
+	@unittest.skip("跳过")
 	def test_112_calculate(self):
 		"""还款计划试算:退货"""
 		data = excel_table_byname(self.excel, 'calculate')
@@ -486,7 +486,7 @@ class JfqjyV218Tp(unittest.TestCase):
 				"successAmount": success_amount,
 				"repayType": 2,
 				"period": repayment_plan_list[0]['period'],
-				"payTime": Common.get_time("-")
+				"payTime": "2020-09-18 00:00:00" #Common.get_time("-")
 			}
 		)
 		param['repaymentDetailList'] = repayment_detail_list

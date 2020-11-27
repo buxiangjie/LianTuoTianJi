@@ -70,7 +70,7 @@ class TestJqh:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		r.set("jqh_projectId", rep['content']['projectId'])
@@ -78,7 +78,7 @@ class TestJqh:
 		assert (rep['content']['message'], "交易成功")
 		GetSqlData.change_project_audit_status(
 			project_id=r.get('jqh_projectId'),
-			enviroment=env
+			environment=env
 		)
 
 	@allure.title("借去花放款")
@@ -109,7 +109,7 @@ class TestJqh:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert (int(data[0]['msgCode']), rep['resultCode'])
@@ -152,7 +152,7 @@ class TestJqh:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert (int(data[0]['msgCode']), rep['resultCode'])
@@ -195,14 +195,14 @@ class TestJqh:
 			if i['assetPlanOwner'] == "foundPartner":
 				plan_list_detail = GetSqlData.get_repayment_detail(
 					project_id=r.get("jqh_projectId"),
-					enviroment=env,
+					environment=env,
 					period=i['period'],
 					repayment_plan_type=plan_pay_type.get(i['repaymentPlanType'])
 				)
 			elif i['assetPlanOwner'] == "financePartner":
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r.get("jqh_projectId"),
-					enviroment=env,
+					environment=env,
 					period=i['period'],
 					repayment_plan_type=plan_pay_type.get(i['repaymentPlanType'])
 				)
@@ -230,7 +230,7 @@ class TestJqh:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert (rep['resultCode'], data[0]['msgCode'])
@@ -267,7 +267,7 @@ class TestJqh:
 				if plan_catecory == 1 or plan_catecory == 2:
 					repayment_detail = GetSqlData.get_repayment_detail(
 						project_id=r.get("jqh_projectId"),
-						enviroment=env,
+						environment=env,
 						period=period,
 						repayment_plan_type=plan_pay_type
 					)
@@ -284,7 +284,7 @@ class TestJqh:
 				else:
 					plan_list_detail = GetSqlData.get_user_repayment_detail(
 						project_id=r.get("jqh_projectId"),
-						enviroment=env,
+						environment=env,
 						period=period,
 						repayment_plan_type=3,
 						feecategory=param['repaymentDetailList'][i]['planCategory']
@@ -302,7 +302,7 @@ class TestJqh:
 				if plan_catecory == 1 or plan_catecory == 2:
 					user_repayment_detail = GetSqlData.get_user_repayment_detail(
 						project_id=r.get("jqh_projectId"),
-						enviroment=env,
+						environment=env,
 						period=period,
 						repayment_plan_type=plan_pay_type
 					)
@@ -319,7 +319,7 @@ class TestJqh:
 			else:
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r.get("jqh_projectId"),
-					enviroment=env,
+					environment=env,
 					period=period,
 					repayment_plan_type=3,
 					feecategory=param['repaymentDetailList'][i]['planCategory']
@@ -339,7 +339,7 @@ class TestJqh:
 			if plan_list_asset_plan_owner == 'financePartner':
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r.get("jqh_projectId"),
-					enviroment=env,
+					environment=env,
 					period=period,
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -356,7 +356,7 @@ class TestJqh:
 			elif plan_list_asset_plan_owner == 'foundPartner':
 				plan_list_detail = GetSqlData.get_repayment_detail(
 					project_id=r.get("jqh_projectId"),
-					enviroment=env,
+					environment=env,
 					period=param['repaymentPlanList'][i]['period'],
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -373,7 +373,7 @@ class TestJqh:
 		for i in range(0, len(param['feePlanList'])):
 			plan_list_detail = GetSqlData.get_user_repayment_detail(
 				project_id=r.get("jqh_projectId"),
-				enviroment=env,
+				environment=env,
 				period=param['feePlanList'][i]['period'],
 				repayment_plan_type=3,
 				feecategory=param['feePlanList'][i]['feeCategory']
@@ -393,7 +393,7 @@ class TestJqh:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert (rep['resultCode'], data[0]['msgCode'])

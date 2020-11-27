@@ -27,7 +27,7 @@ class JfxTp(unittest.TestCase):
 	@classmethod
 	def setUpClass(cls):
 		cls.env = 'qa'
-		cls.r = Common.conn_redis(enviroment=cls.env)
+		cls.r = Common.conn_redis(environment=cls.env)
 		file = Config().get_item('File', 'jfx_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
@@ -81,7 +81,7 @@ class JfxTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.mset(
 			{
@@ -115,7 +115,7 @@ class JfxTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 
@@ -124,7 +124,7 @@ class JfxTp(unittest.TestCase):
 		data = excel_table_byname(self.excel, 'credit_query_result')
 		print("接口名称:%s" % data[0]['casename'])
 		GetSqlData.credit_set(
-			enviroment=self.env,
+			environment=self.env,
 			credit_id=self.r.get("jfx_creditId")
 		)
 		param = json.loads(data[0]['param'])
@@ -138,7 +138,7 @@ class JfxTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
@@ -162,7 +162,7 @@ class JfxTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
@@ -219,7 +219,7 @@ class JfxTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.set('jfx_projectId', rep['content']['projectId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -228,7 +228,7 @@ class JfxTp(unittest.TestCase):
 		"""进件结果查询"""
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('jfx_projectId'),
-			enviroment=self.env
+			environment=self.env
 		)
 		data = excel_table_byname(self.excel, 'project_query_apply_result')
 		print("接口名称:%s" % data[0]['casename'])
@@ -248,7 +248,7 @@ class JfxTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 
@@ -276,7 +276,7 @@ class JfxTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 
@@ -304,7 +304,7 @@ class JfxTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 
@@ -333,18 +333,18 @@ class JfxTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 		time.sleep(8)
 		GetSqlData.change_pay_status(
-			enviroment=self.env,
+			environment=self.env,
 			project_id=self.r.get('jfx_projectId')
 		)
 
 	def test_109_pfa_query(self):
 		"""放款结果查询"""
-		GetSqlData.loan_set(enviroment=self.env, project_id=self.r.get('jfx_projectId'))
+		GetSqlData.loan_set(environment=self.env, project_id=self.r.get('jfx_projectId'))
 		data = excel_table_byname(self.excel, 'pfa_query')
 		param = json.loads(data[0]['param'])
 		param.update({"serviceSn": self.r.get('jfx_pfa_serviceSn')})
@@ -356,7 +356,7 @@ class JfxTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="cloudloan"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -375,7 +375,7 @@ class JfxTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 		self.r.set("jfx_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
@@ -420,7 +420,7 @@ class JfxTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="cloudloan"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -433,7 +433,7 @@ class JfxTp(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		success_amount = GetSqlData.get_repayment_amount(
 			project_id=self.r.get("jfx_projectId"),
-			enviroment=self.env,
+			environment=self.env,
 			period=1
 		)
 		param.update(
@@ -456,7 +456,7 @@ class JfxTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="cloudloan"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))

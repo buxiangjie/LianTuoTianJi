@@ -72,14 +72,11 @@ class NqhRepaymentAdvance(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.r.set("nqh_repayment_advance_projectId", json.loads(rep.text)['content']['projectId'])
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		self.r.set("nqh_repayment_advance_projectId", rep['content']['projectId'])
+		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
 	def test_1_loan_notice(self):
 		"""拿去花放款通知接口"""
@@ -107,12 +104,12 @@ class NqhRepaymentAdvance(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
 		print("返回信息:%s" % rep.text)
 		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
 	def test_2_loan_asset(self):
 		"""拿去花进件放款同步接口"""
@@ -155,13 +152,10 @@ class NqhRepaymentAdvance(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
 	def test_3_repayment_one_period(self):
 		"""拿去花提前还一期"""
@@ -170,7 +164,7 @@ class NqhRepaymentAdvance(unittest.TestCase):
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		success_amount = GetSqlData.get_repayment_amount(
-			enviroment=self.env,
+			environment=self.env,
 			project_id=self.r.get("nqh_repayment_advance_projectId"),
 			period=param['repaymentDetailList'][0]['period']
 		)
@@ -191,7 +185,7 @@ class NqhRepaymentAdvance(unittest.TestCase):
 			plan_pay_type = plan_type.get(param['repaymentDetailList'][i]['repaymentPlanType'])
 			repayment_detail = GetSqlData.get_repayment_detail(
 				project_id=self.r.get("nqh_repayment_advance_projectId"),
-				enviroment=self.env,
+				environment=self.env,
 				period=param['repaymentDetailList'][i]['period'],
 				repayment_plan_type=plan_pay_type)
 			param['repaymentDetailList'][i].update(
@@ -207,7 +201,7 @@ class NqhRepaymentAdvance(unittest.TestCase):
 			plan_pay_type_plan = plan_type.get(param['repaymentPlanList'][y]['repaymentPlanType'])
 			repayment_detail_plan = GetSqlData.get_repayment_detail(
 				project_id=self.r.get("nqh_repayment_advance_projectId"),
-				enviroment=self.env,
+				environment=self.env,
 				period=param['repaymentPlanList'][y]['period'],
 				repayment_plan_type=plan_pay_type_plan
 			)
@@ -228,15 +222,12 @@ class NqhRepaymentAdvance(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], data[0]['msgCode'])
-		self.assertEqual(json.loads(rep.text)['content']['message'], "交易成功")
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
+		self.assertEqual(rep['content']['message'], "交易成功")
+		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
 
 if __name__ == '__main__':

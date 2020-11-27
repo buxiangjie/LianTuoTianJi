@@ -17,7 +17,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.
 
 
 def pytest_addoption(parser):
-	parser.addoption("--env", default="test", help="script run enviroment")
+	parser.addoption("--env", default="test", help="script run environment")
 
 
 @pytest.fixture(scope="session")

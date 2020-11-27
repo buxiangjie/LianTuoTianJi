@@ -68,7 +68,7 @@ class TestJqhRepayment:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		r.set("jqh_repayment_projectId", rep['content']['projectId'])
@@ -81,7 +81,7 @@ class TestJqhRepayment:
 		"""借去花放款接口"""
 		GetSqlData.change_project_audit_status(
 			project_id=r.get("jqh_repayment_projectId"),
-			enviroment=env
+			environment=env
 		)
 		data = excel_table_byname(self.excel, 'loan')
 		print("接口名称:%s" % data[0]['casename'])
@@ -104,7 +104,7 @@ class TestJqhRepayment:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert (rep['resultCode'], int(data[0]['msgCode']))
@@ -144,7 +144,7 @@ class TestJqhRepayment:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert (rep['resultCode'], int(data[0]['msgCode']))
@@ -158,7 +158,7 @@ class TestJqhRepayment:
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		user_amount = GetSqlData.get_user_repayment_amount(
-					enviroment=env,
+					environment=env,
 					project_id=r.get("jqh_repayment_projectId"),
 					period=param['repaymentDetailList'][0]['period']
 				)
@@ -183,7 +183,7 @@ class TestJqhRepayment:
 				if plan_catecory == 1 or plan_catecory == 2:
 					repayment_detail = GetSqlData.get_repayment_detail(
 						project_id=r.get("jqh_repayment_projectId"),
-						enviroment=env,
+						environment=env,
 						period=i['period'],
 						repayment_plan_type=plan_pay_type
 					)
@@ -208,7 +208,7 @@ class TestJqhRepayment:
 			elif asset_plan_owner == "financePartner":
 				user_repayment_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r.get("jqh_repayment_projectId"),
-					enviroment=env,
+					environment=env,
 					period=i['period'],
 					repayment_plan_type=plan_pay_type
 				)
@@ -229,7 +229,7 @@ class TestJqhRepayment:
 			if plan_list_asset_plan_owner == 'financePartner':
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r.get("jqh_repayment_projectId"),
-					enviroment=env,
+					environment=env,
 					period=i['period'],
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -245,7 +245,7 @@ class TestJqhRepayment:
 			elif plan_list_asset_plan_owner == 'foundPartner':
 				plan_list_detail = GetSqlData.get_repayment_detail(
 					project_id=r.get("jqh_repayment_projectId"),
-					enviroment=env,
+					environment=env,
 					period=i['period'],
 					repayment_plan_type=plan_list_pay_type
 				)
@@ -266,7 +266,7 @@ class TestJqhRepayment:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=env,
+			environment=env,
 			product="pintic"
 		)
 		assert (rep['content']['message'], "交易成功")

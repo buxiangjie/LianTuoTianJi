@@ -25,7 +25,7 @@ class Ddq9Tp(unittest.TestCase):
 	@classmethod
 	def setUpClass(cls):
 		cls.env = 'qa'
-		cls.r = Common.conn_redis(enviroment=cls.env)
+		cls.r = Common.conn_redis(environment=cls.env)
 		file = Config().get_item('File', 'ddq_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
@@ -83,7 +83,7 @@ class Ddq9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.set('ddq_9_periods_projectId', rep['content']['projectId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -111,7 +111,7 @@ class Ddq9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
@@ -119,7 +119,7 @@ class Ddq9Tp(unittest.TestCase):
 		"""进件结果查询"""
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('ddq_9_periods_projectId'),
-			enviroment=self.env
+			environment=self.env
 		)
 		data = excel_table_byname(self.excel, 'query_apply_result')
 		print("接口名称:%s" % data[0]['casename'])
@@ -139,7 +139,7 @@ class Ddq9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		self.assertEqual(rep['content']['auditStatus'], 2)
@@ -167,7 +167,7 @@ class Ddq9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.set("ddq_9_periods_contractId", rep['content']['contractId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -195,7 +195,7 @@ class Ddq9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
@@ -215,7 +215,7 @@ class Ddq9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
@@ -242,7 +242,7 @@ class Ddq9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
@@ -268,7 +268,7 @@ class Ddq9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
@@ -307,7 +307,7 @@ class Ddq9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		self.r.set("ddq_9_periods_signId", rep["content"]["signId"])
@@ -336,7 +336,7 @@ class Ddq9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['code'], int(data[0]['resultCode']))
 
@@ -364,19 +364,19 @@ class Ddq9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		# 修改支付表中的品钛返回code
 		time.sleep(8)
 		GetSqlData.change_pay_status(
-			enviroment=self.env,
+			environment=self.env,
 			project_id=self.r.get('ddq_9_periods_projectId')
 		)
 
 	def test_109_loan_query(self):
 		"""放款结果查询"""
-		GetSqlData.loan_set(enviroment=self.env, project_id=self.r.get('ddq_9_periods_projectId'))
+		GetSqlData.loan_set(environment=self.env, project_id=self.r.get('ddq_9_periods_projectId'))
 		data = excel_table_byname(self.excel, 'pfa_query')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
@@ -390,7 +390,7 @@ class Ddq9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		self.assertEqual(rep['content']['projectLoanStatus'], 3)
@@ -415,7 +415,7 @@ class Ddq9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.set("ddq_9_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -446,7 +446,7 @@ class Ddq9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.set(
 			"ddq_9_periods_early_settlement_repayment_plan",
@@ -464,7 +464,7 @@ class Ddq9Tp(unittest.TestCase):
 		period = 1
 		plan_pay_date = GetSqlData.get_repayment_detail(
 			project_id=self.r.get("ddq_9_periods_projectId"),
-			enviroment=self.env,
+			environment=self.env,
 			period=period,
 			repayment_plan_type=1
 		)
@@ -502,7 +502,7 @@ class Ddq9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
@@ -515,7 +515,7 @@ class Ddq9Tp(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
 			project_id=self.r.get("ddq_9_periods_projectId"),
-			enviroment=self.env,
+			environment=self.env,
 			period=1,
 			repayment_plan_type=1
 		)
@@ -551,7 +551,7 @@ class Ddq9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
@@ -579,7 +579,7 @@ class Ddq9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.r.set("ddq_9_periods_contractId", rep['content']['contractId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -608,7 +608,7 @@ class Ddq9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			enviroment=self.env
+			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
@@ -619,7 +619,7 @@ class Ddq9Tp(unittest.TestCase):
 		param = json.loads(data[0]['param'])
 		success_amount = GetSqlData.get_repayment_amount(
 			project_id=self.r.get("ddq_9_periods_projectId"),
-			enviroment=self.env,
+			environment=self.env,
 			period=1
 		)
 		param.update(
@@ -642,7 +642,7 @@ class Ddq9Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			enviroment=self.env,
+			environment=self.env,
 			product="cloudloan"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
