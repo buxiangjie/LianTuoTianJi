@@ -26,10 +26,11 @@ class Cfq12PeriodsTp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = sys.argv[3]
+		cls.env = "qa"
 		cls.sql = GetSqlData()
 		cls.r = Common.conn_redis(environment=cls.env)
-		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+		file = Config().get_item('File', 'cfq_12_periods_return_case_file')
+		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@classmethod
 	def tearDownClass(cls):
@@ -37,11 +38,10 @@ class Cfq12PeriodsTp(unittest.TestCase):
 
 	def test_100_approved(self):
 		"""橙分期进件同意接口"""
-		excel = self.excel + Config().get_item('File', 'cfq_12_periods_return_case_file')
-		data = excel_table_byname(excel, 'approved')
+		data = excel_table_byname(self.excel, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
-		Common.p2p_get_userinfo("cfq_tp", self.env)
+		Common.p2p_get_userinfo("cfq_12_periods_return", self.env)
 		self.r.mset(
 			{
 				"cfq_12_periods_return_sourceProjectId": Common.get_random("sourceProjectId"),
@@ -81,11 +81,8 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			environment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.r.set("cfq_12_periods_return_projectId", json.loads(rep.text)['content']['projectId'])
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		self.r.set("cfq_12_periods_return_projectId", rep['content']['projectId'])
+		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 		# 修改进件审核状态
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get("cfq_12_periods_return_projectId"),
@@ -98,8 +95,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			project_id=self.r.get("cfq_12_periods_return_projectId"),
 			environment=self.env
 		)
-		excel = self.excel + Config().get_item('File', 'cfq_12_periods_return_case_file')
-		data = excel_table_byname(excel, 'query_audit_status')
+		data = excel_table_byname(self.excel, 'query_audit_status')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -120,14 +116,11 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			environment=self.env,
 			product="pintic"
 		)
-		print("返回信息:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
 	def test_101_loan_notice(self):
 		"""橙分期放款通知接口"""
-		excel = self.excel + Config().get_item('File', 'cfq_12_periods_return_case_file')
-		data = excel_table_byname(excel, 'loan_notice')
+		data = excel_table_byname(self.excel, 'loan_notice')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -153,15 +146,12 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			environment=self.env,
 			product="pintic"
 		)
-		print("返回信息:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
 	def test_102_loanasset(self):
 		"""橙分期进件放款同步接口"""
 		global period
-		excel = self.excel + Config().get_item('File', 'cfq_12_periods_return_case_file')
-		data = excel_table_byname(excel, 'loan_asset')
+		data = excel_table_byname(self.excel, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		first_year = str(Common.get_repaydate(12)[0].split(' ')[0].split('-')[0])
@@ -202,10 +192,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			environment=self.env,
 			product="pintic"
 		)
-		print("响应信息:%s" % rep)
-		print("返回json:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
-		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['msgCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
 
 if __name__ == '__main__':

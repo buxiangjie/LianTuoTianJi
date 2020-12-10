@@ -56,6 +56,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 				"transactionId": self.r.get("cfq_24_periods_transactionId")
 			}
 		)
+		param['riskSuggestion']['secondSugStrategy'] = 'R'
 		param['applyInfo'].update({"applyTime": Common.get_time("-")})
 		param['personalInfo'].update(
 			{
@@ -107,8 +108,6 @@ class Cfq24PeriodsTp(unittest.TestCase):
 			environment=self.env,
 			product="pintic"
 		)
-		print("返回信息:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
 		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
 	def test_102_loan_notice(self):
@@ -138,8 +137,6 @@ class Cfq24PeriodsTp(unittest.TestCase):
 			environment=self.env,
 			product="pintic"
 		)
-		print("返回信息:%s" % rep.text)
-		logger.info("返回信息:%s" % rep.text)
 		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
 	def test_103_loanasset(self):
@@ -418,21 +415,21 @@ class Cfq24PeriodsTp(unittest.TestCase):
 					)
 			else:
 				if i['assetPlanOwner'] == 'financePartner':
-					plan_list_detail = GetSqlData.get_user_repayment_detail(
+					plan_list_detail1 = GetSqlData.get_user_repayment_detail(
 						project_id=self.r.get("cfq_24_periods_projectId"),
 						environment=self.env, period=i['period'],
 						repayment_plan_type=plan_type[i['repaymentPlanType']]
 					)
 					i.update(
 						{
-							"sourcePlanId": plan_list_detail.get('source_plan_id'),
-							"planPayDate": str(plan_list_detail.get("plan_pay_date")),
-							"curAmount": float(plan_list_detail.get("rest_amount")),
-							"payAmount": float(plan_list_detail.get("rest_amount")),
+							"sourcePlanId": plan_list_detail1.get('source_plan_id'),
+							"planPayDate": str(plan_list_detail1.get("plan_pay_date")),
+							"curAmount": float(plan_list_detail1.get("rest_amount")),
+							"payAmount": float(plan_list_detail1.get("rest_amount")),
 						}
 					)
 				elif i['assetPlanOwner'] == 'foundPartner':
-					plan_list_detail = GetSqlData.get_repayment_detail(
+					plan_list_detail2 = GetSqlData.get_repayment_detail(
 						project_id=self.r.get("cfq_24_periods_projectId"),
 						environment=self.env,
 						period=i['period'],
@@ -440,10 +437,10 @@ class Cfq24PeriodsTp(unittest.TestCase):
 					)
 					i.update(
 						{
-							"sourcePlanId": plan_list_detail.get('source_plan_id'),
-							"planPayDate": str(plan_list_detail.get("plan_pay_date")),
-							"curAmount": float(plan_list_detail.get("rest_amount")),
-							"payAmount": float(plan_list_detail.get("rest_amount")),
+							"sourcePlanId": plan_list_detail2.get('source_plan_id'),
+							"planPayDate": str(plan_list_detail2.get("plan_pay_date")),
+							"curAmount": float(plan_list_detail2.get("rest_amount")),
+							"payAmount": float(plan_list_detail2.get("rest_amount")),
 						}
 					)
 		if len(data[0]['headers']) == 0:
