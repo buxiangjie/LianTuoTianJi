@@ -17,7 +17,7 @@ from common.get_sql_data import GetSqlData
 from common.common_func import Common
 
 
-class Ob(object):
+class Ob:
 
 	@staticmethod
 	def loan_job():
@@ -42,7 +42,9 @@ class Ob(object):
 			raise e
 
 
-scheduler = BlockingScheduler()
-scheduler.add_job(Ob.loan_job, 'interval', seconds=30, max_instances=1)
-scheduler.add_job(Ob.project_job, 'interval', seconds=11, max_instances=1)
-scheduler.start()
+if __name__ == '__main__':
+	scheduler = BlockingScheduler()
+	# scheduler = BackgroundScheduler()
+	scheduler.add_job(Ob.loan_job, 'interval', seconds=30, max_instances=1)
+	scheduler.add_job(Ob.project_job, 'interval', seconds=11, max_instances=1)
+	scheduler.start()

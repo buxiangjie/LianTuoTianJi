@@ -4,7 +4,7 @@
 @date:2020-05-12 11:26:00
 @describe: 
 """
-bind = ["192.168.1.119:8817"]
+bind = ["192.168.1.105:8817"]
 workers = 2
 daemon = True
 reload = True

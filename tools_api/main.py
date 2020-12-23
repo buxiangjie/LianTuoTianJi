@@ -16,17 +16,20 @@ from dateutil.relativedelta import relativedelta
 from datetime import date
 from typing import Optional
 from common.get_sql_data import GetSqlData
-from common.common_func import Common
 
 
 app = FastAPI(title="测试接口")
 
 
 class OverdueItem(BaseModel):
-	enviroment: str
+	environment: str
 	project_id: Optional[int] = None
 	period: int
 	start_date: Optional[date] = None
+
+@app.get("/", name="首页")
+def index():
+	return "hello"
 
 @app.post("/overdue/change", name="修改还款计划为逾期")
 def change_overdue(item: OverdueItem):
@@ -34,11 +37,12 @@ def change_overdue(item: OverdueItem):
 	count = item.period
 	try:
 		for per in pers:
+			business_date = ''
 			if item.start_date:
-				date = str(item.start_date - relativedelta(months=count)).split(" ")[0]
+				business_date = str(item.start_date - relativedelta(months=count)).split(" ")[0]
 			else:
-				date = str(datetime.datetime.now() - relativedelta(months=count)).split(" ")[0]
-			GetSqlData.change_repayment_plan_date(item.enviroment,per,date,item.project_id)
+				business_date = str(datetime.datetime.now() - relativedelta(months=count)).split(" ")[0]
+			GetSqlData.change_repayment_plan_date(item.environment,per,business_date,item.project_id)
 			count -= 1
 		return {"code": 2000, "msg":"执行成功"}
 	except Exception as e:

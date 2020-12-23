@@ -34,6 +34,7 @@ class TestCfq12PeriodsTp:
 	@pytest.mark.settle_in_advance
 	@pytest.mark.comp
 	@pytest.mark.comp_repay
+	@pytest.mark.repay_two_periods
 	def test_100_approved(self, r, env):
 		"""橙分期进件同意接口"""
 		data = excel_table_byname(self.excel, 'approved')
@@ -97,6 +98,7 @@ class TestCfq12PeriodsTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.comp
 	@pytest.mark.comp_repay
+	@pytest.mark.repay_two_periods
 	def test_101_query_audit_status(self, r, env):
 		"""橙分期进件审核结果查询"""
 		GetSqlData.change_project_audit_status(
@@ -132,6 +134,7 @@ class TestCfq12PeriodsTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.comp
 	@pytest.mark.comp_repay
+	@pytest.mark.repay_two_periods
 	def test_101_loan_notice(self, r, env):
 		"""橙分期放款通知接口"""
 		data = excel_table_byname(self.excel, 'loan_notice')
@@ -168,6 +171,7 @@ class TestCfq12PeriodsTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.comp
 	@pytest.mark.comp_repay
+	@pytest.mark.repay_two_periods
 	def test_102_loanasset(self, r, env):
 		"""橙分期进件放款同步接口"""
 		data = excel_table_byname(self.excel, 'loan_asset')
@@ -218,6 +222,7 @@ class TestCfq12PeriodsTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.comp
 	@pytest.mark.comp_repay
+	@pytest.mark.repay_two_periods
 	def test_103_sign_borrow(self, r, env):
 		"""上传借款协议"""
 		data = excel_table_byname(self.excel, 'contract_sign')
@@ -772,6 +777,166 @@ class TestCfq12PeriodsTp:
 						"payAmount": float(plan_list_detail5.get('rest_amount')),
 						"payTime": Common.get_time("-"),
 						"period": period
+					}
+				)
+		for i in param['feePlanList']:
+			plan_list_detail6 = GetSqlData.get_user_repayment_detail(
+				project_id=r.get("cfq_12_periods_projectId"),
+				environment=env,
+				period=i['period'],
+				repayment_plan_type=3,
+				feecategory=i['feeCategory']
+			)
+			i.update(
+				{
+					"sourcePlanId": plan_list_detail6.get('source_plan_id'),
+					"planPayDate": Common.get_time("-"),
+					"payTime": Common.get_time("-")
+				}
+			)
+		if len(data[0]['headers']) == 0:
+			headers = None
+		else:
+			headers = json.loads(data[0]['headers'])
+		rep = Common.response(
+			faceaddr=data[0]['url'],
+			headers=headers,
+			data=json.dumps(param, ensure_ascii=False),
+			environment=env,
+			product="pintic"
+		)
+		assert rep['resultCode'] == data[0]['msgCode']
+		assert rep['content']['message'] == "交易成功"
+
+	@allure.title("橙分期一次还款2期")
+	@pytest.mark.repay_two_periods
+	def test_repay_two_periods(self, r, env):
+		"""橙分期一次还款2期"""
+		data = excel_table_byname(self.excel, 'repay_two_periods')
+		print("接口名称:%s" % data[0]['casename'])
+		param = json.loads(data[0]['param'])
+		param['repayment'].update(
+			{
+				"projectId": r.get("cfq_12_periods_projectId"),
+				"sourceRepaymentId": Common.get_random("sourceProjectId"),
+				"payTime": Common.get_time("-"),
+				"sourceCreateTime": Common.get_time("-"),
+			}
+		)
+		plan_type = {
+			"Principal": "1",
+			"Interest": "2",
+			"Fee": "3"
+		}
+		for i in param['repaymentDetailList']:
+			plan_pay_type = plan_type[i['repaymentPlanType']]
+			plan_catecory = i['planCategory']
+			asset_plan_owner = i['assetPlanOwner']
+			if asset_plan_owner == "foundPartner":
+				if plan_catecory == 1 or plan_catecory == 2:
+					repayment_detail1 = GetSqlData.get_repayment_detail(
+						project_id=r.get("cfq_12_periods_projectId"),
+						environment=env,
+						period=i['period'],
+						repayment_plan_type=plan_pay_type
+					)
+					i.update(
+						{
+							"sourceRepaymentDetailId": Common.get_random("serviceSn"),
+							"sourceCreateTime": Common.get_time("-"),
+							"planPayDate": str(repayment_detail1.get('plan_pay_date')),
+							"thisPayAmount": float(repayment_detail1.get('rest_amount')),
+							"payTime": Common.get_time("-"),
+							"period": i['period']
+						}
+					)
+				else:
+					plan_list_detail2 = GetSqlData.get_user_repayment_detail(
+						project_id=r.get("cfq_12_periods_projectId"),
+						environment=env,
+						period=i['period'],
+						repayment_plan_type=3,
+						feecategory=i['planCategory']
+					)
+					i.update(
+						{
+							"sourceRepaymentDetailId": Common.get_random("serviceSn"),
+							"sourceCreateTime": Common.get_time("-"),
+							"planPayDate": str(plan_list_detail2.get("plan_pay_date")),
+							"payTime": Common.get_time("-"),
+							"period": i['period']
+						}
+					)
+			elif asset_plan_owner == "financePartner":
+				if plan_catecory == 1 or plan_catecory == 2:
+					user_repayment_detail = GetSqlData.get_user_repayment_detail(
+						project_id=r.get("cfq_12_periods_projectId"),
+						environment=env,
+						period=i['period'],
+						repayment_plan_type=plan_pay_type
+					)
+					i.update(
+						{
+							"sourceRepaymentDetailId": Common.get_random("serviceSn"),
+							"sourceCreateTime": Common.get_time("-"),
+							"planPayDate": str(user_repayment_detail.get('plan_pay_date')),
+							"thisPayAmount": float(user_repayment_detail.get('rest_amount')),
+							"payTime": Common.get_time("-"),
+							"period": i['period']
+						}
+					)
+			else:
+				plan_list_detail3 = GetSqlData.get_user_repayment_detail(
+					project_id=r.get("cfq_12_periods_projectId"),
+					environment=env,
+					period=i['period'],
+					repayment_plan_type=3,
+					feecategory=i['planCategory']
+				)
+				i.update(
+					{
+						"sourceRepaymentDetailId": Common.get_random("serviceSn"),
+						"sourceCreateTime": Common.get_time("-"),
+						"planPayDate": str(plan_list_detail3.get("plan_pay_date")),
+						"payTime": Common.get_time("-"),
+						"period": i['period']
+					}
+				)
+		for i in param['repaymentPlanList']:
+			plan_list_pay_type = plan_type[i['repaymentPlanType']]
+			plan_list_asset_plan_owner = i['assetPlanOwner']
+			if plan_list_asset_plan_owner == 'financePartner':
+				plan_list_detail4 = GetSqlData.get_user_repayment_detail(
+					project_id=r.get("cfq_12_periods_projectId"),
+					environment=env,
+					period=i['period'],
+					repayment_plan_type=plan_list_pay_type
+				)
+				i.update(
+					{
+						"sourcePlanId": plan_list_detail4.get('source_plan_id'),
+						"planPayDate": Common.get_time("-"),
+						"curAmount": float(plan_list_detail4.get('cur_amount')),
+						"payAmount": float(plan_list_detail4.get('rest_amount')),
+						"payTime": Common.get_time("-"),
+						"period": i['period']
+					}
+				)
+			elif plan_list_asset_plan_owner == 'foundPartner':
+				plan_list_detail5 = GetSqlData.get_repayment_detail(
+					project_id=r.get("cfq_12_periods_projectId"),
+					environment=env,
+					period=i['period'],
+					repayment_plan_type=plan_list_pay_type
+				)
+				i.update(
+					{
+						"sourcePlanId": plan_list_detail5.get('source_plan_id'),
+						"planPayDate": Common.get_time("-"),
+						"curAmount": float(plan_list_detail5.get('cur_amount')),
+						"payAmount": float(plan_list_detail5.get('rest_amount')),
+						"payTime": Common.get_time("-"),
+						"period": i['period']
 					}
 				)
 		for i in param['feePlanList']:
