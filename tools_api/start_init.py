@@ -6,6 +6,8 @@
 """
 
 import os, sys, re
+print(sys.path)
+
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -14,6 +16,7 @@ from log.ulog import Ulog
 logger = Ulog().getlog()
 
 logger.info("开始检查8817端口是否被占用")
+
 
 if sys.platform == "darwin":
 	port = os.popen("lsof -i:8817").read()
