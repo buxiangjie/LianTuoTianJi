@@ -6,6 +6,10 @@
 """
 import os
 import time
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from loguru import logger
 
 
@@ -13,12 +17,13 @@ class Ulog:
 	"""
 	初始化日志输出目录与规则
 	"""
+
 	def __init__(self):
 		log_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)) + '/logs/')
 		rq = '/' + time.strftime("%Y_%m_%d", time.localtime())
 		if not os.path.exists(log_path):
 			os.mkdir(log_path)
-		logger.add(log_path + "/" + rq +".log", rotation="00:00")
+		logger.add(log_path + "/" + rq + ".log", rotation="00:00")
 
 	def getlog(self):
 		return logger
