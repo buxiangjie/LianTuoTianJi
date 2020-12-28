@@ -17,7 +17,7 @@ logger.info("开始检查8817端口是否被占用")
 
 if sys.platform == "darwin":
 	port = os.popen("lsof -i:8817").read()
-	if port is "":
+	if port == "":
 		logger.info("端口未被占用")
 	else:
 		logger.info("进行端口清理操作-------------------------------------")
