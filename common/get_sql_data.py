@@ -225,7 +225,7 @@ class GetSqlData(object):
 		try:
 			conn = GetSqlData.conn_database(environment)
 			cur = conn.cursor()
-			sql = f"""select id from sandbox_saas.asset WHERE project_id='{project_id}';"""
+			sql = f"""select id from sandbox_saas.asset WHERE project_id={project_id};"""
 			cur.execute(sql)
 			msg = cur.fetchone().get("id")
 			return msg
