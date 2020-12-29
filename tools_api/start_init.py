@@ -8,6 +8,7 @@
 import os, sys, re
 print(sys.path)
 print(os.path.curdir)
+print(sys.version)
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 print(sys.path)
