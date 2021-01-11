@@ -1,4 +1,3 @@
 #!/bin/bash
 python3 start_init.py
-python3 main.py
-exit 0
+gunicorn -c gun_config.py
