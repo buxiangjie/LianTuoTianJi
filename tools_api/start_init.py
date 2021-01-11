@@ -19,7 +19,7 @@ logger = Ulog().getlog()
 logger.info("开始检查8817端口是否被占用")
 
 
-if sys.platform == "darwin":
+if sys.platform in ("darwin", "linux"):
 	port = os.popen("lsof -i:8817").read()
 	if port == "":
 		logger.info("端口未被占用")
