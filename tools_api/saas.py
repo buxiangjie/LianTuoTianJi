@@ -10,7 +10,7 @@ import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from fastapi import APIRouter, Query, Form, Depends
+from fastapi import APIRouter, Query, Form, Depends, File, UploadFile
 from dateutil.relativedelta import relativedelta
 from common.get_sql_data import GetSqlData
 from tools_api.item import *
@@ -23,6 +23,15 @@ router = APIRouter()
 @router.get("/", name="首页", status_code=status.HTTP_200_OK)
 def index():
 	return "hello"
+
+
+@router.post("/ids", name="测试")
+def ids(idss: int = Form(...), ppp: str = Form(...)):
+	return {"idss": idss, "ppp": ppp}
+@router.post("/file", name="文件上传测试")
+async def upload_file(file: UploadFile = File(...)):
+	content = await file.read()
+	return {"file": content}
 
 
 @router.post("/overdue/change", name="修改还款计划为逾期")
