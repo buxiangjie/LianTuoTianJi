@@ -17,9 +17,9 @@ app = FastAPI(title="测试", description="测试")
 
 app.include_router(saas.router, prefix="/saas", tags=["saas"])
 
-if __name__ == '__main__':
-	uvicorn.run(
-		"main:app",
-		log_level="info",
-		reload=True
-	)
+# if __name__ == '__main__':
+# 	uvicorn.run(
+# 		"main:app",
+# 		log_level="info",
+# 		reload=True
+# 	)
