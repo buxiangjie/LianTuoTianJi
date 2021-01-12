@@ -8,3 +8,4 @@ send "python3 start_init.py\r"
 send "/home/buxj/.local/bin/uvicorn main:app\r"
 
 expect eof
+exit
