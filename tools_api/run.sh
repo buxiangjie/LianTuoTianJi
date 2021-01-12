@@ -1,3 +1,10 @@
 #!/bin/bash
-python3 start_init.py
-/home/buxj/.local/bin/uvicorn main:app
+
+spawn su root
+expect "Password:"
+send "cd /tools_api\r"
+send "111111\r"
+send "python3 start_init.py\r"
+send "/home/buxj/.local/bin/uvicorn main:app\r"
+
+expect eof
