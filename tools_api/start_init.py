@@ -27,14 +27,14 @@ if sys.platform in ("darwin", "linux"):
 		logger.info("进行端口清理操作-------------------------------------")
 		data = port.strip(" ").replace(" ", "")
 		logger.info(f"获取到的端口为:{data}")
-		pid_list = re.findall('Python(.*?)boxiangjie', data)
+		pid_list = re.findall('Python(.*?)root', data)
 		logger.info(f"匹配到的PID为:{pid_list}")
 		count = 1
 		for i in pid_list:
 			logger.info(f"开始清理第{count}个端口-------------------------------------")
 			os.popen(f"kill {str(i)}")
 			logger.info(f"检查端口{i}是否被kill")
-			pid = re.findall('Python(.*?)boxiangjie', str(os.popen("lsof -i:8817").read()).replace(" ", ""))
+			pid = re.findall('Python(.*?)root', str(os.popen("lsof -i:8817").read()).replace(" ", ""))
 			logger.info(f"当前端口PID列表为:{pid}")
 			if str(i) not in pid:
 				logger.info("删除成功")
