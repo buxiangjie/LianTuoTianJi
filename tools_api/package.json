@@ -1,0 +1,12 @@
+{
+    "name": "tools_api",
+    "cwd": "./",
+    "exec_interpreter": "bash",
+    "script": "uvicorn --host localhost --port 8817 main:app",
+    "log_date_format": "YYYY-MM-DD HH:mm:ss Z",
+    "error_file": "error.log",
+    "out_file": "access.log",
+    "cron_restart": "0 4 * * *",
+    "watch": false,
+    "autorestart": true
+}
