@@ -1,6 +1,6 @@
 #!/bin/bash
 
-spawn su root
+spawn sudo su
 expect "Password:"
 send "cd /tools_api\r"
 send "111111\r"
