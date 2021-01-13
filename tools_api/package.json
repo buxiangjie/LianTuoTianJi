@@ -1,9 +1,7 @@
 {
   "name": "tools_api",
   "version": "1.0.0",
-  "script": {
-    "start": "uvicorn --host localhost --port 8817 main:app"
-  },
+  "script": "uvicorn --host 192.168.9.229 --port 8817 main:app",
   "log_date_format": "YYYY-MM-DD HH:mm:ss Z",
   "error_file": "error.log",
   "out_file": "access.log",
