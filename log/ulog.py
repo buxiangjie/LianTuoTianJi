@@ -9,7 +9,6 @@ import time
 
 from loguru import logger
 
-
 class Ulog:
 	"""
 	初始化日志输出目录与规则
