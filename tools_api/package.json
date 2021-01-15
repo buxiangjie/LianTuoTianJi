@@ -5,7 +5,6 @@
   "log_date_format": "YYYY-MM-DD HH:mm:ss Z",
   "error_file": "error.log",
   "out_file": "access.log",
-  "cron_restart": "0 4 * * *",
   "watch": false,
   "autorestart": true
 }
