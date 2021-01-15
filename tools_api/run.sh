@@ -1,3 +1,3 @@
 #!/bin/bash
-sudo su
+# sudo su
 pm2 start package.json
