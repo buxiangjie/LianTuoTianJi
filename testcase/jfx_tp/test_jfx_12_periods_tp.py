@@ -53,7 +53,7 @@ class TestJfx12PeriodTp:
 				"cardNum": r.get('jfx_12_periods_cardNum'),
 				"custName": r.get('jfx_12_periods_custName'),
 				"phone": r.get('jfx_12_periods_phone'),
-				"isDoctor": 1,
+				"isDoctor": 0,
 				"applicantClinicRelationship": 1
 			}
 		)
@@ -219,7 +219,7 @@ class TestJfx12PeriodTp:
 			{
 				"loanAmount": 84920.00,
 				"assetInterestRate": 0.158156,
-				"userInterestRate": 0.158156,
+				"userInterestRate": 0.152156,
 				"loanTerm": 12
 			}
 		)

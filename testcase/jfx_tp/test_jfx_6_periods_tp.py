@@ -74,12 +74,10 @@ class Jfx3PeriodTp(unittest.TestCase):
 			product="cloudloan",
 			environment=self.env
 		)
-		creditId = rep['content']['creditId']
-		userId = rep['content']['userId']
 		self.r.mset(
 			{
-				"jfx_6_periods_creditId": creditId,
-				"jfx_6_periods_userId": userId
+				"jfx_6_periods_creditId": rep['content']['creditId'],
+				"jfx_6_periods_userId": rep['content']['userId']
 			}
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -191,7 +189,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 			{
 				"loanAmount": 84920.00,
 				"assetInterestRate": 0.158156,
-				"userInterestRate": 0.158156,
+				"userInterestRate": 0.153156,
 				"loanTerm": 6
 			}
 		)
@@ -215,8 +213,8 @@ class Jfx3PeriodTp(unittest.TestCase):
 			product="cloudloan",
 			environment=self.env
 		)
-		self.r.set('jfx_6_periods_projectId', rep['content']['projectId'])
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
+		self.r.set('jfx_6_periods_projectId', rep['content']['projectId'])
 
 	def test_105_query_apply_result(self):
 		"""进件结果查询"""
