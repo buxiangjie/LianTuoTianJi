@@ -26,7 +26,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = "test"
+		cls.env = "qa"
 		cls.r = Common.conn_redis(environment=cls.env)
 		file = Config().get_item('File', 'cfq_24_periods_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
@@ -75,7 +75,8 @@ class Cfq24PeriodsTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=self.env,
-			product="pintic"
+			product="gateway",
+			prod_type="pintec"
 		)
 		self.r.set("cfq_24_periods_projectId", rep['content']['projectId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
@@ -106,7 +107,8 @@ class Cfq24PeriodsTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=self.env,
-			product="pintic"
+			product="gateway",
+			prod_type="pintec"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
@@ -135,7 +137,8 @@ class Cfq24PeriodsTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=self.env,
-			product="pintic"
+			product="gateway",
+			prod_type="pintec"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
@@ -174,7 +177,8 @@ class Cfq24PeriodsTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=self.env,
-			product="pintic"
+			product="gateway",
+			prod_type="pintec"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
@@ -332,7 +336,8 @@ class Cfq24PeriodsTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=self.env,
-			product="pintic"
+			product="gateway",
+			prod_type="pintec"
 		)
 		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
 		self.assertEqual(rep['content']['message'], "交易成功")
@@ -452,7 +457,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=self.env,
-			product="pintic"
+			product="pintec"
 		)
 		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
 		self.assertEqual(rep['content']['message'], "交易成功")
@@ -584,7 +589,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=self.env,
-			product="pintic"
+			product="pintec"
 		)
 		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
 		self.assertEqual(rep['content']['message'], "交易成功")
@@ -661,7 +666,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=self.env,
-			product="pintic"
+			product="pintec"
 		)
 		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
 
@@ -725,7 +730,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=self.env,
-			product="pintic"
+			product="pintec"
 		)
 		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
 
@@ -893,7 +898,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=self.env,
-			product="pintic"
+			product="pintec"
 		)
 		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
 		self.assertEqual(rep['content']['message'], "交易成功")

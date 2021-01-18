@@ -86,7 +86,7 @@ class TestCfq12PeriodsTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=env,
-			product="pintic"
+			product="pintec"
 		)
 		r.set("cfq_12_periods_projectId", rep['content']['projectId'])
 		assert rep['resultCode'], int(data[0]['msgCode'])
@@ -123,7 +123,7 @@ class TestCfq12PeriodsTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=env,
-			product="pintic"
+			product="pintec"
 		)
 		assert rep['resultCode'], int(data[0]['msgCode'])
 
@@ -160,7 +160,7 @@ class TestCfq12PeriodsTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=env,
-			product="pintic"
+			product="pintec"
 		)
 		assert rep['resultCode'], int(data[0]['msgCode'])
 
@@ -211,7 +211,7 @@ class TestCfq12PeriodsTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=env,
-			product="pintic"
+			product="pintec"
 		)
 		assert rep['resultCode'], int(data[0]['msgCode'])
 
@@ -246,7 +246,7 @@ class TestCfq12PeriodsTp:
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="pintic",
+			product="pintec",
 			environment=env
 		)
 		r.set("cfq_12_periods_contractId", rep['content']['contractId'])
@@ -385,7 +385,7 @@ class TestCfq12PeriodsTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=env,
-			product="pintic"
+			product="pintec"
 		)
 		assert rep['resultCode'] == data[0]['msgCode']
 		assert rep['content']['message'] == "交易成功"
@@ -509,7 +509,7 @@ class TestCfq12PeriodsTp:
 				headers=headers,
 				data=json.dumps(param, ensure_ascii=False),
 				environment=env,
-				product="pintic"
+				product="pintec"
 			)
 
 			assert rep['resultCode'] == data[0]['msgCode']
@@ -584,7 +584,7 @@ class TestCfq12PeriodsTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=env,
-			product="pintic"
+			product="pintec"
 		)
 		assert rep['resultCode'] == data[0]['msgCode']
 
@@ -643,7 +643,7 @@ class TestCfq12PeriodsTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=env,
-			product="pintic"
+			product="pintec"
 		)
 		assert rep['resultCode'] == data[0]['msgCode']
 
@@ -803,7 +803,7 @@ class TestCfq12PeriodsTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=env,
-			product="pintic"
+			product="pintec"
 		)
 		assert rep['resultCode'] == data[0]['msgCode']
 		assert rep['content']['message'] == "交易成功"
@@ -963,7 +963,7 @@ class TestCfq12PeriodsTp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=env,
-			product="pintic"
+			product="pintec"
 		)
 		assert rep['resultCode'] == data[0]['msgCode']
 		assert rep['content']['message'] == "交易成功"
