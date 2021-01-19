@@ -29,7 +29,7 @@ async def index():
 async def ids(env: str, dtype: str, lis: List):
 	"""
 	- env: 数据所在环境 test/qa
-	- dtype: 数据类型 projectid/assetid
+	- dtype: 数据类型 project/asset
 	- lis: ID列表[1,2,3,4]
 	- 如果是资产,删除asset/asset_fee/asset_extra
 	  /overdue/overdue_detail/fee_plan/asset_swap_apply
@@ -39,6 +39,8 @@ async def ids(env: str, dtype: str, lis: List):
 	  /project_enterprise_detail/project_entity_detail
 	  /project_extra_detail
 	"""
+	if (None in lis) or lis == []:
+		return "列表不能为空"
 	if dtype == "asset":
 		for i in lis:
 			mes = ToolsSql.del_asset_data(environment=env, asset_id=i)
