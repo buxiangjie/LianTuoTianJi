@@ -18,7 +18,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 logger = Ulog().getlog()
 
 
-class GetSqlData(object):
+class GetSqlData:
 
 	@staticmethod
 	def conn_database(environment, source='saas'):
@@ -37,7 +37,7 @@ class GetSqlData(object):
 			raise e
 
 	@staticmethod
-	def get_sub_table(environment, asset_id):
+	def get_sub_table(environment: str, asset_id: int):
 		# noinspection PyGlobalUndefined
 		if environment == "test":
 			table = str((asset_id % 8 + 1))
@@ -885,30 +885,6 @@ class GetSqlData(object):
 			cur.execute(sql)
 			conn.commit()
 		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
-
-	@staticmethod
-	def change_repayment_plan_date(environment: str, period: int, date: str, project_id: int):
-		"""修改还款计划天数"""
-		assetId = GetSqlData.get_asset_id(environment, project_id)
-		plan_table = 'repayment_plan_0' + GetSqlData.get_sub_table(environment, assetId)
-		try:
-			conn = GetSqlData.conn_database(environment)
-			cur = conn.cursor()
-			sql = f"""
-					update sandbox_saas.{plan_table}
-					set plan_pay_date='{date}'
-					where asset_id={assetId}
-						and period={period}
-						and repayment_status=1;
-				"""
-			cur.execute(sql)
-			conn.commit()
-		except Exception as e:
-			conn.rollback()
 			raise e
 		finally:
 			cur.close()
