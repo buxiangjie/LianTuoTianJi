@@ -11,8 +11,6 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from fastapi import APIRouter, Query, Form, Depends, File, UploadFile, Request
-# from fastapi.staticfiles import StaticFiles
-# from fastapi.templating import Jinja2Templates
 from dateutil.relativedelta import relativedelta
 from common.tools_api_sql import ToolsSql
 from tools_api.item import *
@@ -20,10 +18,6 @@ from typing import List
 from fastapi import status
 
 router = APIRouter()
-
-
-# router.mount("/static", StaticFiles(directory="static"), name="static")
-# temp = Jinja2Templates(directory="templates")
 
 
 @router.get("/", name="首页", status_code=status.HTTP_200_OK)
