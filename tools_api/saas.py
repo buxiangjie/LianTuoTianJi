@@ -31,6 +31,13 @@ async def ids(env: str, dtype: str, lis: List):
 	- env: 数据所在环境 test/qa
 	- dtype: 数据类型 projectid/assetid
 	- lis: ID列表[1,2,3,4]
+	- 如果是资产,删除asset/asset_fee/asset_extra
+	  /overdue/overdue_detail/fee_plan/asset_swap_apply
+	  /asset_swap_detail/repayment/repayment_detail
+	  /repayment_plan/user_fee_plan/user_repayment_plan
+	- 如果是进件,删除project_detail/project_customer_detail
+	  /project_enterprise_detail/project_entity_detail
+	  /project_extra_detail
 	"""
 	if dtype == "asset":
 		for i in lis:
