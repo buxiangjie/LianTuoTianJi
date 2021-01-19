@@ -10,9 +10,11 @@ import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from fastapi import APIRouter, Query, Form, Depends, File, UploadFile
+from fastapi import APIRouter, Query, Form, Depends, File, UploadFile, Request
+# from fastapi.staticfiles import StaticFiles
+# from fastapi.templating import Jinja2Templates
 from dateutil.relativedelta import relativedelta
-from common.get_sql_data import GetSqlData
+from common.tools_api_sql import ToolsSql
 from tools_api.item import *
 from typing import List
 from fastapi import status
@@ -20,14 +22,34 @@ from fastapi import status
 router = APIRouter()
 
 
+# router.mount("/static", StaticFiles(directory="static"), name="static")
+# temp = Jinja2Templates(directory="templates")
+
+
 @router.get("/", name="首页", status_code=status.HTTP_200_OK)
-def index():
-	return "hello"
+async def index():
+	return "hello world"
 
 
-@router.post("/ids", name="测试")
-def ids(idss: int = Form(...), ppp: str = Form(...)):
-	return {"idss": idss, "ppp": ppp}
+@router.delete("/ids", name="删除异常数据")
+async def ids(env: str, dtype: str, lis: List):
+	"""
+	- env: 数据所在环境 test/qa
+	- dtype: 数据类型 projectid/assetid
+	- lis: ID列表[1,2,3,4]
+	"""
+	if dtype == "asset":
+		for i in lis:
+			mes = ToolsSql.del_asset_data(environment=env, asset_id=i)
+		return mes
+	elif dtype == "project":
+		for i in lis:
+			mess = ToolsSql.del_project_data(environment=env, projectid=i)
+		return mess
+	else:
+		return "不支持的类型"
+
+
 @router.post("/file", name="文件上传测试")
 async def upload_file(file: UploadFile = File(...)):
 	content = await file.read()
@@ -56,13 +78,8 @@ def change_overdue(item: OverdueItem):
 				business_date = item.start_date
 			else:
 				business_date = str(item.start_date - relativedelta(months=count)).split(" ")[0]
-			GetSqlData.change_repayment_plan_date(item.environment, per, business_date, item.project_id)
+			ToolsSql.change_repayment_plan_date(item.environment, per, business_date, item.project_id)
 			count -= 1
 		return {"code": 2000, "msg": "执行成功"}
 	except Exception as e:
 		return {"code": 5000, "msg": str(e)}
-
-
-@router.post("/login", name="登录")
-def login(name: str, password: str):
-	return {f"登录成功:{name}{password}"}
