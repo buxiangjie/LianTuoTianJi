@@ -27,13 +27,12 @@ logger = Logger(logger="test_yzf_repayment_tp").getlog()
 @allure.feature("翼支付还款流程")
 class TestYzfRepayment:
 	file = Config().get_item('File', 'yzf_repayment_case_file')
-	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@allure.title("翼支付进件接口")
 	@pytest.mark.repayment
 	def test_0_approved(self, env, r):
 		"""翼支付进件同意接口"""
-		data = excel_table_byname(self.excel, 'approved')
+		data = excel_table_byname(self.file, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo("yzf_repayment", env)
 		r.mset(
@@ -82,7 +81,7 @@ class TestYzfRepayment:
 			project_id=r.get('yzf_repayment_projectId'),
 			environment=env
 		)
-		data = excel_table_byname(self.excel, 'loan_notice')
+		data = excel_table_byname(self.file, 'loan_notice')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -114,7 +113,7 @@ class TestYzfRepayment:
 	@pytest.mark.repayment
 	def test_2_loanasset(self, env, r):
 		"""翼支付进件放款同步接口"""
-		data = excel_table_byname(self.excel, 'loan_asset')
+		data = excel_table_byname(self.file, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data("data", "yzf_tp.json")
 		repaydate = Common.get_repaydate(24)
@@ -161,7 +160,7 @@ class TestYzfRepayment:
 	def test_3_repayment_one_period(self, env, r):
 		"""翼支付还款一期"""
 		time.sleep(5)
-		data = excel_table_byname(self.excel, 'repayment')
+		data = excel_table_byname(self.file, 'repayment')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		success_amount = GetSqlData.get_user_repayment_amount(

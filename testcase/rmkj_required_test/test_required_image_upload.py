@@ -16,27 +16,25 @@ from config.configer import Config
 
 @ddt.ddt
 class ImageUpload(unittest.TestCase):
-    excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + Config().get_item(
-        'File',
-        'rmkj_required_case_file')
-    excel_data = excel_table_byname(excel, 'image_upload')
+	file = Config().get_item('File', 'rmkj_required_case_file')
+	excel_data = excel_table_byname(file, 'image_upload')
 
-    def setUp(self):
-        self.env = sys.argv[3]
+	def setUp(self):
+		self.env = sys.argv[3]
 
-    def tearDown(self):
-        pass
+	def tearDown(self):
+		pass
 
-    @ddt.data(*excel_data)
-    def test_image_upload(self, data):
-        print("接口名称:%s" % data['casename'])
-        param = json.loads(data['param'])
-        headers = json.loads(data['headers'])
-        rep = Common.response(faceaddr=data['url'], headers=headers,
-                              data=json.dumps(param, ensure_ascii=False), product='cloudloan',
-                              environment=self.env)
-        self.assertEqual(int(rep['resultCode']), data['resultCode'])
+	@ddt.data(*excel_data)
+	def test_image_upload(self, data):
+		print("接口名称:%s" % data['casename'])
+		param = json.loads(data['param'])
+		headers = json.loads(data['headers'])
+		rep = Common.response(faceaddr=data['url'], headers=headers,
+							  data=json.dumps(param, ensure_ascii=False), product='cloudloan',
+							  environment=self.env)
+		self.assertEqual(int(rep['resultCode']), data['resultCode'])
 
 
 if __name__ == '__main__':
-    unittest.main()
+	unittest.main()

@@ -5,7 +5,6 @@
 @describe:新罗马授信接口字段必填项校验
 """
 import unittest
-import os
 import json
 import ddt
 
@@ -19,10 +18,8 @@ logger = Logger(logger="roma_credit_apply").getlog()
 
 @ddt.ddt
 class RomaCreditApply(unittest.TestCase):
-	excel = os.path.dirname(
-		os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + \
-			Config().get_item('File', 'new_roma_required_case_file')
-	excel_data = excel_table_byname(excel, 'credit_apply_data_new')
+	file = Config().get_item('File', 'new_roma_required_case_file')
+	excel_data = excel_table_byname(file, 'credit_apply_data_new')
 	param = excel_data[0]['param']
 	url = excel_data[0]['url']
 	headers = excel_data[0]['headers']

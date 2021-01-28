@@ -5,7 +5,6 @@
 @describe:卡卡贷进件接口字段必填项校验
 """
 import unittest
-import os
 import json
 import ddt
 import sys
@@ -20,8 +19,7 @@ logger = Logger(logger="kkd_apply").getlog()
 @ddt.ddt
 class KkdApply(unittest.TestCase):
 	file = Config().get_item('File', 'kkd_required_case_file')
-	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
-	excel_data = excel_table_byname(excel, 'apply')
+	excel_data = excel_table_byname(file, 'apply')
 
 	@classmethod
 	def setUpClass(cls):

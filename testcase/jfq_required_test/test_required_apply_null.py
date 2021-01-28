@@ -5,7 +5,6 @@
 @describe: 
 """
 import unittest
-import os
 import json
 import ddt
 from common.common_func import Common
@@ -19,8 +18,7 @@ logger = Logger(logger="jfq_required_project").getlog()
 @ddt.ddt
 class JfqPorjectNull(unittest.TestCase):
 	file = Config().get_item('File', 'jfq_required_case_file')
-	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
-	excel_data = excel_table_byname(excel, 'apply_null')
+	excel_data = excel_table_byname(file, 'apply_null')
 
 	@classmethod
 	def setUpClass(cls):
@@ -54,8 +52,7 @@ class JfqPorjectNull(unittest.TestCase):
 @ddt.ddt
 class JfqPorject(unittest.TestCase):
 	file = Config().get_item('File', 'jfq_required_case_file')
-	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
-	excel_data = excel_table_byname(excel, 'apply_null')
+	excel_data = excel_table_byname(file, 'apply_null')
 
 	@classmethod
 	def setUpClass(cls):

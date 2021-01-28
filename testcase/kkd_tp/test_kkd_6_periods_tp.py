@@ -25,8 +25,7 @@ class Kkd6Tp(unittest.TestCase):
 	def setUpClass(cls):
 		cls.env = "test"
 		cls.r = Common.conn_redis(environment=cls.env)
-		file = Config().get_item('File', 'kkd_case_file')
-		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
+		cls.file = Config().get_item('File', 'kkd_case_file')
 
 	@classmethod
 	def tearDownClass(cls):
@@ -34,7 +33,7 @@ class Kkd6Tp(unittest.TestCase):
 
 	def test_100_apply(self):
 		"""进件"""
-		data = excel_table_byname(self.excel, 'apply')
+		data = excel_table_byname(self.file, 'apply')
 		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo('kkd_6_periods', self.env)
 		self.r.mset(
@@ -84,7 +83,7 @@ class Kkd6Tp(unittest.TestCase):
 
 	def test_101_sign_credit(self):
 		"""上传授信协议"""
-		data = excel_table_byname(self.excel, 'contract_sign')
+		data = excel_table_byname(self.file, 'contract_sign')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'kkd_sign_credit.json')
 		param.update(
@@ -115,7 +114,7 @@ class Kkd6Tp(unittest.TestCase):
 			project_id=self.r.get('kkd_6_periods_projectId'),
 			environment=self.env
 		)
-		data = excel_table_byname(self.excel, 'query_apply_result')
+		data = excel_table_byname(self.file, 'query_apply_result')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -140,7 +139,7 @@ class Kkd6Tp(unittest.TestCase):
 
 	def test_103_sign_borrow(self):
 		"""上传借款协议"""
-		data = excel_table_byname(self.excel, 'contract_sign')
+		data = excel_table_byname(self.file, 'contract_sign')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'kkd_sign_borrow.json')
 		param.update(
@@ -168,7 +167,7 @@ class Kkd6Tp(unittest.TestCase):
 
 	def test_104_sign_guarantee(self):
 		"""上传担保函"""
-		data = excel_table_byname(self.excel, 'contract_sign')
+		data = excel_table_byname(self.file, 'contract_sign')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'kkd_sign_guarantee.json')
 		param.update(
@@ -196,7 +195,7 @@ class Kkd6Tp(unittest.TestCase):
 	@unittest.skip("-")
 	def test_105_image_upload(self):
 		"""上传风控相关图片"""
-		data = excel_table_byname(self.excel, 'image_upload')
+		data = excel_table_byname(self.file, 'image_upload')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update({"associationId": self.r.get('kkd_6_periods_projectId')})
@@ -215,7 +214,7 @@ class Kkd6Tp(unittest.TestCase):
 
 	def test_106_contact_query(self):
 		"""合同结果查询:获取签章后的借款协议"""
-		data = excel_table_byname(self.excel, 'contract_query')
+		data = excel_table_byname(self.file, 'contract_query')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -244,7 +243,7 @@ class Kkd6Tp(unittest.TestCase):
 
 	def test_107_calculate(self):
 		"""还款计划试算（未放款）:正常还款"""
-		data = excel_table_byname(self.excel, 'calculate')
+		data = excel_table_byname(self.file, 'calculate')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -272,7 +271,7 @@ class Kkd6Tp(unittest.TestCase):
 
 	def test_108_loan_pfa(self):
 		"""放款申请"""
-		data = excel_table_byname(self.excel, 'loan_pfa')
+		data = excel_table_byname(self.file, 'loan_pfa')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		self.r.set("kkd_6_periods_loan_serviceSn", Common.get_random("serviceSn"))
@@ -308,7 +307,7 @@ class Kkd6Tp(unittest.TestCase):
 	def test_109_loan_query(self):
 		"""放款结果查询"""
 		GetSqlData.loan_set(environment=self.env, project_id=self.r.get('kkd_6_periods_projectId'))
-		data = excel_table_byname(self.excel, 'pfa_query')
+		data = excel_table_byname(self.file, 'pfa_query')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update({"serviceSn": self.r.get("kkd_6_periods_loan_serviceSn")})
@@ -328,7 +327,7 @@ class Kkd6Tp(unittest.TestCase):
 
 	def test_110_query_repayment_plan(self):
 		"""国投云贷还款计划查询"""
-		data = excel_table_byname(self.excel, 'query_repayment_plan')
+		data = excel_table_byname(self.file, 'query_repayment_plan')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -355,7 +354,7 @@ class Kkd6Tp(unittest.TestCase):
 	# @unittest.skip("跳过")
 	def test_112_calculate(self):
 		"""还款计划试算:提前结清"""
-		data = excel_table_byname(self.excel, 'calculate')
+		data = excel_table_byname(self.file, 'calculate')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -388,7 +387,7 @@ class Kkd6Tp(unittest.TestCase):
 	@unittest.skip("跳过")
 	def test_113_offline_repay_repayment(self):
 		"""线下还款流水推送：正常还一期"""
-		data = excel_table_byname(self.excel, 'offline_repay')
+		data = excel_table_byname(self.file, 'offline_repay')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		period = 1
@@ -440,7 +439,7 @@ class Kkd6Tp(unittest.TestCase):
 	@unittest.skip("跳过")
 	def test_114_offline_repay_early_settlement(self):
 		"""线下还款流水推送：提前全部结清"""
-		data = excel_table_byname(self.excel, 'offline_repay')
+		data = excel_table_byname(self.file, 'offline_repay')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
@@ -490,7 +489,7 @@ class Kkd6Tp(unittest.TestCase):
 	@unittest.skip("-")
 	def test_115_debt_transfer(self):
 		"""上传债转函"""
-		data = excel_table_byname(self.excel, 'contract_sign')
+		data = excel_table_byname(self.file, 'contract_sign')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'kkd_debt_transfer.json')
 		param.update(

@@ -25,7 +25,6 @@ logger = Logger(logger="test_yzf_tp").getlog()
 @allure.feature("翼支付流程")
 class TestYzfTp:
 	file = Config().get_item('File', 'yzf_case_file')
-	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@allure.title("翼支付进件接口")
 	@pytest.mark.asset
@@ -33,7 +32,7 @@ class TestYzfTp:
 	@pytest.mark.comp_repay
 	def test_0_approved(self, env, r):
 		"""翼支付进件同意接口"""
-		data = excel_table_byname(self.excel, 'approved')
+		data = excel_table_byname(self.file, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo('yzf', env)
 		param = json.loads(data[0]['param'])
@@ -86,7 +85,7 @@ class TestYzfTp:
 	@pytest.mark.comp_repay
 	def test_1_loan_notice(self, r, env):
 		"""翼支付放款通知接口"""
-		data = excel_table_byname(self.excel, 'loan_notice')
+		data = excel_table_byname(self.file, 'loan_notice')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -120,7 +119,7 @@ class TestYzfTp:
 	def test_2_loanasset(self, r, env):
 		"""翼支付进件放款同步接口"""
 		global period
-		data = excel_table_byname(self.excel, 'loan_asset')
+		data = excel_table_byname(self.file, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data("data", "yzf_tp.json")
 		param['asset'].update(
@@ -172,7 +171,7 @@ class TestYzfTp:
 	@pytest.mark.comp_repay
 	def test_3_compensation(self, r, env):
 		"""翼支付12期代偿一期"""
-		data = excel_table_byname(self.excel, 'compensation')
+		data = excel_table_byname(self.file, 'compensation')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['assetSwapInfo'].update(
@@ -250,7 +249,7 @@ class TestYzfTp:
 		"""翼支付代偿后还款"""
 		# noinspection PyGlobalUndefined
 		global period, plan_pay_type, plan_list_detail
-		data = excel_table_byname(self.excel, 'after_comp_repay')
+		data = excel_table_byname(self.file, 'after_comp_repay')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		period = 1

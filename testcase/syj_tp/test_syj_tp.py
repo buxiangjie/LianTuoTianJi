@@ -27,10 +27,9 @@ class SyjTp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = "qa"
-		file = Config().get_item('File', 'syj_case_file')
+		cls.env = "test"
+		cls.file = Config().get_item('File', 'syj_case_file')
 		cls.r = Common.conn_redis(cls.env)
-		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@classmethod
 	def tearDownClass(cls):
@@ -38,7 +37,7 @@ class SyjTp(unittest.TestCase):
 
 	def test_100_approved(self):
 		"""随意借进件同意接口"""
-		data = excel_table_byname(self.excel, 'approved')
+		data = excel_table_byname(self.file, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo('syj', self.env)
 		param = json.loads(data[0]['param'])
@@ -85,7 +84,7 @@ class SyjTp(unittest.TestCase):
 
 	def test_101_loan(self):
 		"""随意借放款接口"""
-		data = excel_table_byname(self.excel, 'loan')
+		data = excel_table_byname(self.file, 'loan')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -124,7 +123,7 @@ class SyjTp(unittest.TestCase):
 			environment=self.env
 		)
 		GetSqlData.loan_set(self.env, self.r.get("syj_projectId"))
-		data = excel_table_byname(self.excel, 'query_loan_status')
+		data = excel_table_byname(self.file, 'query_loan_status')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -151,7 +150,7 @@ class SyjTp(unittest.TestCase):
 
 	def test_103_loanasset(self):
 		"""随意借进件放款同步接口"""
-		data = excel_table_byname(self.excel, 'loan_asset')
+		data = excel_table_byname(self.file, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['asset'].update(
@@ -190,7 +189,7 @@ class SyjTp(unittest.TestCase):
 	# @unittest.skipUnless(sys.argv[4] == "compensation", "-")
 	def test_3_compensation(self):
 		"""随意借代偿一期"""
-		data = excel_table_byname(self.excel, 'compensation')
+		data = excel_table_byname(self.file, 'compensation')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['assetSwapInfo'].update(
@@ -266,7 +265,7 @@ class SyjTp(unittest.TestCase):
 	def test_4_after_comp_repay(self):
 		"""随意借代偿后还款"""
 		global period, plan_pay_type, plan_list_detail
-		data = excel_table_byname(self.excel, 'after_comp_repay')
+		data = excel_table_byname(self.file, 'after_comp_repay')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		period = 1

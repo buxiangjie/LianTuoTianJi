@@ -25,7 +25,6 @@ logger = Logger(logger="test_rmkj_3_periods_tp").getlog()
 @allure.feature("任买3期流程")
 class TestRmkj3Tp:
 	file = Config().get_item('File', 'rmkj_case_file')
-	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@allure.title("任买进件")
 	@allure.severity("blocker")
@@ -38,7 +37,7 @@ class TestRmkj3Tp:
 	@pytest.mark.returns
 	def test_100_apply(self, r, env):
 		"""进件申请"""
-		data = excel_table_byname(self.excel, 'apply')
+		data = excel_table_byname(self.file, 'apply')
 		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo('rmkj_3_periods', env)
 		r.mset(
@@ -113,7 +112,7 @@ class TestRmkj3Tp:
 	@pytest.mark.settle
 	def test_101_sign_credit(self, r, env):
 		"""上传授信协议"""
-		data = excel_table_byname(self.excel, 'contract_sign')
+		data = excel_table_byname(self.file, 'contract_sign')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'rmkj_sign_credit.json')
 		param.update(
@@ -154,7 +153,7 @@ class TestRmkj3Tp:
 			project_id=r.get('rmkj_3_periods_projectId'),
 			environment=env
 		)
-		data = excel_table_byname(self.excel, 'query_apply_result')
+		data = excel_table_byname(self.file, 'query_apply_result')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -188,7 +187,7 @@ class TestRmkj3Tp:
 	@pytest.mark.settle
 	def test_103_sign_borrow(self, r, env):
 		"""上传借款协议"""
-		data = excel_table_byname(self.excel, 'contract_sign')
+		data = excel_table_byname(self.file, 'contract_sign')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'rmkj_sign_borrow.json')
 		param.update(
@@ -226,7 +225,7 @@ class TestRmkj3Tp:
 	@pytest.mark.settle
 	def test_1033_sign_repayment(self, r, env):
 		"""上传还款计划文件"""
-		data = excel_table_byname(self.excel, 'contract_sign')
+		data = excel_table_byname(self.file, 'contract_sign')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'rmkj_sign_borrow.json')
 		param.update(
@@ -263,7 +262,7 @@ class TestRmkj3Tp:
 	@pytest.mark.settle
 	def test_104_image_upload(self, r, env):
 		"""上传医疗美容图片"""
-		data = excel_table_byname(self.excel, 'image_upload')
+		data = excel_table_byname(self.file, 'image_upload')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update({"associationId": r.get('rmkj_3_periods_projectId')})
@@ -291,7 +290,7 @@ class TestRmkj3Tp:
 	@pytest.mark.settle
 	def test_105_contact_query(self, r, env):
 		"""合同结果查询:获取签章后的借款协议"""
-		data = excel_table_byname(self.excel, 'contract_query')
+		data = excel_table_byname(self.file, 'contract_query')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -327,7 +326,7 @@ class TestRmkj3Tp:
 	@pytest.mark.settle
 	def test_106_sign(self, r, env):
 		"""预签约"""
-		data = excel_table_byname(self.excel, 'sign')
+		data = excel_table_byname(self.file, 'sign')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -374,7 +373,7 @@ class TestRmkj3Tp:
 	@pytest.mark.settle
 	def test_107_confirm(self, r, env):
 		"""确认签约"""
-		data = excel_table_byname(self.excel, 'confirm')
+		data = excel_table_byname(self.file, 'confirm')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data("data", "rmkj_confirm.json")
 		param.update(
@@ -413,7 +412,7 @@ class TestRmkj3Tp:
 	@pytest.mark.settle
 	def test_108_query_sign(self, r, env):
 		"""绑卡结果查询"""
-		data = excel_table_byname(self.excel, 'query_sign')
+		data = excel_table_byname(self.file, 'query_sign')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -451,7 +450,7 @@ class TestRmkj3Tp:
 	@pytest.mark.settle
 	def test_109_card_change(self, r, env):
 		"""还款卡推送"""
-		data = excel_table_byname(self.excel, 'card_change')
+		data = excel_table_byname(self.file, 'card_change')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -497,7 +496,7 @@ class TestRmkj3Tp:
 	@pytest.mark.settle
 	def test_1091_calculate(self, r, env):
 		"""还款计划试算（未放款）:正常还款"""
-		data = excel_table_byname(self.excel, 'calculate')
+		data = excel_table_byname(self.file, 'calculate')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -532,7 +531,7 @@ class TestRmkj3Tp:
 	@pytest.mark.settle
 	def test_110_loan_pfa(self, r, env):
 		"""放款申请"""
-		data = excel_table_byname(self.excel, 'loan_pfa')
+		data = excel_table_byname(self.file, 'loan_pfa')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		r.set("rmkj_3_periods_loan_serviceSn", Common.get_random("serviceSn"))
@@ -580,7 +579,7 @@ class TestRmkj3Tp:
 	def test_111_loan_query(self, r, env):
 		"""放款结果查询"""
 		GetSqlData.loan_set(environment=env, project_id=r.get('rmkj_3_periods_projectId'))
-		data = excel_table_byname(self.excel, 'pfa_query')
+		data = excel_table_byname(self.file, 'pfa_query')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update({"serviceSn": r.get("rmkj_3_periods_loan_serviceSn")})
@@ -609,7 +608,7 @@ class TestRmkj3Tp:
 	@pytest.mark.settle
 	def test_112_query_repayment_plan(self, r, env):
 		"""国投云贷还款计划查询"""
-		data = excel_table_byname(self.excel, 'query_repayment_plan')
+		data = excel_table_byname(self.file, 'query_repayment_plan')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -638,7 +637,7 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_settle_in_advance
 	def test_113_calculate(self, r, env):
 		"""还款计划试算:提前结清"""
-		data = excel_table_byname(self.excel, 'calculate')
+		data = excel_table_byname(self.file, 'calculate')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -674,7 +673,7 @@ class TestRmkj3Tp:
 	@pytest.mark.returns
 	def test_114_calculate(self, r, env):
 		"""还款计划试算:退货"""
-		data = excel_table_byname(self.excel, 'calculate')
+		data = excel_table_byname(self.file, 'calculate')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -710,7 +709,7 @@ class TestRmkj3Tp:
 	@pytest.mark.repayment
 	def test_115_deduction_apply(self, r, env):
 		"""主动还款:正常还一期"""
-		data = excel_table_byname(self.excel, 'deduction_apply')
+		data = excel_table_byname(self.file, 'deduction_apply')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		repayment_plan_list = r.get("rmkj_3_periods_repayment_plan")
@@ -761,7 +760,7 @@ class TestRmkj3Tp:
 	@pytest.mark.settle
 	def test_116_deduction_apply_all_periods(self, r, env):
 		"""主动还款:连续还款整笔结清"""
-		data = excel_table_byname(self.excel, 'deduction_apply')
+		data = excel_table_byname(self.file, 'deduction_apply')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		repayment_plan_list = r.get("rmkj_3_periods_repayment_plan")
@@ -816,7 +815,7 @@ class TestRmkj3Tp:
 	@pytest.mark.settle_in_advance
 	def test_117_deduction_settle_in_advance(self, r, env):
 		"""主动还款:提前全部结清"""
-		data = excel_table_byname(self.excel, 'deduction_apply')
+		data = excel_table_byname(self.file, 'deduction_apply')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		repayment_plan_list = r.get("rmkj_3_periods_early_settlement_repayment_plan")
@@ -861,7 +860,7 @@ class TestRmkj3Tp:
 	@allure.severity("blocker")
 	def test_118_offline_partial(self, r, env):
 		"""线下还款:部分还款"""
-		data = excel_table_byname(self.excel, 'offline_partial')
+		data = excel_table_byname(self.file, 'offline_partial')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -897,7 +896,7 @@ class TestRmkj3Tp:
 	@pytest.mark.settle
 	def test_119_deduction_query(self, r, env):
 		"""主动还款结果查询"""
-		data = excel_table_byname(self.excel, 'deduction_query')
+		data = excel_table_byname(self.file, 'deduction_query')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update({"deductionTaskId": r.get("rmkj_3_periods_deductionTaskId")})
@@ -919,7 +918,7 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_repay
 	def test_120_offline_repay_repayment(self, r, env):
 		"""线下还款流水推送：正常还一期"""
-		data = excel_table_byname(self.excel, 'offline_repay')
+		data = excel_table_byname(self.file, 'offline_repay')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		period = 1
@@ -974,7 +973,7 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_settle_in_advance
 	def test_121_offline_repay_early_settlement(self, r, env):
 		"""线下还款流水推送：提前全部结清"""
-		data = excel_table_byname(self.excel, 'offline_repay')
+		data = excel_table_byname(self.file, 'offline_repay')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
@@ -1028,7 +1027,7 @@ class TestRmkj3Tp:
 	@pytest.mark.returns
 	def test_122_refunds(self, r, env):
 		"""线下还款流水推送：退货"""
-		data = excel_table_byname(self.excel, 'offline_repay')
+		data = excel_table_byname(self.file, 'offline_repay')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(

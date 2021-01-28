@@ -26,14 +26,13 @@ logger = Logger(logger="nqh_one_period_same_day_return_tp").getlog()
 @allure.feature("拿去花一期当天全部退货")
 class TestNqhOnePeriodSameDayReturn:
 	file = Config().get_item('File', 'nqh_one_period_same_day_return_case_file')
-	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@allure.title("拿去花进件")
 	@allure.severity("blocker")
 	@pytest.mark.returns
 	def test_0_approved(self, env, r):
 		"""拿去花进件同意接口"""
-		data = excel_table_byname(self.excel, 'approved')
+		data = excel_table_byname(self.file, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo('nqh_one_period_same_day_return', env)
 		param = json.loads(data[0]['param'])
@@ -80,7 +79,7 @@ class TestNqhOnePeriodSameDayReturn:
 	@pytest.mark.returns
 	def test_1_loan_notice(self, env, r):
 		"""拿去花放款通知接口"""
-		data = excel_table_byname(self.excel, 'loan_notice')
+		data = excel_table_byname(self.file, 'loan_notice')
 		print("接口名称:%s" % data[0]['casename'])
 		GetSqlData.change_project_audit_status(
 			project_id=r["nqh_one_period_same_day_return_projectId"],
@@ -120,7 +119,7 @@ class TestNqhOnePeriodSameDayReturn:
 		# noinspection PyGlobalUndefined
 		global period
 		time.sleep(5)
-		data = excel_table_byname(self.excel, 'loan_asset')
+		data = excel_table_byname(self.file, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		if len(param['repaymentPlanList']) / 2 == 2:
@@ -170,7 +169,7 @@ class TestNqhOnePeriodSameDayReturn:
 	def test_3_repayment_one_period(self, env, r):
 		"""拿去花一期当天全部退货"""
 		time.sleep(5)
-		data = excel_table_byname(self.excel, 'same_day_return')
+		data = excel_table_byname(self.file, 'same_day_return')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		success_amount = GetSqlData.get_all_repayment_amount(
@@ -249,7 +248,7 @@ class TestNqhOnePeriodSameDayReturn:
 	def test_4_repayment_after_return(self, env, r):
 		"""退货更新还款计划"""
 		time.sleep(5)
-		data = excel_table_byname(self.excel, 'repayment')
+		data = excel_table_byname(self.file, 'repayment')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		plan_type = {

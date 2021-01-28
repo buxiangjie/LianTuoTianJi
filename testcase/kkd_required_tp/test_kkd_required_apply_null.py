@@ -20,8 +20,7 @@ logger = Logger(logger="kkd_apply_null").getlog()
 @ddt.ddt
 class KkdApplyNull(unittest.TestCase):
 	file = Config().get_item('File', 'kkd_required_case_file')
-	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
-	excel_data = excel_table_byname(excel, 'apply_null')
+	excel_data = excel_table_byname(file, 'apply_null')
 
 	@classmethod
 	def setUpClass(cls):

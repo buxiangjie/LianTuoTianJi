@@ -27,8 +27,7 @@ class NqhRepaymentAdvance(unittest.TestCase):
 	def setUpClass(cls):
 		cls.env = sys.argv[3]
 		cls.r = Common.conn_redis(cls.env)
-		file = Config().get_item('File', 'nqh_repayment_advance_case_file')
-		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
+		cls.file = Config().get_item('File', 'nqh_repayment_advance_case_file')
 
 	@classmethod
 	def tearDownClass(cls):
@@ -36,7 +35,7 @@ class NqhRepaymentAdvance(unittest.TestCase):
 
 	def test_0_approved(self):
 		"""拿去花进件同意接口"""
-		data = excel_table_byname(self.excel, 'approved')
+		data = excel_table_byname(self.file, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo('nqh_repayment_advance', self.env)
 		param = json.loads(data[0]['param'])
@@ -80,7 +79,7 @@ class NqhRepaymentAdvance(unittest.TestCase):
 
 	def test_1_loan_notice(self):
 		"""拿去花放款通知接口"""
-		data = excel_table_byname(self.excel, 'loan_notice')
+		data = excel_table_byname(self.file, 'loan_notice')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		self.r.set("nqh_repayment_advance_loan_time", Common.get_time("-"))
@@ -115,7 +114,7 @@ class NqhRepaymentAdvance(unittest.TestCase):
 		"""拿去花进件放款同步接口"""
 		global period
 		time.sleep(5)
-		data = excel_table_byname(self.excel, 'loan_asset')
+		data = excel_table_byname(self.file, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		if len(param['repaymentPlanList']) / 2 == 6:
@@ -160,7 +159,7 @@ class NqhRepaymentAdvance(unittest.TestCase):
 	def test_3_repayment_one_period(self):
 		"""拿去花提前还一期"""
 		time.sleep(5)
-		data = excel_table_byname(self.excel, 'repayment')
+		data = excel_table_byname(self.file, 'repayment')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		success_amount = GetSqlData.get_repayment_amount(

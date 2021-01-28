@@ -28,9 +28,8 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 	@classmethod
 	def setUpClass(cls):
 		cls.env = "qa"
-		file = Config().get_item('File', 'yzf_repayment_normal_settle_case_file')
+		cls.file = Config().get_item('File', 'yzf_repayment_normal_settle_case_file')
 		cls.r = Common.conn_redis(cls.env)
-		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@classmethod
 	def tearDownClass(cls):
@@ -38,7 +37,7 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 
 	def test_0_approved(self):
 		"""翼支付进件同意接口"""
-		data = excel_table_byname(self.excel, 'approved')
+		data = excel_table_byname(self.file, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo("yzf_repayment_normal_settle", self.env)
 		param = json.loads(data[0]['param'])
@@ -85,7 +84,7 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 
 	def test_1_loan_notice(self):
 		"""翼支付放款通知接口"""
-		data = excel_table_byname(self.excel, 'loan_notice')
+		data = excel_table_byname(self.file, 'loan_notice')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -115,7 +114,7 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 
 	def test_2_loanasset(self):
 		"""翼支付进件放款同步接口"""
-		data = excel_table_byname(self.excel, 'loan_asset')
+		data = excel_table_byname(self.file, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data("data", "yzf_tp.json")
 		if len(param['repaymentPlanList']) / 2 == 6:
@@ -163,7 +162,7 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 	def test_3_repayment_one_period(self):
 		"""翼支付全部结清"""
 		time.sleep(5)
-		data = excel_table_byname(self.excel, 'repayment')
+		data = excel_table_byname(self.file, 'repayment')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		for per in range(1, 25):

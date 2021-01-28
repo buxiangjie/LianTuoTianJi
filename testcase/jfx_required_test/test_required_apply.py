@@ -20,8 +20,7 @@ logger = Logger(logger="credit_apply").getlog()
 @ddt.ddt
 class CreditApply(unittest.TestCase):
 	file = Config().get_item('File', 'jfx_required_case_file')
-	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
-	excel_data = excel_table_byname(excel, 'credit_apply_data')
+	excel_data = excel_table_byname(file, 'credit_apply_data')
 	env = 'qa'
 
 	@ddt.data(*excel_data)

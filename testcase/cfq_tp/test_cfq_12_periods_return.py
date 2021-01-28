@@ -29,8 +29,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 		cls.env = "qa"
 		cls.sql = GetSqlData()
 		cls.r = Common.conn_redis(environment=cls.env)
-		file = Config().get_item('File', 'cfq_12_periods_return_case_file')
-		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
+		cls.file = Config().get_item('File', 'cfq_12_periods_return_case_file')
 
 	@classmethod
 	def tearDownClass(cls):
@@ -38,7 +37,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 
 	def test_100_approved(self):
 		"""橙分期进件同意接口"""
-		data = excel_table_byname(self.excel, 'approved')
+		data = excel_table_byname(self.file, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		Common.p2p_get_userinfo("cfq_12_periods_return", self.env)
@@ -95,7 +94,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			project_id=self.r.get("cfq_12_periods_return_projectId"),
 			environment=self.env
 		)
-		data = excel_table_byname(self.excel, 'query_audit_status')
+		data = excel_table_byname(self.file, 'query_audit_status')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -120,7 +119,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 
 	def test_101_loan_notice(self):
 		"""橙分期放款通知接口"""
-		data = excel_table_byname(self.excel, 'loan_notice')
+		data = excel_table_byname(self.file, 'loan_notice')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -151,7 +150,7 @@ class Cfq12PeriodsTp(unittest.TestCase):
 	def test_102_loanasset(self):
 		"""橙分期进件放款同步接口"""
 		global period
-		data = excel_table_byname(self.excel, 'loan_asset')
+		data = excel_table_byname(self.file, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		first_year = str(Common.get_repaydate(12)[0].split(' ')[0].split('-')[0])

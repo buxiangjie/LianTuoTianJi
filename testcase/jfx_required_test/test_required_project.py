@@ -20,8 +20,7 @@ logger = Logger(logger="project").getlog()
 @ddt.ddt
 class JfxPorject(unittest.TestCase):
 	file = Config().get_item('File', 'jfx_required_case_file')
-	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
-	excel_data = excel_table_byname(excel, 'project_null')
+	excel_data = excel_table_byname(file, 'project_null')
 
 	@classmethod
 	def setUpClass(cls):

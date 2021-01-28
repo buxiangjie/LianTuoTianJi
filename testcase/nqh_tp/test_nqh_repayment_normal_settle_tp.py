@@ -25,14 +25,13 @@ logger = Logger(logger="test_nqh_repayment_normal_settle_tp").getlog()
 @allure.feature("拿去花按期全部结清")
 class TestNqhRepaymentNormalSettle:
 	file = Config().get_item('File', 'nqh_repayment_normal_settle_case_file')
-	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@allure.title("拿去花进件")
 	@allure.severity("blocker")
 	@pytest.mark.settle
 	def test_0_approved(self, env, r):
 		"""拿去花进件同意接口"""
-		data = excel_table_byname(self.excel, 'approved')
+		data = excel_table_byname(self.file, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo('nqh_repayment_normal_settle', env)
 		param = json.loads(data[0]['param'])
@@ -79,7 +78,7 @@ class TestNqhRepaymentNormalSettle:
 	@pytest.mark.settle
 	def test_1_loan_notice(self, env, r):
 		"""拿去花放款通知接口"""
-		data = excel_table_byname(self.excel, 'loan_notice')
+		data = excel_table_byname(self.file, 'loan_notice')
 		print("接口名称:%s" % data[0]['casename'])
 		GetSqlData.change_project_audit_status(
 			project_id=r.get('nqh_repayment_normal_settle_projectId'),
@@ -117,7 +116,7 @@ class TestNqhRepaymentNormalSettle:
 	def test_2_loan_asset(self, env, r):
 		"""拿去花进件放款同步接口"""
 		time.sleep(5)
-		data = excel_table_byname(self.excel, 'loan_asset')
+		data = excel_table_byname(self.file, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		if len(param['repaymentPlanList']) / 2 == 6:
@@ -165,7 +164,7 @@ class TestNqhRepaymentNormalSettle:
 	def test_3_repayment_one_period(self, env, r):
 		"""拿去花全部结清"""
 		time.sleep(3)
-		data = excel_table_byname(self.excel, 'repayment')
+		data = excel_table_byname(self.file, 'repayment')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		for per in range(1, 7):

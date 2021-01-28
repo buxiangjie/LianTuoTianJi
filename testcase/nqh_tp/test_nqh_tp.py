@@ -26,7 +26,6 @@ logger = Logger(logger="test_nqh_tp").getlog()
 @allure.feature("拿去花流程")
 class TestNqhTp:
 	file = Config().get_item('File', 'nqh_case_file')
-	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@allure.title("拿去花进件")
 	@allure.severity("blocker")
@@ -35,7 +34,7 @@ class TestNqhTp:
 	@pytest.mark.comp_repay
 	def test_0_approved(self, env, r):
 		"""拿去花进件同意接口"""
-		data = excel_table_byname(self.excel, 'approved')
+		data = excel_table_byname(self.file, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		Common.p2p_get_userinfo("nqh", env)
@@ -87,7 +86,7 @@ class TestNqhTp:
 	@pytest.mark.comp_repay
 	def test_1_loan_notice(self, env, r):
 		"""拿去花放款通知接口"""
-		data = excel_table_byname(self.excel, 'loan_notice')
+		data = excel_table_byname(self.file, 'loan_notice')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -123,7 +122,7 @@ class TestNqhTp:
 	def test_2_loan_asset(self, env, r):
 		"""拿去花进件放款同步接口"""
 		time.sleep(5)
-		data = excel_table_byname(self.excel, 'loan_asset')
+		data = excel_table_byname(self.file, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['asset'].update(
@@ -163,7 +162,7 @@ class TestNqhTp:
 	@pytest.mark.comp_repay
 	def test_3_compensation(self, env, r):
 		"""拿去花代偿一期"""
-		data = excel_table_byname(self.excel, 'compensation')
+		data = excel_table_byname(self.file, 'compensation')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['assetSwapInfo'].update(
@@ -242,7 +241,7 @@ class TestNqhTp:
 		"""拿去花代偿后还款"""
 		# noinspection PyGlobalUndefined
 		global period, plan_pay_type, plan_list_detail
-		data = excel_table_byname(self.excel, 'after_comp_repay')
+		data = excel_table_byname(self.file, 'after_comp_repay')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		period = 1

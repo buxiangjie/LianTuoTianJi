@@ -27,8 +27,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 	def setUpClass(cls):
 		cls.env = sys.argv[3]
 		cls.r = Common.conn_redis(cls.env)
-		file = Config().get_item('File', 'nqh_periods_same_day_return_case_file')
-		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
+		cls.file = Config().get_item('File', 'nqh_periods_same_day_return_case_file')
 
 	@classmethod
 	def tearDownClass(cls):
@@ -36,7 +35,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 
 	def test_0_approved(self):
 		"""拿去花进件同意接口"""
-		data = excel_table_byname(self.excel, 'approved')
+		data = excel_table_byname(self.file, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo('nqh_periods_same_day_return', self.env)
 		param = json.loads(data[0]['param'])
@@ -81,7 +80,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 
 	def test_1_loan_notice(self):
 		"""拿去花放款通知接口"""
-		data = excel_table_byname(self.excel, 'loan_notice')
+		data = excel_table_byname(self.file, 'loan_notice')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		GetSqlData.change_project_audit_status(
@@ -119,7 +118,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 		"""拿去花进件放款同步接口"""
 		global period
 		time.sleep(5)
-		data = excel_table_byname(self.excel, 'loan_asset')
+		data = excel_table_byname(self.file, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		if len(param['repaymentPlanList']) / 2 == 6:
@@ -164,7 +163,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 	def test_3_repayment_one_period(self):
 		"""拿去花多期当天部分退货"""
 		time.sleep(5)
-		data = excel_table_byname(self.excel, 'same_day_return')
+		data = excel_table_byname(self.file, 'same_day_return')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		success_amount = GetSqlData.get_all_repayment_amount(
@@ -232,7 +231,7 @@ class NqhPeriodsSameDayReturn(unittest.TestCase):
 	def test_4_repayment_after_return(self):
 		"""退货更新还款计划"""
 		time.sleep(5)
-		data = excel_table_byname(self.excel, 'repayment')
+		data = excel_table_byname(self.file, 'repayment')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		for per in range(1, 7):

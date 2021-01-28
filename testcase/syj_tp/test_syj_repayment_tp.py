@@ -28,9 +28,8 @@ class SyjRepayment(unittest.TestCase):
 	@classmethod
 	def setUpClass(cls):
 		cls.env = sys.argv[3]
-		file = Config().get_item('File', 'syj_repayment_case_file')
+		cls.file = Config().get_item('File', 'syj_repayment_case_file')
 		cls.r = Common.conn_redis(cls.env)
-		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@classmethod
 	def tearDownClass(cls):
@@ -38,7 +37,7 @@ class SyjRepayment(unittest.TestCase):
 
 	def test_0_approved(self):
 		"""随意借进件同意接口"""
-		data = excel_table_byname(self.excel, 'approved')
+		data = excel_table_byname(self.file, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		Common.p2p_get_userinfo("syj_repayment", self.env)
@@ -87,7 +86,7 @@ class SyjRepayment(unittest.TestCase):
 	def test_1_loan(self):
 		"""随意借放款接口"""
 		time.sleep(5)
-		data = excel_table_byname(self.excel, 'loan')
+		data = excel_table_byname(self.file, 'loan')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -119,7 +118,7 @@ class SyjRepayment(unittest.TestCase):
 		time.sleep(5)
 		GetSqlData.change_pay_status(self.env, self.r.get("syj_repayment_projectId"))
 		GetSqlData.loan_set(self.env, self.r.get("syj_repayment_projectId"))
-		data = excel_table_byname(self.excel, 'query_loan_status')
+		data = excel_table_byname(self.file, 'query_loan_status')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -146,7 +145,7 @@ class SyjRepayment(unittest.TestCase):
 
 	def test_3_loanasset(self):
 		"""随意借进件放款同步接口"""
-		data = excel_table_byname(self.excel, 'loan_asset')
+		data = excel_table_byname(self.file, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['asset'].update(
@@ -184,7 +183,7 @@ class SyjRepayment(unittest.TestCase):
 	def test_4_repayment_one_period(self):
 		"""随意借还款一期"""
 		time.sleep(5)
-		data = excel_table_byname(self.excel, 'repayment')
+		data = excel_table_byname(self.file, 'repayment')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['repayment'].update(

@@ -25,7 +25,7 @@ class Jfqylv212Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = 'test'
+		cls.env = 'qa'
 		cls.r = Common.conn_redis(environment=cls.env)
 		file = Config().get_item('File', 'jfq_case_file')
 		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file

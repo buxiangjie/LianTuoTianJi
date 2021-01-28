@@ -27,14 +27,13 @@ logger = Logger(logger="test_new_roma_tp").getlog()
 @allure.feature("新罗马车贷")
 class TestNewRomaTp:
 	file = Config().get_item('File', 'new_roma_case_file')
-	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@allure.title("额度授信")
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	def test_100_credit_apply(self, r, env):
 		"""额度授信"""
-		data = excel_table_byname(self.excel, 'credit_apply_data_new')
+		data = excel_table_byname(self.file, 'credit_apply_data_new')
 		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo('new_roma', env)
 		r.mset(
@@ -94,7 +93,7 @@ class TestNewRomaTp:
 	@pytest.mark.asset
 	def test_101_upload_image(self, r, env):
 		"""图片上传：授信"""
-		data = excel_table_byname(self.excel, 'image_upload')
+		data = excel_table_byname(self.file, 'image_upload')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -121,7 +120,7 @@ class TestNewRomaTp:
 	@pytest.mark.asset
 	def test_1011_sign_credit(self, r, env):
 		"""上传授信协议"""
-		data = excel_table_byname(self.excel, 'contract_sign')
+		data = excel_table_byname(self.file, 'contract_sign')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'roma_contract_sign.json')
 		param.update(
@@ -153,7 +152,7 @@ class TestNewRomaTp:
 	def test_102_query_result(self, r, env):
 		"""授信结果查询"""
 		GetSqlData.credit_set(environment=env, credit_id=r.get("new_roma_creditId"))
-		data = excel_table_byname(self.excel, 'credit_query_result')
+		data = excel_table_byname(self.file, 'credit_query_result')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update({"creditId": r.get('new_roma_creditId')})
@@ -175,7 +174,7 @@ class TestNewRomaTp:
 	@pytest.mark.asset
 	def test_103_query_user_amount(self, r, env):
 		"""用户额度查询"""
-		data = excel_table_byname(self.excel, 'query_user_amount')
+		data = excel_table_byname(self.file, 'query_user_amount')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -207,7 +206,7 @@ class TestNewRomaTp:
 	@pytest.mark.asset
 	def test_104_project_apply(self, r, env):
 		"""进件"""
-		data = excel_table_byname(self.excel, 'test_project')
+		data = excel_table_byname(self.file, 'test_project')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		r.set('new_roma_sourceProjectId', Common.get_random('sourceProjectId'))
@@ -261,7 +260,7 @@ class TestNewRomaTp:
 	@pytest.mark.asset
 	def test_105_query_apply_result(self, r, env):
 		"""进件结果查询"""
-		data = excel_table_byname(self.excel, 'project_query_apply_result')
+		data = excel_table_byname(self.file, 'project_query_apply_result')
 		print("接口名称:%s" % data[0]['casename'])
 		GetSqlData.change_project_audit_status(
 			project_id=r.get('new_roma_projectId'),
@@ -293,7 +292,7 @@ class TestNewRomaTp:
 	@pytest.mark.asset
 	def test_106_contract_sign(self, r, env):
 		"""上传借款合同"""
-		data = excel_table_byname(self.excel, 'contract_sign')
+		data = excel_table_byname(self.file, 'contract_sign')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'roma_contract_sign.json')
 		param.update(
@@ -325,7 +324,7 @@ class TestNewRomaTp:
 	def test_107_pfa(self, r, env):
 		"""放款"""
 		time.sleep(5)
-		data = excel_table_byname(self.excel, 'project_loan')
+		data = excel_table_byname(self.file, 'project_loan')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -366,7 +365,7 @@ class TestNewRomaTp:
 	def test_108_query(self, r, env):
 		"""放款结果查询"""
 		GetSqlData.loan_set(environment=env, project_id=r.get('new_roma_projectId'))
-		data = excel_table_byname(self.excel, 'query')
+		data = excel_table_byname(self.file, 'query')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -392,7 +391,7 @@ class TestNewRomaTp:
 	@pytest.mark.asset
 	def test_109_query_repayment_plan(self, r, env):
 		"""还款计划查询"""
-		data = excel_table_byname(self.excel, 'query_repayment_plan')
+		data = excel_table_byname(self.file, 'query_repayment_plan')
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -418,7 +417,7 @@ class TestNewRomaTp:
 	@pytest.mark.asset
 	def test_110_pre_clear_calculate(self, r, env):
 		"""还款计划试算"""
-		data = excel_table_byname(self.excel, 'calculate')
+		data = excel_table_byname(self.file, 'calculate')
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -442,7 +441,7 @@ class TestNewRomaTp:
 	@pytest.mark.skip
 	def test_111_offline_partial(self, r, env):
 		"""线下还款:部分还款"""
-		data = excel_table_byname(self.excel, 'offline_partial')
+		data = excel_table_byname(self.file, 'offline_partial')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -474,7 +473,7 @@ class TestNewRomaTp:
 	@pytest.mark.skip
 	def test_112_push_reconciliation_result(self, r, env):
 		"""对账结果推送"""
-		data = excel_table_byname(self.excel, 'push_reconciliation_result')
+		data = excel_table_byname(self.file, 'push_reconciliation_result')
 		param = json.loads(data[0]['param'])
 		param.update(
 			{

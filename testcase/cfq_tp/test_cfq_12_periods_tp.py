@@ -25,7 +25,6 @@ logger = Logger(logger="test_cfq_12_periods_tp").getlog()
 class TestCfq12PeriodsTp:
 
 	file = Config().get_item('File', 'cfq_12_periods_case_file')
-	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@allure.title("橙分期进件")
 	@allure.severity("blocker")
@@ -37,7 +36,7 @@ class TestCfq12PeriodsTp:
 	@pytest.mark.repay_two_periods
 	def test_100_approved(self, r, env):
 		"""橙分期进件同意接口"""
-		data = excel_table_byname(self.excel, 'approved')
+		data = excel_table_byname(self.file, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		Common.p2p_get_userinfo("cfq_12_periods", env)
@@ -105,7 +104,7 @@ class TestCfq12PeriodsTp:
 			project_id=r.get("cfq_12_periods_projectId"),
 			environment=env
 		)
-		data = excel_table_byname(self.excel, 'query_audit_status')
+		data = excel_table_byname(self.file, 'query_audit_status')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -137,7 +136,7 @@ class TestCfq12PeriodsTp:
 	@pytest.mark.repay_two_periods
 	def test_101_loan_notice(self, r, env):
 		"""橙分期放款通知接口"""
-		data = excel_table_byname(self.excel, 'loan_notice')
+		data = excel_table_byname(self.file, 'loan_notice')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -174,7 +173,7 @@ class TestCfq12PeriodsTp:
 	@pytest.mark.repay_two_periods
 	def test_102_loanasset(self, r, env):
 		"""橙分期进件放款同步接口"""
-		data = excel_table_byname(self.excel, 'loan_asset')
+		data = excel_table_byname(self.file, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		first_year = str(Common.get_repaydate(12)[0].split(' ')[0].split('-')[0])
@@ -225,7 +224,7 @@ class TestCfq12PeriodsTp:
 	@pytest.mark.repay_two_periods
 	def test_103_sign_borrow(self, r, env):
 		"""上传借款协议"""
-		data = excel_table_byname(self.excel, 'contract_sign')
+		data = excel_table_byname(self.file, 'contract_sign')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'cfq_sign_borrow.json')
 		param.update(
@@ -257,7 +256,7 @@ class TestCfq12PeriodsTp:
 	@pytest.mark.offline_repay
 	def test_104_repayment(self, r, env):
 		"""橙分期12期还款一期"""
-		data = excel_table_byname(self.excel, 'repayment')
+		data = excel_table_byname(self.file, 'repayment')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		period = 1
@@ -395,7 +394,7 @@ class TestCfq12PeriodsTp:
 	@pytest.mark.settle_in_advance
 	def test_105_settle_in_advance_phase_one(self, r, env):
 		"""橙分期在第一期提前结清"""
-		data = excel_table_byname(self.excel, 'settle_in_advance')
+		data = excel_table_byname(self.file, 'settle_in_advance')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common().get_json_data('data', 'cfq_12_periods_settle_in_advance_phase_one.json')
 		period = GetSqlData.get_current_period(r.get("cfq_12_periods_projectId"), env)
@@ -521,7 +520,7 @@ class TestCfq12PeriodsTp:
 	@pytest.mark.comp_repay
 	def test_107_compensation(self, r, env):
 		"""橙分期12期代偿一期"""
-		data = excel_table_byname(self.excel, 'compensation')
+		data = excel_table_byname(self.file, 'compensation')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['assetSwapInfo'].update(
@@ -590,7 +589,7 @@ class TestCfq12PeriodsTp:
 
 	def test_108_repurchase(self, r, env):
 		"""橙分期12期回购一期"""
-		data = excel_table_byname(self.excel, 'repurchase')
+		data = excel_table_byname(self.file, 'repurchase')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['assetSwapInfo'].update(
@@ -651,7 +650,7 @@ class TestCfq12PeriodsTp:
 	@pytest.mark.comp_repay
 	def test_109_after_comp_repay(self, r, env):
 		"""橙分期12期代偿后还款"""
-		data = excel_table_byname(self.excel, 'after_comp_repay')
+		data = excel_table_byname(self.file, 'after_comp_repay')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		period = 1
@@ -812,7 +811,7 @@ class TestCfq12PeriodsTp:
 	@pytest.mark.repay_two_periods
 	def test_repay_two_periods(self, r, env):
 		"""橙分期一次还款2期"""
-		data = excel_table_byname(self.excel, 'repay_two_periods')
+		data = excel_table_byname(self.file, 'repay_two_periods')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['repayment'].update(

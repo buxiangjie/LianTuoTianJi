@@ -25,7 +25,6 @@ logger = Logger(logger="test_jqh_tp").getlog()
 @allure.feature("借去花")
 class TestJqh:
 	file = Config().get_item('File', 'jqh_case_file')
-	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@allure.title("借去花进件")
 	@allure.severity("blocker")
@@ -34,7 +33,7 @@ class TestJqh:
 	@pytest.mark.comp_repay
 	def test_0_approved(self, r, env):
 		"""借去花进件同意接口"""
-		data = excel_table_byname(self.excel, 'approved')
+		data = excel_table_byname(self.file, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		Common.p2p_get_userinfo("jqh", env)
@@ -88,7 +87,7 @@ class TestJqh:
 	@pytest.mark.comp_repay
 	def test_1_loan(self, r, env):
 		"""借去花放款接口"""
-		data = excel_table_byname(self.excel, 'loan')
+		data = excel_table_byname(self.file, 'loan')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -123,7 +122,7 @@ class TestJqh:
 	def test_2_loanasset(self, r, env):
 		"""借去花进件放款同步接口"""
 		time.sleep(10)
-		data = excel_table_byname(self.excel, 'loan_asset')
+		data = excel_table_byname(self.file, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['asset'].update(
@@ -164,7 +163,7 @@ class TestJqh:
 	@pytest.mark.comp_repay
 	def test_3_compensation(self, r, env):
 		"""借去花代偿一期"""
-		data = excel_table_byname(self.excel, 'compensation')
+		data = excel_table_byname(self.file, 'compensation')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['assetSwapInfo'].update(
@@ -242,7 +241,7 @@ class TestJqh:
 		"""借去花代偿后还款"""
 		# noinspection PyGlobalUndefined
 		global period, plan_pay_type, plan_list_detail
-		data = excel_table_byname(self.excel, 'after_comp_repay')
+		data = excel_table_byname(self.file, 'after_comp_repay')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		period = 1

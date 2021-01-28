@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
-import xlrd
+import xlrd, os
+
+from typing import Optional
 
 
 def open_excel(file: str):
@@ -9,7 +11,8 @@ def open_excel(file: str):
 	:return:An instance of the :class:`~xlrd.book.Book` class.
 	"""
 	try:
-		data = xlrd.open_workbook(file)
+		path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + file
+		data = xlrd.open_workbook(path)
 		return data
 	except Exception as e:
 		raise e
@@ -17,7 +20,7 @@ def open_excel(file: str):
 
 def excel_table_byname(file: str, by_name: str, colnameindex=0) -> list:
 	"""
-	:param file: 文件路径
+	:param file: 文件名
 	:param by_name: 表sheet页的名称
 	:param colnameindex: 表头列名所在行的索引
 	:return data list

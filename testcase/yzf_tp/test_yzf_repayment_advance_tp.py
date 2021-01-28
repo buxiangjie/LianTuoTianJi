@@ -27,14 +27,13 @@ logger = Logger(logger="test_yzf_repayment_advance_tp").getlog()
 @allure.feature("翼支付提前结清")
 class TestYzfRepaymentAdvance:
 	file = Config().get_item('File', 'yzf_repayment_advance_case_file')
-	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@allure.title("翼支付进件")
 	@allure.severity("blocker")
 	@pytest.mark.offline_settle_in_advance
 	def test_0_approved(self, r, env):
 		"""翼支付进件同意接口"""
-		data = excel_table_byname(self.excel, 'approved')
+		data = excel_table_byname(self.file, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo('yzf_repayment_advance', env)
 		param = json.loads(data[0]['param'])
@@ -81,7 +80,7 @@ class TestYzfRepaymentAdvance:
 	@pytest.mark.offline_settle_in_advance
 	def test_1_loan_notice(self, r, env):
 		"""翼支付放款通知接口"""
-		data = excel_table_byname(self.excel, 'loan_notice')
+		data = excel_table_byname(self.file, 'loan_notice')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		r["yzf_repayment_advance_loan_time"] = Common.get_time("-")
@@ -115,8 +114,7 @@ class TestYzfRepaymentAdvance:
 	@pytest.mark.offline_settle_in_advance
 	def test_2_loanasset(self, r, env):
 		"""翼支付进件放款同步接口"""
-		global period
-		data = excel_table_byname(self.excel, 'loan_asset')
+		data = excel_table_byname(self.file, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		if len(param['repaymentPlanList']) / 2 == 6:
@@ -164,7 +162,7 @@ class TestYzfRepaymentAdvance:
 	@pytest.mark.offline_settle_in_advance
 	def test_3_repayment_settle_in_advance(self, r, env):
 		"""翼支付提前结清"""
-		data = excel_table_byname(self.excel, 'repayment')
+		data = excel_table_byname(self.file, 'repayment')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common().get_json_data('data', 'yzf_settle_in_advance.json')
 		param['repayment'].update(

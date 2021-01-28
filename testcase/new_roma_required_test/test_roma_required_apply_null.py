@@ -22,10 +22,8 @@ logger = Logger(logger="roma_credit_apply_null").getlog()
 
 @ddt.ddt
 class RomaCreditApplyNull(unittest.TestCase):
-	excel = os.path.dirname(
-		os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + \
-			Config().get_item('File', 'new_roma_required_case_file')
-	excel_data = excel_table_byname(excel, 'credit_apply_data_null')
+	file = Config().get_item('File', 'new_roma_required_case_file')
+	excel_data = excel_table_byname(file, 'credit_apply_data_null')
 	param = excel_data[0]['param']
 	url = excel_data[0]['url']
 	headers = excel_data[0]['headers']

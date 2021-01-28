@@ -26,7 +26,6 @@ logger = Logger(logger="test_jfx_12_periods_tp").getlog()
 @allure.feature("金服侠12期")
 class TestJfx12PeriodTp:
 	file = Config().get_item('File', 'jfx_mul_case_file')
-	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@allure.title("申请授信")
 	@allure.severity("blocker")
@@ -36,7 +35,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.settle
 	def test_100_credit_apply(self, r, env):
 		"""额度授信"""
-		data = excel_table_byname(self.excel, 'credit_apply_data')
+		data = excel_table_byname(self.file, 'credit_apply_data')
 		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo('jfx_12_periods', env)
 		r.mset(
@@ -101,7 +100,7 @@ class TestJfx12PeriodTp:
 			environment=env,
 			credit_id=r.get("jfx_12_periods_creditId")
 		)
-		data = excel_table_byname(self.excel, 'credit_query_result')
+		data = excel_table_byname(self.file, 'credit_query_result')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update({"creditId": r.get('jfx_12_periods_creditId')})
@@ -126,7 +125,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.settle
 	def test_102_query_user_amount(self, r, env):
 		"""用户额度查询"""
-		data = excel_table_byname(self.excel, 'query_user_amount')
+		data = excel_table_byname(self.file, 'query_user_amount')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -156,7 +155,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.settle
 	def test_103_sign_credit(self, r, env):
 		"""上传授信协议"""
-		data = excel_table_byname(self.excel, 'contract_sign')
+		data = excel_table_byname(self.file, 'contract_sign')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'jfx_credit_contract_sign.json')
 		param.update(
@@ -190,7 +189,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.settle
 	def test_104_project_apply(self, r, env):
 		"""进件"""
-		data = excel_table_byname(self.excel, 'test_project')
+		data = excel_table_byname(self.file, 'test_project')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		r.set('jfx_12_periods_sourceProjectId', Common.get_random('sourceProjectId'))
@@ -258,7 +257,7 @@ class TestJfx12PeriodTp:
 			project_id=r.get('jfx_12_periods_projectId'),
 			environment=env
 		)
-		data = excel_table_byname(self.excel, 'project_query_apply_result')
+		data = excel_table_byname(self.file, 'project_query_apply_result')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -288,7 +287,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.settle
 	def test_106_sign_credit(self, r, env):
 		"""上传借款授信协议"""
-		data = excel_table_byname(self.excel, 'contract_sign')
+		data = excel_table_byname(self.file, 'contract_sign')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'jfx_credit_contract_sign.json')
 		param.update(
@@ -322,7 +321,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.settle
 	def test_107_contract_sign(self, r, env):
 		"""上传借款合同"""
-		data = excel_table_byname(self.excel, 'contract_sign')
+		data = excel_table_byname(self.file, 'contract_sign')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'jfx_borrow_periods_contract_sign.json')
 		param.update(
@@ -356,7 +355,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.settle
 	def test_108_pfa(self, r, env):
 		"""放款申请"""
-		data = excel_table_byname(self.excel, 'project_loan')
+		data = excel_table_byname(self.file, 'project_loan')
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -400,7 +399,7 @@ class TestJfx12PeriodTp:
 			environment=env,
 			project_id=r.get('jfx_12_periods_projectId')
 		)
-		data = excel_table_byname(self.excel, 'pfa_query')
+		data = excel_table_byname(self.file, 'pfa_query')
 		param = json.loads(data[0]['param'])
 		param.update({"serviceSn": r.get('jfx_12_periods_pfa_serviceSn')})
 		if len(data[0]['headers']) == 0:
@@ -422,7 +421,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.skip
 	def test_110_early_settlement(self, r, env):
 		"""还款计划试算:提前结清"""
-		data = excel_table_byname(self.excel, 'calculate')
+		data = excel_table_byname(self.file, 'calculate')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -459,7 +458,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.settle
 	def test_111_query_repaymentplan(self, r, env):
 		"""还款计划查询"""
-		data = excel_table_byname(self.excel, 'repayment_plan')
+		data = excel_table_byname(self.file, 'repayment_plan')
 		param = json.loads(data[0]['param'])
 		param.update({"projectId": r.get('jfx_12_periods_projectId')})
 		if len(data[0]['headers']) == 0:
@@ -481,7 +480,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.offline_repay
 	def test_112_repayment(self, r, env):
 		"""还款流水推送"""
-		data = excel_table_byname(self.excel, 'repayment')
+		data = excel_table_byname(self.file, 'repayment')
 		param = json.loads(data[0]['param'])
 		repayment_plan_list = r.get("jfx_12_periods_repayment_plan")
 		success_amount = 0.00
@@ -527,7 +526,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.settle
 	def test_113_repayment(self, r, env):
 		"""还款流水推送:全部结清"""
-		data = excel_table_byname(self.excel, 'repayment')
+		data = excel_table_byname(self.file, 'repayment')
 		param = json.loads(data[0]['param'])
 		for per in range(1, 13):
 			repayment_plan_list = r.get("jfx_12_periods_repayment_plan")
@@ -573,7 +572,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.offline_settle_in_advance
 	def test_114_offline_settle(self, r, env):
 		"""线下还款流水推送：提前全部结清"""
-		data = excel_table_byname(self.excel, 'offline_repay')
+		data = excel_table_byname(self.file, 'offline_repay')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
@@ -624,7 +623,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.offline_repay
 	def test_115_capital_flow(self, r, env):
 		"""资金流水推送"""
-		data = excel_table_byname(self.excel, 'cash_push')
+		data = excel_table_byname(self.file, 'cash_push')
 		param = json.loads(data[0]['param'])
 		success_amount = GetSqlData.get_repayment_amount(
 			project_id=r.get("jfx_12_periods_projectId"), environment=env, period=1)

@@ -27,7 +27,6 @@ logger = Logger(logger="test_syjv2_tp").getlog()
 @allure.feature("随意借V2")
 class TestSyjv2Tp:
 	file = Config().get_item('File', 'syjv2_case_file')
-	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
 
 	@allure.title("随意借进件")
 	@allure.severity("blocker")
@@ -37,7 +36,7 @@ class TestSyjv2Tp:
 	@pytest.mark.comp_repay
 	def test_100_approved(self, r, env):
 		"""随意借V2进件同意接口"""
-		data = excel_table_byname(self.excel, 'approved')
+		data = excel_table_byname(self.file, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo('syjv2', env)
 		param = json.loads(data[0]['param'])
@@ -56,6 +55,7 @@ class TestSyjv2Tp:
 				"transactionId": r.get('syjv2_transactionId')
 			}
 		)
+		param['riskSuggestion']['secondSugStrategy'] = 'R'
 		param['applyInfo'].update({"applyTime": Common.get_time("-")})
 		param['personalInfo'].update(
 			{
@@ -77,8 +77,8 @@ class TestSyjv2Tp:
 			product="pintic"
 		)
 		r.set('syjv2_projectId', rep['content']['projectId'])
-		assert (int(data[0]['msgCode']), rep['resultCode'])
-		assert ("交易成功", rep['content']['message'], "进件失败")
+		assert int(data[0]['msgCode']) == rep['resultCode']
+		assert "交易成功" == rep['content']['message']
 		GetSqlData.change_project_audit_status(
 			project_id=r.get('syjv2_projectId'),
 			environment=env
@@ -92,7 +92,7 @@ class TestSyjv2Tp:
 	@pytest.mark.comp_repay
 	def test_101_loan(self, r, env):
 		"""随意借V2放款接口"""
-		data = excel_table_byname(self.excel, 'loan')
+		data = excel_table_byname(self.file, 'loan')
 		print("接口名称:%s" % data[0]['casename'])
 		GetSqlData.project_audit_status(
 			project_id=r.get('syjv2_projectId'),
@@ -120,8 +120,8 @@ class TestSyjv2Tp:
 			environment=env,
 			product="pintic"
 		)
-		assert (int(data[0]['msgCode']), rep['resultCode'])
-		assert ("交易成功", rep['content']['message'], "放款申请失败")
+		assert int(data[0]['msgCode']) == rep['resultCode']
+		assert "交易成功" == rep['content']['message']
 
 	@allure.title("随意借放款结果查询")
 	@allure.severity("blocker")
@@ -131,7 +131,7 @@ class TestSyjv2Tp:
 	@pytest.mark.comp_repay
 	def test_102_query_loan_status(self, r, env):
 		"""随意借V2放款结果查询接口"""
-		data = excel_table_byname(self.excel, 'query_loan_status')
+		data = excel_table_byname(self.file, 'query_loan_status')
 		print("接口名称:%s" % data[0]['casename'])
 		time.sleep(8)
 		GetSqlData.change_pay_status(
@@ -159,8 +159,8 @@ class TestSyjv2Tp:
 			environment=env,
 			product="pintic"
 		)
-		assert (int(data[0]['msgCode']), rep['resultCode'])
-		assert ("SUCCESS", rep['content']['loanStatus'], "放款失败")
+		assert int(data[0]['msgCode']) == rep['resultCode']
+		assert "SUCCESS" == rep['content']['loanStatus']
 
 	@allure.title("随意借放款同步")
 	@allure.severity("blocker")
@@ -170,7 +170,7 @@ class TestSyjv2Tp:
 	@pytest.mark.comp_repay
 	def test_103_loanasset(self, r, env):
 		"""随意借V2进件放款同步接口"""
-		data = excel_table_byname(self.excel, 'loan_asset')
+		data = excel_table_byname(self.file, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['asset'].update(
@@ -202,8 +202,8 @@ class TestSyjv2Tp:
 			environment=env,
 			product="pintic"
 		)
-		assert (int(data[0]['msgCode']), rep['resultCode'])
-		assert ("交易成功", rep['content']['message'], "资产同步失败")
+		assert int(data[0]['msgCode']) == rep['resultCode']
+		assert "交易成功" == rep['content']['message']
 
 	@allure.title("随意借还款一期")
 	@allure.severity("blocker")
@@ -212,7 +212,7 @@ class TestSyjv2Tp:
 	@pytest.mark.comp_repay
 	def test_104_repayment_one_period(self, r, env):
 		"""随意借V2还款一期"""
-		data = excel_table_byname(self.excel, 'repayment')
+		data = excel_table_byname(self.file, 'repayment')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['repayment'].update(
@@ -307,8 +307,8 @@ class TestSyjv2Tp:
 			environment=env,
 			product="pintic"
 		)
-		assert (rep['resultCode'], data[0]['msgCode'])
-		assert (rep['content']['message'], "交易成功")
+		assert rep['resultCode'] == data[0]['msgCode']
+		assert rep['content']['message'] == "交易成功"
 
 	@allure.title("随意借代偿一期")
 	@allure.severity("blocker")
@@ -316,7 +316,7 @@ class TestSyjv2Tp:
 	@pytest.mark.comp_repay
 	def test_106_compensation(self, r, env):
 		"""随意借V2代偿一期"""
-		data = excel_table_byname(self.excel, 'compensation')
+		data = excel_table_byname(self.file, 'compensation')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['assetSwapInfo'].update(
@@ -385,14 +385,14 @@ class TestSyjv2Tp:
 			environment=env,
 			product="pintic"
 		)
-		assert (rep['resultCode'], data[0]['msgCode'])
+		assert rep['resultCode'] == data[0]['msgCode']
 
 	@allure.title("随意借代偿后还款")
 	@allure.severity("blocker")
 	@pytest.mark.comp_repay
 	def test_107_after_comp_repay(self, r, env):
 		"""随意借V2代偿后还款"""
-		data = excel_table_byname(self.excel, 'after_comp_repay')
+		data = excel_table_byname(self.file, 'after_comp_repay')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		period = 1
@@ -554,8 +554,8 @@ class TestSyjv2Tp:
 			environment=env,
 			product="pintic"
 		)
-		assert (rep['resultCode'], data[0]['msgCode'])
-		assert (rep['content']['message'], "交易成功")
+		assert rep['resultCode'] == data[0]['msgCode']
+		assert rep['content']['message'] == "交易成功"
 
 
 if __name__ == '__main__':

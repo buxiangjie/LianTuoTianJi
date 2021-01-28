@@ -28,8 +28,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 	def setUpClass(cls):
 		cls.env = "qa"
 		cls.r = Common.conn_redis(environment=cls.env)
-		file = Config().get_item('File', 'cfq_24_periods_case_file')
-		cls.excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
+		cls.file = Config().get_item('File', 'cfq_24_periods_case_file')
 
 	@classmethod
 	def tearDownClass(cls):
@@ -37,7 +36,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 
 	def test_100_approved(self):
 		"""橙分期进件同意接口"""
-		data = excel_table_byname(self.excel, 'approved')
+		data = excel_table_byname(self.file, 'approved')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		Common.p2p_get_userinfo(project="cfq_24_periods", environment=self.env)
@@ -88,7 +87,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 
 	def test_101_query_audit_status(self):
 		"""橙分期进件审核结果查询"""
-		data = excel_table_byname(self.excel, 'query_audit_status')
+		data = excel_table_byname(self.file, 'query_audit_status')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -114,7 +113,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 
 	def test_102_loan_notice(self):
 		"""橙分期放款通知接口"""
-		data = excel_table_byname(self.excel, 'loan_notice')
+		data = excel_table_byname(self.file, 'loan_notice')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -145,7 +144,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 	def test_103_loanasset(self):
 		"""橙分期进件放款同步接口"""
 		global period
-		data = excel_table_byname(self.excel, 'loan_asset')
+		data = excel_table_byname(self.file, 'loan_asset')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data("data", "cfq_24_periods_test_loan.json")
 		param['asset'].update(
@@ -187,7 +186,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 	def test_104_repayment(self):
 		"""橙分期24期还款一期"""
 		global period, plan_pay_type, plan_list_detail
-		data = excel_table_byname(self.excel, 'repayment')
+		data = excel_table_byname(self.file, 'repayment')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		period = 1
@@ -347,7 +346,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 	def test_105_settle_in_advance_phase_one(self):
 		"""橙分期在第一期提前结清"""
 		global period
-		data = excel_table_byname(self.excel, 'settle_in_advance')
+		data = excel_table_byname(self.file, 'settle_in_advance')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common().get_json_data('data', 'cfq_24_periods_settle_in_advance_phase_one.json')
 		period = GetSqlData.get_current_period(self.r.get("cfq_24_periods_projectId"), self.env)
@@ -468,7 +467,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 	def test_105_settle_in_advance_phase_two(self):
 		"""橙分期在第二期提前结清"""
 		global period, plan_list_detail
-		data = excel_table_byname(self.excel, 'settle_in_advance')
+		data = excel_table_byname(self.file, 'settle_in_advance')
 		print("接口名称:%s" % data[0]['casename'])
 		param = Common().get_json_data('data', 'cfq_24_periods_settle_in_advance_phase_two.json')
 		period = GetSqlData.get_current_period(self.r.get("cfq_24_periods_projectId"), self.env)
@@ -599,7 +598,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 	# @unittest.skipUnless(sys.argv[4] == "compensation", "条件成立时执行")
 	def test_106_compensation(self):
 		"""橙分期24期代偿一期"""
-		data = excel_table_byname(self.excel, 'compensation')
+		data = excel_table_byname(self.file, 'compensation')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['assetSwapInfo'].update(
@@ -673,7 +672,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 	@unittest.skip("-")
 	def test_107_repurchase(self):
 		"""橙分期24期回购一期"""
-		data = excel_table_byname(self.excel, 'repurchase')
+		data = excel_table_byname(self.file, 'repurchase')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['assetSwapInfo'].update(
@@ -739,7 +738,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 	def test_108_after_comp_repay(self):
 		"""橙分期24期代偿后还款"""
 		global period, plan_pay_type, plan_list_detail
-		data = excel_table_byname(self.excel, 'after_comp_repay')
+		data = excel_table_byname(self.file, 'after_comp_repay')
 		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		period = 1

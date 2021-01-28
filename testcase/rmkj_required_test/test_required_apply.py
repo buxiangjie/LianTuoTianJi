@@ -17,8 +17,7 @@ from config.configer import Config
 @ddt.ddt
 class Apply(unittest.TestCase):
 	file = Config().get_item('File', 'rmkj_required_case_file')
-	excel = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + file
-	excel_data = excel_table_byname(excel, 'apply')
+	excel_data = excel_table_byname(file, 'apply')
 
 	def setUp(self):
 		self.env = sys.argv[3]
