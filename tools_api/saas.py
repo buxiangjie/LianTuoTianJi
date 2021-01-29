@@ -26,11 +26,11 @@ async def index():
 
 
 @router.delete("/ids", name="删除异常数据")
-async def ids(env: str, dtype: str, lis: List):
+async def ids(env: str, dtype: str, lis: List[int]):
 	"""
 	- env: 数据所在环境 test/qa
 	- dtype: 数据类型 project/asset
-	- lis: ID列表[1,2,3,4]
+	- lis: ID列表[str, str, str, str]
 	- 如果是资产,删除asset/asset_fee/asset_extra
 	  /overdue/overdue_detail/fee_plan/asset_swap_apply
 	  /asset_swap_detail/repayment/repayment_detail

@@ -24,7 +24,7 @@ class Ddq6Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = 'qa'
+		cls.env = 'test'
 		cls.r = Common.conn_redis(environment=cls.env)
 		cls.file = Config().get_item('File', 'ddq_case_file')
 
@@ -194,6 +194,7 @@ class Ddq6Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
+	@unittest.skip("-")
 	def test_105_image_upload(self):
 		"""上传图片"""
 		data = excel_table_byname(self.file, 'image_upload')
@@ -346,7 +347,7 @@ class Ddq6Tp(unittest.TestCase):
 		self.r.set("ddq_6_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	@unittest.skipUnless(sys.argv[4] == "repayment", "-")
+	# @unittest.skipUnless(sys.argv[4] == "repayment", "-")
 	# @unittest.skip("跳过")
 	def test_111_calculate(self):
 		"""还款计划试算（已放款）:正常还款"""
@@ -374,7 +375,7 @@ class Ddq6Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	@unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
+	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
 	# @unittest.skip("跳过")
 	def test_112_calculate(self):
 		"""还款计划试算:提前结清"""
@@ -407,8 +408,8 @@ class Ddq6Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	@unittest.skipUnless(sys.argv[4] == "repayment_offline", "-")
-	# @unittest.skip("跳过")
+	# @unittest.skipUnless(sys.argv[4] == "repayment_offline", "-")
+	@unittest.skip("跳过")
 	def test_113_offline_repay_repayment(self):
 		"""线下还款流水推送：正常还一期"""
 		data = excel_table_byname(self.file, 'offline_repay')
@@ -459,8 +460,8 @@ class Ddq6Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	@unittest.skipUnless(sys.argv[4] == "early_settlement_offline", "-")
-	# @unittest.skip("跳过")
+	# @unittest.skipUnless(sys.argv[4] == "early_settlement_offline", "-")
+	@unittest.skip("跳过")
 	def test_114_offline_repay_early_settlement(self):
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.file, 'offline_repay')

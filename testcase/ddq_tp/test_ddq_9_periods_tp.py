@@ -304,14 +304,15 @@ class Ddq9Tp(unittest.TestCase):
 			headers = None
 		else:
 			headers = json.loads(data[0]['headers'])
-		headers["X-TBC-SKIP-SIGN"] = 'true'
-		headers["X-TBC-SKIP-ENCRYPT"] = 'true'
+		# headers["X-TBC-SKIP-SIGN"] = 'true'
+		# headers["X-TBC-SKIP-ENCRYPT"] = 'true'
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			environment=self.env
+			environment=self.env,
+			prod_type="wxjk"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		self.r.set("ddq_9_periods_signId", rep["content"]["signId"])
@@ -340,7 +341,8 @@ class Ddq9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			environment=self.env
+			environment=self.env,
+			prod_type="wxjk"
 		)
 		self.assertEqual(rep['code'], int(data[0]['resultCode']))
 

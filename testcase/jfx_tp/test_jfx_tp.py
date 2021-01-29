@@ -52,7 +52,7 @@ class JfxTp(unittest.TestCase):
 			{
 				"cardNum": self.r.get('jfx_cardNum'),
 				"custName": self.r.get('jfx_custName'),
-				"isDoctor": 1,
+				"isDoctor": 0,
 				"applicantClinicRelationship": 1
 			}
 		)
@@ -197,7 +197,7 @@ class JfxTp(unittest.TestCase):
 			{
 				"loanAmount": 50000.00,
 				"assetInterestRate": 0.14,
-				"userInterestRate": 0.2
+				"userInterestRate": 0.14
 			}
 		)
 		param['cardInfo'].update(

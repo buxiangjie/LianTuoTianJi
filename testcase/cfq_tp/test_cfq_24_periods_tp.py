@@ -74,7 +74,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=self.env,
-			product="gateway",
+			product="pintec",
 			prod_type="pintec"
 		)
 		self.r.set("cfq_24_periods_projectId", rep['content']['projectId'])
@@ -106,7 +106,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=self.env,
-			product="gateway",
+			product="pintec",
 			prod_type="pintec"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
@@ -136,7 +136,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=self.env,
-			product="gateway",
+			product="pintec",
 			prod_type="pintec"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
@@ -176,7 +176,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=self.env,
-			product="gateway",
+			product="pintec",
 			prod_type="pintec"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
@@ -335,13 +335,12 @@ class Cfq24PeriodsTp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=self.env,
-			product="gateway",
+			product="pintec",
 			prod_type="pintec"
 		)
 		self.assertEqual(rep['resultCode'], data[0]['msgCode'])
 		self.assertEqual(rep['content']['message'], "交易成功")
 
-	# @unittest.skipUnless(sys.argv[4] == "advance_phase_one", "条件成立时执行")
 	@unittest.skip("-")
 	def test_105_settle_in_advance_phase_one(self):
 		"""橙分期在第一期提前结清"""
