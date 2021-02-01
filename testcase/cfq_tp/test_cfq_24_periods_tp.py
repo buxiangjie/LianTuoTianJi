@@ -12,14 +12,11 @@ import time
 import sys
 
 from common.common_func import Common
-from log.logger import Logger
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-logger = Logger(logger="test_cfq_24_periods_tp").getlog()
 
 
 class Cfq24PeriodsTp(unittest.TestCase):
@@ -181,7 +178,7 @@ class Cfq24PeriodsTp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['msgCode']))
 
-	# @unittest.skip("-")
+	@unittest.skip("-")
 	# @unittest.skipUnless(sys.argv == 'repayment', "条件成立时执行")
 	def test_104_repayment(self):
 		"""橙分期24期还款一期"""

@@ -12,10 +12,8 @@ import os
 from common.common_func import Common
 from log.ulog import Ulog
 from config.configer import Config
-from log.logger import Logger
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-logger = Ulog().getlog()
 
 
 class GetSqlData:
@@ -127,7 +125,7 @@ class GetSqlData:
 	def credit_set(environment: str, credit_id: str) -> str:
 		"""授信时调用，根据环境判断是否需要等待补偿"""
 		# noinspection PyGlobalUndefined
-		logger.info("开始检查授信步骤")
+		Ulog.info("开始检查授信步骤")
 		if Config().get_item("Switch", "credit") == "1":
 			# GetSqlData.change_credit_step(environment, credit_id)
 			GetSqlData.change_credit_status(environment, credit_id)
@@ -136,15 +134,15 @@ class GetSqlData:
 		version = 1
 		while status != 4:
 			if version > 10:
-				logger.info("授信未成功")
+				Ulog.info("授信未成功")
 				break
 			step = GetSqlData().check_credit_step(environment, credit_id)
 			if step != 4:
-				logger.info(f"当前授信步骤为:{step:d};当前循环次数为:{version:d}")
+				Ulog.info(f"当前授信步骤为:{step:d};当前循环次数为:{version:d}")
 				version += 1
 				time.sleep(10)
 			elif step == 4:
-				logger.info("当前授信已完成,可以进行下个步骤!")
+				Ulog.info("当前授信已完成,可以进行下个步骤!")
 				status = 4
 
 	@staticmethod
@@ -169,7 +167,7 @@ class GetSqlData:
 	def loan_set(environment: str, project_id: str) -> str:
 		"""放款申请后调用，查询放款状态是否成功"""
 		# noinspection PyGlobalUndefined
-		logger.info("开始检查放款步骤")
+		Ulog.info("开始检查放款步骤")
 		Common.trigger_task("projectLoanReparationJob", environment)
 		time.sleep(15)
 		if GetSqlData().check_loan_result(environment, project_id) == -1:
@@ -179,14 +177,14 @@ class GetSqlData:
 				version = 1
 				while GetSqlData().check_loan_result(environment, project_id) != 1:
 					if version > 100:
-						logger.info(f"循环{version - 1}次未查询到放款成功状态，判断为放款失败")
+						Ulog.info(f"循环{version - 1}次未查询到放款成功状态，判断为放款失败")
 						break
 					res = GetSqlData().check_loan_result(environment, project_id)
 					if res == 0:
-						logger.info(f"当前loan_result为:{res};放款失败")
+						Ulog.info(f"当前loan_result为:{res};放款失败")
 						break
 					if res != 1:
-						logger.info(f"当前loan_result为:{res};当前循环次数为:{version}")
+						Ulog.info(f"当前loan_result为:{res};当前循环次数为:{version}")
 						version += 1
 						time.sleep(5)
 			except Exception as e:
@@ -198,7 +196,7 @@ class GetSqlData:
 		# noinspection PyGlobalUndefined
 		finish_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 		if Config().get_item("Switch", "loan") == '1':
-			logger.info("放款开关已关闭，走虚拟放款逻辑")
+			Ulog.info("放款开关已关闭，走虚拟放款逻辑")
 			time.sleep(5)
 			try:
 				conn = GetSqlData.conn_database(environment, source='steamrunner')
@@ -217,7 +215,7 @@ class GetSqlData:
 				cur.close()
 				conn.close()
 		else:
-			logger.info("放款开关已开启,走真实放款流程")
+			Ulog.info("放款开关已开启,走真实放款流程")
 
 	@staticmethod
 	def get_asset_id(environment: str, project_id: str) -> str:
@@ -442,11 +440,11 @@ class GetSqlData:
 		version = 1
 		while True:
 			if version > 10:
-				logger.info(f'''当前查询次数{version}''')
+				Ulog.info(f'''当前查询次数{version}''')
 				break
 			user_amount = GetSqlData.user_amount(user_id, environment)
 			if user_amount > 0.00:
-				logger.info("额度检查完成")
+				Ulog.info("额度检查完成")
 				break
 			elif user_amount == 0.000000:
 				version += 1
@@ -489,20 +487,20 @@ class GetSqlData:
 	@staticmethod
 	def project_result(project_id: str, environment: str) -> str:
 		"""进件审核结果查询"""
-		logger.info("开始检查进件审核步骤")
+		Ulog.info("开始检查进件审核步骤")
 		try:
 			version = 1
 			while True:
 				if version > 10:
-					logger.info(f"{version}次未查询到进件审核成功状态")
+					Ulog.info(f"{version}次未查询到进件审核成功状态")
 					break
 				audit_status = GetSqlData().project_audit_status(project_id, environment)
 				if audit_status != 2:
-					logger.info(f"当前进件审核状态为:{audit_status};当前查询次数为:{version}")
+					Ulog.info(f"当前进件审核状态为:{audit_status};当前查询次数为:{version}")
 					version += 1
 					time.sleep(10)
 				elif audit_status == 2:
-					logger.info("进件审核成功")
+					Ulog.info("进件审核成功")
 					break
 		except Exception as e:
 			raise e
@@ -512,7 +510,7 @@ class GetSqlData:
 		"""修改进件审核状态为通过"""
 		# noinspection PyGlobalUndefined
 		if Config().get_item("Switch", "project") == '1':
-			logger.info("风控已关闭，走虚拟进件风控逻辑")
+			Ulog.info("风控已关闭，走虚拟进件风控逻辑")
 			try:
 				conn = GetSqlData.conn_database(environment)
 				cur = conn.cursor()
@@ -525,7 +523,7 @@ class GetSqlData:
 				cur.close()
 				conn.close()
 		else:
-			logger.info("风控开关已开启，走真实风控流程")
+			Ulog.info("风控开关已开启，走真实风控流程")
 			GetSqlData.project_result(project_id, environment)
 
 	@staticmethod

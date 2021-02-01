@@ -5,9 +5,7 @@
 @describe: 
 """
 from common.get_sql_data import GetSqlData
-from log.ulog import Ulog
 
-logger = Ulog().getlog()
 
 
 class ToolsSql(GetSqlData):

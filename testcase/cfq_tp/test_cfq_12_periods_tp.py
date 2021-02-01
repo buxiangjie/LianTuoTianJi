@@ -12,18 +12,15 @@ import pytest
 import allure
 
 from common.common_func import Common
-from log.logger import Logger
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-logger = Logger(logger="test_cfq_12_periods_tp").getlog()
 
 @allure.feature("橙分期12期")
 class TestCfq12PeriodsTp:
-
 	file = Config().get_item('File', 'cfq_12_periods_case_file')
 
 	@allure.title("橙分期进件")
@@ -198,7 +195,8 @@ class TestCfq12PeriodsTp:
 			i.update(
 				{
 					"sourcePlanId": Common.get_random("sourceProjectId"),
-					"planPayDate": "-".join(Common.get_repaydate(period=period)[period - 1].split(" ")[0].split("-")[0:2]) + "-10"
+					"planPayDate": "-".join(
+						Common.get_repaydate(period=period)[period - 1].split(" ")[0].split("-")[0:2]) + "-10"
 				}
 			)
 		if len(data[0]['headers']) == 0:
