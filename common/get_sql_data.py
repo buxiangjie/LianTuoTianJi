@@ -155,7 +155,7 @@ class GetSqlData:
 			sql = f'''Select loan_result from sandbox_saas.project_detail where id = {project_id};'''
 			cur.execute(sql)
 			loan_result = cur.fetchone().get('loan_result')
-			print(f"loan_result:{loan_result}")
+			Ulog.info(f"loan_result:{loan_result}")
 			return loan_result
 		except Exception as e:
 			raise e
@@ -169,7 +169,7 @@ class GetSqlData:
 		# noinspection PyGlobalUndefined
 		Ulog.info("开始检查放款步骤")
 		Common.trigger_task("projectLoanReparationJob", environment)
-		time.sleep(15)
+		time.sleep(10)
 		if GetSqlData().check_loan_result(environment, project_id) == -1:
 			raise Exception("放款状态不正确，未申请放款成功")
 		else:

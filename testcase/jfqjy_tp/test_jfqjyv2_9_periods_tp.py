@@ -25,7 +25,7 @@ class JfqjyV29Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = "test"
+		cls.env = "qa"
 		cls.r = Common.conn_redis(environment=cls.env)
 		cls.file = Config().get_item('File', 'jfq_case_file')
 
@@ -66,8 +66,8 @@ class JfqjyV29Tp(unittest.TestCase):
 			{
 				"loanAmount": 33333.33,
 				"loanTerm": 9,
-				"assetInterestRate": 0.153,
-				"userInterestRate": 0.153
+				"assetInterestRate": 0.154,
+				"userInterestRate": 0.087010
 			}
 		)
 		param['personalInfo'].update(
@@ -367,7 +367,7 @@ class JfqjyV29Tp(unittest.TestCase):
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
-	# @unittest.skip("跳过")
+	@unittest.skip("即科不支持退货")
 	def test_112_calculate(self):
 		"""还款计划试算:退货"""
 		data = excel_table_byname(self.file, 'calculate')
@@ -392,10 +392,6 @@ class JfqjyV29Tp(unittest.TestCase):
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
 			environment=self.env
-		)
-		self.r.set(
-			"jfqjyv2_9_periods_return_repayment_plan",
-			json.dumps(rep['content']['repaymentPlanList'])
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
