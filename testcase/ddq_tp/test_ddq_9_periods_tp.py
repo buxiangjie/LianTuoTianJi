@@ -22,7 +22,7 @@ class Ddq9Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = 'test'
+		cls.env = 'qa'
 		cls.r = Common.conn_redis(environment=cls.env)
 		cls.file = Config().get_item('File', 'ddq_case_file')
 
@@ -301,8 +301,8 @@ class Ddq9Tp(unittest.TestCase):
 			headers = None
 		else:
 			headers = json.loads(data[0]['headers'])
-		# headers["X-TBC-SKIP-SIGN"] = 'true'
-		# headers["X-TBC-SKIP-ENCRYPT"] = 'true'
+		headers["X-TBC-SKIP-SIGN"] = 'true'
+		headers["X-TBC-SKIP-ENCRYPT"] = 'true'
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
