@@ -10,14 +10,11 @@ import json
 import ddt
 import sys
 from common.common_func import Common
-from log.logger import Logger
 from common.open_excel import excel_table_byname
 from config.configer import Config
 
 # 把当前目录的父目录加到sys.path中
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
-
-logger = Logger(logger="roma_credit_apply_null").getlog()
 
 
 @ddt.ddt
@@ -31,7 +28,6 @@ class RomaCreditApplyNull(unittest.TestCase):
 
 	@ddt.data(*excel_data)
 	def test_credit_apply(self, data):
-		print("接口名称:%s" % data['casename'])
 		case = data['casename']
 		param = json.loads(self.param)
 		key = str(case).split("空")[1].split(".")[0]

@@ -34,7 +34,6 @@ class JfxPorject(unittest.TestCase):
 
 	@ddt.data(*excel_data)
 	def test_project(self, data):
-		print("接口名称:%s" % data['casename'])
 		case = data['casename']
 		param = json.loads(self.param)
 		key = str(case).split("空")[1].split(".")[0]

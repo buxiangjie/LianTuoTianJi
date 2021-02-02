@@ -25,7 +25,6 @@ class CreditApply(unittest.TestCase):
 
 	@ddt.data(*excel_data)
 	def test_credit_apply(self, data):
-		print("接口名称:%s" % data['casename'])
 		param = json.loads(data['param'])
 		if len(data['headers']) == 0:
 			headers = None

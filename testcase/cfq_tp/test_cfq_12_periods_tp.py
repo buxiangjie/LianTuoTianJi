@@ -34,7 +34,6 @@ class TestCfq12PeriodsTp:
 	def test_100_approved(self, r, env):
 		"""橙分期进件同意接口"""
 		data = excel_table_byname(self.file, 'approved')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		Common.p2p_get_userinfo("cfq_12_periods", env)
 		r.mset(
@@ -102,7 +101,6 @@ class TestCfq12PeriodsTp:
 			environment=env
 		)
 		data = excel_table_byname(self.file, 'query_audit_status')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -134,7 +132,6 @@ class TestCfq12PeriodsTp:
 	def test_101_loan_notice(self, r, env):
 		"""橙分期放款通知接口"""
 		data = excel_table_byname(self.file, 'loan_notice')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -171,7 +168,6 @@ class TestCfq12PeriodsTp:
 	def test_102_loanasset(self, r, env):
 		"""橙分期进件放款同步接口"""
 		data = excel_table_byname(self.file, 'loan_asset')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		first_year = str(Common.get_repaydate(12)[0].split(' ')[0].split('-')[0])
 		first_day = str(Common.get_repaydate(12)[0].split(' ')[0].split('-')[1])
@@ -223,7 +219,6 @@ class TestCfq12PeriodsTp:
 	def test_103_sign_borrow(self, r, env):
 		"""上传借款协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'cfq_sign_borrow.json')
 		param.update(
 			{
@@ -255,7 +250,6 @@ class TestCfq12PeriodsTp:
 	def test_104_repayment(self, r, env):
 		"""橙分期12期还款一期"""
 		data = excel_table_byname(self.file, 'repayment')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		period = 1
 		param['repayment'].update(
@@ -393,7 +387,6 @@ class TestCfq12PeriodsTp:
 	def test_105_settle_in_advance_phase_one(self, r, env):
 		"""橙分期在第一期提前结清"""
 		data = excel_table_byname(self.file, 'settle_in_advance')
-		print("接口名称:%s" % data[0]['casename'])
 		param = Common().get_json_data('data', 'cfq_12_periods_settle_in_advance_phase_one.json')
 		period = GetSqlData.get_current_period(r.get("cfq_12_periods_projectId"), env)
 		# 剩余在贷本金
@@ -519,7 +512,6 @@ class TestCfq12PeriodsTp:
 	def test_107_compensation(self, r, env):
 		"""橙分期12期代偿一期"""
 		data = excel_table_byname(self.file, 'compensation')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['assetSwapInfo'].update(
 			{
@@ -588,7 +580,6 @@ class TestCfq12PeriodsTp:
 	def test_108_repurchase(self, r, env):
 		"""橙分期12期回购一期"""
 		data = excel_table_byname(self.file, 'repurchase')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['assetSwapInfo'].update(
 			{
@@ -649,7 +640,6 @@ class TestCfq12PeriodsTp:
 	def test_109_after_comp_repay(self, r, env):
 		"""橙分期12期代偿后还款"""
 		data = excel_table_byname(self.file, 'after_comp_repay')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		period = 1
 		param['repayment'].update(
@@ -810,7 +800,6 @@ class TestCfq12PeriodsTp:
 	def test_repay_two_periods(self, r, env):
 		"""橙分期一次还款2期"""
 		data = excel_table_byname(self.file, 'repay_two_periods')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param['repayment'].update(
 			{

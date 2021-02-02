@@ -9,11 +9,8 @@ import json
 import ddt
 
 from common.common_func import Common
-from log.logger import Logger
 from common.open_excel import excel_table_byname
 from config.configer import Config
-
-logger = Logger(logger="roma_credit_apply").getlog()
 
 
 @ddt.ddt
@@ -27,7 +24,6 @@ class RomaCreditApply(unittest.TestCase):
 
 	@ddt.data(*excel_data)
 	def test_credit_apply(self, data):
-		print("接口名称:%s" % data['casename'])
 		case = data['casename']
 		param = json.loads(self.param)
 		key = str(case).split("项")[1].split(".")[0]

@@ -12,14 +12,11 @@ import time
 import sys
 
 from common.common_func import Common
-from log.logger import Logger
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-logger = Logger(logger="test_jfx_3_periods_tp").getlog()
 
 
 class Jfx3PeriodTp(unittest.TestCase):
@@ -37,7 +34,6 @@ class Jfx3PeriodTp(unittest.TestCase):
 	def test_0_credit_apply(self):
 		"""额度授信"""
 		data = excel_table_byname(self.file, 'credit_apply_data')
-		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo('jfx_3_periods', self.env)
 		self.r.mset(
 			{
@@ -90,7 +86,6 @@ class Jfx3PeriodTp(unittest.TestCase):
 			credit_id=self.r.get("jfx_3_periods_creditId")
 		)
 		data = excel_table_byname(self.file, 'credit_query_result')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update({"creditId": self.r.get('jfx_3_periods_creditId')})
 		if len(data[0]['headers']) == 0:
@@ -109,7 +104,6 @@ class Jfx3PeriodTp(unittest.TestCase):
 	def test_2_query_user_amount(self):
 		"""用户额度查询"""
 		data = excel_table_byname(self.file, 'query_user_amount')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -133,7 +127,6 @@ class Jfx3PeriodTp(unittest.TestCase):
 	def test_3_sign_credit(self):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'jfx_credit_contract_sign.json')
 		param.update(
 			{
@@ -161,7 +154,6 @@ class Jfx3PeriodTp(unittest.TestCase):
 	def test_4_project_apply(self):
 		"""进件"""
 		data = excel_table_byname(self.file, 'test_project')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		self.r.set('jfx_3_periods_sourceProjectId', Common.get_random('sourceProjectId'))
 		param.update(
@@ -221,7 +213,6 @@ class Jfx3PeriodTp(unittest.TestCase):
 			environment=self.env
 		)
 		data = excel_table_byname(self.file, 'project_query_apply_result')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -245,7 +236,6 @@ class Jfx3PeriodTp(unittest.TestCase):
 	def test_51_sign_credit(self):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'jfx_credit_contract_sign.json')
 		param.update(
 			{
@@ -273,7 +263,6 @@ class Jfx3PeriodTp(unittest.TestCase):
 	def test_6_contract_sign(self):
 		"""上传借款合同"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'jfx_borrow_periods_contract_sign.json')
 		param.update(
 			{
@@ -511,7 +500,6 @@ class Jfx3PeriodTp(unittest.TestCase):
 	def test_D_offline_partial(self):
 		"""线下还款:部分还款"""
 		data = excel_table_byname(self.file, 'offline_partial')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{

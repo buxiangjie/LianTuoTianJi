@@ -35,7 +35,6 @@ class Cfq12PeriodsTp(unittest.TestCase):
 	def test_100_approved(self):
 		"""橙分期进件同意接口"""
 		data = excel_table_byname(self.file, 'approved')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		Common.p2p_get_userinfo("cfq_12_periods_return", self.env)
 		self.r.mset(
@@ -92,7 +91,6 @@ class Cfq12PeriodsTp(unittest.TestCase):
 			environment=self.env
 		)
 		data = excel_table_byname(self.file, 'query_audit_status')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -117,7 +115,6 @@ class Cfq12PeriodsTp(unittest.TestCase):
 	def test_101_loan_notice(self):
 		"""橙分期放款通知接口"""
 		data = excel_table_byname(self.file, 'loan_notice')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -148,7 +145,6 @@ class Cfq12PeriodsTp(unittest.TestCase):
 		"""橙分期进件放款同步接口"""
 		global period
 		data = excel_table_byname(self.file, 'loan_asset')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		first_year = str(Common.get_repaydate(12)[0].split(' ')[0].split('-')[0])
 		first_day = str(Common.get_repaydate(12)[0].split(' ')[0].split('-')[1])

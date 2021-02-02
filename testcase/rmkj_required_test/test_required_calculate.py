@@ -5,7 +5,6 @@
 @describe:任买医美还款试算接口字段必填项校验
 """
 import unittest
-import os
 import json
 import ddt
 import sys
@@ -27,7 +26,6 @@ class Calculate(unittest.TestCase):
 
 	@ddt.data(*excel_data)
 	def test_calculate(self, data):
-		print("接口名称:%s" % data['casename'])
 		param = json.loads(data['param'])
 		headers = json.loads(data['headers'])
 		rep = Common.response(

@@ -31,7 +31,6 @@ class TestDdq12Tp:
 	def test_100_apply(self, r, env):
 		"""进件申请"""
 		data = excel_table_byname(self.file, 'apply')
-		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo('ddq_12_periods', env)
 		r.mset(
 			{
@@ -86,7 +85,6 @@ class TestDdq12Tp:
 	def test_101_sign_credit(self, r, env):
 		"""上传进件授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'kkd_sign_credit.json')
 		param.update(
 			{
@@ -122,7 +120,6 @@ class TestDdq12Tp:
 			environment=env
 		)
 		data = excel_table_byname(self.file, 'query_apply_result')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -152,7 +149,6 @@ class TestDdq12Tp:
 	def test_103_sign_borrow(self, r, env):
 		"""上传借款协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'kkd_sign_borrow.json')
 		param.update(
 			{
@@ -185,7 +181,6 @@ class TestDdq12Tp:
 	def test_104_sign_guarantee(self, r, env):
 		"""上传担保函"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'kkd_sign_guarantee.json')
 		param.update(
 			{
@@ -218,7 +213,6 @@ class TestDdq12Tp:
 	def test_105_image_upload(self, r, env):
 		"""上传图片"""
 		data = excel_table_byname(self.file, 'image_upload')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update({"associationId": r.get('ddq_12_periods_projectId')})
 		if len(data[0]['headers']) == 0:
@@ -242,7 +236,6 @@ class TestDdq12Tp:
 	def test_106_contact_query(self, r, env):
 		"""合同结果查询:获取签章后的借款协议"""
 		data = excel_table_byname(self.file, 'contract_query')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -274,7 +267,6 @@ class TestDdq12Tp:
 	def test_107_calculate(self, r, env):
 		"""还款计划试算（未放款）:正常还款"""
 		data = excel_table_byname(self.file, 'calculate')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -305,7 +297,6 @@ class TestDdq12Tp:
 	def test_108_loan_pfa(self, r, env):
 		"""放款申请"""
 		data = excel_table_byname(self.file, 'loan_pfa')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		r.set("ddq_12_periods_loan_serviceSn", Common.get_random("serviceSn"))
 		param.update(
@@ -345,7 +336,6 @@ class TestDdq12Tp:
 		"""放款结果查询"""
 		GetSqlData.loan_set(environment=env, project_id=r.get('ddq_12_periods_projectId'))
 		data = excel_table_byname(self.file, 'pfa_query')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update({"serviceSn": r.get("ddq_12_periods_loan_serviceSn")})
 		if len(data[0]['headers']) == 0:
@@ -370,7 +360,6 @@ class TestDdq12Tp:
 	def test_110_query_repayment_plan(self, r, env):
 		"""国投云贷还款计划查询"""
 		data = excel_table_byname(self.file, 'query_repayment_plan')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -400,7 +389,6 @@ class TestDdq12Tp:
 	def test_111_calculate(self, r, env):
 		"""还款计划试算:提前结清"""
 		data = excel_table_byname(self.file, 'calculate')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -436,7 +424,6 @@ class TestDdq12Tp:
 	def test_112_offline_repay_repayment(self, r, env):
 		"""线下还款流水推送：正常还一期"""
 		data = excel_table_byname(self.file, 'offline_repay')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		period = 1
 		plan_pay_date = GetSqlData.get_repayment_detail(
@@ -489,7 +476,6 @@ class TestDdq12Tp:
 	def test_113_offline_repay_early_settlement(self, r, env):
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.file, 'offline_repay')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
 			project_id=r.get("ddq_12_periods_projectId"),
@@ -540,7 +526,6 @@ class TestDdq12Tp:
 	def test_114_debt_transfer(self, r, env):
 		"""上传债转函"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'kkd_debt_transfer.json')
 		param.update(
 			{

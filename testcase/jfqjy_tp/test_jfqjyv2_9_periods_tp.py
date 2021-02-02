@@ -36,7 +36,6 @@ class JfqjyV29Tp(unittest.TestCase):
 	def test_100_apply(self):
 		"""进件"""
 		data = excel_table_byname(self.file, 'apply')
-		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo('jfqjyv2_9_periods', self.env)
 		self.r.mset(
 			{
@@ -95,7 +94,6 @@ class JfqjyV29Tp(unittest.TestCase):
 	def test_101_sign_credit(self):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'jfq_sign_credit.json')
 		param.update(
 			{
@@ -127,7 +125,6 @@ class JfqjyV29Tp(unittest.TestCase):
 			environment=self.env
 		)
 		data = excel_table_byname(self.file, 'query_apply_result')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -152,7 +149,6 @@ class JfqjyV29Tp(unittest.TestCase):
 	def test_103_sign_borrow(self):
 		"""上传借款协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'jfq_sign_borrow.json')
 		param.update(
 			{
@@ -181,7 +177,6 @@ class JfqjyV29Tp(unittest.TestCase):
 	def test_105_image_upload(self):
 		"""上传图片"""
 		data = excel_table_byname(self.file, 'image_upload')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update({"associationId": self.r.get('jfqjyv2_9_periods_projectId')})
 		if len(data[0]['headers']) == 0:
@@ -200,7 +195,6 @@ class JfqjyV29Tp(unittest.TestCase):
 	def test_106_contact_query(self):
 		"""合同结果查询:获取签章后的借款协议"""
 		data = excel_table_byname(self.file, 'contract_query')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -227,7 +221,6 @@ class JfqjyV29Tp(unittest.TestCase):
 	def test_107_calculate(self):
 		"""还款计划试算（未放款）:正常还款"""
 		data = excel_table_byname(self.file, 'calculate')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -253,7 +246,6 @@ class JfqjyV29Tp(unittest.TestCase):
 	def test_108_loan_pfa(self):
 		"""放款申请"""
 		data = excel_table_byname(self.file, 'loan_pfa')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		self.r.set("jfqjyv2_9_periods_loan_serviceSn", Common.get_random("serviceSn"))
 		param.update(
@@ -290,7 +282,6 @@ class JfqjyV29Tp(unittest.TestCase):
 		"""放款结果查询"""
 		GetSqlData.loan_set(environment=self.env, project_id=self.r.get('jfqjyv2_9_periods_projectId'))
 		data = excel_table_byname(self.file, 'pfa_query')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update({"serviceSn": self.r.get("jfqjyv2_9_periods_loan_serviceSn")})
 		if len(data[0]['headers']) == 0:
@@ -310,7 +301,6 @@ class JfqjyV29Tp(unittest.TestCase):
 	def test_110_query_repayment_plan(self):
 		"""国投云贷还款计划查询"""
 		data = excel_table_byname(self.file, 'query_repayment_plan')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -337,7 +327,6 @@ class JfqjyV29Tp(unittest.TestCase):
 	def test_111_calculate(self):
 		"""还款计划试算:提前结清"""
 		data = excel_table_byname(self.file, 'calculate')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -371,7 +360,6 @@ class JfqjyV29Tp(unittest.TestCase):
 	def test_112_calculate(self):
 		"""还款计划试算:退货"""
 		data = excel_table_byname(self.file, 'calculate')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -400,7 +388,6 @@ class JfqjyV29Tp(unittest.TestCase):
 	def test_113_offline_repay_repayment(self):
 		"""线下还款流水推送：正常还一期"""
 		data = excel_table_byname(self.file, 'offline_repay')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		period = 1
 		plan_pay_date = GetSqlData.get_repayment_detail(
@@ -452,7 +439,6 @@ class JfqjyV29Tp(unittest.TestCase):
 	def test_114_offline_nrepay_early_settlement(self):
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.file, 'offline_repay')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
 			project_id=self.r.get("jfqjyv2_9_periods_projectId"),
@@ -502,7 +488,6 @@ class JfqjyV29Tp(unittest.TestCase):
 	def test_115_debt_transfer(self):
 		"""上传债转函"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'kkd_debt_transfer.json')
 		param.update(
 			{
@@ -531,7 +516,6 @@ class JfqjyV29Tp(unittest.TestCase):
 	def test_116_return(self):
 		"""退货"""
 		data = excel_table_byname(self.file, 'offline_repay')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
 			project_id=self.r.get("jfqjyv2_9_periods_projectId"),

@@ -12,14 +12,12 @@ import time
 import sys
 
 from common.common_func import Common
-from log.logger import Logger
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-logger = Logger(logger="test_jfx_tp").getlog()
 
 
 class JfxTp(unittest.TestCase):
@@ -37,7 +35,6 @@ class JfxTp(unittest.TestCase):
 	def test_100_credit_apply(self):
 		"""额度授信"""
 		data = excel_table_byname(self.file, 'credit_apply_data')
-		print("接口名称:%s" % data[0]['casename'])
 		Common.p2p_get_userinfo('jfx', self.env)
 		self.r.mset(
 			{
@@ -93,7 +90,6 @@ class JfxTp(unittest.TestCase):
 	def test_101_sign_credit(self):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'jfx_credit_contract_sign.json')
 		param.update(
 			{
@@ -121,7 +117,6 @@ class JfxTp(unittest.TestCase):
 	def test_102_query_result(self):
 		"""授信结果查询"""
 		data = excel_table_byname(self.file, 'credit_query_result')
-		print("接口名称:%s" % data[0]['casename'])
 		GetSqlData.credit_set(
 			environment=self.env,
 			credit_id=self.r.get("jfx_creditId")
@@ -144,7 +139,6 @@ class JfxTp(unittest.TestCase):
 	def test_103_query_user_amount(self):
 		"""用户额度查询"""
 		data = excel_table_byname(self.file, 'query_user_amount')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -168,7 +162,6 @@ class JfxTp(unittest.TestCase):
 	def test_104_project_apply(self):
 		"""进件"""
 		data = excel_table_byname(self.file, 'test_project')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		self.r.set('jfx_sourceProjectId', Common.get_random('sourceProjectId'))
 		param.update(
@@ -230,7 +223,6 @@ class JfxTp(unittest.TestCase):
 			environment=self.env
 		)
 		data = excel_table_byname(self.file, 'project_query_apply_result')
-		print("接口名称:%s" % data[0]['casename'])
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
@@ -254,7 +246,6 @@ class JfxTp(unittest.TestCase):
 	def test_106_sign_credit(self):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'jfx_credit_contract_sign.json')
 		param.update(
 			{
@@ -282,7 +273,6 @@ class JfxTp(unittest.TestCase):
 	def test_107_contract_sign(self):
 		"""上传借款合同"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		print("接口名称:%s" % data[0]['casename'])
 		param = Common.get_json_data('data', 'jfx_borrow_period_contract_sign.json')
 		param.update(
 			{
