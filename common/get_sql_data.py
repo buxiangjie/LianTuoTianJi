@@ -10,6 +10,7 @@ import sys
 import os
 
 from common.common_func import Common
+from typing import Optional
 from log.ulog import Ulog
 from config.configer import Config
 
@@ -19,7 +20,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 class GetSqlData:
 
 	@staticmethod
-	def conn_database(environment, source='saas'):
+	def conn_database(environment, source: Optional[str] = "saas"):
 		"""
 		数据库连接
 		:param source: str
@@ -35,7 +36,45 @@ class GetSqlData:
 			raise e
 
 	@staticmethod
-	def get_sub_table(environment: str, asset_id: int):
+	def exec_update(
+			environment: str,
+			sql: str,
+			source: Optional[str] = "saas"
+	):
+		"""执行更新语句"""
+		try:
+			conn = GetSqlData.conn_database(environment, source)
+			cur = conn.cursor()
+			cur.execute(sql)
+			conn.commit()
+			Ulog.info(f"执行sql:{sql}")
+		except Exception as e:
+			raise e
+		finally:
+			conn.rollback()
+			cur.close()
+			conn.close()
+
+	@staticmethod
+	def exec_select(
+			environment: str,
+			sql: str,
+			source: Optional[str] = "saas"
+	) -> list:
+		"""执行查询语句"""
+		try:
+			conn = GetSqlData.conn_database(environment, source)
+			cur = conn.cursor()
+			cur.execute(sql)
+			return cur.fetchall()
+		except Exception as e:
+			raise e
+		finally:
+			cur.close()
+			conn.close()
+
+	@staticmethod
+	def get_sub_table(environment: str, asset_id: int) -> str:
 		# noinspection PyGlobalUndefined
 		if environment == "test":
 			table = str((asset_id % 8 + 1))
@@ -49,77 +88,37 @@ class GetSqlData:
 		检查授信步骤
 		"""
 		# noinspection PyGlobalUndefined
-		try:
-			conn = GetSqlData.conn_database(environment)
-			cur = conn.cursor()
-			sql = f'''Select credit_step from sandbox_saas.credit where id = {credit_id};'''
-			cur.execute(sql)
-			credit_step = cur.fetchone().get('credit_step')
-			return int(credit_step)
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+		sql = f'''Select credit_step from sandbox_saas.credit where id = {credit_id};'''
+		return GetSqlData.exec_select(environment, sql)[0].get('credit_step')
 
 	@staticmethod
 	def change_credit_step(environment: str, credit_id: str) -> str:
 		"""修改罗马车贷/车置宝授信信息"""
 		# noinspection PyGlobalUndefined
-		conn = GetSqlData.conn_database(environment)
-		try:
-			cur = conn.cursor()
-			sql = """
-				UPDATE sandbox_saas_centaur.apply 
-				set approve_status='3',ds_success='3',indicator='{}' WHERE apply_id=%s;
-				""" % credit_id
-			cur.execute(sql)
-			conn.commit()
-		except Exception as e:
-			conn.rollback()
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+		sql = """
+			UPDATE sandbox_saas_centaur.apply 
+			set approve_status='3',ds_success='3',indicator='{}' WHERE apply_id=%s;
+			""" % credit_id
+		GetSqlData.exec_update(environment, sql)
 
 	@staticmethod
 	def change_jfx_credit_step(environment: str, user_id: str) -> str:
 		"""修改牙医贷授信信息"""
 		# noinspection PyGlobalUndefined
-		conn = GetSqlData.conn_database(environment)
-		try:
-			cur = conn.cursor()
-			sql = f"""
-				UPDATE sandbox_saas_athena.risk_apply 
-				set audit_result='APPROVE',quota='300000.00',level='1',step='COMPLETED' 
-				WHERE user_id={user_id};
-				"""
-			cur.execute(sql)
-			conn.commit()
-		except Exception as e:
-			conn.rollback()
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+		sql = f"""
+			UPDATE sandbox_saas_athena.risk_apply 
+			set audit_result='APPROVE',quota='300000.00',level='1',step='COMPLETED' 
+			WHERE user_id={user_id};
+			"""
+		GetSqlData.exec_update(environment, sql)
 
 	@staticmethod
 	def change_credit_status(environment: str, credit_id: str) -> str:
 		"""修改授信表状态与步骤"""
 		# noinspection PyGlobalUndefined
-		conn = GetSqlData.conn_database(environment)
-		try:
-			cur = conn.cursor()
-			create_time = Common.get_new_time("before", "minutes", 10)
-			sql = f"""update sandbox_saas.credit set create_time='{create_time}' where id='{credit_id}';"""
-			cur.execute(sql)
-			conn.commit()
-		except Exception as e:
-			conn.rollback()
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+		create_time = Common.get_new_time("before", "minutes", 10)
+		sql = f"""update sandbox_saas.credit set create_time='{create_time}' where id='{credit_id}';"""
+		GetSqlData.exec_update(environment, sql)
 
 	@staticmethod
 	def credit_set(environment: str, credit_id: str) -> str:
@@ -149,19 +148,10 @@ class GetSqlData:
 	def check_loan_result(environment: str, project_id: str) -> str:
 		"""查询放款状态"""
 		# noinspection PyGlobalUndefined
-		try:
-			conn = GetSqlData.conn_database(environment)
-			cur = conn.cursor()
-			sql = f'''Select loan_result from sandbox_saas.project_detail where id = {project_id};'''
-			cur.execute(sql)
-			loan_result = cur.fetchone().get('loan_result')
-			Ulog.info(f"loan_result:{loan_result}")
-			return loan_result
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+		sql = f"""Select loan_result from sandbox_saas.project_detail where id = {project_id};"""
+		loan_result = GetSqlData.exec_select(environment, sql)[0].get('loan_result')
+		Ulog.info(f"loan_result:{loan_result}")
+		return loan_result
 
 	@staticmethod
 	def loan_set(environment: str, project_id: str) -> str:
@@ -198,22 +188,12 @@ class GetSqlData:
 		if Config().get_item("Switch", "loan") == '1':
 			Ulog.info("放款开关已关闭，走虚拟放款逻辑")
 			time.sleep(5)
-			try:
-				conn = GetSqlData.conn_database(environment, source='steamrunner')
-				cur = conn.cursor()
-				sql = f"""
-					Update sandbox_saas_steamrunner.sr_pay_order 
-					set code=2000,msg='成功',finish_time='{finish_time}' 
-					where project_id={project_id}
-					"""
-				cur.execute(sql)
-				conn.commit()
-			except Exception as e:
-				conn.rollback()
-				raise e
-			finally:
-				cur.close()
-				conn.close()
+			sql = f"""
+				Update sandbox_saas_steamrunner.sr_pay_order 
+				set code=2000,msg='成功',finish_time='{finish_time}' 
+				where project_id={project_id}
+				"""
+			GetSqlData.exec_update(environment, sql)
 		else:
 			Ulog.info("放款开关已开启,走真实放款流程")
 
@@ -221,218 +201,133 @@ class GetSqlData:
 	def get_asset_id(environment: str, project_id: str) -> str:
 		"""获取资产id"""
 		# noinspection PyGlobalUndefined
-		try:
-			conn = GetSqlData.conn_database(environment)
-			cur = conn.cursor()
-			sql = f"""select id from sandbox_saas.asset WHERE project_id={project_id};"""
-			cur.execute(sql)
-			msg = cur.fetchone().get("id")
-			return msg
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+		sql = f"""select id from sandbox_saas.asset WHERE project_id={project_id};"""
+		return GetSqlData.exec_select(environment, sql)[0].get("id")
 
 	@staticmethod
-	def get_user_repayment_detail(project_id, environment, period, repayment_plan_type, feecategory=2002) -> dict:
+	def get_user_repayment_detail(
+			project_id: str,
+			environment: str,
+			period: int,
+			repayment_plan_type: str,
+			feecategory: int = 2002
+	) -> dict:
 		"""
 		获取用户还款计划中的关联：
 		渠道计划id
 		计划还款时间
 		剩余应还金额
-		:rtype:
 		"""
 		# noinspection PyGlobalUndefined, msg
-		try:
-			asset_id = GetSqlData.get_asset_id(environment, project_id)
-			if repayment_plan_type in ["1", "2"]:
-				plan_table = 'user_repayment_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
-				sql = f"""
-					select * from {plan_table}
-					where asset_id = {str(asset_id)}
-					and period = {str(period)}
-					and repayment_plan_type = {str(repayment_plan_type)};
-					"""
-				conn = GetSqlData.conn_database(environment)
-				cur = conn.cursor()
-			elif feecategory == 3003:
-				plan_table = 'user_fee_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
-				sql = f"""
-					select * from {plan_table} 
-					where asset_id = {str(asset_id)} 
-					and period = {str(period)} and fee_category = {str(repayment_plan_type)};
-					"""
-				conn = GetSqlData.conn_database(environment)
-				cur = conn.cursor()
-			else:
-				plan_table = 'fee_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
-				sql = f"""
-					select plan_pay_date,rest_amount,cur_amount,source_plan_id from {plan_table} 
-					where asset_id = {str(asset_id)} and period = {str(period)} and fee_category = {feecategory};
-					"""
-			conn = GetSqlData.conn_database(environment)
-			cur = conn.cursor()
-			cur.execute(sql)
-			msg = cur.fetchone()
-			return msg
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+		asset_id = GetSqlData.get_asset_id(environment, project_id)
+		if repayment_plan_type in ["1", "2"]:
+			plan_table = 'user_repayment_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
+			sql = f"""
+				select * from {plan_table}
+				where asset_id = {str(asset_id)}
+				and period = {str(period)}
+				and repayment_plan_type = {str(repayment_plan_type)};
+				"""
+		elif feecategory == 3003:
+			plan_table = 'user_fee_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
+			sql = f"""
+				select * from {plan_table} 
+				where asset_id = {str(asset_id)} 
+				and period = {str(period)} and fee_category = {str(repayment_plan_type)};
+				"""
+		else:
+			plan_table = 'fee_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
+			sql = f"""
+				select plan_pay_date,rest_amount,cur_amount,source_plan_id from {plan_table} 
+				where asset_id = {str(asset_id)} and period = {str(period)} and fee_category = {feecategory};
+				"""
+		return GetSqlData.exec_select(environment, sql)
 
 	@staticmethod
 	def get_user_repayment_amount(project_id: str, environment: str, period: str) -> str:
 		"""获取用户还款计划当期应还款总额"""
 		# noinspection PyGlobalUndefined
-		try:
-			asset_id = GetSqlData.get_asset_id(environment, project_id)
-			plan_table = 'user_repayment_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
-			conn = GetSqlData.conn_database(environment)
-			cur = conn.cursor()
-			sql = f"""
-				select sum(cur_amount) as cur_amount from {plan_table} 
-				where asset_id={str(asset_id)} and period={str(period)};
-				"""
-			cur.execute(sql)
-			amount = cur.fetchone().get('cur_amount')
-			return float(amount)
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+		asset_id = GetSqlData.get_asset_id(environment, project_id)
+		plan_table = 'user_repayment_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
+		sql = f"""
+			select sum(cur_amount) as cur_amount from {plan_table} 
+			where asset_id={str(asset_id)} and period={str(period)};
+			"""
+		return float(GetSqlData.exec_select(environment, sql)[0].get('cur_amount'))
 
 	@staticmethod
 	def get_repayment_amount(project_id: str, environment: str, period: str) -> str:
 		"""获取机构还款计划当期应还款总额"""
 		# noinspection PyGlobalUndefined
-		try:
-			asset_id = GetSqlData.get_asset_id(environment, project_id)
-			plan_table = 'repayment_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
-			conn = GetSqlData.conn_database(environment)
-			cur = conn.cursor()
-			sql = f"""
-				select sum(cur_amount) as amount from {plan_table} 
-				where asset_id={str(asset_id)} and period={str(period)};
-				"""
-			cur.execute(sql)
-			amount = cur.fetchone().get("amount")
-			return float(amount)
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+		asset_id = GetSqlData.get_asset_id(environment, project_id)
+		plan_table = 'repayment_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
+		sql = f"""
+			select sum(cur_amount) as amount from {plan_table} 
+			where asset_id={str(asset_id)} and period={str(period)};
+			"""
+		return float(GetSqlData.exec_select(environment, sql)[0].get("amount"))
 
 	@staticmethod
 	def get_all_repayment_amount(project_id: str, environment: str) -> str:
 		"""获取资产还款金额"""
 		# noinspection PyGlobalUndefined
-		try:
-			conn = GetSqlData.conn_database(environment)
-			cur = conn.cursor()
-			sql = f"""select amount from sandbox_saas.asset where project_id='{project_id}';"""
-			cur.execute(sql)
-			amount = cur.fetchone().get('amount')
-			return float(amount)
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+		sql = f"""select amount from sandbox_saas.asset where project_id='{project_id}';"""
+		return float(GetSqlData.exec_select(environment, sql)[0].get('amount'))
 
 	@staticmethod
 	def get_maturity(project_id: str, environment: str) -> str:
 		"""获取资产期数"""
 		# noinspection PyGlobalUndefined
-		try:
-			conn = GetSqlData.conn_database(environment)
-			cur = conn.cursor()
-			sql = f'''select maturity from sandbox_saas.asset where project_id="{project_id}";'''
-			cur.execute(sql)
-			maturity = cur.fetchone().get("maturity")
-			return maturity
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+		sql = f'''select maturity from sandbox_saas.asset where project_id="{project_id}";'''
+		return GetSqlData.exec_select(environment, sql)[0].get("maturity")
 
 	@staticmethod
 	def get_repayment_principal(project_id: str, environment: str, period: str) -> str:
 		"""获取机构还款计划应还本金"""
 		# noinspection PyGlobalUndefined
-		try:
-			asset_id = GetSqlData.get_asset_id(environment, project_id)
-			plan_table = 'repayment_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
-			conn = GetSqlData.conn_database(environment)
-			cur = conn.cursor()
-			sql = f"""
-				select origin_amount 
-				from {plan_table} 
-				where asset_id={str(asset_id)} 
-				and period={str(period)} 
-				and repayment_plan_type=1;
-				"""
-			cur.execute(sql)
-			amount = cur.fetchone()[0]
-			return str(amount)
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+		asset_id = GetSqlData.get_asset_id(environment, project_id)
+		plan_table = 'repayment_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
+		sql = f"""
+			select origin_amount 
+			from {plan_table} 
+			where asset_id={str(asset_id)} 
+			and period={str(period)} 
+			and repayment_plan_type=1;
+			"""
+		return str(GetSqlData.exec_select(environment, sql)[0].get("origin_amount"))
 
 	@staticmethod
 	def get_debt_amount(project_id, environment):
 		"""获取资产剩余应还本金"""
 		# noinspection PyGlobalUndefined
-		try:
-			asset_id = GetSqlData.get_asset_id(environment, project_id)
-			conn = GetSqlData.conn_database(environment)
-			cur = conn.cursor()
-			sql = f"""select debt_amount from sandbox_saas.asset where id={asset_id}"""
-			cur.execute(sql)
-			debt = cur.fetchone().get('debt_amount')
-			return debt
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+		asset_id = GetSqlData.get_asset_id(environment, project_id)
+		sql = f"""select debt_amount from sandbox_saas.asset where id={asset_id}"""
+		return GetSqlData.exec_select(environment, sql)[0].get('debt_amount')
 
 	@staticmethod
-	def get_repayment_detail(project_id: str, environment: str, period: str, repayment_plan_type: str) -> dict:
+	def get_repayment_detail(
+			project_id: str,
+			environment: str,
+			period: str,
+			repayment_plan_type: str
+	) -> dict:
 		"""
 		获取机构还款计划中的关联：
 		渠道计划id
 		计划还款时间
 		剩余应还金额
-		:rtype: object
 		"""
 		# noinspection PyGlobalUndefined
-		try:
-			asset_id = GetSqlData.get_asset_id(environment, project_id)
-			plan_table = 'repayment_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
-			conn = GetSqlData.conn_database(environment)
-			cur = conn.cursor()
-			sql = f"""
-				select * 
-				from {plan_table} 
-				where asset_id = {asset_id} 
-				and period = {period} 
-				and repayment_plan_type = {repayment_plan_type};
-				"""
-			cur.execute(sql)
-			msg = cur.fetchone()
-			return msg
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+		asset_id = GetSqlData.get_asset_id(environment, project_id)
+		plan_table = 'repayment_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
+		sql = f"""
+			select * 
+			from {plan_table} 
+			where asset_id = {asset_id} 
+			and period = {period} 
+			and repayment_plan_type = {repayment_plan_type};
+			"""
+		return GetSqlData.exec_select(environment, sql)[0]
 
 	@staticmethod
 	def check_user_amount(user_id, environment):
@@ -451,38 +346,19 @@ class GetSqlData:
 				time.sleep(5)
 
 	@staticmethod
-	def user_amount(user_id, environment):
+	def user_amount(user_id: str, environment: str):
 		"""查询用户可用额度"""
 		# noinspection PyGlobalUndefined, availableAmount
-		try:
-			conn = GetSqlData.conn_database(environment)
-			cur = conn.cursor()
-			sql = f'select available_amount from sandbox_saas_nebula.amount where user_id={user_id};'
-			cur.execute(sql)
-			available_amount = cur.fetchone().get('available_amount')
-			return available_amount
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+		sql = f'select available_amount from sandbox_saas_nebula.amount where user_id={user_id};'
+		return GetSqlData.exec_select(environment, sql)[0].get('available_amount')
 
 	@staticmethod
 	def project_audit_status(project_id: str, environment: str) -> int:
 		"""查询进件审核状态"""
 		# noinspection PyGlobalUndefined, audit_status
-		try:
-			conn = GetSqlData.conn_database(environment)
-			cur = conn.cursor()
-			sql = f'select audit_status from sandbox_saas.project_detail where id={project_id};'
-			cur.execute(sql)
-			audit_status = cur.fetchone().get('audit_status')
-			return audit_status
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+		sql = f"""select audit_status from sandbox_saas.project_detail where id={project_id};"""
+		audit_status = GetSqlData.exec_select(environment, sql)[0].get('audit_status')
+		return audit_status
 
 	@staticmethod
 	def project_result(project_id: str, environment: str) -> str:
@@ -506,22 +382,17 @@ class GetSqlData:
 			raise e
 
 	@staticmethod
-	def change_project_audit_status(project_id: str, environment: str) -> str:
+	def change_project_audit_status(project_id: str, environment: str):
 		"""修改进件审核状态为通过"""
 		# noinspection PyGlobalUndefined
 		if Config().get_item("Switch", "project") == '1':
 			Ulog.info("风控已关闭，走虚拟进件风控逻辑")
-			try:
-				conn = GetSqlData.conn_database(environment)
-				cur = conn.cursor()
-				sql = f'update sandbox_saas.project_detail set audit_status=2,audit_result=1,project_step=5 where id={project_id};'
-				cur.execute(sql)
-				conn.commit()
-			except Exception as e:
-				raise e
-			finally:
-				cur.close()
-				conn.close()
+			sql = f"""
+						UPDATE sandbox_saas.project_detail
+						SET audit_status = 2, audit_result = 1, project_step = 5
+						WHERE id = {project_id};
+					"""
+			GetSqlData.exec_update(environment, sql)
 		else:
 			Ulog.info("风控开关已开启，走真实风控流程")
 			GetSqlData.project_result(project_id, environment)
@@ -530,56 +401,19 @@ class GetSqlData:
 	def check_project_audit_status(project_id: str, environment: str) -> int:
 		"""查询进件审核状态"""
 		# noinspection PyGlobalUndefined
-		try:
-			conn = GetSqlData.conn_database(environment)
-			cur = conn.cursor()
-			sql = f'select audit_status from sandbox_saas.project_detail where id={project_id};'
-			cur.execute(sql)
-			conn.commit()
-			audit_status = cur.fetchone().get('audit_status')
-			return audit_status
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+		sql = f"""select audit_status from sandbox_saas.project_detail where id={project_id};"""
+		return GetSqlData.exec_select(environment, sql)[0].get('audit_status')
 
 	@staticmethod
-	def loan_sql(env):
+	def loan_sql(env: str):
 		"""修改steamrunner放款状态"""
 		# noinspection PyGlobalUndefined
-		try:
-			conn = GetSqlData.conn_database(env)
-			cur = conn.cursor()
-			sql1 = f"""UPDATE sandbox_saas.project_loan_record
-						SET loan_result = 2
-						WHERE project_id IN (
-								SELECT id
-								FROM sandbox_saas.project_detail
-								WHERE product_code IN (
-										'XJ_JFX_YYDSIN', 
-										'XJ_JFX_YYDMUL', 
-										'FQ_RM_RMYM', 
-										'XJ_ROMA_CAR', 
-										'XJ_ROMA_CARV2', 
-										'XJ_DX_SYJV2', 
-										'XJ_DX_SYJ', 
-										'FQ_JK_JFQYL', 
-										'FQ_JK_JFQYLV2', 
-										'FQ_JK_JFQJY', 
-										'FQ_JK_JFQJYV2',
-										'XJ_WX_DDQ',
-										'XJ_WX_KKD'
-									)
-									AND project_detail.loan_result != 1
-						)
-						AND loan_result = 0;"""
-			sql2 = f"""UPDATE sandbox_saas_steamrunner.sr_pay_order
-						SET code = 2000
-						WHERE project_id IN (
-								SELECT id
-								FROM sandbox_saas.project_detail
-								WHERE product_code IN (
+		sql1 = f"""UPDATE sandbox_saas.project_loan_record
+					SET loan_result = 2
+					WHERE project_id IN (
+							SELECT id
+							FROM sandbox_saas.project_detail
+							WHERE product_code IN (
 									'XJ_JFX_YYDSIN', 
 									'XJ_JFX_YYDMUL', 
 									'FQ_RM_RMYM', 
@@ -595,40 +429,14 @@ class GetSqlData:
 									'XJ_WX_KKD'
 								)
 								AND project_detail.loan_result != 1
-							);"""
-			sql3 = f"""UPDATE sandbox_saas.project_detail
-					SET loan_result = 2
-					WHERE id IN (
-							SELECT a.project_id
-							FROM (
-								SELECT project_id
-								FROM sandbox_saas.project_loan_flow
-								WHERE project_id IN (
-									SELECT id
-									FROM sandbox_saas.project_detail
-									WHERE (product_code IN (
-											'XJ_JFX_YYDSIN', 
-											'XJ_JFX_YYDMUL', 
-											'FQ_RM_RMYM', 
-											'XJ_ROMA_CAR', 
-											'XJ_ROMA_CARV2', 
-											'XJ_DX_SYJV2', 
-											'XJ_DX_SYJ', 
-											'FQ_JK_JFQYL', 
-											'FQ_JK_JFQYLV2', 
-											'FQ_JK_JFQJY', 
-											'FQ_JK_JFQJYV2', 
-											'XJ_WX_DDQ', 
-											'XJ_WX_KKD'
-										)
-										AND loan_result != 1
-										AND audit_result = 1)
-								)
-							) a
-						);"""
-			sql4 = f"""UPDATE sandbox_saas.project_loan_flow
-						SET loan_result = 2
-						WHERE product_code IN (
+					)
+					AND loan_result = 0;"""
+		sql2 = f"""UPDATE sandbox_saas_steamrunner.sr_pay_order
+					SET code = 2000
+					WHERE project_id IN (
+							SELECT id
+							FROM sandbox_saas.project_detail
+							WHERE product_code IN (
 								'XJ_JFX_YYDSIN', 
 								'XJ_JFX_YYDMUL', 
 								'FQ_RM_RMYM', 
@@ -643,186 +451,40 @@ class GetSqlData:
 								'XJ_WX_DDQ',
 								'XJ_WX_KKD'
 							)
-							AND loan_result != 1;"""
-			cur.execute(sql1)
-			cur.execute(sql2)
-			cur.execute(sql3)
-			cur.execute(sql4)
-			conn.commit()
-		except Exception as e:
-			conn.rollback()
-			raise e
-		finally:
-			cur.close()
-			conn.close()
-
-	@staticmethod
-	def select_asset():
-		"""查询没有放款成功的进件数量"""
-		# noinspection PyGlobalUndefined
-		try:
-			conn = GetSqlData.conn_database("qa")
-			cur = conn.cursor()
-			sql = f"""SELECT COUNT(DISTINCT project_id) AS c
-						FROM sandbox_saas.project_loan_flow
-						WHERE project_id IN (
-							SELECT id
-							FROM sandbox_saas.project_detail
-							WHERE product_code IN (
-									'XJ_JFX_YYDSIN', 
-									'XJ_JFX_YYDMUL', 
-									'FQ_RM_RMYM', 
-									'XJ_ROMA_CAR', 
-									'XJ_ROMA_CARV2', 
-									'XJ_DX_SYJV2', 
-									'XJ_DX_SYJ', 
-									'FQ_JK_JFQYL', 
-									'FQ_JK_JFQYLV2', 
-									'FQ_JK_JFQJY', 
-									'FQ_JK_JFQJYV2', 
-									'XJ_WX_DDQ', 
-									'XJ_WX_KKD', 
-									'XJ_WX_DDQ', 
-									'XJ_WX_KKD'
-								)
-								AND loan_result != 1
-						);
-					"""
-			cur.execute(sql)
-			conn.commit()
-			coun = cur.fetchone().get("c")
-			return coun
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
-
-	@staticmethod
-	def get_current_period(project_id, environment):
-		"""获取资产当前发生期"""
-		# noinspection PyGlobalUndefined
-		try:
-			asset_id = GetSqlData.get_asset_id(environment, project_id)
-			plan_table = 'repayment_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
-			conn = GetSqlData.conn_database(environment)
-			cur = conn.cursor()
-			sql = f"""select period 
-					from sandbox_saas.{plan_table} 
-					where asset_id={asset_id} 
-					and repayment_status=1 
-					order by period limit 1
-					"""
-			cur.execute(sql)
-			period = cur.fetchone().get('period')
-			return period
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
-
-	@staticmethod
-	def get_prod_project_id(asset_id):
-		"""获取进件ID"""
-		# noinspection PyGlobalUndefined
-		try:
-			conn = GetSqlData.conn_database('prod')
-			cur = conn.cursor()
-			sql = f"""select project_id from saas_zhtb where asset_id={asset_id}"""
-			cur.execute(sql)
-			project_id = cur.fetchone()[0]
-			return project_id
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
-
-	@staticmethod
-	def get_contact_id(project_id):
-		"""获取合同ID"""
-		# noinspection PyGlobalUndefined
-		try:
-			conn = GetSqlData.conn_database('prod')
-			cur = conn.cursor()
-			sql = f"""select id from saas_zhtb where association_id={project_id}"""
-			cur.execute(sql)
-			contact_id = cur.fetchone()[0]
-			return contact_id
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
-
-	@staticmethod
-	def like_asset_id(asset_id, environment):
-		"""资产ID模糊查询"""
-		# noinspection PyGlobalUndefined
-		try:
-			conn = GetSqlData.conn_database(environment)
-			cur = conn.cursor()
-			sql = f"""select id from asset where id like '{asset_id}';"""
-			cur.execute(sql)
-			asset_id = cur.fetchone().get('id')
-			return asset_id
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
-
-	@staticmethod
-	def asset_count(environment):
-		"""查询资产ID"""
-		# noinspection PyGlobalUndefined
-		try:
-			conn = GetSqlData.conn_database(environment)
-			cur = conn.cursor()
-			sql = "select id from asset;"
-			cur.execute(sql)
-			asset_id = cur.fetchall()
-			ids = []
-			for i in asset_id:
-				ids.append(i.get('id'))
-			return ids
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
-
-	@staticmethod
-	def repayment_plan(asset_id: str, environment: str) -> int:
-		"""查询机构还款计划条数"""
-		# noinspection PyGlobalUndefined, plan_table
-		try:
-			conn = GetSqlData.conn_database(environment)
-			plan_table = 'repayment_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
-			cur = conn.cursor()
-			sql = f"""select count(*) as c from {plan_table} where asset_id={asset_id};"""
-			cur.execute(sql)
-			count = cur.fetchone().get('c')
-			return int(count)
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
-
-	@staticmethod
-	def select_need_audit_project_ids() -> list:
-		"""
-		查询要修改审核状态的进件ID
-		用于Job
-		"""
-		# noinspection PyGlobalUndefined
-		try:
-			conn = GetSqlData.conn_database("qa")
-			cur = conn.cursor()
-			sql = f"""SELECT id
-					FROM project_detail
+							AND project_detail.loan_result != 1
+						);"""
+		sql3 = f"""UPDATE sandbox_saas.project_detail
+				SET loan_result = 2
+				WHERE id IN (
+						SELECT a.project_id
+						FROM (
+							SELECT project_id
+							FROM sandbox_saas.project_loan_flow
+							WHERE project_id IN (
+								SELECT id
+								FROM sandbox_saas.project_detail
+								WHERE (product_code IN (
+										'XJ_JFX_YYDSIN', 
+										'XJ_JFX_YYDMUL', 
+										'FQ_RM_RMYM', 
+										'XJ_ROMA_CAR', 
+										'XJ_ROMA_CARV2', 
+										'XJ_DX_SYJV2', 
+										'XJ_DX_SYJ', 
+										'FQ_JK_JFQYL', 
+										'FQ_JK_JFQYLV2', 
+										'FQ_JK_JFQJY', 
+										'FQ_JK_JFQJYV2', 
+										'XJ_WX_DDQ', 
+										'XJ_WX_KKD'
+									)
+									AND loan_result != 1
+									AND audit_result = 1)
+							)
+						) a
+					);"""
+		sql4 = f"""UPDATE sandbox_saas.project_loan_flow
+					SET loan_result = 2
 					WHERE product_code IN (
 							'XJ_JFX_YYDSIN', 
 							'XJ_JFX_YYDMUL', 
@@ -834,24 +496,134 @@ class GetSqlData:
 							'FQ_JK_JFQYL', 
 							'FQ_JK_JFQYLV2', 
 							'FQ_JK_JFQJY', 
-							'FQ_JK_JFQJYV2', 
-							'XJ_WX_DDQ', 
-							'XJ_WX_KKD', 
-							'XJ_WX_DDQ', 
+							'FQ_JK_JFQJYV2',
+							'XJ_WX_DDQ',
 							'XJ_WX_KKD'
 						)
-						AND audit_status != 2"""
-			cur.execute(sql)
-			ids = cur.fetchall()
-			idss = []
-			for i in ids:
-				idss.append(i.get("id"))
-			return idss
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+						AND loan_result != 1;"""
+		sql_list = [sql1, sql2, sql3, sql4]
+		for sql in sql_list:
+			GetSqlData.exec_update(environment=env, sql=sql)
+
+	@staticmethod
+	def select_asset() -> int:
+		"""查询没有放款成功的进件数量"""
+		# noinspection PyGlobalUndefined
+		sql = f"""SELECT COUNT(DISTINCT project_id) AS c
+					FROM sandbox_saas.project_loan_flow
+					WHERE project_id IN (
+						SELECT id
+						FROM sandbox_saas.project_detail
+						WHERE product_code IN (
+								'XJ_JFX_YYDSIN', 
+								'XJ_JFX_YYDMUL', 
+								'FQ_RM_RMYM', 
+								'XJ_ROMA_CAR', 
+								'XJ_ROMA_CARV2', 
+								'XJ_DX_SYJV2', 
+								'XJ_DX_SYJ', 
+								'FQ_JK_JFQYL', 
+								'FQ_JK_JFQYLV2', 
+								'FQ_JK_JFQJY', 
+								'FQ_JK_JFQJYV2', 
+								'XJ_WX_DDQ', 
+								'XJ_WX_KKD', 
+								'XJ_WX_DDQ', 
+								'XJ_WX_KKD'
+							)
+							AND loan_result != 1
+					);
+				"""
+		return GetSqlData.exec_select("qa", sql)[0].get("c")
+
+	@staticmethod
+	def get_current_period(project_id: str, environment: str) -> int:
+		"""获取资产当前发生期"""
+		# noinspection PyGlobalUndefined
+		asset_id = GetSqlData.get_asset_id(environment, project_id)
+		plan_table = 'repayment_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
+		sql = f"""select period 
+				from sandbox_saas.{plan_table} 
+				where asset_id={asset_id} 
+				and repayment_status=1 
+				order by period limit 1
+				"""
+		period = GetSqlData.exec_select(environment, sql)[0].get('period')
+		return period
+
+	@staticmethod
+	def get_prod_project_id(asset_id: str):
+		"""获取进件ID"""
+		# noinspection PyGlobalUndefined
+		sql = f"""select project_id from saas_zhtb where asset_id={asset_id}"""
+		return GetSqlData.exec_select("prod", sql)[0].get("project_id")
+
+	@staticmethod
+	def get_contact_id(project_id: str):
+		"""获取合同ID"""
+		# noinspection PyGlobalUndefined
+		sql = f"""select id from saas_zhtb where association_id={project_id}"""
+		return GetSqlData.exec_select("prod", sql)[0].get("id")
+
+	@staticmethod
+	def like_asset_id(asset_id: str, environment: str):
+		"""资产ID模糊查询"""
+		# noinspection PyGlobalUndefined
+		sql = f"""select id from asset where id like '{asset_id}';"""
+		return GetSqlData.exec_select(environment, sql)[0].get('id')
+
+	@staticmethod
+	def asset_count(environment: str):
+		"""查询资产ID"""
+		# noinspection PyGlobalUndefined
+		sql = "select id from asset;"
+		asset_id = GetSqlData.exec_select(environment, sql)
+		ids = []
+		for i in asset_id:
+			ids.append(i.get('id'))
+		return ids
+
+	@staticmethod
+	def repayment_plan(asset_id: str, environment: str) -> int:
+		"""查询机构还款计划条数"""
+		# noinspection PyGlobalUndefined, plan_table
+		plan_table = 'repayment_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
+		sql = f"""select count(*) as c from {plan_table} where asset_id={asset_id};"""
+		count = GetSqlData.exec_select(environment, sql)[0].get('c')
+		return count
+
+	@staticmethod
+	def select_need_audit_project_ids() -> list:
+		"""
+		查询要修改审核状态的进件ID
+		用于Job
+		"""
+		# noinspection PyGlobalUndefined
+		sql = f"""SELECT id
+				FROM project_detail
+				WHERE product_code IN (
+						'XJ_JFX_YYDSIN', 
+						'XJ_JFX_YYDMUL', 
+						'FQ_RM_RMYM', 
+						'XJ_ROMA_CAR', 
+						'XJ_ROMA_CARV2', 
+						'XJ_DX_SYJV2', 
+						'XJ_DX_SYJ', 
+						'FQ_JK_JFQYL', 
+						'FQ_JK_JFQYLV2', 
+						'FQ_JK_JFQJY', 
+						'FQ_JK_JFQJYV2', 
+						'XJ_WX_DDQ', 
+						'XJ_WX_KKD', 
+						'XJ_WX_DDQ', 
+						'XJ_WX_KKD'
+					)
+					AND audit_status != 2"""
+		ids = GetSqlData.exec_select("qa", sql)
+		idss = []
+		for i in ids:
+			idss.append(i.get("id"))
+		return idss
 
 	@staticmethod
 	def change_audit():
@@ -860,30 +632,12 @@ class GetSqlData:
 		用于Job
 		"""
 		# noinspection PyGlobalUndefined
-		try:
-			conn = GetSqlData.conn_database("qa")
-			cur = conn.cursor()
-			sql1 = f"""update project_detail set audit_status=2,audit_result=1 where product_code in ("FQ_JK_JFQYL", "FQ_JK_JFQJY")"""
-			cur.execute(sql1)
-			conn.commit()
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+		sql1 = f"""update project_detail set audit_status=2,audit_result=1 where product_code in ("FQ_JK_JFQYL", "FQ_JK_JFQJY")"""
+		GetSqlData.exec_update(environment="qa", sql=sql1)
 
 	@staticmethod
 	def change_athena_status(environment, apply_id):
 		"""修改Athena数据状态"""
 		# noinspection PyGlobalUndefined
-		try:
-			conn = GetSqlData.conn_database(environment)
-			cur = conn.cursor()
-			sql = f"""update sandbox_saas_athena.risk_apply set audit_result='APPROVE',quota=300000,step='COMPLETED',return_code=2000 where apply_id='{apply_id}';"""
-			cur.execute(sql)
-			conn.commit()
-		except Exception as e:
-			raise e
-		finally:
-			cur.close()
-			conn.close()
+		sql = f"""update sandbox_saas_athena.risk_apply set audit_result='APPROVE',quota=300000,step='COMPLETED',return_code=2000 where apply_id='{apply_id}';"""
+		GetSqlData.exec_update(environment, sql)

@@ -415,7 +415,7 @@ class JfxTp(unittest.TestCase):
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	# @unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
-	@unittest.skip("11")
+	# @unittest.skip("11")
 	def test_113_capital_flow(self):
 		"""资金流水推送"""
 		data = excel_table_byname(self.file, 'cash_push')
