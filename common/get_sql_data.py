@@ -42,6 +42,8 @@ class GetSqlData:
 			source: Optional[str] = "saas"
 	):
 		"""执行更新语句"""
+		conn = None
+		cur = None
 		try:
 			conn = GetSqlData.conn_database(environment, source)
 			cur = conn.cursor()
@@ -62,6 +64,8 @@ class GetSqlData:
 			source: Optional[str] = "saas"
 	) -> list:
 		"""执行查询语句"""
+		conn = None
+		cur = None
 		try:
 			conn = GetSqlData.conn_database(environment, source)
 			cur = conn.cursor()
@@ -76,6 +80,7 @@ class GetSqlData:
 	@staticmethod
 	def get_sub_table(environment: str, asset_id: int) -> str:
 		# noinspection PyGlobalUndefined
+		table = None
 		if environment == "test":
 			table = str((asset_id % 8 + 1))
 		elif environment in ("qa", "prod"):
@@ -241,7 +246,7 @@ class GetSqlData:
 				select plan_pay_date,rest_amount,cur_amount,source_plan_id from {plan_table} 
 				where asset_id = {str(asset_id)} and period = {str(period)} and fee_category = {feecategory};
 				"""
-		return GetSqlData.exec_select(environment, sql)
+		return GetSqlData.exec_select(environment, sql)[0]
 
 	@staticmethod
 	def get_user_repayment_amount(project_id: str, environment: str, period: str) -> str:
@@ -632,12 +637,20 @@ class GetSqlData:
 		用于Job
 		"""
 		# noinspection PyGlobalUndefined
-		sql1 = f"""update project_detail set audit_status=2,audit_result=1 where product_code in ("FQ_JK_JFQYL", "FQ_JK_JFQJY")"""
+		sql1 = f"""
+				update project_detail 
+				set audit_status=2,audit_result=1
+				where product_code in ("FQ_JK_JFQYL", "FQ_JK_JFQJY")
+				"""
 		GetSqlData.exec_update(environment="qa", sql=sql1)
 
 	@staticmethod
-	def change_athena_status(environment, apply_id):
+	def change_athena_status(environment: str, apply_id: str):
 		"""修改Athena数据状态"""
 		# noinspection PyGlobalUndefined
-		sql = f"""update sandbox_saas_athena.risk_apply set audit_result='APPROVE',quota=300000,step='COMPLETED',return_code=2000 where apply_id='{apply_id}';"""
+		sql = f"""
+				update sandbox_saas_athena.risk_apply 
+				set audit_result='APPROVE',quota=300000,step='COMPLETED',return_code=2000 
+				where apply_id='{apply_id}';
+				"""
 		GetSqlData.exec_update(environment, sql)

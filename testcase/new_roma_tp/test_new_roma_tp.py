@@ -27,6 +27,7 @@ class TestNewRomaTp:
 
 	@allure.title("额度授信")
 	@allure.severity("blocker")
+	@pytest.mark.project
 	@pytest.mark.asset
 	def test_100_credit_apply(self, r, env):
 		"""额度授信"""
@@ -112,6 +113,7 @@ class TestNewRomaTp:
 
 	@allure.title("上传授信协议")
 	@allure.severity("blocker")
+	@pytest.mark.project
 	@pytest.mark.asset
 	def test_1011_sign_credit(self, r, env):
 		"""上传授信协议"""
@@ -142,6 +144,7 @@ class TestNewRomaTp:
 
 	@allure.title("授信结果查询")
 	@allure.severity("blocker")
+	@pytest.mark.project
 	@pytest.mark.asset
 	def test_102_query_result(self, r, env):
 		"""授信结果查询"""
@@ -164,6 +167,7 @@ class TestNewRomaTp:
 
 	@allure.title("用户额度查询")
 	@allure.severity("normal")
+	@pytest.mark.project
 	@pytest.mark.asset
 	def test_103_query_user_amount(self, r, env):
 		"""用户额度查询"""
@@ -195,6 +199,7 @@ class TestNewRomaTp:
 
 	@allure.title("进件申请")
 	@allure.severity("blocker")
+	@pytest.mark.project
 	@pytest.mark.asset
 	def test_104_project_apply(self, r, env):
 		"""进件"""
@@ -248,6 +253,7 @@ class TestNewRomaTp:
 
 	@allure.title("进件结果查询")
 	@allure.severity("blocker")
+	@pytest.mark.project
 	@pytest.mark.asset
 	def test_105_query_apply_result(self, r, env):
 		"""进件结果查询"""

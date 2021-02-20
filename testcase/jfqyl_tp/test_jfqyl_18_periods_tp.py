@@ -27,6 +27,7 @@ class TestJfqyl18Tp:
 
 	@allure.title("进件申请")
 	@allure.severity("blocker")
+	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
@@ -124,6 +125,7 @@ class TestJfqyl18Tp:
 
 	@allure.title("进件结果查询")
 	@allure.severity("blocker")
+	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance

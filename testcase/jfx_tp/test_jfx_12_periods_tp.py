@@ -26,6 +26,7 @@ class TestJfx12PeriodTp:
 
 	@allure.title("申请授信")
 	@allure.severity("blocker")
+	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
@@ -86,6 +87,7 @@ class TestJfx12PeriodTp:
 
 	@allure.title("授信结果查询")
 	@allure.severity("normal")
+	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
@@ -114,6 +116,7 @@ class TestJfx12PeriodTp:
 
 	@allure.title("用户额度查询")
 	@allure.severity("normal")
+	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
@@ -176,6 +179,7 @@ class TestJfx12PeriodTp:
 
 	@allure.title("进件申请")
 	@allure.severity("blocker")
+	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
@@ -239,6 +243,7 @@ class TestJfx12PeriodTp:
 
 	@allure.title("进件结果查询")
 	@allure.severity("blocker")
+	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance

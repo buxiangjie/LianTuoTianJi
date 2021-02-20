@@ -25,6 +25,7 @@ class TestRmkj3Tp:
 
 	@allure.title("任买进件")
 	@allure.severity("blocker")
+	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.repayment
 	@pytest.mark.settle_in_advance
@@ -135,6 +136,7 @@ class TestRmkj3Tp:
 
 	@allure.title("进件结果查询")
 	@allure.severity("trivial")
+	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.repayment
 	@pytest.mark.settle_in_advance
