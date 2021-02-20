@@ -95,8 +95,8 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			environment=env
 		)
-		r.set('rmkj_3_periods_projectId', rep['content']['projectId'])
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		r.set('rmkj_3_periods_projectId', rep['content']['projectId'])
 
 	@allure.title("上传借款授信协议")
 	@allure.severity("blocker")
