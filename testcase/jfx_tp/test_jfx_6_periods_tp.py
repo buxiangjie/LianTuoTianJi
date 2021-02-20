@@ -69,13 +69,13 @@ class Jfx3PeriodTp(unittest.TestCase):
 			product="cloudloan",
 			environment=self.env
 		)
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		self.r.mset(
 			{
 				"jfx_6_periods_creditId": rep['content']['creditId'],
 				"jfx_6_periods_userId": rep['content']['userId']
 			}
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	def test_101_query_result(self):
 		"""授信结果查询"""
