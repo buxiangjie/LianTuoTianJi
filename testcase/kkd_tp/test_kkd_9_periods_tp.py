@@ -66,8 +66,8 @@ class Kkd9Tp(unittest.TestCase):
 		param['loanInfo'].update(
 			{
 				"loanTerm": 9,
-				"assetInterestRate": 0.105000,
-				"userInterestRate": 0.105000,
+				"assetInterestRate": 0.100000,
+				"userInterestRate": 0.100000,
 			}
 		)
 		if len(data[0]['headers']) == 0:

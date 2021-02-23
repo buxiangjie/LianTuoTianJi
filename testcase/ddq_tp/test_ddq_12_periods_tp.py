@@ -75,8 +75,8 @@ class TestDdq12Tp:
 			product="cloudloan",
 			environment=env
 		)
-		r.set('ddq_12_periods_projectId', rep['content']['projectId'])
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		r.set('ddq_12_periods_projectId', rep['content']['projectId'])
 
 	@allure.title("上传进件授信协议")
 	@allure.severity("blocker")

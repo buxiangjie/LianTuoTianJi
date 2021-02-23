@@ -6,6 +6,7 @@
 """
 import sys
 import os
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import unittest
 import json
@@ -15,8 +16,6 @@ from common.common_func import Common
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
-
-
 
 
 class Kkd6Tp(unittest.TestCase):
