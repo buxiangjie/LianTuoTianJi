@@ -23,9 +23,9 @@ class JfqPorjectNull(unittest.TestCase):
 	@classmethod
 	def setUpClass(cls):
 		cls.env = 'qa'
-		cls.url = JfqPorject.excel_data[0]['url']
-		cls.headers = JfqPorject.excel_data[0]['headers']
-		cls.param = JfqPorject.excel_data[0]['param']
+		cls.url = JfqPorjectNull.excel_data[0]['url']
+		cls.headers = JfqPorjectNull.excel_data[0]['headers']
+		cls.param = JfqPorjectNull.excel_data[0]['param']
 
 	def tearDown(self):
 		pass

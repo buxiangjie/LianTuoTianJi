@@ -494,7 +494,6 @@ class Ddq9Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	# @unittest.skipUnless(sys.argv[4] == "early_settlement_offline", "-")
 	@unittest.skip("跳过")
 	def test_114_offline_repay_early_settlement(self):
 		"""线下还款流水推送：提前全部结清"""
@@ -526,7 +525,7 @@ class Ddq9Tp(unittest.TestCase):
 			"successAmount": success_amount,
 			"repayType": 2,
 			"period": json.loads(repayment_plan_list)[0]['period'],
-			"payTime": Common.get_time("-")
+			"payTime": Common.get_time("day")
 		})
 		param['repaymentDetailList'] = repayment_detail_list
 		if len(data[0]['headers']) == 0:

@@ -621,10 +621,7 @@ class Jfqyl9Tp(unittest.TestCase):
 			environment=self.env,
 			product="gateway"
 		)
-		response_data = json.loads(Common.dencrypt_response(rep.text))
-		print("返回json:%s" % response_data)
-		logger.info("返回信息:%s" % response_data)
-		self.assertEqual(response_data['resultCode'], int(data[0]['resultCode']))
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 
 if __name__ == '__main__':

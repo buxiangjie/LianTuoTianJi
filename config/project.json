@@ -293,5 +293,25 @@
     "id": "jfqylv2_3_periods_cardNum",
     "name": "jfqylv2_3_periods_custName",
     "card": "jfqylv2_3_periods_bankcard"
+  },
+  "jk_ckshd_6_periods": {
+    "id": "jk_ckshd_6_periods_cardNum",
+    "name": "jk_ckshd_6_periods_custName",
+    "card": "jk_ckshd_6_periods_bankcard"
+  },
+  "jk_ckshd_12_periods": {
+    "id": "jk_ckshd_12_periods_cardNum",
+    "name": "jk_ckshd_12_periods_custName",
+    "card": "jk_ckshd_12_periods_bankcard"
+  },
+  "jk_ckshd_18_periods": {
+    "id": "jk_ckshd_18_periods_cardNum",
+    "name": "jk_ckshd_18_periods_custName",
+    "card": "jk_ckshd_18_periods_bankcard"
+  },
+  "jk_ckshd_24_periods": {
+    "id": "jk_ckshd_24_periods_cardNum",
+    "name": "jk_ckshd_24_periods_custName",
+    "card": "jk_ckshd_24_periods_bankcard"
   }
 }
