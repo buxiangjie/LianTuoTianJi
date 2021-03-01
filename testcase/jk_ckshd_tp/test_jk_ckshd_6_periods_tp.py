@@ -2,7 +2,7 @@
 """
 @auth:buxiangjie
 @date:2020-05-12 11:26:00
-@describe: 
+@describe: 即科商户贷6期
 """
 import time
 import unittest

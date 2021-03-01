@@ -5,10 +5,9 @@
 @describe:牙医贷授信接口字段必填项校验
 """
 import unittest
-import os
 import json
 import ddt
-import sys
+
 from common.common_func import Common
 from log.logger import Logger
 from common.open_excel import excel_table_byname

@@ -119,7 +119,6 @@ class Rmkj6Tp(unittest.TestCase):
 
 	def test_102_query_apply_result(self):
 		"""进件结果查询"""
-		time.sleep(4)
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('rmkj_6_periods_projectId'),
 			environment=self.env
