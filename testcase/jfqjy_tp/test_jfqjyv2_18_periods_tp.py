@@ -23,7 +23,7 @@ logger = Logger(logger="test_jfqjyv2_18_periods_tp").getlog()
 
 
 @allure.feature("即分期教育V2 18期")
-class JfqjyV218Tp:
+class TestJfqjyV218Tp:
 	file = Config().get_item('File', 'jfq_case_file')
 
 	@allure.title("进件申请")
@@ -37,7 +37,7 @@ class JfqjyV218Tp:
 		"""进件"""
 		data = excel_table_byname(self.file, 'apply')
 		Common.p2p_get_userinfo('jfqjyv2_18_periods', env)
-		self.r.mset(
+		r.mset(
 			{
 				"jfqjyv2_18_periods_sourceUserId": Common.get_random('userid'),
 				"jfqjyv2_18_periods_transactionId": Common.get_random('transactionId'),
@@ -88,8 +88,8 @@ class JfqjyV218Tp:
 			product="cloudloan",
 			environment=env
 		)
-		self.r.set('jfqjyv2_18_periods_projectId', rep['content']['projectId'])
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		r.set('jfqjyv2_18_periods_projectId', rep['content']['projectId'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("上传授信协议")
 	@allure.severity("blocker")
@@ -122,7 +122,7 @@ class JfqjyV218Tp:
 			product="cloudloan",
 			environment=env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("进件结果查询")
 	@allure.severity("blocker")
@@ -156,8 +156,8 @@ class JfqjyV218Tp:
 			product="cloudloan",
 			environment=env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
-		self.assertEqual(rep['content']['auditStatus'], 2)
+		assert rep['resultCode'] == int(data[0]['resultCode'])
+		assert rep['content']['auditStatus'] == 2
 
 	@allure.title("上传借款协议")
 	@allure.severity("blocker")
@@ -189,8 +189,8 @@ class JfqjyV218Tp:
 			product="cloudloan",
 			environment=env
 		)
-		self.r.set("jfqjyv2_18_periods_contractId", rep['content']['contractId'])
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		r.set("jfqjyv2_18_periods_contractId", rep['content']['contractId'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("上传图片")
 	@allure.severity("normal")
@@ -214,7 +214,7 @@ class JfqjyV218Tp:
 			product="cloudloan",
 			environment=env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("签章结果查询")
 	@allure.severity("blocker")
@@ -246,7 +246,7 @@ class JfqjyV218Tp:
 			product="cloudloan",
 			environment=env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("还款计划试算")
 	@allure.severity("blocker")
@@ -277,7 +277,7 @@ class JfqjyV218Tp:
 			product="cloudloan",
 			environment=env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("放款申请")
 	@allure.severity("blocker")
@@ -289,7 +289,7 @@ class JfqjyV218Tp:
 		"""放款申请"""
 		data = excel_table_byname(self.file, 'loan_pfa')
 		param = json.loads(data[0]['param'])
-		self.r.set("jfqjyv2_18_periods_loan_serviceSn", Common.get_random("serviceSn"))
+		r.set("jfqjyv2_18_periods_loan_serviceSn", Common.get_random("serviceSn"))
 		param.update(
 			{
 				"sourceProjectId": r.get("jfqjyv2_18_periods_sourceProjectId"),
@@ -312,7 +312,7 @@ class JfqjyV218Tp:
 			product="cloudloan",
 			environment=env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 		# 修改支付表中的品钛返回code
 		time.sleep(8)
 		GetSqlData.change_pay_status(
@@ -343,8 +343,8 @@ class JfqjyV218Tp:
 			product="cloudloan",
 			environment=env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
-		self.assertEqual(rep['content']['projectLoanStatus'], 3)
+		assert rep['resultCode'] == int(data[0]['resultCode'])
+		assert rep['content']['projectLoanStatus'] == 3
 
 	@allure.title("还款计划查询")
 	@allure.severity("blocker")
@@ -373,8 +373,8 @@ class JfqjyV218Tp:
 			product="cloudloan",
 			environment=env
 		)
-		self.r.set("jfqjyv2_18_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		r.set("jfqjyv2_18_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("提前结清试算")
 	@allure.severity("blocker")
@@ -404,11 +404,11 @@ class JfqjyV218Tp:
 			product="cloudloan",
 			environment=env
 		)
-		self.r.set(
+		r.set(
 			"jfqjyv2_18_periods_early_settlement_repayment_plan",
 			json.dumps(rep['content']['repaymentPlanList'])
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("退货试算")
 	@allure.severity("blocker")
@@ -437,11 +437,11 @@ class JfqjyV218Tp:
 			product="cloudloan",
 			environment=env
 		)
-		self.r.set(
+		r.set(
 			"jfqjyv2_18_periods_return_repayment_plan",
 			json.dumps(rep['content']['repaymentPlanList'])
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("还款流水推送")
 	@allure.severity("blocker")
@@ -493,7 +493,7 @@ class JfqjyV218Tp:
 			product="cloudloan",
 			environment=env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("提前全部结清")
 	@allure.severity("blocker")
@@ -544,7 +544,7 @@ class JfqjyV218Tp:
 			product="cloudloan",
 			environment=env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@pytest.mark.skip("跳过")
 	def test_115_debt_transfer(self, r, env):
@@ -571,8 +571,8 @@ class JfqjyV218Tp:
 			product="cloudloan",
 			environment=env
 		)
-		self.r.set("jfqjyv2_18_periods_contractId", rep['content']['contractId'])
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		r.set("jfqjyv2_18_periods_contractId", rep['content']['contractId'])
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("退货")
 	@allure.severity("blocker")
@@ -623,7 +623,7 @@ class JfqjyV218Tp:
 			product="cloudloan",
 			environment=env
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 	@allure.title("资金流水推送")
 	@allure.severity("blocker")
@@ -660,7 +660,7 @@ class JfqjyV218Tp:
 			environment=env,
 			product="cloudloan"
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 
 
 if __name__ == '__main__':
