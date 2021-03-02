@@ -546,7 +546,7 @@ class JfqjyV218Tp:
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	@pytest.skip("跳过")
+	@pytest.mark.skip("跳过")
 	def test_115_debt_transfer(self, r, env):
 		"""上传债转函"""
 		data = excel_table_byname(self.file, 'contract_sign')
