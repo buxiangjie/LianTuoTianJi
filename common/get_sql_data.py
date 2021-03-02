@@ -134,17 +134,18 @@ class GetSqlData:
 			# GetSqlData.change_credit_step(environment, credit_id)
 			GetSqlData.change_credit_status(environment, credit_id)
 			GetSqlData.change_athena_status(environment, credit_id)
+			Common.trigger_task(job_name="creditReparationJob", env=environment)
 		status = 2
 		version = 1
 		while status != 4:
-			if version > 10:
+			if version > 20:
 				Ulog.info("授信未成功")
 				break
 			step = GetSqlData().check_credit_step(environment, credit_id)
 			if step != 4:
 				Ulog.info(f"当前授信步骤为:{step:d};当前循环次数为:{version:d}")
 				version += 1
-				time.sleep(10)
+				time.sleep(5)
 			elif step == 4:
 				Ulog.info("当前授信已完成,可以进行下个步骤!")
 				status = 4
@@ -640,7 +641,7 @@ class GetSqlData:
 		sql1 = f"""
 				update project_detail 
 				set audit_status=2,audit_result=1
-				where product_code in ("FQ_JK_JFQYL", "FQ_JK_JFQJY")
+				where product_code in ("FQ_JK_JFQYL", "FQ_JK_JFQJY");
 				"""
 		GetSqlData.exec_update(environment="qa", sql=sql1)
 

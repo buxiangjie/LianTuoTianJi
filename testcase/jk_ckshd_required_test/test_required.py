@@ -69,12 +69,14 @@ class ApplyNone(unittest.TestCase):
 		cls.url = ApplyNone.excel_data[0]['url']
 		cls.headers = ApplyNone.excel_data[0]['headers']
 		cls.param = ApplyNone.excel_data[0]['param']
+		cls.r = Common.conn_redis(environment=cls.env)
 
 	def tearDown(self):
 		pass
 
 	def credit(self):
-		data = excel_table_byname(self.file, 'credit')
+		print("授信------")
+		data = excel_table_byname(Config().get_item('File', 'jk_ckshd_case_file'), 'credit')
 		Common.p2p_get_userinfo('jk_ckshd_6_periods', self.env)
 		self.r.mset(
 			{
@@ -120,12 +122,15 @@ class ApplyNone(unittest.TestCase):
 			}
 		)
 
+
 	def query_result(self):
+		print("授信结果检查-------")
 		GetSqlData.credit_set(
 			environment=self.env,
 			credit_id=self.r.get("jk_ckshd_6_periods_creditId")
 		)
-		data = excel_table_byname(self.file, 'query_result')
+		GetSqlData.check_user_amount(user_id=self.r.get("jk_ckshd_6_periods_userId"), environment=self.env)
+		data = excel_table_byname(Config().get_item('File', 'jk_ckshd_case_file'), 'query_result')
 		param = json.loads(data[0]['param'])
 		param.update({"creditId": self.r.get('jk_ckshd_6_periods_creditId')})
 		if len(data[0]['headers']) == 0:
@@ -150,6 +155,13 @@ class ApplyNone(unittest.TestCase):
 		print(case)
 		user = Common.get_userinfo()
 		param = json.loads(self.param)
+		param.update(
+			{
+				"sourceProjectId": Common.get_random("sourceProjectId"),
+				"sourceUserId": self.r.get('jk_ckshd_6_periods_sourceUserId'),
+				"transactionId": self.r.get('jk_ckshd_6_periods_transactionId')
+			}
+		)
 		param["personalInfo"].update(
 			{
 				"custName": user["name"],
