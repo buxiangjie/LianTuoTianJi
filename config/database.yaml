@@ -41,11 +41,3 @@ qa:
     password: dJ_xw2ve_Dc9_1OiY3
     port: 9919
     db: ifc_eridanus
-
-prod:
-  saas:
-    host: rr-2ze577m0237nzl5fb.mysql.rds.aliyuncs.com
-    user: ceshi_read
-    password: Iu&rzyFBf2r4
-    port: 3306
-    db: saas_zhtb
