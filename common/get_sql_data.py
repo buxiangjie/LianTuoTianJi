@@ -165,7 +165,7 @@ class GetSqlData:
 		# noinspection PyGlobalUndefined
 		Ulog.info("开始检查放款步骤")
 		Common.trigger_task("projectLoanReparationJob", environment)
-		time.sleep(10)
+		time.sleep(5)
 		if GetSqlData().check_loan_result(environment, project_id) == -1:
 			raise Exception("放款状态不正确，未申请放款成功")
 		else:
@@ -193,13 +193,29 @@ class GetSqlData:
 		finish_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 		if Config().get_item("Switch", "loan") == '1':
 			Ulog.info("放款开关已关闭，走虚拟放款逻辑")
-			time.sleep(5)
-			sql = f"""
+			sql1 = f"""
 				Update sandbox_saas_steamrunner.sr_pay_order 
 				set code=2000,msg='成功',finish_time='{finish_time}' 
-				where project_id={project_id}
+				where project_id={project_id};
 				"""
-			GetSqlData.exec_update(environment, sql)
+			sql2 = f"""
+				Update sandbox_saas.project_loan_flow
+				set loan_result=2
+				where project_id={project_id};
+				"""
+			sql3 = f"""
+				Update sandbox_saas.project_loan_record
+				set loan_result=2 
+				where project_id={project_id};
+				"""
+			sql4 = f"""
+				Update sandbox_saas.project_detail
+				set loan_result=2
+				where id={project_id};
+				"""
+			sqls = [sql1,sql2,sql3,sql4]
+			for sql in sqls:
+				GetSqlData.exec_update(environment, sql)
 		else:
 			Ulog.info("放款开关已开启,走真实放款流程")
 

@@ -34,6 +34,7 @@ class CreditNone(unittest.TestCase):
 
 	@ddt.data(*excel_data)
 	def test_credit_apply(self, data):
+		"""授信申请参数校验"""
 		case = data['casename']
 		print(case)
 		user = Common.get_userinfo()
@@ -153,7 +154,6 @@ class ApplyNone(unittest.TestCase):
 		self.query_result()
 		case = data['casename']
 		print(case)
-		user = Common.get_userinfo()
 		param = json.loads(self.param)
 		param.update(
 			{
@@ -162,10 +162,11 @@ class ApplyNone(unittest.TestCase):
 				"transactionId": self.r.get('jk_ckshd_6_periods_transactionId')
 			}
 		)
-		param["personalInfo"].update(
+		param['personalInfo'].update(
 			{
-				"custName": user["name"],
-				"cardNum": user["id"]
+				"cardNum": self.r.get('jk_ckshd_6_periods_cardNum'),
+				"custName": self.r.get('jk_ckshd_6_periods_custName'),
+				"phone": self.r.get('jk_ckshd_6_periods_phone')
 			}
 		)
 		key = str(case).split("空")[1].split(".")[0]
