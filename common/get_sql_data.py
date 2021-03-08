@@ -210,7 +210,7 @@ class GetSqlData:
 				"""
 			sql4 = f"""
 				Update sandbox_saas.project_detail
-				set loan_result=2
+				set loan_result=2,loan_status=0,loan_step=0
 				where id={project_id};
 				"""
 			sqls = [sql1,sql2,sql3,sql4]
