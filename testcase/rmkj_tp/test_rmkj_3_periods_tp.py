@@ -325,16 +325,14 @@ class TestRmkj3Tp:
 				"requestId": Common.get_random("serviceSn"),
 				"requestTime": Common.get_time("-"),
 				"sourceUserId": r.get("rmkj_3_periods_sourceUserId"),
-				"name": r.get("rmkj_3_periods_custName"),
-				"cardNo": r.get("rmkj_3_periods_cardNum"),
-				# "name": "卜祥杰",
-				# "cardNo": "372301199509074811",
-				# "bankCode": "BOC",
-				"bankNo": r.get("rmkj_3_periods_bankcard"),
-				# "bankName": "中国银行",
-				"mobile": r.get("rmkj_3_periods_phone"),
-				# "mobile": "18366582857",
-				# "bankNo": "6216600100008405977"
+				# "name": r.get("rmkj_3_periods_custName"),
+				# "cardNo": r.get("rmkj_3_periods_cardNum"),
+				# "bankNo": r.get("rmkj_3_periods_bankcard"),
+				# "mobile": r.get("rmkj_3_periods_phone"),
+				"bankNo": "6214850219949549",
+				"name": "幸福",
+				"mobile": "18689262774",
+				"cardNo": "370613198705308692"
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -348,7 +346,8 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product='gateway',
-			environment=env
+			environment=env,
+			prod_type="rmkj"
 		)
 		r.set("rmkj_3_periods_signTaskId", rep['data']['signTaskId'])
 		assert rep['code'] == int(data[0]['resultCode'])
@@ -386,7 +385,8 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product='gateway',
-			environment=env
+			environment=env,
+			prod_type="rmkj"
 		)
 		assert rep['code'] == int(data[0]['resultCode'])
 		assert rep['data']['status'] == 3
@@ -423,7 +423,8 @@ class TestRmkj3Tp:
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product='gateway',
-			environment=env
+			environment=env,
+			prod_type="rmkj"
 		)
 		assert rep['code'] == int(data[0]['resultCode'])
 		assert rep['data']['status'] == 3
@@ -446,18 +447,14 @@ class TestRmkj3Tp:
 				"sourceUserId": r.get("rmkj_3_periods_sourceUserId"),
 				"sourceProjectId": r.get("rmkj_3_periods_sourceProjectId"),
 				"projectId": r.get("rmkj_3_periods_projectId"),
-				"name": r.get("rmkj_3_periods_custName"),
-				"cardNo": r.get("rmkj_3_periods_cardNum"),
-				"bankNo": r.get("rmkj_3_periods_bankcard"),
-				"mobile": r.get("rmkj_3_periods_phone"),
-				"businessType": 1,
-				# "bankNo": "6216600100008405977",
-				# "bankName": "中国银行",
-				# "bankCode": "BOC",
-				# "name": "卜祥杰",
-				# "cardNo": "372301199509074811",
-				# "mobile": "18366582857",
-				# "bankNo": "6214830173648519",
+				# "name": r.get("rmkj_3_periods_custName"),
+				# "cardNo": r.get("rmkj_3_periods_cardNum"),
+				# "bankNo": r.get("rmkj_3_periods_bankcard"),
+				# "mobile": r.get("rmkj_3_periods_phone"),
+				"bankNo": "6214850219949549",
+				"name": "幸福",
+				"mobile": "18689262774",
+				"cardNo": "370613198705308692",
 			}
 		)
 		if len(data[0]['headers']) == 0:
