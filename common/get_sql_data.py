@@ -190,8 +190,8 @@ class GetSqlData:
 	def change_pay_status(environment: str, project_id: str):
 		"""修改steamrunner.pay_order的放款状态为成功"""
 		# noinspection PyGlobalUndefined
-		# finish_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-		finish_time = "2021-03-29 00:00:00"
+		finish_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+		# finish_time = "2021-03-29 00:00:00"
 		if Config().get_item("Switch", "loan") == '1':
 			Ulog.info("放款开关已关闭，走虚拟放款逻辑")
 			sql1 = f"""
