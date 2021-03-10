@@ -100,6 +100,7 @@ class TestRmkj3Tp:
 
 	@allure.title("上传借款授信协议")
 	@allure.severity("blocker")
+	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.repayment
 	@pytest.mark.settle_in_advance
