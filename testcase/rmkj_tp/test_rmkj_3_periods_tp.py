@@ -390,7 +390,7 @@ class TestRmkj3Tp:
 			prod_type="rmkj"
 		)
 		assert rep['code'] == int(data[0]['resultCode'])
-		assert rep['data']['status'] == 3
+		assert rep['data']['code'] in (60103, 3)
 
 	@allure.title("绑卡结果查询")
 	@allure.severity("normal")
