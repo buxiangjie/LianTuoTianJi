@@ -55,17 +55,17 @@ class Jfqyl12Tp(unittest.TestCase):
 		param['applyInfo'].update(
 			{
 				"applyTime": Common.get_time("-"),
-				"applyAmount": 33333.33,
+				"applyAmount": 50000,
 				"applyTerm": 12,
 				"productCode": "FQ_JK_JFQYL"
 			}
 		)
 		param['loanInfo'].update(
 			{
-				"loanAmount": 33333.33,
+				"loanAmount": 50000,
 				"loanTerm": 12,
-				"assetInterestRate": 0.153,
-				"userInterestRate": 0.153
+				"assetInterestRate": 0.16,
+				"userInterestRate": 0.16
 			}
 		)
 		param['personalInfo'].update(
@@ -255,7 +255,7 @@ class Jfqyl12Tp(unittest.TestCase):
 				"serviceSn": self.r.get("jfqyl_12_periods_loan_serviceSn"),
 				"id": self.r.get('jfqyl_12_periods_cardNum'),
 				"accountName": self.r.get("jfqyl_12_periods_custName"),
-				"amount": 33333.33
+				"amount": 50000
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -355,7 +355,7 @@ class Jfqyl12Tp(unittest.TestCase):
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
-	# @unittest.skip("跳过")
+	@unittest.skip("不支持")
 	def test_112_calculate(self):
 		"""还款计划试算:退货"""
 		data = excel_table_byname(self.file, 'calculate')

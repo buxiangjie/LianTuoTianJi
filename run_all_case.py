@@ -57,7 +57,7 @@ def send_report():
 	smtp.sendmail(msg['From'], (msg['To'].split(';') + msg['CC'].split(';')), msg.as_string())
 	# smtp.sendmail(msg['From'], (msg['To'].split(';')), msg.as_string())
 	smtp.quit()
-	print('Report has send out!')
+	logger.info('Report has send out!')
 
 
 # def new_report(test_report: str) -> str:
@@ -68,14 +68,14 @@ def send_report():
 # 	return globals()['filename']
 
 
-def begin(file: str):
+def begin(dirs:str, file: str):
 	newtime = time.strftime("%Y_%m_%d_%H_%M_%S", time.localtime())
 	if not os.path.exists("./test_report"):
 		os.mkdir("test_report")
 	globals()['filename'] = "./test_report/" + newtime + '.html'
 	filename = newtime + ".html"
 	fp = open(globals()['filename'], 'wb+')
-	suit = all_case(file)
+	suit = all_case(dirs, file)
 	# runner = HTMLTestRunner(stream=fp, title='小贷业务接口测试报告', description='执行情况')
 	# runner.run(suit)
 	result = BeautifulReport.BeautifulReport(suit)
@@ -84,5 +84,5 @@ def begin(file: str):
 
 
 if __name__ == "__main__":
-	begin(sys.argv[1])
-	send_report()  # 调用发送报告函数
+	begin("jk_ckshd_required_tp", "test_required.py")
+	# send_report()  # 调用发送报告函数

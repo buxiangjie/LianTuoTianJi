@@ -24,7 +24,7 @@ class Jfqjy12Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = "qa"
+		cls.env = "test"
 		cls.r = Common.conn_redis(environment=cls.env)
 		cls.file = Config().get_item('File', 'jfq_case_file')
 
@@ -354,7 +354,7 @@ class Jfqjy12Tp(unittest.TestCase):
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
-	# @unittest.skip("跳过")
+	@unittest.skip("不支持")
 	def test_112_calculate(self):
 		"""还款计划试算:退货"""
 		data = excel_table_byname(self.file, 'calculate')

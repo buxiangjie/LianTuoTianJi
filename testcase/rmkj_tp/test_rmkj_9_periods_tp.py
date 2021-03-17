@@ -21,7 +21,7 @@ class Rmkj9Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = "qa"
+		cls.env = "test"
 		cls.r = Common.conn_redis(environment=cls.env)
 		cls.file = Config().get_item('File', 'rmkj_case_file')
 
@@ -67,6 +67,13 @@ class Rmkj9Tp(unittest.TestCase):
 				"loanTerm": 9,
 				# "assetInterestRate": 0.27,
 				# "userInterestRate": 0.27
+			}
+		)
+		param['cardInfo'].update(
+			{
+				"unifiedSocialCreditCode": Common.get_random("businessLicenseNo"),
+				"corporateAccountName": "南京车置宝网络技术有限公司",
+				"bankCode": 34
 			}
 		)
 		param['cardInfo'].update({"unifiedSocialCreditCode": Common.get_random("businessLicenseNo")})
@@ -226,10 +233,13 @@ class Rmkj9Tp(unittest.TestCase):
 				"requestId": Common.get_random("serviceSn"),
 				"requestTime": Common.get_time("-"),
 				"sourceUserId": self.r.get("rmkj_9_periods_sourceUserId"),
-				"name": self.r.get("rmkj_9_periods_custName"),
-				"cardNo": self.r.get("rmkj_9_periods_cardNum"),
-				"bankNo": self.r.get("rmkj_9_periods_bankcard"),
-				"mobile": self.r.get("rmkj_9_periods_phone")
+				# "name": self.r.get("rmkj_9_periods_custName"),
+				# "cardNo": self.r.get("rmkj_9_periods_cardNum"),
+				# "mobile": self.r.get("rmkj_9_periods_phone"),
+				"bankNo": "6214850219949549",
+				"name": "幸福",
+				"mobile": "18689262774",
+				"cardNo": "370613198705308692"
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -243,10 +253,11 @@ class Rmkj9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product='gateway',
-			environment=self.env
+			environment=self.env,
+			prod_type="rmkj"
 		)
-		self.r.set("rmkj_9_periods_signTaskId", rep['data']['signTaskId'])
 		self.assertEqual(rep['code'], int(data[0]['resultCode']))
+		self.r.set("rmkj_9_periods_signTaskId", rep['data']['signTaskId'])
 
 	def test_107_confirm(self):
 		"""确认签约"""
@@ -272,10 +283,11 @@ class Rmkj9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product='gateway',
-			environment=self.env
+			environment=self.env,
+			prod_type="rmkj"
 		)
 		self.assertEqual(rep['code'], int(data[0]['resultCode']))
-		self.assertEqual(rep['data']['status'], 3)
+		self.assertEqual(rep['data']['code'], 60103)
 
 	def test_108_query_sign(self):
 		"""绑卡结果查询"""
@@ -300,10 +312,11 @@ class Rmkj9Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product='gateway',
-			environment=self.env
+			environment=self.env,
+			prod_type="rmkj"
 		)
 		self.assertEqual(rep['code'], int(data[0]['resultCode']))
-		self.assertEqual(rep['data']['status'], 3)
+		self.assertEqual(rep['data']['code'], 60103)
 
 	def test_109_card_change(self):
 		"""还款卡推送"""
@@ -314,10 +327,15 @@ class Rmkj9Tp(unittest.TestCase):
 				"sourceUserId": self.r.get("rmkj_9_periods_sourceUserId"),
 				"sourceProjectId": self.r.get("rmkj_9_periods_sourceProjectId"),
 				"projectId": self.r.get("rmkj_9_periods_projectId"),
-				"name": self.r.get("rmkj_9_periods_custName"),
-				"cardNo": self.r.get("rmkj_9_periods_cardNum"),
-				"mobile": self.r.get("rmkj_9_periods_phone"),
-				"bankNo": self.r.get("rmkj_9_periods_bankcard")
+				# "name": self.r.get("rmkj_9_periods_custName"),
+				# "cardNo": self.r.get("rmkj_9_periods_cardNum"),
+				# "mobile": self.r.get("rmkj_9_periods_phone"),
+				# "bankNo": self.r.get("rmkj_9_periods_bankcard")
+				"bankNo": "6214850219949549",
+				"name": "幸福",
+				"mobile": "18689262774",
+				"cardNo": "370613198705308692",
+
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -368,7 +386,17 @@ class Rmkj9Tp(unittest.TestCase):
 				"sourceProjectId": self.r.get("rmkj_9_periods_sourceProjectId"),
 				"projectId": self.r.get("rmkj_9_periods_projectId"),
 				"sourceUserId": self.r.get("rmkj_9_periods_sourceUserId"),
-				"serviceSn": self.r.get("rmkj_9_periods_loan_serviceSn")
+				"serviceSn": self.r.get("rmkj_9_periods_loan_serviceSn"),
+				# "bankNo": "6214850219949549",
+				# "name": "幸福",
+				# "mobile": "18689262774",
+				# "accountNo": "370613198705308692",
+				# "bankCode": "CMB"
+				"accountName": "南京车置宝网络技术有限公司",
+				"openAccountProvince": 320000,
+				"openAccountCity": 320100,
+				"openAccountBankNameSub": "南京支行",
+				"bankCode": 34
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -384,7 +412,7 @@ class Rmkj9Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		# 修改支付表中的品钛返回code
-		time.sleep(8)
+		time.sleep(5)
 		GetSqlData.change_pay_status(
 			environment=self.env,
 			project_id=self.r.get('rmkj_9_periods_projectId')
@@ -393,6 +421,7 @@ class Rmkj9Tp(unittest.TestCase):
 	def test_111_loan_query(self):
 		"""放款结果查询"""
 		GetSqlData.loan_set(environment=self.env, project_id=self.r.get('rmkj_9_periods_projectId'))
+		# GetSqlData.change_plan_pay_date(environment=self.env, project_id=self.r.get('rmkj_9_periods_projectId'), period=1)
 		data = excel_table_byname(self.file, 'pfa_query')
 		param = json.loads(data[0]['param'])
 		param.update({"serviceSn": self.r.get("rmkj_9_periods_loan_serviceSn")})

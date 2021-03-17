@@ -22,7 +22,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = "test"
+		cls.env = "qa"
 		cls.r = Common.conn_redis(environment=cls.env)
 		cls.file = Config().get_item('File', 'jk_ckshd_case_file')
 
@@ -63,12 +63,15 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			headers = None
 		else:
 			headers = json.loads(data[0]['headers'])
+		# headers["X-TBC-SKIP-ENCRYPT"] = "true"
+		# headers["X-TBC-SKIP-SIGN"] = "true"
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			environment=self.env
+			environment=self.env,
+			prod_type="jkjr"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		self.r.mset(
@@ -171,6 +174,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 		param['applyInfo'].update(
 			{
 				"applyTime": Common.get_time("-"),
+				# "applyTime": "2021-03-29 00:00:00",
 				"applyAmount": 50000,
 				"applyTerm": 12,
 			}
@@ -180,7 +184,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 				"loanAmount": 50000,
 				"loanTerm": 12,
 				"assetInterestRate": 0.09,
-				"userInterestRate": 0.10,
+				"userInterestRate": 0.16,
 				"discountRate": 0.01
 			}
 		)
@@ -195,12 +199,15 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			headers = None
 		else:
 			headers = json.loads(data[0]['headers'])
+		# headers["X-TBC-SKIP-ENCRYPT"] = "true"
+		# headers["X-TBC-SKIP-SIGN"] = "true"
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="cloudloan",
-			environment=self.env
+			environment=self.env,
+			prod_type="jkjr"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		self.r.set('jk_ckshd_12_periods_projectId', rep['content']['projectId'])
@@ -433,8 +440,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 				"sourceUserId": self.r.get("jk_ckshd_12_periods_sourceUserId"),
 				"serviceSn": self.r.get("jk_ckshd_12_periods_loan_serviceSn"),
 				"id": self.r.get('jk_ckshd_12_periods_cardNum'),
-				"accountName": self.r.get("jk_ckshd_12_periods_custName"),
-				"amount": 33333.33
+				"accountName": self.r.get("jk_ckshd_12_periods_custName")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -450,7 +456,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		# 修改支付表中的品钛返回code
-		time.sleep(8)
+		time.sleep(3)
 		GetSqlData.change_pay_status(
 			environment=self.env,
 			project_id=self.r.get('jk_ckshd_12_periods_projectId')
@@ -742,3 +748,31 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			product="cloudloan"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+
+	def test_122_sign_purchase_vouchers(self):
+		"""上传采购凭证"""
+		data = excel_table_byname(self.file, 'contract_sign')
+		param = Common.get_json_data('data', 'jk_ckshd_sign_purchase_vouchers.json')
+		param.update(
+			{
+				"serviceSn": Common.get_random('serviceSn'),
+				"sourceUserId": self.r.get('jk_ckshd_12_periods_sourceUserId'),
+				"sourceContractId": Common.get_random('userid'),
+				"transactionId": self.r.get('jk_ckshd_12_periods_transactionId'),
+				"associationId": self.r.get('jk_ckshd_12_periods_projectId'),
+				"contractType": 15
+			}
+		)
+		if len(data[0]['headers']) == 0:
+			headers = None
+		else:
+			headers = json.loads(data[0]['headers'])
+		rep = Common.response(
+			faceaddr=data[0]['url'],
+			headers=headers,
+			data=json.dumps(param, ensure_ascii=False),
+			product="cloudloan",
+			environment=self.env
+		)
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		self.r.set("jk_ckshd_12_periods_contractId", rep['content']['contractId'])

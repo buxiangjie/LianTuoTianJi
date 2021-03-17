@@ -8,6 +8,8 @@ import pymysql
 import time
 import sys
 import os
+import requests
+import json
 
 from common.common_func import Common
 from typing import Optional
@@ -70,6 +72,7 @@ class GetSqlData:
 			conn = GetSqlData.conn_database(environment, source)
 			cur = conn.cursor()
 			cur.execute(sql)
+			Ulog.info(f"""执行查询语句:{sql}""")
 			return cur.fetchall()
 		except Exception as e:
 			raise e
@@ -156,7 +159,6 @@ class GetSqlData:
 		# noinspection PyGlobalUndefined
 		sql = f"""Select loan_result from sandbox_saas.project_detail where id = {project_id};"""
 		loan_result = GetSqlData.exec_select(environment, sql)[0].get('loan_result')
-		Ulog.info(f"loan_result:{loan_result}")
 		return loan_result
 
 	@staticmethod
@@ -164,8 +166,16 @@ class GetSqlData:
 		"""放款申请后调用，查询放款状态是否成功"""
 		# noinspection PyGlobalUndefined
 		Ulog.info("开始检查放款步骤")
+
+		# datas = '{"projectId":"%s","code":2000,"success":true,"inProcess":false}'%project_id
+		# Ulog.info(datas)
+		# rep = requests.post(url="http://api-qa1.cloudloan.com:9011/api/v1/busi/callback/loan/apply",
+		# 			  data=datas)
+		# Ulog.info(rep.status_code)
+		# Ulog.info(rep.text)
+		# http://api-qa1.cloudloan.com 39.107.43.201
+		# while True:
 		Common.trigger_task("projectLoanReparationJob", environment)
-		time.sleep(5)
 		if GetSqlData().check_loan_result(environment, project_id) == -1:
 			raise Exception("放款状态不正确，未申请放款成功")
 		else:
@@ -182,9 +192,18 @@ class GetSqlData:
 					if res != 1:
 						Ulog.info(f"当前loan_result为:{res};当前循环次数为:{version}")
 						version += 1
-						time.sleep(5)
+						time.sleep(1)
 			except Exception as e:
 				raise e
+
+	@staticmethod
+	def check_pay_order_code(environment:str, project_id:str):
+		"""检查steamrunner.pay_order的code"""
+		# noinspection PyGlobalUndefined
+		sql = f"""Select code from sandbox_saas_steamrunner.sr_pay_order where project_id = {project_id};"""
+		code = GetSqlData.exec_select(environment, sql)[0].get('code')
+		return code
+
 
 	@staticmethod
 	def change_pay_status(environment: str, project_id: str):
@@ -214,7 +233,10 @@ class GetSqlData:
 				set loan_result=2,loan_status=0,loan_step=0
 				where id={project_id};
 				"""
-			sqls = [sql1,sql2,sql3,sql4]
+			if GetSqlData.check_pay_order_code(environment, project_id) in (2002, 2003):
+				sqls = [sql1, sql2, sql3, sql4]
+			else:
+				sqls = [sql1]
 			for sql in sqls:
 				GetSqlData.exec_update(environment, sql)
 		else:
@@ -670,5 +692,18 @@ class GetSqlData:
 				update sandbox_saas_athena.risk_apply 
 				set audit_result='APPROVE',quota=300000,step='COMPLETED',return_code=2000 
 				where apply_id='{apply_id}';
+				"""
+		GetSqlData.exec_update(environment, sql)
+
+	@staticmethod
+	def change_plan_pay_date(environment: str, project_id: str, period: int):
+		"""修改还款计划应还时间"""
+		# noinspection PyGlobalUndefined
+		asset_id = GetSqlData.get_asset_id(environment, project_id)
+		table = "repayment_plan_0" + GetSqlData.get_sub_table(environment, asset_id)
+		sql = f"""
+				update sandbox_saas.{table}
+				set plan_pay_date='{Common.get_time("day")}'
+				where asset_id='{asset_id}' and period={period};
 				"""
 		GetSqlData.exec_update(environment, sql)
