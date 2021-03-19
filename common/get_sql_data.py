@@ -232,6 +232,7 @@ class GetSqlData:
 				set loan_result=2,loan_status=0,loan_step=0
 				where id={project_id};
 				"""
+			time.sleep(3)
 			if GetSqlData.check_pay_order_code(environment, project_id) in (2002, 2003):
 				sqls = [sql1, sql2, sql3, sql4]
 			else:
