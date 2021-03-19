@@ -8,8 +8,6 @@ import pymysql
 import time
 import sys
 import os
-import requests
-import json
 
 from common.common_func import Common
 from typing import Optional
@@ -53,9 +51,9 @@ class GetSqlData:
 			conn.commit()
 			Ulog.info(f"执行sql:{sql}")
 		except Exception as e:
+			conn.rollback()
 			raise e
 		finally:
-			conn.rollback()
 			cur.close()
 			conn.close()
 
@@ -97,7 +95,8 @@ class GetSqlData:
 		"""
 		# noinspection PyGlobalUndefined
 		sql = f'''Select credit_step from sandbox_saas.credit where id = {credit_id};'''
-		return GetSqlData.exec_select(environment, sql)[0].get('credit_step')
+		credit_step = GetSqlData.exec_select(environment, sql)[0].get("credit_step")
+		return credit_step
 
 	@staticmethod
 	def change_credit_step(environment: str, credit_id: str) -> str:
@@ -201,7 +200,7 @@ class GetSqlData:
 		"""检查steamrunner.pay_order的code"""
 		# noinspection PyGlobalUndefined
 		sql = f"""Select code from sandbox_saas_steamrunner.sr_pay_order where project_id = {project_id};"""
-		code = GetSqlData.exec_select(environment, sql)[0].get('code')
+		code = GetSqlData.exec_select(environment, sql)[0].get("code")
 		return code
 
 
