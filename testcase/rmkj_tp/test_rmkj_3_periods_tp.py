@@ -545,7 +545,6 @@ class TestRmkj3Tp:
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 		# 修改支付表中的品钛返回code
-		time.sleep(8)
 		GetSqlData.change_pay_status(
 			environment=env,
 			project_id=r.get('rmkj_3_periods_projectId')

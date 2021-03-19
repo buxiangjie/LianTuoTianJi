@@ -325,7 +325,6 @@ class JfxTp(unittest.TestCase):
 			environment=self.env
 		)
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
-		time.sleep(8)
 		GetSqlData.change_pay_status(
 			environment=self.env,
 			project_id=self.r.get('jfx_projectId')

@@ -318,7 +318,6 @@ class TestNewRomaTp:
 	@pytest.mark.asset
 	def test_107_pfa(self, r, env):
 		"""放款"""
-		time.sleep(5)
 		data = excel_table_byname(self.file, 'project_loan')
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -346,7 +345,6 @@ class TestNewRomaTp:
 			environment=env
 		)
 		assert (int(data[0]['resultCode']), rep['resultCode'])
-		time.sleep(8)
 		# 修改支付表中的品钛返回code
 		GetSqlData.change_pay_status(
 			environment=env,

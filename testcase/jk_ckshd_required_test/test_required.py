@@ -69,7 +69,7 @@ class ApplyNone(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = 'test'
+		cls.env = 'qa'
 		cls.url = ApplyNone.excel_data[0]['url']
 		cls.headers = ApplyNone.excel_data[0]['headers']
 		cls.param = ApplyNone.excel_data[0]['param']
@@ -174,7 +174,10 @@ class ApplyNone(unittest.TestCase):
 		)
 		key = str(case).split("空")[1].split(".")[0]
 		value = str(case).split("空")[1].split(".")[1]
-		param[key][value] = None
+		if key == value:
+			param[key] = None
+		else:
+			param[key][value] = None
 		headers = json.loads(self.headers)
 		rep = Common.response(
 			faceaddr=self.url,

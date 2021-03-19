@@ -440,7 +440,8 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 				"sourceUserId": self.r.get("jk_ckshd_12_periods_sourceUserId"),
 				"serviceSn": self.r.get("jk_ckshd_12_periods_loan_serviceSn"),
 				"id": self.r.get('jk_ckshd_12_periods_cardNum'),
-				"accountName": self.r.get("jk_ckshd_12_periods_custName")
+				"accountName": self.r.get("jk_ckshd_12_periods_custName"),
+				"amount": 50000
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -456,7 +457,6 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		# 修改支付表中的品钛返回code
-		time.sleep(3)
 		GetSqlData.change_pay_status(
 			environment=self.env,
 			project_id=self.r.get('jk_ckshd_12_periods_projectId')

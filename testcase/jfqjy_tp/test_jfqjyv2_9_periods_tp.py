@@ -272,7 +272,6 @@ class JfqjyV29Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		# 修改支付表中的品钛返回code
-		time.sleep(8)
 		GetSqlData.change_pay_status(
 			environment=self.env,
 			project_id=self.r.get('jfqjyv2_9_periods_projectId')

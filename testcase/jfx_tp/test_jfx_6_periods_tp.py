@@ -317,18 +317,17 @@ class Jfx3PeriodTp(unittest.TestCase):
 			environment=self.env
 		)
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
-		time.sleep(8)
 		GetSqlData.change_pay_status(
-			environment=self.env,
-			project_id=self.r.get('jfx_6_periods_projectId')
-		)
-		GetSqlData.loan_set(
 			environment=self.env,
 			project_id=self.r.get('jfx_6_periods_projectId')
 		)
 
 	def test_109_pfa_query(self):
 		"""放款结果查询"""
+		GetSqlData.loan_set(
+			environment=self.env,
+			project_id=self.r.get('jfx_6_periods_projectId')
+		)
 		data = excel_table_byname(self.file, 'pfa_query')
 		param = json.loads(data[0]['param'])
 		param.update({"serviceSn": self.r.get('jfx_6_periods_pfa_serviceSn')})
