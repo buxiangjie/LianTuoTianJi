@@ -1,8 +1,8 @@
 # -*- coding: UTF-8 -*-
 """
 @auth:bxj
-@date:2019-08-23 09:28
-@describe:牙医贷授信接口字段必填项校验
+@date:2021-03-23 10:28
+@describe:即科🐈‍⬛商户贷授信接口字段必填项校验
 """
 import unittest
 import json
@@ -14,17 +14,17 @@ from log.logger import Logger
 from common.open_excel import excel_table_byname
 from config.configer import Config
 
-logger = Logger(logger="jfx").getlog()
+logger = Logger(logger="cwshd").getlog()
 
 
 @ddt.ddt
 class CreditNone(unittest.TestCase):
-	file = Config().get_item('File', 'jfx_required_case_file')
+	file = Config().get_item('File', 'jk_cwshd_required_case_file')
 	excel_data = excel_table_byname(file, 'credit_none')
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = 'test'
+		cls.env = 'qa'
 		cls.url = CreditNone.excel_data[0]['url']
 		cls.headers = CreditNone.excel_data[0]['headers']
 		cls.param = CreditNone.excel_data[0]['param']
@@ -64,7 +64,7 @@ class CreditNone(unittest.TestCase):
 
 @ddt.ddt
 class ApplyNone(unittest.TestCase):
-	file = Config().get_item('File', 'jfx_required_case_file')
+	file = Config().get_item('File', 'jk_cwshd_required_case_file')
 	excel_data = excel_table_byname(file, 'apply_none')
 
 	@classmethod
@@ -80,31 +80,31 @@ class ApplyNone(unittest.TestCase):
 
 	def credit(self):
 		print("授信------")
-		data = excel_table_byname(Config().get_item('File', 'jfx_case_file'), 'credit')
-		Common.p2p_get_userinfo('jfx', self.env)
+		data = excel_table_byname(Config().get_item('File', 'jk_cwshd_case_file'), 'credit')
+		Common.p2p_get_userinfo('jk_cwshd_6_periods', self.env)
 		self.r.mset(
 			{
-				"jfx_sourceUserId": Common.get_random('userid'),
-				'jfx_transactionId': Common.get_random('transactionId'),
-				"jfx_phone": Common.get_random('phone'),
-				"jfx_firstCreditDate": Common.get_time()
+				"jk_cwshd_6_periods_sourceUserId": Common.get_random('userid'),
+				'jk_cwshd_6_periods_transactionId': Common.get_random('transactionId'),
+				"jk_cwshd_6_periods_phone": Common.get_random('phone'),
+				"jk_cwshd_6_periods_firstCreditDate": Common.get_time()
 			}
 		)
 		param = json.loads(data[0]['param'])
 		param['personalInfo'].update(
 			{
-				"cardNum": self.r.get('jfx_cardNum'),
-				"custName": self.r.get('jfx_custName'),
-				"phone": self.r.get('jfx_phone')
+				"cardNum": self.r.get('jk_cwshd_6_periods_cardNum'),
+				"custName": self.r.get('jk_cwshd_6_periods_custName'),
+				"phone": self.r.get('jk_cwshd_6_periods_phone')
 			}
 		)
 		param['applyInfo'].update({"applyTime": Common.get_time()})
 		param['entityInfo']['unifiedSocialCreditCode'] = Common.get_random("businessLicenseNo")
 		param.update(
 			{
-				"sourceUserId": self.r.get('jfx_sourceUserId'),
+				"sourceUserId": self.r.get('jk_cwshd_6_periods_sourceUserId'),
 				"serviceSn": Common.get_random('serviceSn'),
-				"transactionId": self.r.get('jfx_transactionId')
+				"transactionId": self.r.get('jk_cwshd_6_periods_transactionId')
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -121,8 +121,8 @@ class ApplyNone(unittest.TestCase):
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		self.r.mset(
 			{
-				"jfx_creditId": rep['content']['creditId'],
-				"jfx_userId": rep['content']['userId']
+				"jk_cwshd_6_periods_creditId": rep['content']['creditId'],
+				"jk_cwshd_6_periods_userId": rep['content']['userId']
 			}
 		)
 
@@ -131,12 +131,12 @@ class ApplyNone(unittest.TestCase):
 		print("授信结果检查-------")
 		GetSqlData.credit_set(
 			environment=self.env,
-			credit_id=self.r.get("jfx_creditId")
+			credit_id=self.r.get("jk_cwshd_6_periods_creditId")
 		)
-		GetSqlData.check_user_amount(user_id=self.r.get("jfx_userId"), environment=self.env)
-		data = excel_table_byname(Config().get_item('File', 'jfx_case_file'), 'query_result')
+		GetSqlData.check_user_amount(user_id=self.r.get("jk_cwshd_6_periods_userId"), environment=self.env)
+		data = excel_table_byname(Config().get_item('File', 'jk_cwshd_case_file'), 'query_result')
 		param = json.loads(data[0]['param'])
-		param.update({"creditId": self.r.get('jfx_creditId')})
+		param.update({"creditId": self.r.get('jk_cwshd_6_periods_creditId')})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -161,15 +161,15 @@ class ApplyNone(unittest.TestCase):
 		param.update(
 			{
 				"sourceProjectId": Common.get_random("sourceProjectId"),
-				"sourceUserId": self.r.get('jfx_sourceUserId'),
-				"transactionId": self.r.get('jfx_transactionId')
+				"sourceUserId": self.r.get('jk_cwshd_6_periods_sourceUserId'),
+				"transactionId": self.r.get('jk_cwshd_6_periods_transactionId')
 			}
 		)
 		param['personalInfo'].update(
 			{
-				"cardNum": self.r.get('jfx_cardNum'),
-				"custName": self.r.get('jfx_custName'),
-				"phone": self.r.get('jfx_phone')
+				"cardNum": self.r.get('jk_cwshd_6_periods_cardNum'),
+				"custName": self.r.get('jk_cwshd_6_periods_custName'),
+				"phone": self.r.get('jk_cwshd_6_periods_phone')
 			}
 		)
 		key = str(case).split("空")[1].split(".")[0]
