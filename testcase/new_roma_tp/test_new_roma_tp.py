@@ -192,10 +192,6 @@ class TestNewRomaTp:
 			environment=env
 		)
 		assert (rep['resultCode'], int(data[0]['resultCode']))
-		GetSqlData.check_user_amount(
-			user_id=r.get('new_roma_userId'),
-			environment=env
-		)
 
 	@allure.title("进件申请")
 	@allure.severity("blocker")
