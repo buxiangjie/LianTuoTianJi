@@ -5,19 +5,18 @@
 @describe:金服侠-牙医贷一期12期产品流程用例
 """
 
-import time
 import os
 import json
 import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import allure
 import pytest
-
 from common.common_func import Common
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 @allure.feature("金服侠12期")

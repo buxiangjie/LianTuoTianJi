@@ -32,7 +32,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 	def test_100_credit_apply(self):
 		"""额度授信"""
 		data = excel_table_byname(self.file, 'credit')
-		Common.p2p_get_userinfo('jk_ckshd_12_periods', self.env)
+		# Common.p2p_get_userinfo('jk_ckshd_12_periods', self.env)
 		self.r.mset(
 			{
 				"jk_ckshd_12_periods_sourceUserId": Common.get_random('userid'),
