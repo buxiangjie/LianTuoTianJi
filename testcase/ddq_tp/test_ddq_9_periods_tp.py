@@ -8,7 +8,6 @@ import unittest
 import os
 import json
 import sys
-import time
 
 from common.common_func import Common
 from common.open_excel import excel_table_byname

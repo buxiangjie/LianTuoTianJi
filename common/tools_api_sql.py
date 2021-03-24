@@ -24,7 +24,7 @@ class ToolsSql(GetSqlData):
 		GetSqlData.exec_update(environment, sql)
 
 	@staticmethod
-	def del_asset_data(environment: str, asset_id: int):
+	def del_asset_data(environment: str, asset_id: str):
 		"""删除资产相关数据"""
 		table_index = GetSqlData.get_sub_table(environment, asset_id)
 		plan_table = 'repayment_plan_0' + table_index

@@ -4,7 +4,6 @@
 @date:2020-05-12 11:26:00
 @describe: 即科商户贷12期
 """
-import time
 import unittest
 import os
 import json

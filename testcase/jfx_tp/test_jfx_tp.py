@@ -8,7 +8,6 @@
 import unittest
 import os
 import json
-import time
 import sys
 
 from common.common_func import Common
@@ -24,7 +23,7 @@ class JfxTp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = 'qa'
+		cls.env = 'test'
 		cls.r = Common.conn_redis(environment=cls.env)
 		cls.file = Config().get_item('File', 'jfx_case_file')
 
@@ -202,6 +201,7 @@ class JfxTp(unittest.TestCase):
 			}
 		)
 		self.r.set("jfx_corporateAccountName", param['cardInfo']['corporateAccountName'])
+		del param["contactInfo"]
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -213,8 +213,8 @@ class JfxTp(unittest.TestCase):
 			product="cloudloan",
 			environment=self.env
 		)
-		self.r.set('jfx_projectId', rep['content']['projectId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		self.r.set('jfx_projectId', rep['content']['projectId'])
 
 	def test_105_query_apply_result(self):
 		"""进件结果查询"""

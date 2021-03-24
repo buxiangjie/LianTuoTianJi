@@ -7,13 +7,8 @@
 
 import allure
 import pytest
-import sys
-import os
 
 from common.common_func import Common
-
-# 把当前目录的父目录加到sys.path中
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 
 
 def pytest_addoption(parser):

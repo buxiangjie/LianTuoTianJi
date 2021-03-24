@@ -2,7 +2,6 @@
 # -*- coding: UTF-8 -*-
 import xlrd, os
 
-from typing import Optional
 
 
 def open_excel(file: str):
