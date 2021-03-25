@@ -93,7 +93,7 @@ class Jfqjy9Tp(unittest.TestCase):
 	def test_101_sign_credit(self):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		param = Common.get_json_data('data', 'jfq_sign_credit.json')
+		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
@@ -101,7 +101,8 @@ class Jfqjy9Tp(unittest.TestCase):
 				"contractType": 5,
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": self.r.get('jfqjy_9_periods_transactionId'),
-				"associationId": self.r.get('jfqjy_9_periods_projectId')
+				"associationId": self.r.get('jfqjy_9_periods_projectId'),
+				"content": Common.get_json_data('data', 'credit_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -148,14 +149,15 @@ class Jfqjy9Tp(unittest.TestCase):
 	def test_103_sign_borrow(self):
 		"""上传借款协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		param = Common.get_json_data('data', 'jfq_sign_borrow.json')
+		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
 				"sourceUserId": self.r.get('jfqjy_9_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": self.r.get('jfqjy_9_periods_transactionId'),
-				"associationId": self.r.get('jfqjy_9_periods_projectId')
+				"associationId": self.r.get('jfqjy_9_periods_projectId'),
+				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:

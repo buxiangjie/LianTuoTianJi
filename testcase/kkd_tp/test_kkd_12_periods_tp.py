@@ -86,7 +86,7 @@ class TestKkd12Tp:
 	def test_101_sign_credit(self, r, env):
 		"""上传进件授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		param = Common.get_json_data('data', 'kkd_sign_credit.json')
+		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
@@ -94,7 +94,8 @@ class TestKkd12Tp:
 				"contractType": 5,
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": r.get('kkd_12_periods_transactionId'),
-				"associationId": r.get('kkd_12_periods_projectId')
+				"associationId": r.get('kkd_12_periods_projectId'),
+				"content": Common.get_json_data('data', 'kkd_sign_credit.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -152,14 +153,15 @@ class TestKkd12Tp:
 	def test_103_sign_borrow(self, r, env):
 		"""上传借款协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		param = Common.get_json_data('data', 'kkd_sign_borrow.json')
+		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
 				"sourceUserId": r.get('kkd_12_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": r.get('kkd_12_periods_transactionId'),
-				"associationId": r.get('kkd_12_periods_projectId')
+				"associationId": r.get('kkd_12_periods_projectId'),
+				"content": Common.get_json_data('data', 'kkd_sign_borrow.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:

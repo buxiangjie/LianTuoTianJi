@@ -129,7 +129,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 	def test_103_sign_credit(self):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		param = Common.get_json_data('data', 'jk_ckshd_credit_contract_sign.json')
+		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
@@ -137,7 +137,8 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 				"contractType": 1,
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": self.r.get('jk_ckshd_12_periods_transactionId'),
-				"associationId": self.r.get('jk_ckshd_12_periods_creditId')
+				"associationId": self.r.get('jk_ckshd_12_periods_creditId'),
+				"content": Common.get_json_data('data', 'credit_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -266,14 +267,15 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 	def test_107_sign_borrow(self):
 		"""上传借款协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		param = Common.get_json_data('data', 'jfq_sign_borrow.json')
+		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
 				"sourceUserId": self.r.get('jk_ckshd_12_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": self.r.get('jk_ckshd_12_periods_transactionId'),
-				"associationId": self.r.get('jk_ckshd_12_periods_projectId')
+				"associationId": self.r.get('jk_ckshd_12_periods_projectId'),
+				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -751,7 +753,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 	def test_122_sign_purchase_vouchers(self):
 		"""上传采购凭证"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		param = Common.get_json_data('data', 'jk_ckshd_sign_purchase_vouchers.json')
+		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
@@ -759,7 +761,8 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": self.r.get('jk_ckshd_12_periods_transactionId'),
 				"associationId": self.r.get('jk_ckshd_12_periods_projectId'),
-				"contractType": 15
+				"contractType": 15,
+				"content": Common.get_json_data('data', 'credit_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:

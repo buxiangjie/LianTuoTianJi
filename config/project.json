@@ -129,6 +129,16 @@
     "name": "jfx_12_periods_custName",
     "card": "jfx_12_periods_bankcard"
   },
+  "jfx_18_periods": {
+    "id": "jfx_18_periods_cardNum",
+    "name": "jfx_18_periods_custName",
+    "card": "jfx_18_periods_bankcard"
+  },
+  "jfx_24_periods": {
+    "id": "jfx_24_periods_cardNum",
+    "name": "jfx_24_periods_custName",
+    "card": "jfx_24_periods_bankcard"
+  },
   "jfx_required": {
     "id": "jfx_required_cardNum",
     "name": "jfx_required_custName",

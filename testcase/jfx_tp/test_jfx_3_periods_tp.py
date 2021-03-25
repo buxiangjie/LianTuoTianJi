@@ -126,7 +126,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 	def test_3_sign_credit(self):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		param = Common.get_json_data('data', 'jfx_credit_contract_sign.json')
+		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
@@ -134,7 +134,8 @@ class Jfx3PeriodTp(unittest.TestCase):
 				"contractType": 1,
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": self.r.get('jfx_3_periods_transactionId'),
-				"associationId": self.r.get('jfx_3_periods_creditId')
+				"associationId": self.r.get('jfx_3_periods_creditId'),
+				"content": Common.get_json_data('data', 'credit_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -235,7 +236,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 	def test_51_sign_credit(self):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		param = Common.get_json_data('data', 'jfx_credit_contract_sign.json')
+		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
@@ -243,7 +244,8 @@ class Jfx3PeriodTp(unittest.TestCase):
 				"contractType": 5,
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": self.r.get('jfx_3_periods_transactionId'),
-				"associationId": self.r.get('jfx_3_periods_projectId')
+				"associationId": self.r.get('jfx_3_periods_projectId'),
+				"content": Common.get_json_data('data', 'credit_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -262,7 +264,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 	def test_6_contract_sign(self):
 		"""上传借款合同"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		param = Common.get_json_data('data', 'jfx_borrow_periods_contract_sign.json')
+		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
@@ -270,7 +272,8 @@ class Jfx3PeriodTp(unittest.TestCase):
 				"contractType": 2,
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": self.r.get('jfx_3_periods_transactionId'),
-				"associationId": self.r.get('jfx_3_periods_projectId')
+				"associationId": self.r.get('jfx_3_periods_projectId'),
+				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:

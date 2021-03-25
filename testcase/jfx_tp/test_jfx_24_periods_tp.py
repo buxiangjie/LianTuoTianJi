@@ -1,8 +1,8 @@
 # -*- coding: UTF-8 -*-
 """
 @auth:bxj
-@date: 2019-08-20
-@describe:金服侠-牙医贷一期12期产品流程用例
+@date: 2021-03-25
+@describe:金服侠-牙医贷一期24期产品流程用例
 """
 
 import os
@@ -16,6 +16,7 @@ from common.common_func import Common
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
+
 
 
 @allure.feature("金服侠12期")
@@ -32,21 +33,21 @@ class TestJfx12PeriodTp:
 	def test_100_credit_apply(self, r, env):
 		"""额度授信"""
 		data = excel_table_byname(self.file, 'credit_apply_data')
-		Common.p2p_get_userinfo('jfx_12_periods', env)
+		Common.p2p_get_userinfo('jfx_24_periods', env)
 		r.mset(
 			{
-				"jfx_12_periods_sourceUserId": Common.get_random('userid'),
-				'jfx_12_periods_transactionId': Common.get_random('transactionId'),
-				"jfx_12_periods_phone": Common.get_random('phone'),
-				"jfx_12_periods_firstCreditDate": Common.get_time()
+				"jfx_24_periods_sourceUserId": Common.get_random('userid'),
+				'jfx_24_periods_transactionId': Common.get_random('transactionId'),
+				"jfx_24_periods_phone": Common.get_random('phone'),
+				"jfx_24_periods_firstCreditDate": Common.get_time()
 			}
 		)
 		param = json.loads(data[0]['param'])
 		param['personalInfo'].update(
 			{
-				"cardNum": r.get('jfx_12_periods_cardNum'),
-				"custName": r.get('jfx_12_periods_custName'),
-				"phone": r.get('jfx_12_periods_phone'),
+				"cardNum": r.get('jfx_24_periods_cardNum'),
+				"custName": r.get('jfx_24_periods_custName'),
+				"phone": r.get('jfx_24_periods_phone'),
 				"isDoctor": 0,
 				"applicantClinicRelationship": 1
 			}
@@ -54,9 +55,9 @@ class TestJfx12PeriodTp:
 		param['applyInfo'].update({"applyTime": Common.get_time()})
 		param.update(
 			{
-				"sourceUserId": r.get('jfx_12_periods_sourceUserId'),
+				"sourceUserId": r.get('jfx_24_periods_sourceUserId'),
 				"serviceSn": Common.get_random('serviceSn'),
-				"transactionId": r.get('jfx_12_periods_transactionId')
+				"transactionId": r.get('jfx_24_periods_transactionId')
 			}
 		)
 		# del param["imageInfo"]["businessLicense"] #营业执照
@@ -77,8 +78,8 @@ class TestJfx12PeriodTp:
 		)
 		r.mset(
 			{
-				"jfx_12_periods_creditId": rep['content']['creditId'],
-				"jfx_12_periods_userId": rep['content']['userId']
+				"jfx_24_periods_creditId": rep['content']['creditId'],
+				"jfx_24_periods_userId": rep['content']['userId']
 			}
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
@@ -94,11 +95,11 @@ class TestJfx12PeriodTp:
 		"""授信结果查询"""
 		GetSqlData.credit_set(
 			environment=env,
-			credit_id=r.get("jfx_12_periods_creditId")
+			credit_id=r.get("jfx_24_periods_creditId")
 		)
 		data = excel_table_byname(self.file, 'credit_query_result')
 		param = json.loads(data[0]['param'])
-		param.update({"creditId": r.get('jfx_12_periods_creditId')})
+		param.update({"creditId": r.get('jfx_24_periods_creditId')})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -125,8 +126,8 @@ class TestJfx12PeriodTp:
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceUserId": r.get('jfx_12_periods_sourceUserId'),
-				"userId": r.get('jfx_12_periods_userId')
+				"sourceUserId": r.get('jfx_24_periods_sourceUserId'),
+				"userId": r.get('jfx_24_periods_userId')
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -155,11 +156,11 @@ class TestJfx12PeriodTp:
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
-				"sourceUserId": r.get('jfx_12_periods_sourceUserId'),
+				"sourceUserId": r.get('jfx_24_periods_sourceUserId'),
 				"contractType": 1,
 				"sourceContractId": Common.get_random('userid'),
-				"transactionId": r.get('jfx_12_periods_transactionId'),
-				"associationId": r.get('jfx_12_periods_creditId'),
+				"transactionId": r.get('jfx_24_periods_transactionId'),
+				"associationId": r.get('jfx_24_periods_creditId'),
 				"content": Common.get_json_data('data', 'credit_sign.json').get("content")
 			}
 		)
@@ -187,19 +188,19 @@ class TestJfx12PeriodTp:
 		"""进件"""
 		data = excel_table_byname(self.file, 'test_project')
 		param = json.loads(data[0]['param'])
-		r.set('jfx_12_periods_sourceProjectId', Common.get_random('sourceProjectId'))
+		r.set('jfx_24_periods_sourceProjectId', Common.get_random('sourceProjectId'))
 		param.update(
 			{
-				"sourceProjectId": r.get('jfx_12_periods_sourceProjectId'),
-				"sourceUserId": r.get('jfx_12_periods_sourceUserId'),
-				"transactionId": r.get('jfx_12_periods_transactionId')
+				"sourceProjectId": r.get('jfx_24_periods_sourceProjectId'),
+				"sourceUserId": r.get('jfx_24_periods_sourceUserId'),
+				"transactionId": r.get('jfx_24_periods_transactionId')
 			}
 		)
 		param['personalInfo'].update(
 			{
-				"cardNum": r.get('jfx_12_periods_cardNum'),
-				"custName": r.get('jfx_12_periods_custName'),
-				"phone": r.get('jfx_12_periods_phone')
+				"cardNum": r.get('jfx_24_periods_cardNum'),
+				"custName": r.get('jfx_24_periods_custName'),
+				"phone": r.get('jfx_24_periods_phone')
 			}
 		)
 		param['applyInfo'].update(
@@ -225,7 +226,7 @@ class TestJfx12PeriodTp:
 				"unifiedSocialCreditCode": Common.get_random("businessLicenseNo")
 			}
 		)
-		r.set("jfx_12_periods_corporateAccountName", param['cardInfo']['corporateAccountName'])
+		r.set("jfx_24_periods_corporateAccountName", param['cardInfo']['corporateAccountName'])
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -237,7 +238,7 @@ class TestJfx12PeriodTp:
 			product="cloudloan",
 			environment=env
 		)
-		r.set('jfx_12_periods_projectId', rep['content']['projectId'])
+		r.set('jfx_24_periods_projectId', rep['content']['projectId'])
 		assert int(data[0]['resultCode']) == rep['resultCode']
 
 	@allure.title("进件结果查询")
@@ -250,15 +251,15 @@ class TestJfx12PeriodTp:
 	def test_105_query_apply_result(self, r, env):
 		"""进件结果查询"""
 		GetSqlData.change_project_audit_status(
-			project_id=r.get('jfx_12_periods_projectId'),
+			project_id=r.get('jfx_24_periods_projectId'),
 			environment=env
 		)
 		data = excel_table_byname(self.file, 'project_query_apply_result')
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceProjectId": r.get('jfx_12_periods_sourceProjectId'),
-				"projectId": r.get('jfx_12_periods_projectId')
+				"sourceProjectId": r.get('jfx_24_periods_sourceProjectId'),
+				"projectId": r.get('jfx_24_periods_projectId')
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -287,11 +288,11 @@ class TestJfx12PeriodTp:
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
-				"sourceUserId": r.get('jfx_12_periods_sourceUserId'),
+				"sourceUserId": r.get('jfx_24_periods_sourceUserId'),
 				"contractType": 5,
 				"sourceContractId": Common.get_random('userid'),
-				"transactionId": r.get('jfx_12_periods_transactionId'),
-				"associationId": r.get('jfx_12_periods_projectId'),
+				"transactionId": r.get('jfx_24_periods_transactionId'),
+				"associationId": r.get('jfx_24_periods_projectId'),
 				"content": Common.get_json_data('data', 'credit_sign.json').get("content")
 			}
 		)
@@ -321,12 +322,12 @@ class TestJfx12PeriodTp:
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
-				"sourceUserId": r.get('jfx_12_periods_sourceUserId'),
+				"sourceUserId": r.get('jfx_24_periods_sourceUserId'),
 				"contractType": 2,
 				"sourceContractId": Common.get_random('userid'),
-				"transactionId": r.get('jfx_12_periods_transactionId'),
-				"associationId": r.get('jfx_12_periods_projectId'),
-				"content": Common.get_json_data('data', 'jfx_borrow_periods_contract_sign.json').get("content")
+				"transactionId": r.get('jfx_24_periods_transactionId'),
+				"associationId": r.get('jfx_24_periods_projectId'),
+				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -354,17 +355,17 @@ class TestJfx12PeriodTp:
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceProjectId": r.get('jfx_12_periods_sourceProjectId'),
-				"projectId": r.get('jfx_12_periods_projectId'),
-				"sourceUserId": r.get('jfx_12_periods_sourceUserId'),
+				"sourceProjectId": r.get('jfx_24_periods_sourceProjectId'),
+				"projectId": r.get('jfx_24_periods_projectId'),
+				"sourceUserId": r.get('jfx_24_periods_sourceUserId'),
 				"serviceSn": Common.get_random('serviceSn'),
-				"accountName": r.get("jfx_12_periods_corporateAccountName"),
+				"accountName": r.get("jfx_24_periods_corporateAccountName"),
 				"bankCode": 86,
 				"amount": 84920.00,
 				"accountNo": "6214830173648711"  # 6227002432220410613
 			}
 		)
-		r.set("jfx_12_periods_pfa_serviceSn", param['serviceSn'])
+		r.set("jfx_24_periods_pfa_serviceSn", param['serviceSn'])
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -379,7 +380,7 @@ class TestJfx12PeriodTp:
 		assert int(data[0]['resultCode']) == rep['resultCode']
 		GetSqlData.change_pay_status(
 			environment=env,
-			project_id=r.get('jfx_12_periods_projectId')
+			project_id=r.get('jfx_24_periods_projectId')
 		)
 
 	@allure.title("放款结果查询")
@@ -392,11 +393,11 @@ class TestJfx12PeriodTp:
 		"""放款结果查询"""
 		GetSqlData.loan_set(
 			environment=env,
-			project_id=r.get('jfx_12_periods_projectId')
+			project_id=r.get('jfx_24_periods_projectId')
 		)
 		data = excel_table_byname(self.file, 'pfa_query')
 		param = json.loads(data[0]['param'])
-		param.update({"serviceSn": r.get('jfx_12_periods_pfa_serviceSn')})
+		param.update({"serviceSn": r.get('jfx_24_periods_pfa_serviceSn')})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -420,10 +421,10 @@ class TestJfx12PeriodTp:
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceUserId": r.get("jfx_12_periods_sourceUserId"),
-				"transactionId": r.get("jfx_12_periods_sourceProjectId"),
-				"sourceProjectId": r.get("jfx_12_periods_sourceProjectId"),
-				"projectId": r.get("jfx_12_periods_projectId"),
+				"sourceUserId": r.get("jfx_24_periods_sourceUserId"),
+				"transactionId": r.get("jfx_24_periods_sourceProjectId"),
+				"sourceProjectId": r.get("jfx_24_periods_sourceProjectId"),
+				"projectId": r.get("jfx_24_periods_projectId"),
 				"businessType": 2
 			}
 		)
@@ -439,7 +440,7 @@ class TestJfx12PeriodTp:
 			environment=env
 		)
 		r.set(
-			"jfx_12_periods_early_settlement_repayment_plan",
+			"jfx_24_periods_early_settlement_repayment_plan",
 			json.dumps(rep['content']['repaymentPlanList'])
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -454,7 +455,7 @@ class TestJfx12PeriodTp:
 		"""还款计划查询"""
 		data = excel_table_byname(self.file, 'repayment_plan')
 		param = json.loads(data[0]['param'])
-		param.update({"projectId": r.get('jfx_12_periods_projectId')})
+		param.update({"projectId": r.get('jfx_24_periods_projectId')})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -467,7 +468,7 @@ class TestJfx12PeriodTp:
 			environment=env
 		)
 		assert int(data[0]['resultCode']) == rep['resultCode']
-		r.set("jfx_12_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
+		r.set("jfx_24_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
 	@allure.title("还款流水推送")
 	@allure.severity("blocker")
@@ -476,7 +477,7 @@ class TestJfx12PeriodTp:
 		"""还款流水推送"""
 		data = excel_table_byname(self.file, 'repayment')
 		param = json.loads(data[0]['param'])
-		repayment_plan_list = r.get("jfx_12_periods_repayment_plan")
+		repayment_plan_list = r.get("jfx_24_periods_repayment_plan")
 		success_amount = 0.00
 		repayment_detail_list = []
 		period = 1
@@ -492,9 +493,9 @@ class TestJfx12PeriodTp:
 		param.update(
 			{
 				"sourceRequestId": Common.get_random("requestNum"),
-				"projectId": r.get("jfx_12_periods_projectId"),
-				"sourceProjectId": r.get("jfx_12_periods_sourceProjectId"),
-				"sourceUserId": r.get("jfx_12_periods_sourceUserId"),
+				"projectId": r.get("jfx_24_periods_projectId"),
+				"sourceProjectId": r.get("jfx_24_periods_sourceProjectId"),
+				"sourceUserId": r.get("jfx_24_periods_sourceUserId"),
 				"serviceSn": Common.get_random("serviceSn"),
 				"payTime": Common.get_time("-"),
 				"successAmount": success_amount,
@@ -523,7 +524,7 @@ class TestJfx12PeriodTp:
 		data = excel_table_byname(self.file, 'repayment')
 		param = json.loads(data[0]['param'])
 		for per in range(1, 13):
-			repayment_plan_list = r.get("jfx_12_periods_repayment_plan")
+			repayment_plan_list = r.get("jfx_24_periods_repayment_plan")
 			success_amount = 0.00
 			repayment_detail_list = []
 			for i in json.loads(repayment_plan_list):
@@ -538,9 +539,9 @@ class TestJfx12PeriodTp:
 			param.update(
 				{
 					"sourceRequestId": Common.get_random("requestNum"),
-					"projectId": r.get("jfx_12_periods_projectId"),
-					"sourceProjectId": r.get("jfx_12_periods_sourceProjectId"),
-					"sourceUserId": r.get("jfx_12_periods_sourceUserId"),
+					"projectId": r.get("jfx_24_periods_projectId"),
+					"sourceProjectId": r.get("jfx_24_periods_sourceProjectId"),
+					"sourceUserId": r.get("jfx_24_periods_sourceUserId"),
 					"serviceSn": Common.get_random("serviceSn"),
 					"payTime": Common.get_time("-"),
 					"successAmount": success_amount,
@@ -569,12 +570,12 @@ class TestJfx12PeriodTp:
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=r.get("jfx_12_periods_projectId"),
+			project_id=r.get("jfx_24_periods_projectId"),
 			environment=env,
 			period=1,
 			repayment_plan_type=1
 		)
-		repayment_plan_list = r.get("jfx_12_periods_early_settlement_repayment_plan")
+		repayment_plan_list = r.get("jfx_24_periods_early_settlement_repayment_plan")
 		success_amount = 0.00
 		repayment_detail_list = []
 		for i in json.loads(repayment_plan_list):
@@ -587,9 +588,9 @@ class TestJfx12PeriodTp:
 			repayment_detail_list.append(plan_detail)
 		param.update(
 			{
-				"projectId": r.get("jfx_12_periods_projectId"),
-				"transactionId": r.get("jfx_12_periods_sourceProjectId"),
-				"sourceProjectId": r.get("jfx_12_periods_sourceProjectId"),
+				"projectId": r.get("jfx_24_periods_projectId"),
+				"transactionId": r.get("jfx_24_periods_sourceProjectId"),
+				"sourceProjectId": r.get("jfx_24_periods_sourceProjectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"planPayDate": str(plan_pay_date['plan_pay_date']),
 				"successAmount": success_amount,
@@ -619,12 +620,12 @@ class TestJfx12PeriodTp:
 		data = excel_table_byname(self.file, 'cash_push')
 		param = json.loads(data[0]['param'])
 		success_amount = GetSqlData.get_repayment_amount(
-			project_id=r.get("jfx_12_periods_projectId"), environment=env, period=1)
+			project_id=r.get("jfx_24_periods_projectId"), environment=env, period=1)
 		param.update(
 			{
 				"serviceSn": Common.get_random("serviceSn"),
-				"projectId": r.get("jfx_12_periods_projectId"),
-				"sourceProjectId": r.get("jfx_12_periods_sourceProjectId"),
+				"projectId": r.get("jfx_24_periods_projectId"),
+				"sourceProjectId": r.get("jfx_24_periods_sourceProjectId"),
 				"repaymentPlanId": Common.get_random("sourceProjectId"),
 				"sucessAmount": float(success_amount),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),

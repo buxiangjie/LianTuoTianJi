@@ -92,7 +92,7 @@ class Rmkj12Tp(unittest.TestCase):
 	def test_101_sign_credit(self):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		param = Common.get_json_data('data', 'rmkj_sign_credit.json')
+		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
@@ -100,7 +100,8 @@ class Rmkj12Tp(unittest.TestCase):
 				"contractType": 5,
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": self.r.get('rmkj_12_periods_transactionId'),
-				"associationId": self.r.get('rmkj_12_periods_projectId')
+				"associationId": self.r.get('rmkj_12_periods_projectId'),
+				"content": Common.get_json_data('data', 'credit_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -118,7 +119,6 @@ class Rmkj12Tp(unittest.TestCase):
 
 	def test_102_query_apply_result(self):
 		"""进件结果查询"""
-		time.sleep(4)
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('rmkj_12_periods_projectId'),
 			environment=self.env
@@ -148,7 +148,7 @@ class Rmkj12Tp(unittest.TestCase):
 	def test_103_sign_borrow(self):
 		"""上传借款协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		param = Common.get_json_data('data', 'rmkj_sign_borrow.json')
+		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
@@ -156,7 +156,8 @@ class Rmkj12Tp(unittest.TestCase):
 				"contractType": 2,
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": self.r.get('rmkj_12_periods_transactionId'),
-				"associationId": self.r.get('rmkj_12_periods_projectId')
+				"associationId": self.r.get('rmkj_12_periods_projectId'),
+				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:

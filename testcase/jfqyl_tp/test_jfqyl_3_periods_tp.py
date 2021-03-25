@@ -94,7 +94,7 @@ class Jfqyl3Tp(unittest.TestCase):
 	def test_101_sign_credit(self):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		param = Common.get_json_data('data', 'jfq_sign_credit.json')
+		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
@@ -102,7 +102,8 @@ class Jfqyl3Tp(unittest.TestCase):
 				"contractType": 5,
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": self.r.get('jfqyl_3_periods_transactionId'),
-				"associationId": self.r.get('jfqyl_3_periods_projectId')
+				"associationId": self.r.get('jfqyl_3_periods_projectId'),
+				"content": Common.get_json_data('data', 'credit_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -146,18 +147,18 @@ class Jfqyl3Tp(unittest.TestCase):
 		self.assertEqual(json.loads(rep.text)['resultCode'], int(data[0]['resultCode']))
 		self.assertEqual(json.loads(rep.text)['content']['auditStatus'], 2)
 
-	# @unittest.skip("_")
 	def test_103_sign_borrow(self):
 		"""上传借款协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		param = Common.get_json_data('data', 'jfq_sign_borrow.json')
+		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
 				"sourceUserId": self.r.get('jfqyl_3_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": self.r.get('jfqyl_3_periods_transactionId'),
-				"associationId": self.r.get('jfqyl_3_periods_projectId')
+				"associationId": self.r.get('jfqyl_3_periods_projectId'),
+				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:
