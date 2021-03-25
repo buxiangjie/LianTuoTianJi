@@ -62,7 +62,6 @@ class JfxTp(unittest.TestCase):
 		)
 		param["entityInfo"]["enterpriseCertificateNum"] = Common.get_random("transactionId")
 		param["entityInfo"]["enterpriseCertificateType"] = 1
-		param["entityInfo"]["inspectionEquipment"] = "1,2"
 		# del param["imageInfo"]["businessLicense"] #营业执照
 		# del param["imageInfo"]["medicalPracticeCertificate"] #本人医师执业证书
 		# del param["imageInfo"]["medicalInstitutionLicense"] #医疗机构执业许可证
@@ -276,7 +275,7 @@ class JfxTp(unittest.TestCase):
 	def test_107_contract_sign(self):
 		"""上传借款合同"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		param = Common.get_json_data('data', 'borrow_sign.json')
+		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
@@ -284,7 +283,8 @@ class JfxTp(unittest.TestCase):
 				"contractType": 2,
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": self.r.get('jfx_transactionId'),
-				"associationId": self.r.get('jfx_projectId')
+				"associationId": self.r.get('jfx_projectId'),
+				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:
