@@ -20,7 +20,7 @@ class KkdApply(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = sys.argv[3]
+		cls.env = "qa"
 		cls.param = KkdApply.excel_data[0]['param']
 		cls.headers = KkdApply.excel_data[0]['headers']
 		cls.url = KkdApply.excel_data[0]['url']
