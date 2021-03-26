@@ -14,68 +14,68 @@ from config.configer import Config
 from common.get_sql_data import GetSqlData
 
 
-@ddt.ddt
-class CreditNone(unittest.TestCase):
-	file = Config().get_item('File', 'jfx_required_case_file')
-	excel_data = excel_table_byname(file, 'credit_none')
-
-	@classmethod
-	def setUpClass(cls):
-		cls.env = 'test'
-		cls.url = CreditNone.excel_data[0]['url']
-		cls.headers = CreditNone.excel_data[0]['headers']
-		cls.param = CreditNone.excel_data[0]['param']
-		cls.r = Common.conn_redis(cls.env)
-
-	def tearDown(self):
-		pass
-
-	@ddt.data(*excel_data)
-	def test_credit_apply(self, data):
-		"""授信申请参数校验"""
-		case = str(data['casename'])
-		print(case)
-		Common.p2p_get_userinfo(environment=self.env, project="jfx")
-		param = json.loads(self.param)
-		param["personalInfo"].update(
-			{
-				"custName": self.r.get("jfx_custName"),
-				"cardNum": self.r.get("jfx_cardNum")
-			}
-		)
-		print(f"""前置条件:{data["前置条件"]}""")
-		if len(data["前置条件"]) > 0:
-			preconditions = data["前置条件"].split(",")
-			for k in preconditions:
-				key = k.split(".")[0]
-				value = k.split(".")[1].split("==")[0]
-				enum = k.split(".")[1].split("==")[1]
-				if Common.is_number(enum):
-					enum = int(enum)
-				param[key][value] = enum
-		if "==" in case:
-			_key = case.split("围")[1].split(".")[0]
-			_value = case.split("围")[1].split(".")[1].split("==")[0]
-			_enum = case.split("围")[1].split(".")[1].split("==")[1].replace(" ", "")
-			if Common.is_number(_enum):
-				_enum  = int(_enum)
-			param[_key][_value] = _enum
-		elif "." in case:
-			_key = case.split("空")[1].split(".")[0]
-			_value = case.split("空")[1].split(".")[1]
-			if _key == _value:
-				param[_key] = None
-			else:
-				param[_key][_value] = None
-		headers = json.loads(self.headers)
-		rep = Common.response(
-			faceaddr=self.url,
-			headers=headers,
-			data=json.dumps(param, ensure_ascii=False),
-			product='cloudloan',
-			environment=self.env
-		)
-		self.assertEqual(rep['resultCode'], int(data['resultCode']))
+# @ddt.ddt
+# class CreditNone(unittest.TestCase):
+# 	file = Config().get_item('File', 'jfx_required_case_file')
+# 	excel_data = excel_table_byname(file, 'credit_none')
+#
+# 	@classmethod
+# 	def setUpClass(cls):
+# 		cls.env = 'test'
+# 		cls.url = CreditNone.excel_data[0]['url']
+# 		cls.headers = CreditNone.excel_data[0]['headers']
+# 		cls.param = CreditNone.excel_data[0]['param']
+# 		cls.r = Common.conn_redis(cls.env)
+#
+# 	def tearDown(self):
+# 		pass
+#
+# 	@ddt.data(*excel_data)
+# 	def test_credit_apply(self, data):
+# 		"""授信申请参数校验"""
+# 		case = str(data['casename'])
+# 		print(case)
+# 		Common.p2p_get_userinfo(environment=self.env, project="jfx")
+# 		param = json.loads(self.param)
+# 		param["personalInfo"].update(
+# 			{
+# 				"custName": self.r.get("jfx_custName"),
+# 				"cardNum": self.r.get("jfx_cardNum")
+# 			}
+# 		)
+# 		print(f"""前置条件:{data["前置条件"]}""")
+# 		if len(data["前置条件"]) > 0:
+# 			preconditions = data["前置条件"].split(",")
+# 			for k in preconditions:
+# 				key = k.split(".")[0]
+# 				value = k.split(".")[1].split("==")[0]
+# 				enum = k.split(".")[1].split("==")[1]
+# 				if Common.is_number(enum):
+# 					enum = int(enum)
+# 				param[key][value] = enum
+# 		if "==" in case:
+# 			_key = case.split("围")[1].split(".")[0]
+# 			_value = case.split("围")[1].split(".")[1].split("==")[0]
+# 			_enum = case.split("围")[1].split(".")[1].split("==")[1].replace(" ", "")
+# 			if Common.is_number(_enum):
+# 				_enum  = int(_enum)
+# 			param[_key][_value] = _enum
+# 		elif "." in case:
+# 			_key = case.split("空")[1].split(".")[0]
+# 			_value = case.split("空")[1].split(".")[1]
+# 			if _key == _value:
+# 				param[_key] = None
+# 			else:
+# 				param[_key][_value] = None
+# 		headers = json.loads(self.headers)
+# 		rep = Common.response(
+# 			faceaddr=self.url,
+# 			headers=headers,
+# 			data=json.dumps(param, ensure_ascii=False),
+# 			product='cloudloan',
+# 			environment=self.env
+# 		)
+# 		self.assertEqual(rep['resultCode'], int(data['resultCode']))
 
 
 @ddt.ddt
@@ -150,7 +150,7 @@ class ApplyNone(unittest.TestCase):
 			credit_id=self.r.get("jfx_creditId")
 		)
 		GetSqlData.check_user_amount(user_id=self.r.get("jfx_userId"), environment=self.env)
-		data = excel_table_byname(Config().get_item('File', 'jfx_case_file'), 'query_result')
+		data = excel_table_byname(Config().get_item('File', 'jfx_case_file'), 'credit_query_result')
 		param = json.loads(data[0]['param'])
 		param.update({"creditId": self.r.get('jfx_creditId')})
 		if len(data[0]['headers']) == 0:

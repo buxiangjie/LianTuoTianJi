@@ -174,6 +174,7 @@ class TestJfqyl18Tp:
 				"serviceSn": Common.get_random('serviceSn'),
 				"sourceUserId": r.get('jfqyl_18_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
+				"contractType": 2,
 				"transactionId": r.get('jfqyl_18_periods_transactionId'),
 				"associationId": r.get('jfqyl_18_periods_projectId'),
 				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")

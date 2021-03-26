@@ -95,7 +95,7 @@ class TestKkd12Tp:
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": r.get('kkd_12_periods_transactionId'),
 				"associationId": r.get('kkd_12_periods_projectId'),
-				"content": Common.get_json_data('data', 'kkd_sign_credit.json').get("content")
+				"content": Common.get_json_data('data', 'credit_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -161,7 +161,7 @@ class TestKkd12Tp:
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": r.get('kkd_12_periods_transactionId'),
 				"associationId": r.get('kkd_12_periods_projectId'),
-				"content": Common.get_json_data('data', 'kkd_sign_borrow.json').get("content")
+				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:

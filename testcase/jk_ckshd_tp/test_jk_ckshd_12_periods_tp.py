@@ -32,7 +32,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 	def test_100_credit_apply(self):
 		"""额度授信"""
 		data = excel_table_byname(self.file, 'credit')
-		# Common.p2p_get_userinfo('jk_ckshd_12_periods', self.env)
+		Common.p2p_get_userinfo('jk_ckshd_12_periods', self.env)
 		self.r.mset(
 			{
 				"jk_ckshd_12_periods_sourceUserId": Common.get_random('userid'),
@@ -273,6 +273,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 				"serviceSn": Common.get_random('serviceSn'),
 				"sourceUserId": self.r.get('jk_ckshd_12_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
+				"contractType": 2,
 				"transactionId": self.r.get('jk_ckshd_12_periods_transactionId'),
 				"associationId": self.r.get('jk_ckshd_12_periods_projectId'),
 				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")
@@ -567,7 +568,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			json.dumps(rep['content']['repaymentPlanList'])
 		)
 
-	@unittest.skip("跳过")
+	# @unittest.skip("跳过")
 	def test_118_offline_repay_repayment(self):
 		"""线下还款流水推送：正常还一期"""
 		data = excel_table_byname(self.file, 'offline_repay')

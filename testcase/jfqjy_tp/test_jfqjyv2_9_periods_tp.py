@@ -156,6 +156,7 @@ class JfqjyV29Tp(unittest.TestCase):
 				"serviceSn": Common.get_random('serviceSn'),
 				"sourceUserId": self.r.get('jfqjyv2_9_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
+				"contractType": 2,
 				"transactionId": self.r.get('jfqjyv2_9_periods_transactionId'),
 				"associationId": self.r.get('jfqjyv2_9_periods_projectId'),
 				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")
