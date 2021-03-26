@@ -8,17 +8,16 @@
 
 import os
 import json
-import time
 import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import allure
 import pytest
-
 from common.common_func import Common
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 @allure.feature("新罗马车贷")
@@ -118,7 +117,7 @@ class TestNewRomaTp:
 	def test_1011_sign_credit(self, r, env):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		param = Common.get_json_data('data', 'roma_contract_sign.json')
+		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
@@ -126,7 +125,8 @@ class TestNewRomaTp:
 				"contractType": 1,
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": r.get('new_roma_transactionId'),
-				"associationId": r.get('new_roma_creditId')
+				"associationId": r.get('new_roma_creditId'),
+				"content": Common.get_json_data('data', 'credit_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:
