@@ -92,9 +92,10 @@ class TestDdq12Tp:
 				"serviceSn": Common.get_random('serviceSn'),
 				"sourceUserId": r.get('ddq_12_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
+				"contractType": 2,
 				"transactionId": r.get('ddq_12_periods_transactionId'),
 				"associationId": r.get('ddq_12_periods_projectId'),
-				"content": Common.get_json_data('data', 'kkd_sign_credit.json').get("content")
+				"content": Common.get_json_data('data', 'credit_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -158,6 +159,7 @@ class TestDdq12Tp:
 				"serviceSn": Common.get_random('serviceSn'),
 				"sourceUserId": r.get('ddq_12_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
+				"contractType": 2,
 				"transactionId": r.get('ddq_12_periods_transactionId'),
 				"associationId": r.get('ddq_12_periods_projectId'),
 				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")
