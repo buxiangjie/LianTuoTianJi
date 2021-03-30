@@ -7,6 +7,7 @@
 
 import sys
 import os
+import asyncio
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -22,7 +23,9 @@ router = APIRouter()
 
 @router.get("/", name="首页", status_code=status.HTTP_200_OK)
 async def index():
-	return "hello world"
+	loop = asyncio.get_event_loop()
+	loop.create_task(ToolsSql.ss(1))
+	return "Hello"
 
 
 @router.delete("/ids", name="删除异常数据")
@@ -39,16 +42,17 @@ async def ids(env: str, dtype: str, lis: List[int]):
 	  /project_enterprise_detail/project_entity_detail
 	  /project_extra_detail
 	"""
+	loop = asyncio.get_event_loop()
 	if (None in lis) or lis == []:
 		return "列表不能为空"
 	if dtype == "asset":
 		for i in lis:
-			mes = ToolsSql.del_asset_data(environment=env, asset_id=i)
-		return mes
+			loop.create_task(ToolsSql.del_asset_data(environment=env, asset_id=i))
+		return "执行完成"
 	elif dtype == "project":
 		for i in lis:
-			mess = ToolsSql.del_project_data(environment=env, projectid=i)
-		return mess
+			loop.create_task(ToolsSql.del_project_data(environment=env, projectid=i))
+		return "执行完成"
 	else:
 		return "不支持的类型"
 

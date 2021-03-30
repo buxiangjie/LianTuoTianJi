@@ -165,7 +165,7 @@ class GetSqlData:
 		"""放款申请后调用，查询放款状态是否成功"""
 		# noinspection PyGlobalUndefined
 		Ulog.info("开始检查放款步骤")
-
+		time.sleep(3)
 		# datas = '{"projectId":"%s","code":2000,"success":true,"inProcess":false}'%project_id
 		# Ulog.info(datas)
 		# rep = requests.post(url="http://api-qa1.cloudloan.com:9011/api/v1/busi/callback/loan/apply",

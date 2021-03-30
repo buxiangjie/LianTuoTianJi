@@ -18,12 +18,11 @@ from common.get_sql_data import GetSqlData
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-
 class JfxTp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = 'test'
+		cls.env = 'qa'
 		cls.r = Common.conn_redis(environment=cls.env)
 		cls.file = Config().get_item('File', 'jfx_case_file')
 
@@ -48,8 +47,8 @@ class JfxTp(unittest.TestCase):
 			{
 				"cardNum": self.r.get('jfx_cardNum'),
 				"custName": self.r.get('jfx_custName'),
-				"isDoctor": 0,
-				"applicantClinicRelationship": 1,
+				# "isDoctor": 0,
+				"applicantClinicRelationship": 1
 			}
 		)
 		param['applyInfo'].update({"applyTime": Common.get_time()})
@@ -176,7 +175,7 @@ class JfxTp(unittest.TestCase):
 				"cardNum": self.r.get('jfx_cardNum'),
 				"custName": self.r.get('jfx_custName'),
 				"phone": self.r.get('jfx_phone'),
-				"isDoctor": 0,
+				# "isDoctor": 0,
 				"applicantClinicRelationship": 1
 			}
 		)
@@ -202,7 +201,6 @@ class JfxTp(unittest.TestCase):
 			}
 		)
 		self.r.set("jfx_corporateAccountName", param['cardInfo']['corporateAccountName'])
-		del param["contactInfo"]
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -416,8 +414,7 @@ class JfxTp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	# @unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
-	# @unittest.skip("11")
+	@unittest.skip("11")
 	def test_113_capital_flow(self):
 		"""资金流水推送"""
 		data = excel_table_byname(self.file, 'cash_push')

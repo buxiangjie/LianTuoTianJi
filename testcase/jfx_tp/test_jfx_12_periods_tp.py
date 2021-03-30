@@ -326,7 +326,7 @@ class TestJfx12PeriodTp:
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": r.get('jfx_12_periods_transactionId'),
 				"associationId": r.get('jfx_12_periods_projectId'),
-				"content": Common.get_json_data('data', 'jfx_borrow_periods_contract_sign.json').get("content")
+				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:

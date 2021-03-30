@@ -183,9 +183,9 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			{
 				"loanAmount": 50000,
 				"loanTerm": 12,
-				"assetInterestRate": 0.09,
+				"assetInterestRate": 0,
 				"userInterestRate": 0.16,
-				"discountRate": 0.01
+				"discountRate": 0.1
 			}
 		)
 		param['personalInfo'].update(
@@ -568,7 +568,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			json.dumps(rep['content']['repaymentPlanList'])
 		)
 
-	# @unittest.skip("跳过")
+	@unittest.skip("跳过")
 	def test_118_offline_repay_repayment(self):
 		"""线下还款流水推送：正常还一期"""
 		data = excel_table_byname(self.file, 'offline_repay')

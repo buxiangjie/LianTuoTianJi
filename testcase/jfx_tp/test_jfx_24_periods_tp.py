@@ -19,8 +19,8 @@ from common.get_sql_data import GetSqlData
 
 
 
-@allure.feature("金服侠12期")
-class TestJfx12PeriodTp:
+@allure.feature("金服侠24期")
+class TestJfx24PeriodTp:
 	file = Config().get_item('File', 'jfx_mul_case_file')
 
 	@allure.title("申请授信")
@@ -207,7 +207,7 @@ class TestJfx12PeriodTp:
 			{
 				"applyTime": Common.get_time(),
 				"applyAmount": 84920.00,
-				"applyTerm": 12
+				"applyTerm": 24
 			}
 		)
 		param['loanInfo'].update(
@@ -215,7 +215,7 @@ class TestJfx12PeriodTp:
 				"loanAmount": 84920.00,
 				"assetInterestRate": 0.158156,
 				"userInterestRate": 0.152156,
-				"loanTerm": 12
+				"loanTerm": 24
 			}
 		)
 		param['cardInfo'].update(

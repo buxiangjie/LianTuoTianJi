@@ -2,7 +2,7 @@
 """
 @auth:bxj
 @date: 2019-08-20
-@describe:金服侠-牙医贷一期12期产品流程用例
+@describe:金服侠-牙医贷一期18期产品流程用例
 """
 
 import os
@@ -19,8 +19,8 @@ from common.get_sql_data import GetSqlData
 
 
 
-@allure.feature("金服侠12期")
-class TestJfx12PeriodTp:
+@allure.feature("金服侠18期")
+class TestJfx18PeriodTp:
 	file = Config().get_item('File', 'jfx_mul_case_file')
 
 	@allure.title("申请授信")
@@ -207,7 +207,7 @@ class TestJfx12PeriodTp:
 			{
 				"applyTime": Common.get_time(),
 				"applyAmount": 84920.00,
-				"applyTerm": 12
+				"applyTerm": 18
 			}
 		)
 		param['loanInfo'].update(
@@ -215,7 +215,7 @@ class TestJfx12PeriodTp:
 				"loanAmount": 84920.00,
 				"assetInterestRate": 0.158156,
 				"userInterestRate": 0.152156,
-				"loanTerm": 12
+				"loanTerm": 18
 			}
 		)
 		param['cardInfo'].update(
@@ -238,8 +238,8 @@ class TestJfx12PeriodTp:
 			product="cloudloan",
 			environment=env
 		)
-		r.set('jfx_18_periods_projectId', rep['content']['projectId'])
 		assert int(data[0]['resultCode']) == rep['resultCode']
+		r.set('jfx_18_periods_projectId', rep['content']['projectId'])
 
 	@allure.title("进件结果查询")
 	@allure.severity("blocker")
