@@ -8,6 +8,7 @@ import pymysql
 import time
 import sys
 import os
+import json
 
 from common.common_func import Common
 from typing import Optional
@@ -136,6 +137,7 @@ class GetSqlData:
 			# GetSqlData.change_credit_step(environment, credit_id)
 			GetSqlData.change_credit_status(environment, credit_id)
 			GetSqlData.change_athena_status(environment, credit_id)
+			time.sleep(1)
 			Common.trigger_task(job_name="creditReparationJob", env=environment)
 		status = 2
 		version = 1
@@ -146,8 +148,9 @@ class GetSqlData:
 			step = GetSqlData().check_credit_step(environment, credit_id)
 			if step != 4:
 				Ulog.info(f"当前授信步骤为:{step:d};当前循环次数为:{version:d}")
+				Common.trigger_task(job_name="creditReparationJob", env=environment)
 				version += 1
-				time.sleep(5)
+				time.sleep(2)
 			elif step == 4:
 				Ulog.info("当前授信已完成,可以进行下个步骤!")
 				status = 4
@@ -190,19 +193,19 @@ class GetSqlData:
 						break
 					if res != 1:
 						Ulog.info(f"当前loan_result为:{res};当前循环次数为:{version}")
+						Common.trigger_task("projectLoanReparationJob", environment)
 						version += 1
-						time.sleep(1)
+						time.sleep(2)
 			except Exception as e:
 				raise e
 
 	@staticmethod
-	def check_pay_order_code(environment:str, project_id:str):
+	def check_pay_order_code(environment: str, project_id: str):
 		"""检查steamrunner.pay_order的code"""
 		# noinspection PyGlobalUndefined
 		sql = f"""Select code from sandbox_saas_steamrunner.sr_pay_order where project_id = {project_id};"""
 		code = GetSqlData.exec_select(environment, sql)[0].get("code")
 		return code
-
 
 	@staticmethod
 	def change_pay_status(environment: str, project_id: str):
@@ -707,3 +710,20 @@ class GetSqlData:
 				where asset_id='{asset_id}' and period={period};
 				"""
 		GetSqlData.exec_update(environment, sql)
+
+	@staticmethod
+	def select_extra_info(environment: str, busi_type: str, busi_id: str) -> dict:
+		"""查询extra_info数据"""
+		# noinspection PyGlobalUndefined
+		if busi_type == "credit":
+			sql = f"""
+					select extra_info from sandbox_saas.credit_entity where credit_id={busi_id};
+				   """
+		elif busi_type == "project":
+			sql = f"""
+					select extra_info from sandbox_saas.project_entity_detail where project_id={busi_id};
+				   """
+		else:
+			raise KeyError("不支持的业务类型")
+		extra_info = json.loads(GetSqlData.exec_select(environment, sql)[0].get("extra_info"))
+		return extra_info

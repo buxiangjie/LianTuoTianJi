@@ -188,6 +188,7 @@ class ApplyNone(unittest.TestCase):
 				"phone": self.r.get('jfx_phone')
 			}
 		)
+		param["cardInfo"]["unifiedSocialCreditCode"] = Common.get_random("businessLicenseNo")
 		print(f"""前置条件:{data["前置条件"]}""")
 		if len(data["前置条件"]) > 0:
 			preconditions = data["前置条件"].split(",")

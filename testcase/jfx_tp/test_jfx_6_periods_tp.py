@@ -58,6 +58,12 @@ class Jfx3PeriodTp(unittest.TestCase):
 				"transactionId": self.r.get('jfx_6_periods_transactionId')
 			}
 		)
+		param["entityInfo"].update(
+			{
+				"supplierOriginalLevel": 0,
+				"supplierTradingLevel": 0
+			}
+		)
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -167,7 +173,9 @@ class Jfx3PeriodTp(unittest.TestCase):
 			{
 				"cardNum": self.r.get('jfx_6_periods_cardNum'),
 				"custName": self.r.get('jfx_6_periods_custName'),
-				"phone": self.r.get('jfx_6_periods_phone')
+				"phone": self.r.get('jfx_6_periods_phone'),
+				"isDoctor": 0,
+				"applicantClinicRelationship": 1
 			}
 		)
 		param['applyInfo'].update(
@@ -175,6 +183,12 @@ class Jfx3PeriodTp(unittest.TestCase):
 				"applyTime": Common.get_time(),
 				"applyAmount": 84920.00,
 				"applyTerm": 6
+			}
+		)
+		param["entityInfo"].update(
+			{
+				"supplierOriginalLevel": 0,
+				"supplierTradingLevel": 0
 			}
 		)
 		param['loanInfo'].update(
@@ -208,7 +222,31 @@ class Jfx3PeriodTp(unittest.TestCase):
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 		self.r.set('jfx_6_periods_projectId', rep['content']['projectId'])
 
-	def test_105_query_apply_result(self):
+	@unittest.skip("-")
+	def test_105_apply_cancel(self):
+		"""进件取消"""
+		data = excel_table_byname(self.file, 'apply_cancel')
+		param = json.loads(data[0]['param'])
+		param.update(
+			{
+				"projectId": self.r.get("jfx_6_periods_projectId"),
+				"sourceProjectId": self.r.get("jfx_6_periods_sourceProjectId")
+			}
+		)
+		if len(data[0]['headers']) == 0:
+			headers = None
+		else:
+			headers = json.loads(data[0]['headers'])
+		rep = Common.response(
+			faceaddr=data[0]['url'],
+			headers=headers,
+			data=json.dumps(param, ensure_ascii=False),
+			product="cloudloan",
+			environment=self.env
+		)
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+
+	def test_106_query_apply_result(self):
 		"""进件结果查询"""
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('jfx_6_periods_projectId'),
@@ -235,7 +273,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		)
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 
-	def test_106_sign_credit(self):
+	def test_107_sign_credit(self):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
 		param = json.loads(data[0]['param'])
@@ -263,7 +301,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		)
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 
-	def test_107_contract_sign(self):
+	def test_108_contract_sign(self):
 		"""上传借款合同"""
 		data = excel_table_byname(self.file, 'contract_sign')
 		param = json.loads(data[0]['param'])
@@ -291,7 +329,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		)
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 
-	def test_108_pfa(self):
+	def test_109_pfa(self):
 		"""放款"""
 		data = excel_table_byname(self.file, 'project_loan')
 		param = json.loads(data[0]['param'])
@@ -325,7 +363,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 			project_id=self.r.get('jfx_6_periods_projectId')
 		)
 
-	def test_109_pfa_query(self):
+	def test_110_pfa_query(self):
 		"""放款结果查询"""
 		GetSqlData.loan_set(
 			environment=self.env,
@@ -347,7 +385,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	def test_110_query_repaymentplan(self):
+	def test_111_query_repaymentplan(self):
 		"""还款计划查询"""
 		data = excel_table_byname(self.file, 'repayment_plan')
 		param = json.loads(data[0]['param'])
@@ -367,7 +405,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		self.r.set("jfx_6_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
 	# @unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
-	@unittest.skip("11")
+	# @unittest.skip("11")
 	def test_112_repayment(self):
 		"""还款流水推送"""
 		data = excel_table_byname(self.file, 'repayment')
@@ -505,31 +543,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	@unittest.skip("-")
-	def test_115_apply_cancel(self):
-		"""进件取消"""
-		data = excel_table_byname(self.file, 'apply_cancel')
-		param = json.loads(data[0]['param'])
-		param.update(
-			{
-				"projectId": self.r.get("jfx_6_periods_projectId"),
-				"sourceProjectId": self.r.get("jfx_6_periods_sourceProjectId")
-			}
-		)
-		if len(data[0]['headers']) == 0:
-			headers = None
-		else:
-			headers = json.loads(data[0]['headers'])
-		rep = Common.response(
-			faceaddr=data[0]['url'],
-			headers=headers,
-			data=json.dumps(param, ensure_ascii=False),
-			product="cloudloan",
-			environment=self.env
-		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
-
-	@unittest.skip("-")
-	def test_116_offline_partial(self):
+	def test_115_offline_partial(self):
 		"""线下还款:部分还款"""
 		data = excel_table_byname(self.file, 'offline_partial')
 		param = json.loads(data[0]['param'])

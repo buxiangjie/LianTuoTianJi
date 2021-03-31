@@ -320,6 +320,7 @@ class TestJkCkshd6PeriodsTp:
 				"serviceSn": Common.get_random('serviceSn'),
 				"sourceUserId": r.get('jk_ckshd_12_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
+				"contractType": 1,
 				"transactionId": r.get('jk_ckshd_12_periods_transactionId'),
 				"associationId": r.get('jk_ckshd_12_periods_projectId'),
 				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")
