@@ -7,11 +7,11 @@
 import os
 import json
 import sys
-import time
 import allure
 import pytest
 
 from common.common_func import Common
+from busi_assert.busi_asset import Asset
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
@@ -75,8 +75,8 @@ class TestKkd12Tp:
 			product="cloudloan",
 			environment=env
 		)
-		r.set('kkd_12_periods_projectId', rep['content']['projectId'])
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		r.set('kkd_12_periods_projectId', rep['content']['projectId'])
 
 	@allure.title("上传进件授信协议")
 	@allure.severity("normal")
@@ -84,7 +84,7 @@ class TestKkd12Tp:
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
 	def test_101_sign_credit(self, r, env):
-		"""上传进件授信协议"""
+		"""上传借款授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -119,6 +119,7 @@ class TestKkd12Tp:
 	@pytest.mark.offline_settle_in_advance
 	def test_102_query_apply_result(self, r, env):
 		"""进件结果查询"""
+		Asset.check_column("wxjk_project", env, r.get('kkd_12_periods_projectId'))
 		GetSqlData.change_project_audit_status(
 			project_id=r.get('kkd_12_periods_projectId'),
 			environment=env
@@ -159,6 +160,7 @@ class TestKkd12Tp:
 				"serviceSn": Common.get_random('serviceSn'),
 				"sourceUserId": r.get('kkd_12_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
+				"contractType": 2,
 				"transactionId": r.get('kkd_12_periods_transactionId'),
 				"associationId": r.get('kkd_12_periods_projectId'),
 				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")

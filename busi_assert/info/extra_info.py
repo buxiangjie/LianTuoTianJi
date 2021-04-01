@@ -159,9 +159,16 @@ class EntityInfo(object):
 			"productUnitPrice": 100
 		}]
 	}
+	_wxjk_project = {
+		"livePhone": "1012345678",
+		"faceRecognition": "Y",
+		"currentCity": "110000",
+		"cardValidDate": "2019-12-10-9999-09-09"
+	}
 	mapping = {
 		"jfx_credit": _jfx_credit,
 		"jfx_project": _jfx_project,
 		"jk_ckshd_credit": _jk_ckshd_credit,
-		"jk_ckshd_project": _jk_ckshd_project
+		"jk_ckshd_project": _jk_ckshd_project,
+		"wxjk_project": _wxjk_project
 	}

@@ -10,9 +10,9 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import unittest
 import json
-import time
 
 from common.common_func import Common
+from busi_assert.busi_asset import Asset
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
@@ -76,11 +76,11 @@ class Kkd6Tp(unittest.TestCase):
 			product="cloudloan",
 			environment=self.env
 		)
-		self.r.set('kkd_6_periods_projectId', rep['content']['projectId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		self.r.set('kkd_6_periods_projectId', rep['content']['projectId'])
 
 	def test_101_sign_credit(self):
-		"""上传授信协议"""
+		"""上传借款授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -88,6 +88,7 @@ class Kkd6Tp(unittest.TestCase):
 				"serviceSn": Common.get_random('serviceSn'),
 				"sourceUserId": self.r.get('kkd_6_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
+				"contractType": 5,
 				"transactionId": self.r.get('kkd_6_periods_transactionId'),
 				"associationId": self.r.get('kkd_6_periods_projectId'),
 				"content": Common.get_json_data('data', 'credit_sign.json').get("content")
@@ -108,6 +109,7 @@ class Kkd6Tp(unittest.TestCase):
 
 	def test_102_query_apply_result(self):
 		"""进件结果查询"""
+		Asset.check_column("wxjk_project", self.env, self.r.get('kkd_6_periods_projectId'))
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('kkd_6_periods_projectId'),
 			environment=self.env
@@ -143,6 +145,7 @@ class Kkd6Tp(unittest.TestCase):
 				"serviceSn": Common.get_random('serviceSn'),
 				"sourceUserId": self.r.get('kkd_6_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
+				"contractType": 2,
 				"transactionId": self.r.get('kkd_6_periods_transactionId'),
 				"associationId": self.r.get('kkd_6_periods_projectId'),
 				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")

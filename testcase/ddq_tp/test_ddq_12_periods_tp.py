@@ -7,11 +7,11 @@
 import os
 import json
 import sys
-import time
 import pytest
 import allure
 
 from common.common_func import Common
+from busi_assert.busi_asset import Asset
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
@@ -84,7 +84,7 @@ class TestDdq12Tp:
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
 	def test_101_sign_credit(self, r, env):
-		"""上传进件授信协议"""
+		"""上传借款授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -119,6 +119,7 @@ class TestDdq12Tp:
 	@pytest.mark.offline_settle_in_advance
 	def test_102_query_apply_result(self, r, env):
 		"""进件结果查询"""
+		Asset.check_column("wxjk_project", env, r.get('ddq_12_periods_projectId'))
 		GetSqlData.change_project_audit_status(
 			project_id=r.get('ddq_12_periods_projectId'),
 			environment=env
