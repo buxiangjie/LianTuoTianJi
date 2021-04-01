@@ -8,15 +8,15 @@ import os
 import json
 import sys
 import time
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import pytest
 import allure
-
 from common.common_func import Common
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 @allure.feature("任买3期流程")
@@ -209,8 +209,8 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			environment=env
 		)
-		r.set("rmkj_3_periods_contractId", rep['content']['contractId'])
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		r.set("rmkj_3_periods_contractId", rep['content']['contractId'])
 
 	@allure.title("上传还款计划文件")
 	@allure.severity("minor")
@@ -353,8 +353,8 @@ class TestRmkj3Tp:
 			environment=env,
 			prod_type="rmkj"
 		)
-		r.set("rmkj_3_periods_signTaskId", rep['data']['signTaskId'])
 		assert rep['code'] == int(data[0]['resultCode'])
+		r.set("rmkj_3_periods_signTaskId", rep['data']['signTaskId'])
 
 	@allure.title("确认签约")
 	@allure.severity("blocker")
@@ -612,8 +612,8 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			environment=env
 		)
-		r.set("rmkj_3_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		r.set("rmkj_3_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
 	@allure.title("提前结清试算")
 	@allure.severity("blocker")
@@ -649,8 +649,6 @@ class TestRmkj3Tp:
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	# @unittest.skipUnless(sys.argv[4] == "refunds", "-")
-	# @unittest.skip("跳过")
 	@allure.title("退货试算")
 	@allure.severity("blocker")
 	@pytest.mark.returns
@@ -678,14 +676,12 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			environment=env
 		)
+		assert rep['resultCode'] == int(data[0]['resultCode'])
 		r.set(
 			"rmkj_3_periods_refunds_repayment_plan",
 			json.dumps(rep['content']['repaymentPlanList'])
 		)
-		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	# @unittest.skipUnless(sys.argv[4] == "repayment", "-")
-	# @unittest.skip("跳过")
 	@allure.title("主动还款一期")
 	@allure.severity("blocker")
 	@pytest.mark.repayment
@@ -731,11 +727,9 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			environment=env
 		)
-		r.set("rmkj_3_periods_deductionTaskId", rep['content']['deductionTaskId'])
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		r.set("rmkj_3_periods_deductionTaskId", rep['content']['deductionTaskId'])
 
-	# @unittest.skip("跳过")
-	# @unittest.skipUnless(sys.argv[4] == "all_periods", "-")
 	@allure.title("主动还款-连续还款结清")
 	@allure.severity("blocker")
 	@pytest.mark.settle
@@ -785,10 +779,8 @@ class TestRmkj3Tp:
 				product="cloudloan",
 				environment=env
 			)
-
-			r.set("rmkj_3_periods_deductionTaskId", rep['content']['deductionTaskId'])
 			assert rep['resultCode'] == int(data[0]['resultCode'])
-			time.sleep(5)
+			r.set("rmkj_3_periods_deductionTaskId", rep['content']['deductionTaskId'])
 
 	@allure.title("主动还款-提前全部结清")
 	@allure.severity("blocker")
@@ -831,11 +823,9 @@ class TestRmkj3Tp:
 			product="cloudloan",
 			environment=env
 		)
-		r.set("rmkj_3_periods_deductionTaskId", rep['content']['deductionTaskId'])
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		r.set("rmkj_3_periods_deductionTaskId", rep['content']['deductionTaskId'])
 
-	# @unittest.skipUnless(sys.argv[4] == "offline_partial", "-")
-	# @unittest.skip("跳过")
 	@allure.severity("blocker")
 	def test_118_offline_partial(self, r, env):
 		"""线下还款:部分还款"""
@@ -942,8 +932,6 @@ class TestRmkj3Tp:
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	# @unittest.skipUnless(sys.argv[4] == "early_settlement_offline", "-")
-	# @unittest.skip("跳过")
 	@allure.title("还款计划查询")
 	@allure.severity("blocker")
 	@pytest.mark.offline_settle_in_advance
@@ -995,8 +983,6 @@ class TestRmkj3Tp:
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	# @unittest.skipUnless(sys.argv[4] == "refunds", "-")
-	# @unittest.skip("跳过")
 	@allure.title("退货")
 	@allure.severity("blocker")
 	@pytest.mark.returns

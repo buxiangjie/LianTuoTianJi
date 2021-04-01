@@ -9,12 +9,13 @@ import os
 import json
 import time
 import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from common.common_func import Common
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 class Rmkj9Tp(unittest.TestCase):
@@ -94,8 +95,8 @@ class Rmkj9Tp(unittest.TestCase):
 			product="cloudloan",
 			environment=self.env
 		)
-		self.r.set('rmkj_9_periods_projectId', rep['content']['projectId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		self.r.set('rmkj_9_periods_projectId', rep['content']['projectId'])
 
 	def test_101_sign_credit(self):
 		"""上传授信协议"""
@@ -179,8 +180,8 @@ class Rmkj9Tp(unittest.TestCase):
 			product="cloudloan",
 			environment=self.env
 		)
-		self.r.set("rmkj_9_periods_contractId", rep['content']['contractId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		self.r.set("rmkj_9_periods_contractId", rep['content']['contractId'])
 
 	def test_104_image_upload(self):
 		"""上传医疗美容图片"""
@@ -464,7 +465,6 @@ class Rmkj9Tp(unittest.TestCase):
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		self.r.set("rmkj_9_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
-	# @unittest.skipUnless(sys.argv[4] == "repayment", "-")
 	# @unittest.skip("跳过")
 	def test_113_calculate(self):
 		"""还款计划试算:正常还款"""
@@ -491,7 +491,6 @@ class Rmkj9Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
 	# @unittest.skip("跳过")
 	def test_114_calculate(self):
 		"""还款计划试算:提前结清"""
@@ -517,13 +516,12 @@ class Rmkj9Tp(unittest.TestCase):
 			product="cloudloan",
 			environment=self.env
 		)
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		self.r.set(
 			"rmkj_9_periods_early_settlement_repayment_plan",
 			json.dumps(rep['content']['repaymentPlanList'])
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	# @unittest.skipUnless(sys.argv[4] == "refunds", "-")
 	# @unittest.skip("跳过")
 	def test_115_calculate(self):
 		"""还款计划试算:退货"""
@@ -549,11 +547,10 @@ class Rmkj9Tp(unittest.TestCase):
 			product="cloudloan",
 			environment=self.env
 		)
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		self.r.set("rmkj_9_periods_refunds_repayment_plan",
 				   json.dumps(rep['content']['repaymentPlanList']))
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	# @unittest.skipUnless(sys.argv[4] == "repayment", "-")
 	@unittest.skip("跳过")
 	def test_116_deduction_apply(self):
 		"""主动还款:正常还一期"""
@@ -596,11 +593,10 @@ class Rmkj9Tp(unittest.TestCase):
 			product="cloudloan",
 			environment=self.env
 		)
-		self.r.set("rmkj_9_periods_deductionTaskId", rep['content']['deductionTaskId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		self.r.set("rmkj_9_periods_deductionTaskId", rep['content']['deductionTaskId'])
 
 	@unittest.skip("跳过")
-	# @unittest.skipUnless(sys.argv[4] == "all_periods", "-")
 	def test_117_deduction_apply_all_periods(self):
 		"""主动还款:连续还款整笔结清"""
 		data = excel_table_byname(self.file, 'deduction_apply')
@@ -644,13 +640,10 @@ class Rmkj9Tp(unittest.TestCase):
 				product="cloudloan",
 				environment=self.env
 			)
-
-			self.r.set("rmkj_9_periods_deductionTaskId", rep['content']['deductionTaskId'])
 			self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
-			time.sleep(5)
+			self.r.set("rmkj_9_periods_deductionTaskId", rep['content']['deductionTaskId'])
 
 	@unittest.skip("跳过")
-	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
 	def test_118_deduction_early_settlement(self):
 		"""主动还款:提前全部结清"""
 		data = excel_table_byname(self.file, 'deduction_apply')
@@ -689,10 +682,9 @@ class Rmkj9Tp(unittest.TestCase):
 			product="cloudloan",
 			environment=self.env
 		)
-		self.r.set("rmkj_9_periods_deductionTaskId", rep['content']['deductionTaskId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		self.r.set("rmkj_9_periods_deductionTaskId", rep['content']['deductionTaskId'])
 
-	# @unittest.skipUnless(sys.argv[4] in ("repayment", "early_settlement"), "-")
 	@unittest.skip("跳过")
 	def test_119_deduction_query(self):
 		"""主动还款结果查询"""
@@ -712,7 +704,6 @@ class Rmkj9Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	# @unittest.skipUnless(sys.argv[4] == "repayment_offline", "-")
 	@unittest.skip("跳过")
 	def test_120_offline_repay_repayment(self):
 		"""线下还款流水推送：正常还一期"""
@@ -758,7 +749,6 @@ class Rmkj9Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	# @unittest.skipUnless(sys.argv[4] == "early_settlement_offline", "-")
 	@unittest.skip("跳过")
 	def test_121_offline_repay_early_settlement(self):
 		"""线下还款流水推送：提前全部结清"""
@@ -805,7 +795,6 @@ class Rmkj9Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	# @unittest.skipUnless(sys.argv[4] == "refunds", "-")
 	@unittest.skip("跳过")
 	def test_122_refunds(self):
 		"""线下还款流水推送：退货"""
