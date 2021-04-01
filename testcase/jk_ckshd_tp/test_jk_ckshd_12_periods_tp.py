@@ -12,6 +12,7 @@ import sys
 from common.common_func import Common
 from common.open_excel import excel_table_byname
 from config.configer import Config
+from busi_assert.busi_asset import Asset
 from common.get_sql_data import GetSqlData
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -82,6 +83,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 
 	def test_101_query_result(self):
 		"""授信结果查询"""
+		Asset.check_column("jk_ckshd_credit", self.env, self.r.get("jk_ckshd_12_periods_creditId"))
 		GetSqlData.credit_set(
 			environment=self.env,
 			credit_id=self.r.get("jk_ckshd_12_periods_creditId")
@@ -238,6 +240,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 
 	def test_106_query_apply_result(self):
 		"""进件结果查询"""
+		Asset.check_column("jk_ckshd_project", self.env, self.r.get("jk_ckshd_12_periods_projectId"))
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('jk_ckshd_12_periods_projectId'),
 			environment=self.env

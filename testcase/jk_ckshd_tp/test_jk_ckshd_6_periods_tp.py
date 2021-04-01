@@ -13,6 +13,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import pytest
 import allure
 from common.common_func import Common
+from busi_assert.busi_asset import Asset
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
@@ -91,6 +92,7 @@ class TestJkCkshd6PeriodsTp:
 	@pytest.mark.returns
 	def test_101_query_result(self, env, r):
 		"""授信结果查询"""
+		Asset.check_column("jk_ckshd_credit", env, r.get("jk_ckshd_6_periods_creditId"))
 		GetSqlData.credit_set(
 			environment=env,
 			credit_id=r.get("jk_ckshd_12_periods_creditId")
@@ -279,6 +281,7 @@ class TestJkCkshd6PeriodsTp:
 	@pytest.mark.returns
 	def test_106_query_apply_result(self, env, r):
 		"""进件结果查询"""
+		Asset.check_column("jk_ckshd_project", env, r.get("jk_ckshd_6_periods_projectId"))
 		GetSqlData.change_project_audit_status(
 			project_id=r.get('jk_ckshd_12_periods_projectId'),
 			environment=env

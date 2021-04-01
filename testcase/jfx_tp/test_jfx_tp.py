@@ -11,6 +11,7 @@ import json
 import sys
 
 from common.common_func import Common
+from busi_assert.busi_asset import Asset
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
@@ -115,6 +116,7 @@ class JfxTp(unittest.TestCase):
 
 	def test_102_query_result(self):
 		"""授信结果查询"""
+		Asset.check_column("jfx_credit", self.env, self.r.get("jfx_creditId"))
 		data = excel_table_byname(self.file, 'credit_query_result')
 		GetSqlData.credit_set(
 			environment=self.env,
@@ -217,6 +219,7 @@ class JfxTp(unittest.TestCase):
 
 	def test_105_query_apply_result(self):
 		"""进件结果查询"""
+		Asset.check_column("jfx_project", self.env, self.r.get("jfx_projectId"))
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('jfx_projectId'),
 			environment=self.env

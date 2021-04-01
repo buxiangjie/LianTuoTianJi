@@ -15,6 +15,7 @@ from common.common_func import Common
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
+from busi_assert.busi_asset import Asset
 
 
 
@@ -85,6 +86,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 
 	def test_101_query_result(self):
 		"""授信结果查询"""
+		Asset.check_column("jfx_credit", self.env, self.r.get("jfx_6_periods_creditId"))
 		GetSqlData.credit_set(
 			environment=self.env,
 			credit_id=self.r.get("jfx_6_periods_creditId")
@@ -120,12 +122,15 @@ class Jfx3PeriodTp(unittest.TestCase):
 			headers = None
 		else:
 			headers = json.loads(data[0]['headers'])
+		headers["X-TBC-SKIP-SIGN"] = "true"
+		headers["X-TBC-SKIP-ENCRYPT"] = "true"
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="cloudloan",
-			environment=self.env
+			product="gateway",
+			environment=self.env,
+			prod_type="jfx"
 		)
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 
@@ -188,7 +193,8 @@ class Jfx3PeriodTp(unittest.TestCase):
 		param["entityInfo"].update(
 			{
 				"supplierOriginalLevel": 0,
-				"supplierTradingLevel": 0
+				"supplierTradingLevel": 0,
+				"inspectionEquipment": "1,2,4"
 			}
 		)
 		param['loanInfo'].update(
@@ -248,6 +254,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 
 	def test_106_query_apply_result(self):
 		"""进件结果查询"""
+		Asset.check_column("jfx_project", self.env, self.r.get("jfx_6_periods_projectId"))
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('jfx_6_periods_projectId'),
 			environment=self.env
