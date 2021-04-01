@@ -603,8 +603,8 @@ class TestJkCkshd6PeriodsTp:
 			product="cloudloan",
 			environment=env
 		)
-		r.set("jk_ckshd_12_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		r.set("jk_ckshd_12_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
 	@allure.title("还款计划试算:提前结清")
 	@allure.severity("blocker")

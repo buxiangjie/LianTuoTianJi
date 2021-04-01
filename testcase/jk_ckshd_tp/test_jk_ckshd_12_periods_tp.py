@@ -508,8 +508,8 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			product="cloudloan",
 			environment=self.env
 		)
-		self.r.set("jk_ckshd_12_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		self.r.set("jk_ckshd_12_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
 	def test_116_calculate(self):
 		"""还款计划试算:提前结清"""
@@ -535,11 +535,11 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			product="cloudloan",
 			environment=self.env
 		)
+		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		self.r.set(
 			"jk_ckshd_12_periods_early_settlement_repayment_plan",
 			json.dumps(rep['content']['repaymentPlanList'])
 		)
-		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	def test_117_calculate(self):
 		"""还款计划试算:退货"""
