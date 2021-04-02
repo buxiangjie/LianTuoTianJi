@@ -186,7 +186,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		param['applyInfo'].update(
 			{
 				"applyTime": Common.get_time(),
-				"applyAmount": 84920.00,
+				"applyAmount": 50000.00,
 				"applyTerm": 6
 			}
 		)
@@ -199,7 +199,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		)
 		param['loanInfo'].update(
 			{
-				"loanAmount": 84920.00,
+				"loanAmount": 50000.00,
 				"assetInterestRate": 0.158156,
 				"userInterestRate": 0.153156,
 				"loanTerm": 6
@@ -348,7 +348,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 				"serviceSn": Common.get_random('serviceSn'),
 				"accountName": self.r.get("jfx_6_periods_corporateAccountName"),
 				"bankCode": "34",
-				"amount": 84920.00,
+				"amount": 50000.00,
 				"accountNo": "6227002432220410613"  # 6227003814170172872
 			}
 		)
@@ -411,7 +411,6 @@ class Jfx3PeriodTp(unittest.TestCase):
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 		self.r.set("jfx_6_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
-	# @unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
 	# @unittest.skip("11")
 	def test_112_repayment(self):
 		"""还款流水推送"""
