@@ -285,7 +285,7 @@ class TestNewRomaTp:
 	def test_106_contract_sign(self, r, env):
 		"""上传借款合同"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		param = Common.get_json_data('data', 'roma_contract_sign.json')
+		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
@@ -293,7 +293,8 @@ class TestNewRomaTp:
 				"contractType": 2,
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": r.get('new_roma_transactionId'),
-				"associationId": r.get('new_roma_projectId')
+				"associationId": r.get('new_roma_projectId'),
+				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:
