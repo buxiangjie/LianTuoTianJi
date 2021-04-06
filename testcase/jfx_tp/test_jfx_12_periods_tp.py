@@ -28,7 +28,6 @@ class TestJfx12PeriodTp:
 	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
-	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
 	def test_100_credit_apply(self, r, env):
 		"""额度授信"""
@@ -89,7 +88,6 @@ class TestJfx12PeriodTp:
 	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
-	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
 	def test_101_query_result(self, r, env):
 		"""授信结果查询"""
@@ -119,7 +117,6 @@ class TestJfx12PeriodTp:
 	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
-	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
 	def test_102_query_user_amount(self, r, env):
 		"""用户额度查询"""
@@ -148,7 +145,6 @@ class TestJfx12PeriodTp:
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
-	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
 	def test_103_sign_credit(self, r, env):
 		"""上传授信协议"""
@@ -183,7 +179,6 @@ class TestJfx12PeriodTp:
 	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
-	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
 	def test_104_project_apply(self, r, env):
 		"""进件"""
@@ -247,7 +242,6 @@ class TestJfx12PeriodTp:
 	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
-	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
 	def test_105_query_apply_result(self, r, env):
 		"""进件结果查询"""
@@ -281,7 +275,6 @@ class TestJfx12PeriodTp:
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
-	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
 	def test_106_sign_credit(self, r, env):
 		"""上传借款授信协议"""
@@ -315,7 +308,6 @@ class TestJfx12PeriodTp:
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
-	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
 	def test_107_contract_sign(self, r, env):
 		"""上传借款合同"""
@@ -349,7 +341,6 @@ class TestJfx12PeriodTp:
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
-	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
 	def test_108_pfa(self, r, env):
 		"""放款申请"""
@@ -389,7 +380,6 @@ class TestJfx12PeriodTp:
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
-	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
 	def test_109_pfa_query(self, r, env):
 		"""放款结果查询"""
@@ -415,7 +405,6 @@ class TestJfx12PeriodTp:
 
 	@allure.title("提前结清试算")
 	@allure.severity("blocker")
-	@pytest.mark.offline_settle_in_advance
 	def test_110_early_settlement(self, r, env):
 		"""还款计划试算:提前结清"""
 		data = excel_table_byname(self.file, 'calculate')
@@ -450,7 +439,6 @@ class TestJfx12PeriodTp:
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
-	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
 	def test_111_query_repaymentplan(self, r, env):
 		"""还款计划查询"""
@@ -565,7 +553,6 @@ class TestJfx12PeriodTp:
 
 	@allure.title("提前结清")
 	@allure.severity("normal")
-	@pytest.mark.offline_settle_in_advance
 	def test_114_offline_settle(self, r, env):
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.file, 'offline_repay')
