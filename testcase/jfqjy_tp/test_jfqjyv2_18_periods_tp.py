@@ -631,6 +631,7 @@ class TestJfqjyv218Tp:
 				"serviceSn": Common.get_random("serviceSn"),
 				"projectId": r.get("jfqjyv2_18_periods_projectId"),
 				"sourceProjectId": r.get("jfqjyv2_18_periods_sourceProjectId"),
+				"productCode": "FQ_JK_JFQJYV2",
 				"repaymentPlanId": Common.get_random("sourceProjectId"),
 				"successAmount": success_amount,
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
