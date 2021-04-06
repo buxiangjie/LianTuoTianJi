@@ -25,6 +25,7 @@ logger = Logger(logger="test_yzf_repayment_tp").getlog()
 
 
 @allure.feature("翼支付还款流程")
+@pytest.mark.skip("业务暂停")
 class TestYzfRepayment:
 	file = Config().get_item('File', 'yzf_repayment_case_file')
 

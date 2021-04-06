@@ -23,6 +23,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 logger = Logger(logger="test_nqh_repayment_normal_settle_tp").getlog()
 
 @allure.feature("拿去花按期全部结清")
+@pytest.mark.skip("业务暂停")
 class TestNqhRepaymentNormalSettle:
 	file = Config().get_item('File', 'nqh_repayment_normal_settle_case_file')
 

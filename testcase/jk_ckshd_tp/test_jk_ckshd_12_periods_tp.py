@@ -185,9 +185,9 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			{
 				"loanAmount": 50000,
 				"loanTerm": 12,
-				"assetInterestRate": 0,
+				"assetInterestRate": 0.03,
 				"userInterestRate": 0.16,
-				"discountRate": 0.1
+				"discountRate": 0.07
 			}
 		)
 		param['personalInfo'].update(

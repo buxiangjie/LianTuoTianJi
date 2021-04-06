@@ -23,6 +23,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 logger = Logger(logger="test_jqh_repayment_tp").getlog()
 
 @allure.feature("借去花还款")
+@pytest.mark.skip("业务暂停")
 class TestJqhRepayment:
 	file = Config().get_item('File', 'jqh_repayment_case_file')
 

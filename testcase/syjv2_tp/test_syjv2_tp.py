@@ -25,6 +25,7 @@ logger = Logger(logger="test_syjv2_tp").getlog()
 
 
 @allure.feature("随意借V2")
+@pytest.mark.skip("业务暂停")
 class TestSyjv2Tp:
 	file = Config().get_item('File', 'syjv2_case_file')
 

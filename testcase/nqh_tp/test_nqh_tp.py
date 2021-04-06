@@ -24,6 +24,7 @@ logger = Logger(logger="test_nqh_tp").getlog()
 
 
 @allure.feature("拿去花流程")
+@pytest.mark.skip("业务暂停")
 class TestNqhTp:
 	file = Config().get_item('File', 'nqh_case_file')
 

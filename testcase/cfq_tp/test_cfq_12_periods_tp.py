@@ -20,6 +20,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 @allure.feature("橙分期12期")
+@pytest.mark.skip("业务暂停")
 class TestCfq12PeriodsTp:
 	file = Config().get_item('File', 'cfq_12_periods_case_file')
 

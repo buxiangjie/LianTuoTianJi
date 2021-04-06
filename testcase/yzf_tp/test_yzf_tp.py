@@ -23,6 +23,7 @@ logger = Logger(logger="test_yzf_tp").getlog()
 
 
 @allure.feature("翼支付流程")
+@pytest.mark.skip("业务暂停")
 class TestYzfTp:
 	file = Config().get_item('File', 'yzf_case_file')
 

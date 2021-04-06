@@ -62,7 +62,8 @@ class Jfx3PeriodTp(unittest.TestCase):
 		param["entityInfo"].update(
 			{
 				"supplierOriginalLevel": 0,
-				"supplierTradingLevel": 0
+				"supplierTradingLevel": 0,
+				"inspectionEquipment": "1,2,3"
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -411,7 +412,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
 		self.r.set("jfx_6_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
-	# @unittest.skip("11")
+	@unittest.skip("11")
 	def test_112_repayment(self):
 		"""还款流水推送"""
 		data = excel_table_byname(self.file, 'repayment')

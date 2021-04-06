@@ -24,6 +24,7 @@ logger = Logger(logger="nqh_one_period_same_day_return_tp").getlog()
 
 
 @allure.feature("拿去花一期当天全部退货")
+@pytest.mark.skip("业务暂停")
 class TestNqhOnePeriodSameDayReturn:
 	file = Config().get_item('File', 'nqh_one_period_same_day_return_case_file')
 

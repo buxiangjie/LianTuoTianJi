@@ -23,6 +23,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 logger = Logger(logger="test_jqh_tp").getlog()
 
 @allure.feature("借去花")
+@pytest.skip("业务暂停")
 class TestJqh:
 	file = Config().get_item('File', 'jqh_case_file')
 
