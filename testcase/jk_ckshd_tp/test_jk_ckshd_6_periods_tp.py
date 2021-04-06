@@ -34,30 +34,30 @@ class TestJkCkshd6PeriodsTp:
 	def test_100_credit_apply(self, env, r):
 		"""额度授信"""
 		data = excel_table_byname(self.file, 'credit')
-		Common.p2p_get_userinfo('jk_ckshd_12_periods', env)
+		Common.p2p_get_userinfo('jk_ckshd_6_periods', env)
 		r.mset(
 			{
-				"jk_ckshd_12_periods_sourceUserId": Common.get_random('userid'),
-				'jk_ckshd_12_periods_transactionId': Common.get_random('transactionId'),
-				"jk_ckshd_12_periods_phone": Common.get_random('phone'),
-				"jk_ckshd_12_periods_firstCreditDate": Common.get_time()
+				"jk_ckshd_6_periods_sourceUserId": Common.get_random('userid'),
+				'jk_ckshd_6_periods_transactionId': Common.get_random('transactionId'),
+				"jk_ckshd_6_periods_phone": Common.get_random('phone'),
+				"jk_ckshd_6_periods_firstCreditDate": Common.get_time()
 			}
 		)
 		param = json.loads(data[0]['param'])
 		param['personalInfo'].update(
 			{
-				"cardNum": r.get('jk_ckshd_12_periods_cardNum'),
-				"custName": r.get('jk_ckshd_12_periods_custName'),
-				"phone": r.get('jk_ckshd_12_periods_phone')
+				"cardNum": r.get('jk_ckshd_6_periods_cardNum'),
+				"custName": r.get('jk_ckshd_6_periods_custName'),
+				"phone": r.get('jk_ckshd_6_periods_phone')
 			}
 		)
 		param['applyInfo'].update({"applyTime": Common.get_time()})
 		param['entityInfo']['unifiedSocialCreditCode'] = Common.get_random("businessLicenseNo")
 		param.update(
 			{
-				"sourceUserId": r.get('jk_ckshd_12_periods_sourceUserId'),
+				"sourceUserId": r.get('jk_ckshd_6_periods_sourceUserId'),
 				"serviceSn": Common.get_random('serviceSn'),
-				"transactionId": r.get('jk_ckshd_12_periods_transactionId')
+				"transactionId": r.get('jk_ckshd_6_periods_transactionId')
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -77,8 +77,8 @@ class TestJkCkshd6PeriodsTp:
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 		r.mset(
 			{
-				"jk_ckshd_12_periods_creditId": rep['content']['creditId'],
-				"jk_ckshd_12_periods_userId": rep['content']['userId']
+				"jk_ckshd_6_periods_creditId": rep['content']['creditId'],
+				"jk_ckshd_6_periods_userId": rep['content']['userId']
 			}
 		)
 
@@ -95,11 +95,11 @@ class TestJkCkshd6PeriodsTp:
 		Asset.check_column("jk_ckshd_credit", env, r.get("jk_ckshd_6_periods_creditId"))
 		GetSqlData.credit_set(
 			environment=env,
-			credit_id=r.get("jk_ckshd_12_periods_creditId")
+			credit_id=r.get("jk_ckshd_6_periods_creditId")
 		)
 		data = excel_table_byname(self.file, 'query_result')
 		param = json.loads(data[0]['param'])
-		param.update({"creditId": r.get('jk_ckshd_12_periods_creditId')})
+		param.update({"creditId": r.get('jk_ckshd_6_periods_creditId')})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -128,8 +128,8 @@ class TestJkCkshd6PeriodsTp:
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceUserId": r.get('jk_ckshd_12_periods_sourceUserId'),
-				"userId": r.get('jk_ckshd_12_periods_userId')
+				"sourceUserId": r.get('jk_ckshd_6_periods_sourceUserId'),
+				"userId": r.get('jk_ckshd_6_periods_userId')
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -160,11 +160,11 @@ class TestJkCkshd6PeriodsTp:
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
-				"sourceUserId": r.get('jk_ckshd_12_periods_sourceUserId'),
+				"sourceUserId": r.get('jk_ckshd_6_periods_sourceUserId'),
 				"contractType": 1,
 				"sourceContractId": Common.get_random('userid'),
-				"transactionId": r.get('jk_ckshd_12_periods_transactionId'),
-				"associationId": r.get('jk_ckshd_12_periods_creditId')
+				"transactionId": r.get('jk_ckshd_6_periods_transactionId'),
+				"associationId": r.get('jk_ckshd_6_periods_creditId')
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -193,16 +193,16 @@ class TestJkCkshd6PeriodsTp:
 		data = excel_table_byname(self.file, 'apply')
 		r.mset(
 			{
-				"jk_ckshd_12_periods_transactionId": Common.get_random('transactionId'),
-				"jk_ckshd_12_periods_sourceProjectId": Common.get_random('sourceProjectId'),
+				"jk_ckshd_6_periods_transactionId": Common.get_random('transactionId'),
+				"jk_ckshd_6_periods_sourceProjectId": Common.get_random('sourceProjectId'),
 			}
 		)
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceProjectId": r.get('jk_ckshd_12_periods_sourceProjectId'),
-				"sourceUserId": r.get('jk_ckshd_12_periods_sourceUserId'),
-				# "transactionId": r.get('jk_ckshd_12_periods_transactionId')
+				"sourceProjectId": r.get('jk_ckshd_6_periods_sourceProjectId'),
+				"sourceUserId": r.get('jk_ckshd_6_periods_sourceUserId'),
+				# "transactionId": r.get('jk_ckshd_6_periods_transactionId')
 			}
 		)
 		param['applyInfo'].update(
@@ -223,9 +223,9 @@ class TestJkCkshd6PeriodsTp:
 		)
 		param['personalInfo'].update(
 			{
-				"cardNum": r.get('jk_ckshd_12_periods_cardNum'),
-				"custName": r.get('jk_ckshd_12_periods_custName'),
-				"phone": r.get('jk_ckshd_12_periods_phone')
+				"cardNum": r.get('jk_ckshd_6_periods_cardNum'),
+				"custName": r.get('jk_ckshd_6_periods_custName'),
+				"phone": r.get('jk_ckshd_6_periods_phone')
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -243,7 +243,7 @@ class TestJkCkshd6PeriodsTp:
 			prod_type="jkjr"
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
-		r.set('jk_ckshd_12_periods_projectId', rep['content']['projectId'])
+		r.set('jk_ckshd_6_periods_projectId', rep['content']['projectId'])
 
 	@allure.title("进件取消")
 	@allure.severity("critical")
@@ -254,8 +254,8 @@ class TestJkCkshd6PeriodsTp:
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceProjectId": r.get('jk_ckshd_12_periods_sourceProjectId'),
-				"projectId": r.get('jk_ckshd_12_periods_projectId')
+				"sourceProjectId": r.get('jk_ckshd_6_periods_sourceProjectId'),
+				"projectId": r.get('jk_ckshd_6_periods_projectId')
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -283,15 +283,15 @@ class TestJkCkshd6PeriodsTp:
 		"""进件结果查询"""
 		Asset.check_column("jk_ckshd_project", env, r.get("jk_ckshd_6_periods_projectId"))
 		GetSqlData.change_project_audit_status(
-			project_id=r.get('jk_ckshd_12_periods_projectId'),
+			project_id=r.get('jk_ckshd_6_periods_projectId'),
 			environment=env
 		)
 		data = excel_table_byname(self.file, 'query_apply_result')
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceProjectId": r.get('jk_ckshd_12_periods_sourceProjectId'),
-				"projectId": r.get('jk_ckshd_12_periods_projectId')
+				"sourceProjectId": r.get('jk_ckshd_6_periods_sourceProjectId'),
+				"projectId": r.get('jk_ckshd_6_periods_projectId')
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -321,11 +321,11 @@ class TestJkCkshd6PeriodsTp:
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
-				"sourceUserId": r.get('jk_ckshd_12_periods_sourceUserId'),
+				"sourceUserId": r.get('jk_ckshd_6_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
-				"contractType": 1,
-				"transactionId": r.get('jk_ckshd_12_periods_transactionId'),
-				"associationId": r.get('jk_ckshd_12_periods_projectId'),
+				"contractType": 2,
+				"transactionId": r.get('jk_ckshd_6_periods_transactionId'),
+				"associationId": r.get('jk_ckshd_6_periods_projectId'),
 				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")
 			}
 		)
@@ -341,7 +341,7 @@ class TestJkCkshd6PeriodsTp:
 			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
-		r.set("jk_ckshd_12_periods_contractId", rep['content']['contractId'])
+		r.set("jk_ckshd_6_periods_contractId", rep['content']['contractId'])
 
 	@allure.title("上传图片")
 	@allure.severity("trivial")
@@ -354,7 +354,7 @@ class TestJkCkshd6PeriodsTp:
 		"""上传图片"""
 		data = excel_table_byname(self.file, 'image_upload')
 		param = json.loads(data[0]['param'])
-		param.update({"associationId": r.get('jk_ckshd_12_periods_projectId')})
+		param.update({"associationId": r.get('jk_ckshd_6_periods_projectId')})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -380,11 +380,11 @@ class TestJkCkshd6PeriodsTp:
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"associationId": r.get('jk_ckshd_12_periods_projectId'),
+				"associationId": r.get('jk_ckshd_6_periods_projectId'),
 				"serviceSn": Common.get_random("serviceSn"),
 				"requestTime": Common.get_time("-"),
-				"sourceUserId": r.get("jk_ckshd_12_periods_sourceUserId"),
-				"contractId": r.get("jk_ckshd_12_periods_contractId")
+				"sourceUserId": r.get("jk_ckshd_6_periods_sourceUserId"),
+				"contractId": r.get("jk_ckshd_6_periods_contractId")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -412,10 +412,10 @@ class TestJkCkshd6PeriodsTp:
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceUserId": r.get("jk_ckshd_12_periods_sourceUserId"),
-				"transactionId": r.get("jk_ckshd_12_periods_sourceProjectId"),
-				"sourceProjectId": r.get("jk_ckshd_12_periods_sourceProjectId"),
-				"projectId": r.get("jk_ckshd_12_periods_projectId")
+				"sourceUserId": r.get("jk_ckshd_6_periods_sourceUserId"),
+				"transactionId": r.get("jk_ckshd_6_periods_sourceProjectId"),
+				"sourceProjectId": r.get("jk_ckshd_6_periods_sourceProjectId"),
+				"projectId": r.get("jk_ckshd_6_periods_projectId")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -445,15 +445,15 @@ class TestJkCkshd6PeriodsTp:
 			{
 				"serviceSn": Common.get_random("serviceSn"),
 				"requestTime": Common.get_time("-"),
-				"sourceUserId": r.get("jk_ckshd_12_periods_sourceUserId"),
+				"sourceUserId": r.get("jk_ckshd_6_periods_sourceUserId"),
 				"transactionId": Common.get_random("transactionId"),
-				"sourceProjectId": r.get("jk_ckshd_12_periods_sourceProjectId"),
-				"projectId": r.get("jk_ckshd_12_periods_projectId"),
-				"name": r.get("jk_ckshd_12_periods_custName"),
-				"cardNo": r.get("jk_ckshd_12_periods_cardNum"),
+				"sourceProjectId": r.get("jk_ckshd_6_periods_sourceProjectId"),
+				"projectId": r.get("jk_ckshd_6_periods_projectId"),
+				"name": r.get("jk_ckshd_6_periods_custName"),
+				"cardNo": r.get("jk_ckshd_6_periods_cardNum"),
 				# "bankNo": "6217002200003225702",
-				"bankNo": r.get("jk_ckshd_12_periods_bankcard"),
-				"bankPhone": r.get("jk_ckshd_12_periods_phone"),
+				"bankNo": r.get("jk_ckshd_6_periods_bankcard"),
+				"bankPhone": r.get("jk_ckshd_6_periods_phone"),
 				"signNo": Common.get_random("businessLicenseNo"),
 				"authLetterNo": Common.get_random("transactionId")
 
@@ -474,7 +474,7 @@ class TestJkCkshd6PeriodsTp:
 			prod_type="wxjk"
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
-		r.set("jk_ckshd_12_periods_signId", rep["content"]["signId"])
+		r.set("jk_ckshd_6_periods_signId", rep["content"]["signId"])
 
 	@allure.title("委托划扣协议上传")
 	@allure.severity("blocker")
@@ -488,10 +488,10 @@ class TestJkCkshd6PeriodsTp:
 		param = Common.get_json_data('data', 'rong_pay_upload.json')
 		param.update(
 			{
-				"associationId": r.get("jk_ckshd_12_periods_signId"),
+				"associationId": r.get("jk_ckshd_6_periods_signId"),
 				"requestId": Common.get_random("serviceSn"),
 				"sourceContractId": Common.get_random("serviceSn"),
-				"sourceUserId": r.get("jk_ckshd_12_periods_sourceUserId")
+				"sourceUserId": r.get("jk_ckshd_6_periods_sourceUserId")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -520,15 +520,15 @@ class TestJkCkshd6PeriodsTp:
 		"""放款申请"""
 		data = excel_table_byname(self.file, 'loan_pfa')
 		param = json.loads(data[0]['param'])
-		r.set("jk_ckshd_12_periods_loan_serviceSn", Common.get_random("serviceSn"))
+		r.set("jk_ckshd_6_periods_loan_serviceSn", Common.get_random("serviceSn"))
 		param.update(
 			{
-				"sourceProjectId": r.get("jk_ckshd_12_periods_sourceProjectId"),
-				"projectId": r.get("jk_ckshd_12_periods_projectId"),
-				"sourceUserId": r.get("jk_ckshd_12_periods_sourceUserId"),
-				"serviceSn": r.get("jk_ckshd_12_periods_loan_serviceSn"),
-				"id": r.get('jk_ckshd_12_periods_cardNum'),
-				"accountName": r.get("jk_ckshd_12_periods_custName"),
+				"sourceProjectId": r.get("jk_ckshd_6_periods_sourceProjectId"),
+				"projectId": r.get("jk_ckshd_6_periods_projectId"),
+				"sourceUserId": r.get("jk_ckshd_6_periods_sourceUserId"),
+				"serviceSn": r.get("jk_ckshd_6_periods_loan_serviceSn"),
+				"id": r.get('jk_ckshd_6_periods_cardNum'),
+				"accountName": r.get("jk_ckshd_6_periods_custName"),
 				"amount": 50000
 			}
 		)
@@ -547,7 +547,7 @@ class TestJkCkshd6PeriodsTp:
 		# 修改支付表中的品钛返回code
 		GetSqlData.change_pay_status(
 			environment=env,
-			project_id=r.get('jk_ckshd_12_periods_projectId')
+			project_id=r.get('jk_ckshd_6_periods_projectId')
 		)
 
 	@allure.title("放款结果查询")
@@ -558,10 +558,10 @@ class TestJkCkshd6PeriodsTp:
 	@pytest.mark.returns
 	def test_114_loan_query(self, env, r):
 		"""放款结果查询"""
-		GetSqlData.loan_set(environment=env, project_id=r.get('jk_ckshd_12_periods_projectId'))
+		GetSqlData.loan_set(environment=env, project_id=r.get('jk_ckshd_6_periods_projectId'))
 		data = excel_table_byname(self.file, 'pfa_query')
 		param = json.loads(data[0]['param'])
-		param.update({"serviceSn": r.get("jk_ckshd_12_periods_loan_serviceSn")})
+		param.update({"serviceSn": r.get("jk_ckshd_6_periods_loan_serviceSn")})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -588,8 +588,8 @@ class TestJkCkshd6PeriodsTp:
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"transactionId": r.get("jk_ckshd_12_periods_sourceProjectId"),
-				"projectId": r.get("jk_ckshd_12_periods_projectId")
+				"transactionId": r.get("jk_ckshd_6_periods_sourceProjectId"),
+				"projectId": r.get("jk_ckshd_6_periods_projectId")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -604,7 +604,7 @@ class TestJkCkshd6PeriodsTp:
 			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
-		r.set("jk_ckshd_12_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
+		r.set("jk_ckshd_6_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
 	@allure.title("还款计划试算:提前结清")
 	@allure.severity("blocker")
@@ -615,10 +615,10 @@ class TestJkCkshd6PeriodsTp:
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceUserId": r.get("jk_ckshd_12_periods_sourceUserId"),
-				"transactionId": r.get("jk_ckshd_12_periods_sourceProjectId"),
-				"sourceProjectId": r.get("jk_ckshd_12_periods_sourceProjectId"),
-				"projectId": r.get("jk_ckshd_12_periods_projectId"),
+				"sourceUserId": r.get("jk_ckshd_6_periods_sourceUserId"),
+				"transactionId": r.get("jk_ckshd_6_periods_sourceProjectId"),
+				"sourceProjectId": r.get("jk_ckshd_6_periods_sourceProjectId"),
+				"projectId": r.get("jk_ckshd_6_periods_projectId"),
 				"businessType": 2
 			}
 		)
@@ -634,7 +634,7 @@ class TestJkCkshd6PeriodsTp:
 			environment=env
 		)
 		r.set(
-			"jk_ckshd_12_periods_early_settlement_repayment_plan",
+			"jk_ckshd_6_periods_early_settlement_repayment_plan",
 			json.dumps(rep['content']['repaymentPlanList'])
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
@@ -648,10 +648,10 @@ class TestJkCkshd6PeriodsTp:
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceUserId": r.get("jk_ckshd_12_periods_sourceUserId"),
-				"transactionId": r.get("jk_ckshd_12_periods_sourceProjectId"),
-				"sourceProjectId": r.get("jk_ckshd_12_periods_sourceProjectId"),
-				"projectId": r.get("jk_ckshd_12_periods_projectId"),
+				"sourceUserId": r.get("jk_ckshd_6_periods_sourceUserId"),
+				"transactionId": r.get("jk_ckshd_6_periods_sourceProjectId"),
+				"sourceProjectId": r.get("jk_ckshd_6_periods_sourceProjectId"),
+				"projectId": r.get("jk_ckshd_6_periods_projectId"),
 				"businessType": 3
 			}
 		)
@@ -668,7 +668,7 @@ class TestJkCkshd6PeriodsTp:
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 		r.set(
-			"jk_ckshd_12_periods_return_repayment_plan",
+			"jk_ckshd_6_periods_return_repayment_plan",
 			json.dumps(rep['content']['repaymentPlanList'])
 		)
 
@@ -681,12 +681,12 @@ class TestJkCkshd6PeriodsTp:
 		param = json.loads(data[0]['param'])
 		period = 1
 		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=r.get("jk_ckshd_12_periods_projectId"),
+			project_id=r.get("jk_ckshd_6_periods_projectId"),
 			environment=env,
 			period=period,
 			repayment_plan_type=1
 		)
-		repayment_plan_list = r.get("jk_ckshd_12_periods_repayment_plan")
+		repayment_plan_list = r.get("jk_ckshd_6_periods_repayment_plan")
 		success_amount = 0.00
 		repayment_detail_list = []
 		for i in json.loads(repayment_plan_list):
@@ -700,9 +700,9 @@ class TestJkCkshd6PeriodsTp:
 				repayment_detail_list.append(plan_detail)
 		param.update(
 			{
-				"projectId": r.get("jk_ckshd_12_periods_projectId"),
-				"transactionId": r.get("jk_ckshd_12_periods_sourceProjectId"),
-				"sourceProjectId": r.get("jk_ckshd_12_periods_sourceProjectId"),
+				"projectId": r.get("jk_ckshd_6_periods_projectId"),
+				"transactionId": r.get("jk_ckshd_6_periods_sourceProjectId"),
+				"sourceProjectId": r.get("jk_ckshd_6_periods_sourceProjectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"planPayDate": str(plan_pay_date['plan_pay_date']),
 				"successAmount": success_amount,
@@ -732,12 +732,12 @@ class TestJkCkshd6PeriodsTp:
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=r.get("jk_ckshd_12_periods_projectId"),
+			project_id=r.get("jk_ckshd_6_periods_projectId"),
 			environment=env,
 			period=1,
 			repayment_plan_type=1
 		)
-		repayment_plan_list = json.loads(r.get("jk_ckshd_12_periods_early_settlement_repayment_plan"))
+		repayment_plan_list = json.loads(r.get("jk_ckshd_6_periods_early_settlement_repayment_plan"))
 		success_amount = 0.00
 		repayment_detail_list = []
 		for i in repayment_plan_list:
@@ -750,9 +750,9 @@ class TestJkCkshd6PeriodsTp:
 			repayment_detail_list.append(plan_detail)
 		param.update(
 			{
-				"projectId": r.get("jk_ckshd_12_periods_projectId"),
-				"transactionId": r.get("jk_ckshd_12_periods_sourceProjectId"),
-				"sourceProjectId": r.get("jk_ckshd_12_periods_sourceProjectId"),
+				"projectId": r.get("jk_ckshd_6_periods_projectId"),
+				"transactionId": r.get("jk_ckshd_6_periods_sourceProjectId"),
+				"sourceProjectId": r.get("jk_ckshd_6_periods_sourceProjectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"planPayDate": str(plan_pay_date['plan_pay_date']),
 				"successAmount": success_amount,
@@ -783,12 +783,12 @@ class TestJkCkshd6PeriodsTp:
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=r.get("jk_ckshd_12_periods_projectId"),
+			project_id=r.get("jk_ckshd_6_periods_projectId"),
 			environment=env,
 			period=1,
 			repayment_plan_type=1
 		)
-		repayment_plan_list = json.loads(r.get("jk_ckshd_12_periods_return_repayment_plan"))
+		repayment_plan_list = json.loads(r.get("jk_ckshd_6_periods_return_repayment_plan"))
 		success_amount = 0.00
 		repayment_detail_list = []
 		for i in repayment_plan_list:
@@ -801,9 +801,9 @@ class TestJkCkshd6PeriodsTp:
 			repayment_detail_list.append(plan_detail)
 		param.update(
 			{
-				"projectId": r.get("jk_ckshd_12_periods_projectId"),
-				"transactionId": r.get("jk_ckshd_12_periods_sourceProjectId"),
-				"sourceProjectId": r.get("jk_ckshd_12_periods_sourceProjectId"),
+				"projectId": r.get("jk_ckshd_6_periods_projectId"),
+				"transactionId": r.get("jk_ckshd_6_periods_sourceProjectId"),
+				"sourceProjectId": r.get("jk_ckshd_6_periods_sourceProjectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"planPayDate": str(plan_pay_date['plan_pay_date']),
 				"successAmount": success_amount,
@@ -835,15 +835,15 @@ class TestJkCkshd6PeriodsTp:
 		data = excel_table_byname(self.file, 'cash_push')
 		param = json.loads(data[0]['param'])
 		success_amount = GetSqlData.get_repayment_amount(
-			project_id=r.get("jk_ckshd_12_periods_projectId"),
+			project_id=r.get("jk_ckshd_6_periods_projectId"),
 			environment=env,
 			period=1
 		)
 		param.update(
 			{
 				"serviceSn": Common.get_random("serviceSn"),
-				"projectId": r.get("jk_ckshd_12_periods_projectId"),
-				"sourceProjectId": r.get("jk_ckshd_12_periods_sourceProjectId"),
+				"projectId": r.get("jk_ckshd_6_periods_projectId"),
+				"sourceProjectId": r.get("jk_ckshd_6_periods_sourceProjectId"),
 				"repaymentPlanId": Common.get_random("sourceProjectId"),
 				"sucessAmount": success_amount,
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
@@ -877,10 +877,10 @@ class TestJkCkshd6PeriodsTp:
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
-				"sourceUserId": r.get('jk_ckshd_12_periods_sourceUserId'),
+				"sourceUserId": r.get('jk_ckshd_6_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
-				"transactionId": r.get('jk_ckshd_12_periods_transactionId'),
-				"associationId": r.get('jk_ckshd_12_periods_projectId'),
+				"transactionId": r.get('jk_ckshd_6_periods_transactionId'),
+				"associationId": r.get('jk_ckshd_6_periods_projectId'),
 				"contractType": 15,
 				"content": Common.get_json_data('data', 'credit_sign.json').get("content")
 			}
