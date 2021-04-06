@@ -53,23 +53,26 @@ class EntityInfo(object):
 	}
 	_jfx_project = {
 		"supplierLegalPersonPhone": "15533330202",
-		"date": "2019-01-01",
 		"clinicOriginalLevel": 1,
 		"monthPatients": 50,
 		"supplierLegalPersonIdcard": "372301199509074811",
 		"clinicTradingLevel": 2,
 		"permitRegistrationNumber": "000000000000000000",
+		"loanUsageInfo": {
+			"totalAmount": 200000.0,
+			"allProductNumber": 2,
+			"date": "2019-01-01",
+			"saleProductDetailList": [{
+				"unitPriceAmount": 100000.0,
+				"productName": "产品名称123",
+				"singleProductNumber": 5
+			}, {
+				"unitPriceAmount": 200000.0,
+				"productName": "产品名称456",
+				"singleProductNumber": 3
+			}]
+		},
 		"supplierAccessWay": 1,
-		"allProductNumber": 2,
-		"saleProductDetailList": [{
-			"unitPriceAmount": 100000.0,
-			"productName": "产品名称123",
-			"singleProductNumber": 5
-		}, {
-			"unitPriceAmount": 200000.0,
-			"productName": "产品名称456",
-			"singleProductNumber": 3
-		}],
 		"supplierLegalPersonName": "经销商法人",
 		"doctorNumber": 3,
 		"downPayment": 5555.55,
@@ -82,8 +85,7 @@ class EntityInfo(object):
 		"consumeAmount": 3333.33,
 		"supplierProprietorRealCity": "110000",
 		"annualPlantingNumber": 130,
-		"inspectionEquipment": "4",
-		"totalAmount": 200000.0,
+		"inspectionEquipment": "1,2,4",
 		"supplierCompanyBadAccountRate": 3.33,
 		"chairNumber": 10,
 		"supplierOriginalLevel": 0,

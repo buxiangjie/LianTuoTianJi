@@ -416,7 +416,6 @@ class TestJfx12PeriodTp:
 	@allure.title("提前结清试算")
 	@allure.severity("blocker")
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.skip
 	def test_110_early_settlement(self, r, env):
 		"""还款计划试算:提前结清"""
 		data = excel_table_byname(self.file, 'calculate')
@@ -629,7 +628,7 @@ class TestJfx12PeriodTp:
 				"projectId": r.get("jfx_12_periods_projectId"),
 				"sourceProjectId": r.get("jfx_12_periods_sourceProjectId"),
 				"repaymentPlanId": Common.get_random("sourceProjectId"),
-				"sucessAmount": float(success_amount),
+				"successAmount": float(success_amount),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"tradeTime": Common.get_time(),
 				"finishTime": Common.get_time()

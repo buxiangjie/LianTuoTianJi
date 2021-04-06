@@ -7,7 +7,8 @@
 import os
 import json
 import sys
-import time
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import allure
 import pytest
 
@@ -17,13 +18,11 @@ from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 logger = Logger(logger="test_jfqjyv2_18_periods_tp").getlog()
 
 
 @allure.feature("即分期教育V2 18期")
-class TestJfqjyV218Tp:
+class TestJfqjyv218Tp:
 	file = Config().get_item('File', 'jfq_case_file')
 
 	@allure.title("进件申请")
@@ -32,7 +31,6 @@ class TestJfqjyV218Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_100_apply(self, r, env):
 		"""进件"""
 		data = excel_table_byname(self.file, 'apply')
@@ -96,7 +94,6 @@ class TestJfqjyV218Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_101_sign_credit(self, r, env):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
@@ -131,7 +128,6 @@ class TestJfqjyV218Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_102_query_apply_result(self, r, env):
 		"""进件结果查询"""
 		GetSqlData.change_project_audit_status(
@@ -165,7 +161,6 @@ class TestJfqjyV218Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_103_sign_borrow(self, r, env):
 		"""上传借款协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
@@ -200,7 +195,6 @@ class TestJfqjyV218Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_105_image_upload(self, r, env):
 		"""上传图片"""
 		data = excel_table_byname(self.file, 'image_upload')
@@ -224,7 +218,6 @@ class TestJfqjyV218Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_106_contact_query(self, r, env):
 		"""合同结果查询:获取签章后的借款协议"""
 		data = excel_table_byname(self.file, 'contract_query')
@@ -256,7 +249,6 @@ class TestJfqjyV218Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_107_calculate(self, r, env):
 		"""还款计划试算（未放款）:正常还款"""
 		data = excel_table_byname(self.file, 'calculate')
@@ -287,7 +279,6 @@ class TestJfqjyV218Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_108_loan_pfa(self, r, env):
 		"""放款申请"""
 		data = excel_table_byname(self.file, 'loan_pfa')
@@ -327,7 +318,6 @@ class TestJfqjyV218Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_109_loan_query(self, r, env):
 		"""放款结果查询"""
 		GetSqlData.loan_set(environment=env, project_id=r.get('jfqjyv2_18_periods_projectId'))
@@ -353,7 +343,6 @@ class TestJfqjyV218Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_110_query_repayment_plan(self, r, env):
 		"""国投云贷还款计划查询"""
 		data = excel_table_byname(self.file, 'query_repayment_plan')
@@ -392,7 +381,7 @@ class TestJfqjyV218Tp:
 				"sourceProjectId": r.get("jfqjyv2_18_periods_sourceProjectId"),
 				"projectId": r.get("jfqjyv2_18_periods_projectId"),
 				"businessType": 2,
-				"repayTime": "2020-09-18 00:00:00" #Common.get_time("-")
+				"repayTime": "2020-09-18 00:00:00"  # Common.get_time("-")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -414,7 +403,6 @@ class TestJfqjyV218Tp:
 
 	@allure.title("退货试算")
 	@allure.severity("blocker")
-	@pytest.mark.returns
 	def test_112_calculate(self, r, env):
 		"""还款计划试算:退货"""
 		data = excel_table_byname(self.file, 'calculate')
@@ -531,7 +519,7 @@ class TestJfqjyV218Tp:
 				"successAmount": success_amount,
 				"repayType": 2,
 				"period": repayment_plan_list[0]['period'],
-				"payTime": "2020-09-18 00:00:00" #Common.get_time("-")
+				"payTime": "2020-09-18 00:00:00"  # Common.get_time("-")
 			}
 		)
 		param['repaymentDetailList'] = repayment_detail_list
@@ -578,7 +566,6 @@ class TestJfqjyV218Tp:
 
 	@allure.title("退货")
 	@allure.severity("blocker")
-	@pytest.mark.returns
 	def test_116_return(self, r, env):
 		"""退货"""
 		data = excel_table_byname(self.file, 'offline_repay')
@@ -645,7 +632,7 @@ class TestJfqjyV218Tp:
 				"projectId": r.get("jfqjyv2_18_periods_projectId"),
 				"sourceProjectId": r.get("jfqjyv2_18_periods_sourceProjectId"),
 				"repaymentPlanId": Common.get_random("sourceProjectId"),
-				"sucessAmount": success_amount,
+				"successAmount": success_amount,
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"tradeTime": Common.get_time(),
 				"finishTime": Common.get_time()
@@ -658,7 +645,7 @@ class TestJfqjyV218Tp:
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
-			data=param,
+			data=json.dumps(param, ensure_ascii=False),
 			environment=env,
 			product="cloudloan"
 		)

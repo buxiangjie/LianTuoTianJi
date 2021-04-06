@@ -19,7 +19,7 @@ from busi_assert.busi_asset import Asset
 
 
 
-class Jfx3PeriodTp(unittest.TestCase):
+class Jfx6PeriodTp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
