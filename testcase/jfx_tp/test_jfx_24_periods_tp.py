@@ -94,7 +94,7 @@ class TestJfx24PeriodTp:
 	@pytest.mark.settle
 	def test_101_query_result(self, r, env):
 		"""授信结果查询"""
-		Asset.check_column("jfx_credit", self.env, self.r.get("jfx_24_periods_creditId"))
+		Asset.check_column("jfx_credit", env, r.get("jfx_24_periods_creditId"))
 		GetSqlData.credit_set(
 			environment=env,
 			credit_id=r.get("jfx_24_periods_creditId")
@@ -252,7 +252,7 @@ class TestJfx24PeriodTp:
 	@pytest.mark.settle
 	def test_105_query_apply_result(self, r, env):
 		"""进件结果查询"""
-		Asset.check_column("jfx_project", self.env, self.r.get("jfx_24_periods_projectId"))
+		Asset.check_column("jfx_project", env, r.get("jfx_24_periods_projectId"))
 		GetSqlData.change_project_audit_status(
 			project_id=r.get('jfx_24_periods_projectId'),
 			environment=env
