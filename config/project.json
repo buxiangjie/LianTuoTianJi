@@ -323,5 +323,15 @@
     "id": "jk_ckshd_24_periods_cardNum",
     "name": "jk_ckshd_24_periods_custName",
     "card": "jk_ckshd_24_periods_bankcard"
+  },
+  "jk_cwshd_6_periods": {
+    "id": "jk_cwshd_6_periods_cardNum",
+    "name": "jk_cwshd_6_periods_custName",
+    "card": "jk_cwshd_6_periods_bankcard"
+  },
+  "jk_cwshd_12_periods": {
+    "id": "jk_cwshd_12_periods_cardNum",
+    "name": "jk_cwshd_12_periods_custName",
+    "card": "jk_cwshd_12_periods_bankcard"
   }
 }

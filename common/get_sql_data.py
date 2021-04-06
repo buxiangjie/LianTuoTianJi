@@ -249,7 +249,7 @@ class GetSqlData:
 	def get_asset_id(environment: str, project_id: str) -> str:
 		"""获取资产id"""
 		# noinspection PyGlobalUndefined
-		sql = f"""select id from sandbox_saas.asset WHERE project_id={project_id};"""
+		sql = f"""select id from sandbox_saas.asset WHERE project_id='{project_id}';"""
 		return GetSqlData.exec_select(environment, sql)[0].get("id")
 
 	@staticmethod
@@ -272,22 +272,22 @@ class GetSqlData:
 			plan_table = 'user_repayment_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
 			sql = f"""
 				select * from {plan_table}
-				where asset_id = {str(asset_id)}
-				and period = {str(period)}
-				and repayment_plan_type = {str(repayment_plan_type)};
+				where asset_id = {asset_id}
+				and period = {period}
+				and repayment_plan_type = {repayment_plan_type};
 				"""
 		elif feecategory == 3003:
 			plan_table = 'user_fee_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
 			sql = f"""
 				select * from {plan_table} 
-				where asset_id = {str(asset_id)} 
-				and period = {str(period)} and fee_category = {str(repayment_plan_type)};
+				where asset_id = {asset_id} 
+				and period = {period} and fee_category = {repayment_plan_type};
 				"""
 		else:
 			plan_table = 'fee_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
 			sql = f"""
 				select plan_pay_date,rest_amount,cur_amount,source_plan_id from {plan_table} 
-				where asset_id = {str(asset_id)} and period = {str(period)} and fee_category = {feecategory};
+				where asset_id = {asset_id} and period = {period} and fee_category = {feecategory};
 				"""
 		return GetSqlData.exec_select(environment, sql)[0]
 
@@ -299,7 +299,7 @@ class GetSqlData:
 		plan_table = 'user_repayment_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
 		sql = f"""
 			select sum(cur_amount) as cur_amount from {plan_table} 
-			where asset_id={str(asset_id)} and period={str(period)};
+			where asset_id={asset_id} and period={period};
 			"""
 		return float(GetSqlData.exec_select(environment, sql)[0].get('cur_amount'))
 
@@ -311,7 +311,7 @@ class GetSqlData:
 		plan_table = 'repayment_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
 		sql = f"""
 			select sum(cur_amount) as amount from {plan_table} 
-			where asset_id={str(asset_id)} and period={str(period)};
+			where asset_id='{asset_id}' and period={period};
 			"""
 		return float(GetSqlData.exec_select(environment, sql)[0].get("amount"))
 
@@ -338,8 +338,8 @@ class GetSqlData:
 		sql = f"""
 			select origin_amount 
 			from {plan_table} 
-			where asset_id={str(asset_id)} 
-			and period={str(period)} 
+			where asset_id={asset_id} 
+			and period={period} 
 			and repayment_plan_type=1;
 			"""
 		return str(GetSqlData.exec_select(environment, sql)[0].get("origin_amount"))
@@ -371,7 +371,7 @@ class GetSqlData:
 		sql = f"""
 			select * 
 			from {plan_table} 
-			where asset_id = {asset_id} 
+			where asset_id = {asset_id}
 			and period = {period} 
 			and repayment_plan_type = {repayment_plan_type};
 			"""
