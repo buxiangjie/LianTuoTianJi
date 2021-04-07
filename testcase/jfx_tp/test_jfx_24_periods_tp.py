@@ -567,7 +567,6 @@ class TestJfx24PeriodTp:
 
 	@allure.title("提前结清")
 	@allure.severity("normal")
-	@pytest.mark.offline_settle_in_advance
 	def test_114_offline_settle(self, r, env):
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.file, 'offline_repay')
