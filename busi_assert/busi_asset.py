@@ -10,7 +10,7 @@ from busi_assert.info.extra_info import EntityInfo
 from log.ulog import Ulog
 
 
-class Asset:
+class Assert:
 	@staticmethod
 	def check_column(info: str, environment: str, busi_id: str):
 		map_dict = EntityInfo.mapping.get(info)

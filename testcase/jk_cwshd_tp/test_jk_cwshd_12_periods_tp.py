@@ -12,6 +12,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from common.common_func import Common
+from busi_assert.busi_asset import Assert
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
@@ -174,7 +175,6 @@ class JkCkshd12PeriodsTp(unittest.TestCase):
 		param['applyInfo'].update(
 			{
 				"applyTime": Common.get_time("-"),
-				# "applyTime": "2021-03-29 00:00:00",
 				"applyAmount": 50000,
 				"applyTerm": 12,
 			}
@@ -238,6 +238,7 @@ class JkCkshd12PeriodsTp(unittest.TestCase):
 
 	def test_106_query_apply_result(self):
 		"""进件结果查询"""
+		Assert.check_column("jk_cwshd_project", self.env, self.r.get('jk_cwshd_12_periods_projectId'))
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('jk_cwshd_12_periods_projectId'),
 			environment=self.env
@@ -273,6 +274,7 @@ class JkCkshd12PeriodsTp(unittest.TestCase):
 				"serviceSn": Common.get_random('serviceSn'),
 				"sourceUserId": self.r.get('jk_cwshd_12_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
+				"contractType": 2,
 				"transactionId": self.r.get('jk_cwshd_12_periods_transactionId'),
 				"associationId": self.r.get('jk_cwshd_12_periods_projectId'),
 				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")

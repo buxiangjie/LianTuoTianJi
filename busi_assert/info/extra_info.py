@@ -1,12 +1,12 @@
 # -*- coding: UTF-8 -*-
 """
 @auth:buxiangjie
-@date:2020-05-12 11:26:00
+@date:2021-03-22 11:26:00
 @describe: entity
 """
 
 
-class EntityInfo(object):
+class EntityInfo:
 	_jfx_credit = {
 		"cityGrading": 2,
 		"companyScale": 1,
@@ -29,7 +29,7 @@ class EntityInfo(object):
 		"isAddressConsistent": 1,
 		"clinicTotalLoanCount": 10,
 		"registerAddressProvince": "110000",
-		"clinicHistorysupplierNum": 12,
+		"clinicHistorySupplierNum": 12,
 		"sourceUserProductType": 1,
 		"registerAddressCity": "110100",
 		"clinicOverdueTimesMoreThan5": 0,
@@ -161,6 +161,58 @@ class EntityInfo(object):
 			"productUnitPrice": 100
 		}]
 	}
+	_jk_cwshd_project = {
+		"cityGrading": 1,
+		"proprietorIsDoctor": 1,
+		"monthPatients": 1,
+		"accessWay": 2,
+		"permitRegistrationNumber": "5849134",
+		"proprietorRealName": "实际经营者",
+		"deliveryAddressBorough": "110500",
+		"isThreeCertificatesInOne": "Y",
+		"establishYears": 3,
+		"merchantDiscountRate": 0.120005,
+		"registerDetailAddress": "北京市海淀区xxx街道xxx小区xxx号楼xxx层xxx室",
+		"consigneeName": "收货联系人",
+		"businessLicenseValidDate": "2029-12-10-9999-09-09",
+		"doctorNumber": 1,
+		"supplierUnifiedSocialCreditCode": "9499123004",
+		"consigneePhone": "13800138003",
+		"isAddressConsistent": "Y",
+		"legalPersonPhoneRealName": "Y",
+		"registerAddressProvince": "110100",
+		"legalPersonIsDoctor": 1,
+		"registerAddressCity": "110100",
+		"proprietorIsPhoneRealName": "Y",
+		"shareholderIsDoctor": 1,
+		"supplierName": "XXX",
+		"deliveryAddressProvince": "110100",
+		"brandName": "品牌名称",
+		"deliveryDetailAddress": "北京市海淀区xxx街道xxx小区xxx号楼xxx层xxx室",
+		"isChangeForLegalPerson": 1,
+		"decorateGrade": 1,
+		"productInfoList": [{
+			"productName": "产品名称",
+			"brandName": "品牌名称",
+			"productQuantity": 10,
+			"productUnitPrice": 100.55
+		}],
+		"proprietorRealPhone": "12345678900",
+		"locationGrade": 1,
+		"isSamePersonForProprietorAndLegal": "Y",
+		"proprietorRealIdCardNo": "123456789000000000",
+		"registeredAssets": 100.05,
+		"manageTime": 5,
+		"registerAddressBorough": "110500",
+		"hasCertificateNumberOfPeople": 1,
+		"deliveryAddressCity": "110100",
+		"floorSpace": 21.55,
+		"oldLegalPersonName": "原法人",
+		"consultationRoomNumber": 1,
+		"hospitalCategory": 1,
+		"monitorDevice": "宠物医院设备"
+	}
+
 	_wxjk_project = {
 		"livePhone": "1012345678",
 		"faceRecognition": "Y",
@@ -172,5 +224,6 @@ class EntityInfo(object):
 		"jfx_project": _jfx_project,
 		"jk_ckshd_credit": _jk_ckshd_credit,
 		"jk_ckshd_project": _jk_ckshd_project,
-		"wxjk_project": _wxjk_project
+		"wxjk_project": _wxjk_project,
+		"jk_cwshd_project": _jk_cwshd_project
 	}
