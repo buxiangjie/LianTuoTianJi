@@ -13,7 +13,7 @@ from log.ulog import Ulog
 class Assert:
 	@staticmethod
 	def check_column(info: str, environment: str, busi_id: str):
-		map_dict = EntityInfo.mapping.get(info)
+		map_dict = EntityInfo[info].value
 		busi_type = info.split("_")[-1]
 		sql_data = GetSqlData.select_extra_info(environment, busi_type, busi_id)
 		for key, value in map_dict.items():

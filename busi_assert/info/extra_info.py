@@ -4,10 +4,11 @@
 @date:2021-03-22 11:26:00
 @describe: entity
 """
+from enum import Enum
 
 
-class EntityInfo:
-	_jfx_credit = {
+class EntityInfo(Enum):
+	jfx_credit = {
 		"cityGrading": 2,
 		"companyScale": 1,
 		"enterpriseCertificateType": 1,
@@ -51,7 +52,7 @@ class EntityInfo:
 		"enterpriseCertificateNum": "6323272466301355006",
 		"hospitalCategory": 1
 	}
-	_jfx_project = {
+	jfx_project = {
 		"supplierLegalPersonPhone": "15533330202",
 		"clinicOriginalLevel": 1,
 		"monthPatients": 50,
@@ -91,7 +92,7 @@ class EntityInfo:
 		"supplierOriginalLevel": 0,
 		"supplierTradingLevel": 0
 	}
-	_jk_ckshd_credit = {
+	jk_ckshd_credit = {
 		"cityGrading": 1,
 		"unifiedSocialCreditCode": "178199873022801",
 		"proprietorIsDoctor": 1,
@@ -147,7 +148,7 @@ class EntityInfo:
 		"clinicTotalLoanAmount": 100.55,
 		"contactPhone": "12345678900"
 	}
-	_jk_ckshd_project = {
+	jk_ckshd_project = {
 		"supplierName": "供应商名称",
 		"consigneeName": "收货人",
 		"supplierUnifiedSocialCreditCode": "1823994",
@@ -161,7 +162,48 @@ class EntityInfo:
 			"productUnitPrice": 100
 		}]
 	}
-	_jk_cwshd_project = {
+	jk_cwshd_credit = {
+		"cityGrading": 1,
+		"proprietorIsDoctor": 1,
+		"monthPatients": 1,
+		"accessWay": 1,
+		"permitRegistrationNumber": "192030304",
+		"corpType": 1,
+		"proprietorRealName": "实际经营者",
+		"isThreeCertificatesInOne": "Y",
+		"establishYears": 3,
+		"staffOnActiveDutyNum": 1,
+		"registerDetailAddress": "北京市海淀区xxx街道xxx小区xxx号楼xxx层xxx室",
+		"businessLicenseValidDate": "9999-09-09",
+		"doctorNumber": 3,
+		"supplierUnifiedSocialCreditCode": "32849935",
+		"isAddressConsistent": "Y",
+		"legalPersonPhoneRealName": "Y",
+		"registerAddressProvince": "110100",
+		"legalPersonIsDoctor": 1,
+		"registerAddressCity": "110100",
+		"proprietorIsPhoneRealName": "Y",
+		"shareholderIsDoctor": 1,
+		"supplierName": "供应商",
+		"brandName": "品牌名称",
+		"isChangeForLegalPerson": 1,
+		"decorateGrade": 1,
+		"proprietorRealPhone": "15533330101",
+		"locationGrade": 1,
+		"chainInstitutionNumber": 2,
+		"isSamePersonForProprietorAndLegal": "Y",
+		"proprietorRealIdCardNo": "372301199509074811",
+		"registeredAssets": 111.11,
+		"manageTime": 5,
+		"registerAddressBorough": "110500",
+		"hasCertificateNumberOfPeople": 5,
+		"floorSpace": 21.11,
+		"oldLegalPersonName": "原法人姓名",
+		"consultationRoomNumber": 7,
+		"hospitalCategory": 1,
+		"monitorDevice": "ct"
+	}
+	jk_cwshd_project = {
 		"cityGrading": 1,
 		"proprietorIsDoctor": 1,
 		"monthPatients": 1,
@@ -212,18 +254,9 @@ class EntityInfo:
 		"hospitalCategory": 1,
 		"monitorDevice": "宠物医院设备"
 	}
-
-	_wxjk_project = {
+	wxjk_project = {
 		"livePhone": "1012345678",
 		"faceRecognition": "Y",
 		"currentCity": "110000",
 		"cardValidDate": "2019-12-10-9999-09-09"
-	}
-	mapping = {
-		"jfx_credit": _jfx_credit,
-		"jfx_project": _jfx_project,
-		"jk_ckshd_credit": _jk_ckshd_credit,
-		"jk_ckshd_project": _jk_ckshd_project,
-		"wxjk_project": _wxjk_project,
-		"jk_cwshd_project": _jk_cwshd_project
 	}
