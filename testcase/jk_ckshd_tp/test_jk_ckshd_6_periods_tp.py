@@ -208,13 +208,13 @@ class TestJkCkshd6PeriodsTp:
 		param['applyInfo'].update(
 			{
 				"applyTime": Common.get_time("-"),
-				"applyAmount": 50000,
+				"applyAmount": 30000,
 				"applyTerm": 12,
 			}
 		)
 		param['loanInfo'].update(
 			{
-				"loanAmount": 50000,
+				"loanAmount": 30000,
 				"loanTerm": 12,
 				"assetInterestRate": 0.09,
 				"userInterestRate": 0.16,
@@ -529,7 +529,7 @@ class TestJkCkshd6PeriodsTp:
 				"serviceSn": r.get("jk_ckshd_6_periods_loan_serviceSn"),
 				"id": r.get('jk_ckshd_6_periods_cardNum'),
 				"accountName": r.get("jk_ckshd_6_periods_custName"),
-				"amount": 50000
+				"amount": 30000
 			}
 		)
 		if len(data[0]['headers']) == 0:
