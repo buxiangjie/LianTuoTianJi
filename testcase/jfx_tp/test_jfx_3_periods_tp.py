@@ -12,7 +12,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from common.common_func import Common
-from busi_assert.busi_asset import Asset
+from busi_assert.busi_asset import Assert
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
@@ -81,7 +81,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 
 	def test_1_query_result(self):
 		"""授信结果查询"""
-		Asset.check_column("jfx_credit", self.env, self.r.get("jfx_3_periods_creditId"))
+		Assert.check_column("jfx_credit", self.env, self.r.get("jfx_3_periods_creditId"))
 		GetSqlData.credit_set(
 			environment=self.env,
 			credit_id=self.r.get("jfx_3_periods_creditId")
@@ -210,7 +210,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 
 	def test_5_query_apply_result(self):
 		"""进件结果查询"""
-		Asset.check_column("jfx_project", self.env, self.r.get("jfx_3_periods_projectId"))
+		Assert.check_column("jfx_project", self.env, self.r.get("jfx_3_periods_projectId"))
 		GetSqlData.change_project_audit_status(
 			project_id=self.r.get('jfx_3_periods_projectId'),
 			environment=self.env

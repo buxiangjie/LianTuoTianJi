@@ -13,7 +13,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import allure
 import pytest
 from common.common_func import Common
-from busi_assert.busi_asset import Asset
+from busi_assert.busi_asset import Assert
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
@@ -92,7 +92,7 @@ class TestJfx18PeriodTp:
 	@pytest.mark.settle
 	def test_101_query_result(self, r, env):
 		"""授信结果查询"""
-		Asset.check_column("jfx_credit", env, r.get("jfx_18_periods_creditId"))
+		Assert.check_column("jfx_credit", env, r.get("jfx_18_periods_creditId"))
 		GetSqlData.credit_set(
 			environment=env,
 			credit_id=r.get("jfx_18_periods_creditId")
@@ -246,7 +246,7 @@ class TestJfx18PeriodTp:
 	@pytest.mark.settle
 	def test_105_query_apply_result(self, r, env):
 		"""进件结果查询"""
-		Asset.check_column("jfx_project", env, r.get("jfx_18_periods_projectId"))
+		Assert.check_column("jfx_project", env, r.get("jfx_18_periods_projectId"))
 		GetSqlData.change_project_audit_status(
 			project_id=r.get('jfx_18_periods_projectId'),
 			environment=env
