@@ -172,16 +172,17 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 		param['applyInfo'].update(
 			{
 				"applyTime": Common.get_time("-"),
-				"applyAmount": 50000,
+				"applyAmount": 30000,
 				"applyTerm": 6,
 			}
 		)
 		param['loanInfo'].update(
 			{
-				"loanAmount": 50000,
+				"loanAmount": 30000,
 				"loanTerm": 6,
 				"assetInterestRate": 0.10,
-				"userInterestRate": 0.10
+				"userInterestRate": 0.10,
+				"discountRate": 0
 			}
 		)
 		param['personalInfo'].update(
@@ -373,9 +374,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 				"bankNo": self.r.get("jk_cwshd_6_periods_bankcard"),
 				"bankPhone": self.r.get("jk_cwshd_6_periods_phone"),
 				"signNo": Common.get_random("businessLicenseNo"),
-				"authLetterNo": Common.get_random("transactionId"),
-				"productCode": "XJ_WX_DDQ"
-
+				"authLetterNo": Common.get_random("transactionId")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -390,7 +389,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			environment=self.env,
-			prod_type="wxjk"
+			prod_type="jkjr"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		self.r.set("jk_cwshd_6_periods_signId", rep["content"]["signId"])
@@ -419,7 +418,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			environment=self.env,
-			prod_type="wxjk"
+			prod_type="jkjr"
 		)
 		self.assertEqual(rep['code'], int(data[0]['resultCode']))
 
@@ -436,7 +435,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 				"serviceSn": self.r.get("jk_cwshd_6_periods_loan_serviceSn"),
 				"id": self.r.get('jk_cwshd_6_periods_cardNum'),
 				"accountName": self.r.get("jk_cwshd_6_periods_custName"),
-				"amount": 33333.33
+				"amount": 50000
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -725,7 +724,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 				"projectId": self.r.get("jk_cwshd_6_periods_projectId"),
 				"sourceProjectId": self.r.get("jk_cwshd_6_periods_sourceProjectId"),
 				"repaymentPlanId": Common.get_random("sourceProjectId"),
-				"sucessAmount": success_amount,
+				"successAmount": success_amount,
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"tradeTime": Common.get_time(),
 				"finishTime": Common.get_time()

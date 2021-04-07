@@ -471,7 +471,7 @@ class TestJkCkshd6PeriodsTp:
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			environment=env,
-			prod_type="wxjk"
+			prod_type="jkjr"
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 		r.set("jk_ckshd_6_periods_signId", rep["content"]["signId"])
@@ -506,7 +506,7 @@ class TestJkCkshd6PeriodsTp:
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			environment=env,
-			prod_type="wxjk"
+			prod_type="jkjr"
 		)
 		assert rep['code'], int(data[0]['resultCode'])
 

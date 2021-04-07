@@ -381,7 +381,6 @@ class JkCkshd12PeriodsTp(unittest.TestCase):
 				"bankPhone": self.r.get("jk_cwshd_12_periods_phone"),
 				"signNo": Common.get_random("businessLicenseNo"),
 				"authLetterNo": Common.get_random("transactionId")
-
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -396,7 +395,7 @@ class JkCkshd12PeriodsTp(unittest.TestCase):
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			environment=self.env,
-			prod_type="wxjk"
+			prod_type="jkjr"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		self.r.set("jk_cwshd_12_periods_signId", rep["content"]["signId"])
@@ -425,7 +424,7 @@ class JkCkshd12PeriodsTp(unittest.TestCase):
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
 			environment=self.env,
-			prod_type="wxjk"
+			prod_type="jkjr"
 		)
 		self.assertEqual(rep['code'], int(data[0]['resultCode']))
 
