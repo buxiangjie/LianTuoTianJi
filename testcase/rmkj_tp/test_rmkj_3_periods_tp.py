@@ -668,7 +668,7 @@ class TestRmkj3Tp:
 			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
-		r.setex(red["refunds_repayment_plan"], 72000, json.dumps(rep['content']['repaymentPlanList']))
+		r.setex(red["return_repayment_plan"], 72000, json.dumps(rep['content']['repaymentPlanList']))
 
 	@allure.title("主动还款一期")
 	@allure.severity("blocker")
@@ -984,7 +984,7 @@ class TestRmkj3Tp:
 			period=1,
 			repayment_plan_type=1
 		)
-		repayment_plan_list = r.get(red["refunds_repayment_plan"])
+		repayment_plan_list = r.get(red["return_repayment_plan"])
 		success_amount = 0.00
 		repayment_detail_list = []
 		for i in json.loads(repayment_plan_list):
