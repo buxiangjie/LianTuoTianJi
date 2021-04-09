@@ -28,7 +28,6 @@ class TestJfqylv212Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_100_apply(self, r, env, red):
 		"""进件"""
 		data = excel_table_byname(self.file, 'apply')
@@ -88,7 +87,6 @@ class TestJfqylv212Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_101_sign_credit(self, r, env, red):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
@@ -123,7 +121,6 @@ class TestJfqylv212Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_102_query_apply_result(self, r, env, red):
 		"""进件结果查询"""
 		GetSqlData.change_project_audit_status(
@@ -157,7 +154,6 @@ class TestJfqylv212Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_103_sign_borrow(self, r, env, red):
 		"""上传借款协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
@@ -192,7 +188,6 @@ class TestJfqylv212Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_105_image_upload(self, r, env, red):
 		"""上传图片"""
 		data = excel_table_byname(self.file, 'image_upload')
@@ -216,7 +211,6 @@ class TestJfqylv212Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_106_contact_query(self, r, env, red):
 		"""合同结果查询:获取签章后的借款协议"""
 		data = excel_table_byname(self.file, 'contract_query')
@@ -248,7 +242,6 @@ class TestJfqylv212Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_107_calculate(self, r, env, red):
 		"""还款计划试算（未放款）:正常还款"""
 		data = excel_table_byname(self.file, 'calculate')
@@ -279,7 +272,6 @@ class TestJfqylv212Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_108_loan_pfa(self, r, env, red):
 		"""放款申请"""
 		data = excel_table_byname(self.file, 'loan_pfa')
@@ -319,7 +311,6 @@ class TestJfqylv212Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_109_loan_query(self, r, env, red):
 		"""放款结果查询"""
 		GetSqlData.loan_set(environment=env, project_id=r.get(red["project_id"]))
@@ -345,7 +336,6 @@ class TestJfqylv212Tp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
-	@pytest.mark.returns
 	def test_110_query_repayment_plan(self, r, env, red):
 		"""国投云贷还款计划查询"""
 		data = excel_table_byname(self.file, 'query_repayment_plan')
@@ -403,7 +393,6 @@ class TestJfqylv212Tp:
 
 	@allure.title("退货试算")
 	@allure.severity("blocker")
-	@pytest.mark.returns
 	def test_112_calculate(self, r, env, red):
 		"""还款计划试算:退货"""
 		data = excel_table_byname(self.file, 'calculate')
@@ -565,7 +554,6 @@ class TestJfqylv212Tp:
 
 	@allure.title("退货")
 	@allure.severity("blocker")
-	@pytest.mark.returns
 	def test_116_return(self, r, env, red):
 		"""退货"""
 		data = excel_table_byname(self.file, 'offline_repay')
