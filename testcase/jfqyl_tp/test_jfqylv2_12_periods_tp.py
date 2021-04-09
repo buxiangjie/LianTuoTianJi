@@ -621,6 +621,7 @@ class TestJfqylv212Tp:
 				"sourceProjectId": r.get(red["source_project_id"]),
 				"repaymentPlanId": Common.get_random("sourceProjectId"),
 				"successAmount": success_amount,
+				"productCode": "FQ_JK_JFQYLV2",
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"tradeTime": Common.get_time(),
 				"finishTime": Common.get_time()
