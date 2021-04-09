@@ -25,3 +25,8 @@ def env(request):
 @allure.step("连接与环境对应的Redis")
 def r(env):
 	return Common.conn_redis(env)
+
+@pytest.fixture(scope="session")
+@allure.step("生成redis随机参数")
+def red():
+	return Common.p2p_get_userinfo(frame="pytest")

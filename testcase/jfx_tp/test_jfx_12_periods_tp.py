@@ -29,24 +29,19 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.settle
-	def test_100_credit_apply(self, r, env):
+	def test_100_credit_apply(self, r, env, red):
 		"""额度授信"""
 		data = excel_table_byname(self.file, 'credit_apply_data')
-		Common.p2p_get_userinfo('jfx_12_periods', env)
-		r.mset(
-			{
-				"jfx_12_periods_sourceUserId": Common.get_random('userid'),
-				'jfx_12_periods_transactionId': Common.get_random('transactionId'),
-				"jfx_12_periods_phone": Common.get_random('phone'),
-				"jfx_12_periods_firstCreditDate": Common.get_time()
-			}
-		)
+		r.setex(red["source_user_id"], 72000, Common.get_random("userid"))
+		r.setex(red["transaction_id"], 72000, Common.get_random('transactionId'))
+		r.setex(red["phone"], 72000, Common.get_random('phone'))
+		r.setex(red["first_credit_date"], 72000, Common.get_time())
 		param = json.loads(data[0]['param'])
 		param['personalInfo'].update(
 			{
-				"cardNum": r.get('jfx_12_periods_cardNum'),
-				"custName": r.get('jfx_12_periods_custName'),
-				"phone": r.get('jfx_12_periods_phone'),
+				"cardNum": r.get(red["id_card"]),
+				"custName": r.get(red["user_name"]),
+				"phone": r.get(red["phone"]),
 				"isDoctor": 0,
 				"applicantClinicRelationship": 1
 			}
@@ -54,9 +49,9 @@ class TestJfx12PeriodTp:
 		param['applyInfo'].update({"applyTime": Common.get_time()})
 		param.update(
 			{
-				"sourceUserId": r.get('jfx_12_periods_sourceUserId'),
+				"sourceUserId": r.get(red["source_user_id"]),
 				"serviceSn": Common.get_random('serviceSn'),
-				"transactionId": r.get('jfx_12_periods_transactionId')
+				"transactionId": r.get(red["transaction_id"])
 			}
 		)
 		# del param["imageInfo"]["businessLicense"] #营业执照
@@ -75,13 +70,9 @@ class TestJfx12PeriodTp:
 			product="cloudloan",
 			environment=env
 		)
-		r.mset(
-			{
-				"jfx_12_periods_creditId": rep['content']['creditId'],
-				"jfx_12_periods_userId": rep['content']['userId']
-			}
-		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		r.setex(red["credit_id"], 72000, rep['content']['creditId'])
+		r.setex(red["user_id"], 72000, rep['content']['userId'])
 
 	@allure.title("授信结果查询")
 	@allure.severity("normal")
@@ -89,16 +80,16 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.settle
-	def test_101_query_result(self, r, env):
+	def test_101_query_result(self, r, env, red):
 		"""授信结果查询"""
-		Assert.check_column("jfx_credit", env, r.get("jfx_12_periods_creditId"))
+		Assert.check_column("jfx_credit", env, r.get(red["credit_id"]))
 		GetSqlData.credit_set(
 			environment=env,
-			credit_id=r.get("jfx_12_periods_creditId")
+			credit_id=r.get(red["credit_id"])
 		)
 		data = excel_table_byname(self.file, 'credit_query_result')
 		param = json.loads(data[0]['param'])
-		param.update({"creditId": r.get('jfx_12_periods_creditId')})
+		param.update({"creditId": r.get(red["credit_id"])})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -118,14 +109,14 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.settle
-	def test_102_query_user_amount(self, r, env):
+	def test_102_query_user_amount(self, r, env, red):
 		"""用户额度查询"""
 		data = excel_table_byname(self.file, 'query_user_amount')
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceUserId": r.get('jfx_12_periods_sourceUserId'),
-				"userId": r.get('jfx_12_periods_userId')
+				"sourceUserId": r.get(red["source_user_id"]),
+				"userId": r.get(red["user_id"])
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -146,18 +137,18 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.settle
-	def test_103_sign_credit(self, r, env):
+	def test_103_sign_credit(self, r, env, red):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
-				"sourceUserId": r.get('jfx_12_periods_sourceUserId'),
+				"sourceUserId": r.get(red["source_user_id"]),
 				"contractType": 1,
 				"sourceContractId": Common.get_random('userid'),
-				"transactionId": r.get('jfx_12_periods_transactionId'),
-				"associationId": r.get('jfx_12_periods_creditId'),
+				"transactionId": r.get(red["transaction_id"]),
+				"associationId": r.get(red["credit_id"]),
 				"content": Common.get_json_data('data', 'credit_sign.json').get("content")
 			}
 		)
@@ -180,23 +171,23 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.settle
-	def test_104_project_apply(self, r, env):
+	def test_104_project_apply(self, r, env, red):
 		"""进件"""
 		data = excel_table_byname(self.file, 'test_project')
 		param = json.loads(data[0]['param'])
-		r.set('jfx_12_periods_sourceProjectId', Common.get_random('sourceProjectId'))
+		r.setex(red["source_project_id"], 72000, Common.get_random('sourceProjectId'))
 		param.update(
 			{
-				"sourceProjectId": r.get('jfx_12_periods_sourceProjectId'),
-				"sourceUserId": r.get('jfx_12_periods_sourceUserId'),
-				"transactionId": r.get('jfx_12_periods_transactionId')
+				"sourceProjectId": r.get(red["source_project_id"]),
+				"sourceUserId": r.get(red["source_user_id"]),
+				"transactionId": r.get(red["transaction_id"])
 			}
 		)
 		param['personalInfo'].update(
 			{
-				"cardNum": r.get('jfx_12_periods_cardNum'),
-				"custName": r.get('jfx_12_periods_custName'),
-				"phone": r.get('jfx_12_periods_phone')
+				"cardNum": r.get(red["id_card"]),
+				"custName": r.get(red["user_name"]),
+				"phone": r.get(red["phone"])
 			}
 		)
 		param['applyInfo'].update(
@@ -222,7 +213,7 @@ class TestJfx12PeriodTp:
 				"unifiedSocialCreditCode": Common.get_random("businessLicenseNo")
 			}
 		)
-		r.set("jfx_12_periods_corporateAccountName", param['cardInfo']['corporateAccountName'])
+		r.setex(red["corporate_account_name"], 72000, param['cardInfo']['corporateAccountName'])
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -234,8 +225,8 @@ class TestJfx12PeriodTp:
 			product="cloudloan",
 			environment=env
 		)
-		r.set('jfx_12_periods_projectId', rep['content']['projectId'])
 		assert int(data[0]['resultCode']) == rep['resultCode']
+		r.setex(red["project_id"], 72000, rep['content']['projectId'])
 
 	@allure.title("进件结果查询")
 	@allure.severity("blocker")
@@ -243,19 +234,19 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.settle
-	def test_105_query_apply_result(self, r, env):
+	def test_105_query_apply_result(self, r, env, red):
 		"""进件结果查询"""
-		Assert.check_column("jfx_project", env, r.get("jfx_12_periods_projectId"))
+		Assert.check_column("jfx_project", env, r.get(red["project_id"]))
 		GetSqlData.change_project_audit_status(
-			project_id=r.get('jfx_12_periods_projectId'),
+			project_id=r.get(red["project_id"]),
 			environment=env
 		)
 		data = excel_table_byname(self.file, 'project_query_apply_result')
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceProjectId": r.get('jfx_12_periods_sourceProjectId'),
-				"projectId": r.get('jfx_12_periods_projectId')
+				"sourceProjectId": r.get(red["source_project_id"]),
+				"projectId": r.get(red["project_id"])
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -276,18 +267,18 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.settle
-	def test_106_sign_credit(self, r, env):
+	def test_106_sign_credit(self, r, env, red):
 		"""上传借款授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
-				"sourceUserId": r.get('jfx_12_periods_sourceUserId'),
+				"sourceUserId": r.get(red["source_user_id"]),
 				"contractType": 5,
 				"sourceContractId": Common.get_random('userid'),
-				"transactionId": r.get('jfx_12_periods_transactionId'),
-				"associationId": r.get('jfx_12_periods_projectId'),
+				"transactionId": r.get(red["transaction_id"]),
+				"associationId": r.get(red["project_id"]),
 				"content": Common.get_json_data('data', 'credit_sign.json').get("content")
 			}
 		)
@@ -309,18 +300,18 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.settle
-	def test_107_contract_sign(self, r, env):
+	def test_107_contract_sign(self, r, env, red):
 		"""上传借款合同"""
 		data = excel_table_byname(self.file, 'contract_sign')
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
-				"sourceUserId": r.get('jfx_12_periods_sourceUserId'),
+				"sourceUserId": r.get(red["source_user_id"]),
 				"contractType": 2,
 				"sourceContractId": Common.get_random('userid'),
-				"transactionId": r.get('jfx_12_periods_transactionId'),
-				"associationId": r.get('jfx_12_periods_projectId'),
+				"transactionId": r.get(red["transaction_id"]),
+				"associationId": r.get(red["project_id"]),
 				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")
 			}
 		)
@@ -342,23 +333,23 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.settle
-	def test_108_pfa(self, r, env):
+	def test_108_pfa(self, r, env, red):
 		"""放款申请"""
 		data = excel_table_byname(self.file, 'project_loan')
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceProjectId": r.get('jfx_12_periods_sourceProjectId'),
-				"projectId": r.get('jfx_12_periods_projectId'),
-				"sourceUserId": r.get('jfx_12_periods_sourceUserId'),
+				"sourceProjectId": r.get(red["source_project_id"]),
+				"projectId": r.get(red["project_id"]),
+				"sourceUserId": r.get(red["source_user_id"]),
 				"serviceSn": Common.get_random('serviceSn'),
-				"accountName": r.get("jfx_12_periods_corporateAccountName"),
+				"accountName": r.get(red["corporate_account_name"]),
 				"bankCode": 86,
 				"amount": 84920.00,
 				"accountNo": "6214830173648711"  # 6227002432220410613
 			}
 		)
-		r.set("jfx_12_periods_pfa_serviceSn", param['serviceSn'])
+		r.setex(red["loan_service_sn"], 72000, param['serviceSn'])
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -373,7 +364,7 @@ class TestJfx12PeriodTp:
 		assert int(data[0]['resultCode']) == rep['resultCode']
 		GetSqlData.change_pay_status(
 			environment=env,
-			project_id=r.get('jfx_12_periods_projectId')
+			project_id=r.get(red["project_id"])
 		)
 
 	@allure.title("放款结果查询")
@@ -381,15 +372,15 @@ class TestJfx12PeriodTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.settle
-	def test_109_pfa_query(self, r, env):
+	def test_109_pfa_query(self, r, env, red):
 		"""放款结果查询"""
 		GetSqlData.loan_set(
 			environment=env,
-			project_id=r.get('jfx_12_periods_projectId')
+			project_id=r.get(red["project_id"])
 		)
 		data = excel_table_byname(self.file, 'pfa_query')
 		param = json.loads(data[0]['param'])
-		param.update({"serviceSn": r.get('jfx_12_periods_pfa_serviceSn')})
+		param.update({"serviceSn": r.get(red["loan_service_sn"])})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -405,16 +396,16 @@ class TestJfx12PeriodTp:
 
 	@allure.title("提前结清试算")
 	@allure.severity("blocker")
-	def test_110_early_settlement(self, r, env):
+	def test_110_early_settlement(self, r, env, red):
 		"""还款计划试算:提前结清"""
 		data = excel_table_byname(self.file, 'calculate')
 		param = json.loads(data[0]['param'])
 		param.update(
 			{
-				"sourceUserId": r.get("jfx_12_periods_sourceUserId"),
-				"transactionId": r.get("jfx_12_periods_sourceProjectId"),
-				"sourceProjectId": r.get("jfx_12_periods_sourceProjectId"),
-				"projectId": r.get("jfx_12_periods_projectId"),
+				"sourceUserId": r.get(red["source_user_id"]),
+				"transactionId": r.get(red["source_project_id"]),
+				"sourceProjectId": r.get(red["source_project_id"]),
+				"projectId": r.get(red["project_id"]),
 				"businessType": 2
 			}
 		)
@@ -429,22 +420,19 @@ class TestJfx12PeriodTp:
 			product="cloudloan",
 			environment=env
 		)
-		r.set(
-			"jfx_12_periods_early_settlement_repayment_plan",
-			json.dumps(rep['content']['repaymentPlanList'])
-		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		r.setex(red["early_settlement_repayment_plan"], 72000, json.dumps(rep['content']['repaymentPlanList']))
 
 	@allure.title("还款计划查询")
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.settle
-	def test_111_query_repaymentplan(self, r, env):
+	def test_111_query_repayment_plan(self, r, env, red):
 		"""还款计划查询"""
 		data = excel_table_byname(self.file, 'repayment_plan')
 		param = json.loads(data[0]['param'])
-		param.update({"projectId": r.get('jfx_12_periods_projectId')})
+		param.update({"projectId": r.get(red["project_id"])})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -457,16 +445,16 @@ class TestJfx12PeriodTp:
 			environment=env
 		)
 		assert int(data[0]['resultCode']) == rep['resultCode']
-		r.set("jfx_12_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
+		r.setex(red["repayment_plan"], 72000, json.dumps(rep['content']['repaymentPlanList']))
 
 	@allure.title("还款流水推送")
 	@allure.severity("blocker")
 	@pytest.mark.offline_repay
-	def test_112_repayment(self, r, env):
+	def test_112_repayment(self, r, env, red):
 		"""还款流水推送"""
 		data = excel_table_byname(self.file, 'repayment')
 		param = json.loads(data[0]['param'])
-		repayment_plan_list = r.get("jfx_12_periods_repayment_plan")
+		repayment_plan_list = r.get(red["repayment_plan"])
 		success_amount = 0.00
 		repayment_detail_list = []
 		period = 1
@@ -482,9 +470,9 @@ class TestJfx12PeriodTp:
 		param.update(
 			{
 				"sourceRequestId": Common.get_random("requestNum"),
-				"projectId": r.get("jfx_12_periods_projectId"),
-				"sourceProjectId": r.get("jfx_12_periods_sourceProjectId"),
-				"sourceUserId": r.get("jfx_12_periods_sourceUserId"),
+				"projectId": r.get(red["project_id"]),
+				"sourceProjectId": r.get(red["source_project_id"]),
+				"sourceUserId": r.get(red["source_user_id"]),
 				"serviceSn": Common.get_random("serviceSn"),
 				"payTime": Common.get_time("-"),
 				"successAmount": success_amount,
@@ -508,12 +496,12 @@ class TestJfx12PeriodTp:
 	@allure.title("全部结清")
 	@allure.severity("blocker")
 	@pytest.mark.settle
-	def test_113_repayment(self, r, env):
+	def test_113_repayment(self, r, env, red):
 		"""还款流水推送:全部结清"""
 		data = excel_table_byname(self.file, 'repayment')
 		param = json.loads(data[0]['param'])
 		for per in range(1, 13):
-			repayment_plan_list = r.get("jfx_12_periods_repayment_plan")
+			repayment_plan_list = r.get(red["repayment_plan"])
 			success_amount = 0.00
 			repayment_detail_list = []
 			for i in json.loads(repayment_plan_list):
@@ -528,9 +516,9 @@ class TestJfx12PeriodTp:
 			param.update(
 				{
 					"sourceRequestId": Common.get_random("requestNum"),
-					"projectId": r.get("jfx_12_periods_projectId"),
-					"sourceProjectId": r.get("jfx_12_periods_sourceProjectId"),
-					"sourceUserId": r.get("jfx_12_periods_sourceUserId"),
+					"projectId": r.get(red["project_id"]),
+					"sourceProjectId": r.get(red["source_project_id"]),
+					"sourceUserId": r.get(red["source_user_id"]),
 					"serviceSn": Common.get_random("serviceSn"),
 					"payTime": Common.get_time("-"),
 					"successAmount": success_amount,
@@ -553,17 +541,17 @@ class TestJfx12PeriodTp:
 
 	@allure.title("提前结清")
 	@allure.severity("normal")
-	def test_114_offline_settle(self, r, env):
+	def test_114_offline_settle(self, r, env, red):
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
 		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=r.get("jfx_12_periods_projectId"),
+			project_id=r.get(red["project_id"]),
 			environment=env,
 			period=1,
 			repayment_plan_type=1
 		)
-		repayment_plan_list = r.get("jfx_12_periods_early_settlement_repayment_plan")
+		repayment_plan_list = r.get(red["early_settlement_repayment_plan"])
 		success_amount = 0.00
 		repayment_detail_list = []
 		for i in json.loads(repayment_plan_list):
@@ -576,9 +564,9 @@ class TestJfx12PeriodTp:
 			repayment_detail_list.append(plan_detail)
 		param.update(
 			{
-				"projectId": r.get("jfx_12_periods_projectId"),
-				"transactionId": r.get("jfx_12_periods_sourceProjectId"),
-				"sourceProjectId": r.get("jfx_12_periods_sourceProjectId"),
+				"projectId": r.get(red["project_id"]),
+				"transactionId": r.get(red["source_project_id"]),
+				"sourceProjectId": r.get(red["source_project_id"]),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"planPayDate": str(plan_pay_date['plan_pay_date']),
 				"successAmount": success_amount,
@@ -603,17 +591,17 @@ class TestJfx12PeriodTp:
 	@allure.title("资金流水推送")
 	@allure.severity("normal")
 	@pytest.mark.offline_repay
-	def test_115_capital_flow(self, r, env):
+	def test_115_capital_flow(self, r, env, red):
 		"""资金流水推送"""
 		data = excel_table_byname(self.file, 'cash_push')
 		param = json.loads(data[0]['param'])
 		success_amount = GetSqlData.get_repayment_amount(
-			project_id=r.get("jfx_12_periods_projectId"), environment=env, period=1)
+			project_id=r.get(red["project_id"]), environment=env, period=1)
 		param.update(
 			{
 				"serviceSn": Common.get_random("serviceSn"),
-				"projectId": r.get("jfx_12_periods_projectId"),
-				"sourceProjectId": r.get("jfx_12_periods_sourceProjectId"),
+				"projectId": r.get(red["project_id"]),
+				"sourceProjectId": r.get(red["source_project_id"]),
 				"repaymentPlanId": Common.get_random("sourceProjectId"),
 				"successAmount": float(success_amount),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),

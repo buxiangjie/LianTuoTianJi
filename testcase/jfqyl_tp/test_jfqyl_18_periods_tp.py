@@ -7,7 +7,9 @@
 import os
 import json
 import sys
-import time
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import allure
 import pytest
 
@@ -17,11 +19,11 @@ from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 logger = Logger(logger="test_jfqyl_18_periods_tp").getlog()
 
+
 @allure.feature("即分期医疗18期")
+@pytest.mark.skip("无业务")
 class TestJfqyl18Tp:
 	file = Config().get_item('File', 'jfq_case_file')
 
@@ -34,7 +36,6 @@ class TestJfqyl18Tp:
 	def test_100_apply(self, r, env):
 		"""进件申请"""
 		data = excel_table_byname(self.file, 'apply')
-		Common.p2p_get_userinfo('jfqyl_18_periods', env)
 		r.mset(
 			{
 				"jfqyl_18_periods_sourceUserId": Common.get_random('userid'),
