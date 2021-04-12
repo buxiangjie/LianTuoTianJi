@@ -21,7 +21,7 @@ from common.get_sql_data import GetSqlData
 
 
 @allure.feature("宠物商户贷6期")
-@pytest.mark.skip("业务未上线")
+# @pytest.mark.skip("业务未上线")
 class TestJkCwShd6PeriodsTp:
 	file = Config().get_item('File', 'jk_cwshd_case_file')
 
@@ -145,7 +145,7 @@ class TestJkCwShd6PeriodsTp:
 	def test_103_sign_credit(self, env, r, red):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
-		param = Common.get_json_data('data', 'credit_sign.json')
+		param = json.loads(data[0]['param'])
 		param.update(
 			{
 				"serviceSn": Common.get_random('serviceSn'),
@@ -153,7 +153,8 @@ class TestJkCwShd6PeriodsTp:
 				"contractType": 1,
 				"sourceContractId": Common.get_random('userid'),
 				"transactionId": r.get(red["transaction_id"]),
-				"associationId": r.get(red["credit_id"])
+				"associationId": r.get(red["credit_id"]),
+				"content": Common.get_json_data('data', 'credit_sign.json').get("content")
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -304,6 +305,7 @@ class TestJkCwShd6PeriodsTp:
 				"serviceSn": Common.get_random('serviceSn'),
 				"sourceUserId": r.get(red["source_user_id"]),
 				"sourceContractId": Common.get_random('userid'),
+				"contractType": 2,
 				"transactionId": r.get(red["transaction_id"]),
 				"associationId": r.get(red["project_id"]),
 				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")

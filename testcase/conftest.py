@@ -28,5 +28,5 @@ def r(env):
 
 @pytest.fixture(scope="session")
 @allure.step("生成redis随机参数")
-def red():
-	return Common.p2p_get_userinfo(frame="pytest")
+def red(env):
+	return Common.p2p_get_userinfo(environment=env, frame="pytest")
