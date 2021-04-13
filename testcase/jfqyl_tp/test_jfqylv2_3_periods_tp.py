@@ -84,11 +84,12 @@ class Jfqylv23Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
-			environment=self.env
+			product="cloudloan",
+			environment=self.env,
+			prod_type="jfq"
 		)
-		self.r.set('jfqylv2_3_periods_projectId', rep['content']['projectId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		self.r.set('jfqylv2_3_periods_projectId', rep['content']['projectId'])
 
 	@unittest.skip("-")
 	def test_101_sign_credit(self):
@@ -603,6 +604,7 @@ class Jfqylv23Tp(unittest.TestCase):
 			product="gateway"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+
 
 if __name__ == '__main__':
 	unittest.main()

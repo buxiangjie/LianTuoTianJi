@@ -29,10 +29,10 @@ async def index():
 
 
 @router.delete("/ids", name="删除异常数据")
-async def ids(env: str, dtype: str, lis: List[int]):
+async def ids(env: str, busi_type: str, lis: List[int]):
 	"""
 	- env: 数据所在环境 test/qa
-	- dtype: 数据类型 project/asset
+	- busi_type: 业务类型 project/asset
 	- lis: ID列表[str, str, str, str]
 	- 如果是资产,删除asset/asset_fee/asset_extra
 	  /overdue/overdue_detail/fee_plan/asset_swap_apply
@@ -45,11 +45,11 @@ async def ids(env: str, dtype: str, lis: List[int]):
 	loop = asyncio.get_event_loop()
 	if (None in lis) or lis == []:
 		return "列表不能为空"
-	if dtype == "asset":
+	if busi_type == "asset":
 		for i in lis:
 			loop.create_task(ToolsSql.del_asset_data(environment=env, asset_id=i))
 		return "执行完成"
-	elif dtype == "project":
+	elif busi_type == "project":
 		for i in lis:
 			loop.create_task(ToolsSql.del_project_data(environment=env, projectid=i))
 		return "执行完成"

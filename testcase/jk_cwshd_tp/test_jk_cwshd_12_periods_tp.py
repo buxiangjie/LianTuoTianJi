@@ -732,7 +732,7 @@ class JkCkshd12PeriodsTp(unittest.TestCase):
 				"projectId": self.r.get("jk_cwshd_12_periods_projectId"),
 				"sourceProjectId": self.r.get("jk_cwshd_12_periods_sourceProjectId"),
 				"repaymentPlanId": Common.get_random("sourceProjectId"),
-				"sucessAmount": success_amount,
+				"successAmount": success_amount,
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"tradeTime": Common.get_time(),
 				"finishTime": Common.get_time()

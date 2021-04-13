@@ -21,6 +21,7 @@ from common.get_sql_data import GetSqlData
 
 
 @allure.feature("金服侠18期")
+@pytest.mark.skip("跳过")
 class TestJfx18PeriodTp:
 	file = Config().get_item('File', 'jfx_mul_case_file')
 

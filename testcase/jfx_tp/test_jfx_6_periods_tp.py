@@ -9,6 +9,7 @@ import unittest
 import os
 import json
 import sys
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from common.common_func import Common
@@ -16,7 +17,6 @@ from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
 from busi_assert.busi_asset import Assert
-
 
 
 class Jfx6PeriodTp(unittest.TestCase):
@@ -63,7 +63,7 @@ class Jfx6PeriodTp(unittest.TestCase):
 			{
 				"supplierOriginalLevel": 0,
 				"supplierTradingLevel": 0,
-				"inspectionEquipment": "1,2,3"
+				"inspectionEquipment": "5"
 			}
 		)
 		if len(data[0]['headers']) == 0:
