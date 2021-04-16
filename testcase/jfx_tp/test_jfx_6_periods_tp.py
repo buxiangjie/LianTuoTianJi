@@ -187,7 +187,7 @@ class Jfx6PeriodTp(unittest.TestCase):
 		param['applyInfo'].update(
 			{
 				"applyTime": Common.get_time(),
-				"applyAmount": 50000.00,
+				"applyAmount": 500000.00,
 				"applyTerm": 6
 			}
 		)
@@ -200,7 +200,7 @@ class Jfx6PeriodTp(unittest.TestCase):
 		)
 		param['loanInfo'].update(
 			{
-				"loanAmount": 50000.00,
+				"loanAmount": 500000.00,
 				"assetInterestRate": 0.158156,
 				"userInterestRate": 0.153156,
 				"loanTerm": 6
@@ -349,7 +349,7 @@ class Jfx6PeriodTp(unittest.TestCase):
 				"serviceSn": Common.get_random('serviceSn'),
 				"accountName": self.r.get("jfx_6_periods_corporateAccountName"),
 				"bankCode": "34",
-				"amount": 50000.00,
+				"amount": 500000.00,
 				"accountNo": "6227002432220410613"  # 6227003814170172872
 			}
 		)
@@ -462,12 +462,11 @@ class Jfx6PeriodTp(unittest.TestCase):
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	@unittest.skip("1")
-	# @unittest.skipUnless(sys.argv[4] == "early_repayment", "条件成立时执行")
 	def test_113_repayment(self):
 		"""还款流水推送:提前全部结清"""
 		data = excel_table_byname(self.file, 'repayment')
 		param = json.loads(data[0]['param'])
-		for per in range(1, 7):
+		for per in range(2, 7):
 			success_amount = GetSqlData.get_repayment_amount(
 				project_id=self.r.get("jfx_6_periods_projectId"),
 				environment=self.env,

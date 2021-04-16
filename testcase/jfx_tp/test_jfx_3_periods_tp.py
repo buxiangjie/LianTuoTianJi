@@ -68,7 +68,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
+			product="cloudloan",
 			environment=self.env
 		)
 		self.r.mset(
@@ -202,7 +202,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
+			product="cloudloan",
 			environment=self.env
 		)
 		self.r.set('jfx_3_periods_projectId', rep['content']['projectId'])
@@ -317,7 +317,7 @@ class Jfx3PeriodTp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
+			product="cloudloan",
 			environment=self.env
 		)
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])

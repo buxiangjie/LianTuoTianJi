@@ -693,7 +693,7 @@ class GetSqlData:
 		# noinspection PyGlobalUndefined
 		sql = f"""
 				update sandbox_saas_athena.risk_apply 
-				set audit_result='APPROVE',quota=300000,step='COMPLETED',return_code=2000 
+				set audit_result='APPROVE',quota=500000,step='COMPLETED',return_code=2000 
 				where apply_id='{apply_id}';
 				"""
 		GetSqlData.exec_update(environment, sql)

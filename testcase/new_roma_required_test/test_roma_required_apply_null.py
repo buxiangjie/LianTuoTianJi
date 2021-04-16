@@ -24,7 +24,7 @@ class RomaCreditApplyNull(unittest.TestCase):
 	param = excel_data[0]['param']
 	url = excel_data[0]['url']
 	headers = excel_data[0]['headers']
-	env = sys.argv[3]
+	env = "test"
 
 	@ddt.data(*excel_data)
 	def test_credit_apply(self, data):

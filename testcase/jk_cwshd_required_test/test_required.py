@@ -35,12 +35,12 @@ class CreditNone(unittest.TestCase):
 		"""授信申请参数校验"""
 		case = str(data['casename'])
 		print(case)
-		Common.p2p_get_userinfo(environment=self.env, project="jk_cwshd_6_periods")
+		red = Common.p2p_get_userinfo(environment=self.env, frame="pytest")
 		param = json.loads(self.param)
 		param["personalInfo"].update(
 			{
-				"custName": self.r.get("jk_cwshd_6_periods_custName"),
-				"cardNum": self.r.get("jk_cwshd_6_periods_cardNum")
+				"custName": self.r.get(red["user_name"]),
+				"cardNum": self.r.get(red["id_card"])
 			}
 		)
 		print(f"""前置条件:{data["前置条件"]}""")
@@ -56,9 +56,12 @@ class CreditNone(unittest.TestCase):
 		if "==" in case:
 			_key = case.split("围")[1].split(".")[0]
 			_value = case.split("围")[1].split(".")[1].split("==")[0]
-			_enum = case.split("围")[1].split(".")[1].split("==")[1].replace(" ", "")
+			_enum = case.split("==")[1].replace(" ", "")
 			if Common.is_number(_enum):
-				_enum = int(_enum)
+				if _enum.isdigit():
+					_enum = int(_enum)
+				else:
+					_enum = float(_enum)
 			param[_key][_value] = _enum
 		elif "." in case:
 			_key = case.split("空")[1].split(".")[0]
@@ -94,33 +97,28 @@ class ApplyNone(unittest.TestCase):
 	def tearDown(self):
 		pass
 
-	def credit(self):
+	def credit(self, red):
 		print("授信------")
 		data = excel_table_byname(Config().get_item('File', 'jk_cwshd_case_file'), 'credit')
-		Common.p2p_get_userinfo('jk_cwshd_6_periods', self.env)
-		self.r.mset(
-			{
-				"jk_cwshd_6_periods_sourceUserId": Common.get_random('userid'),
-				'jk_cwshd_6_periods_transactionId': Common.get_random('transactionId'),
-				"jk_cwshd_6_periods_phone": Common.get_random('phone'),
-				"jk_cwshd_6_periods_firstCreditDate": Common.get_time()
-			}
-		)
+		self.r.setex(red["source_user_id"], 72000, Common.get_random("userid"))
+		self.r.setex(red["transaction_id"], 72000, Common.get_random('transactionId'))
+		self.r.setex(red["phone"], 72000, Common.get_random('phone'))
+		self.r.setex(red["first_credit_date"], 72000, Common.get_time())
 		param = json.loads(data[0]['param'])
 		param['personalInfo'].update(
 			{
-				"cardNum": self.r.get('jk_cwshd_6_periods_cardNum'),
-				"custName": self.r.get('jk_cwshd_6_periods_custName'),
-				"phone": self.r.get('jk_cwshd_6_periods_phone')
+				"cardNum": self.r.get(red["id_card"]),
+				"custName": self.r.get(red["user_name"]),
+				"phone": self.r.get(red["phone"])
 			}
 		)
 		param['applyInfo'].update({"applyTime": Common.get_time()})
 		param['entityInfo']['unifiedSocialCreditCode'] = Common.get_random("businessLicenseNo")
 		param.update(
 			{
-				"sourceUserId": self.r.get('jk_cwshd_6_periods_sourceUserId'),
+				"sourceUserId": self.r.get(red["source_user_id"]),
 				"serviceSn": Common.get_random('serviceSn'),
-				"transactionId": self.r.get('jk_cwshd_6_periods_transactionId')
+				"transactionId": self.r.get(red["transaction_id"])
 			}
 		)
 		if len(data[0]['headers']) == 0:
@@ -135,23 +133,19 @@ class ApplyNone(unittest.TestCase):
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
-		self.r.mset(
-			{
-				"jk_cwshd_6_periods_creditId": rep['content']['creditId'],
-				"jk_cwshd_6_periods_userId": rep['content']['userId']
-			}
-		)
+		self.r.setex(red["credit_id"], 72000, rep['content']['creditId'])
+		self.r.setex(red["user_id"], 72000, rep['content']['userId'])
 
-	def query_result(self):
+	def query_result(self, red):
 		print("授信结果检查-------")
 		GetSqlData.credit_set(
 			environment=self.env,
-			credit_id=self.r.get("jk_cwshd_6_periods_creditId")
+			credit_id=self.r.get(red["credit_id"])
 		)
-		GetSqlData.check_user_amount(user_id=self.r.get("jk_cwshd_6_periods_userId"), environment=self.env)
+		GetSqlData.check_user_amount(user_id=self.r.get(red["user_id"]), environment=self.env)
 		data = excel_table_byname(Config().get_item('File', 'jk_cwshd_case_file'), 'query_result')
 		param = json.loads(data[0]['param'])
-		param.update({"creditId": self.r.get('jk_cwshd_6_periods_creditId')})
+		param.update({"creditId": self.r.get(red["credit_id"])})
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -168,23 +162,24 @@ class ApplyNone(unittest.TestCase):
 
 	@ddt.data(*excel_data)
 	def test_apply(self, data):
-		self.credit()
-		self.query_result()
+		red =Common.p2p_get_userinfo(environment=self.env, frame="pytest")
+		self.credit(red)
+		self.query_result(red)
 		case = str(data['casename'])
 		print(case)
 		param = json.loads(self.param)
 		param.update(
 			{
 				"sourceProjectId": Common.get_random("sourceProjectId"),
-				"sourceUserId": self.r.get('jk_cwshd_6_periods_sourceUserId'),
-				"transactionId": self.r.get('jk_cwshd_6_periods_transactionId')
+				"sourceUserId": self.r.get(red["source_user_id"]),
+				"transactionId": self.r.get(red["transaction_id"])
 			}
 		)
 		param['personalInfo'].update(
 			{
-				"cardNum": self.r.get('jk_cwshd_6_periods_cardNum'),
-				"custName": self.r.get('jk_cwshd_6_periods_custName'),
-				"phone": self.r.get('jk_cwshd_6_periods_phone')
+				"cardNum": self.r.get(red["id_card"]),
+				"custName": self.r.get(red["user_name"]),
+				"phone": self.r.get(red["phone"])
 			}
 		)
 		param["applyInfo"]["applyAmount"] = 30000

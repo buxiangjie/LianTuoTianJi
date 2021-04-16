@@ -37,6 +37,13 @@ class CreditNone(unittest.TestCase):
 		print(case)
 		Common.p2p_get_userinfo(environment=self.env, project="jfx")
 		param = json.loads(self.param)
+		param.update(
+			{
+			"sourceUserId": Common.get_random("userid"),
+				"transactionId": Common.get_random("transactionId"),
+				"serviceSn": Common.get_random("serviceSn")
+		}
+		)
 		param["personalInfo"].update(
 			{
 				"custName": self.r.get("jfx_custName"),

@@ -184,12 +184,12 @@ class JfxTp(unittest.TestCase):
 		param['applyInfo'].update(
 			{
 				"applyTime": Common.get_time(),
-				"applyAmount": 50000.00
+				"applyAmount": 500000.00
 			}
 		)
 		param['loanInfo'].update(
 			{
-				"loanAmount": 50000.00,
+				"loanAmount": 500000.00,
 				"assetInterestRate": 0.14,
 				"userInterestRate": 0.14
 			}
@@ -203,6 +203,8 @@ class JfxTp(unittest.TestCase):
 			}
 		)
 		self.r.set("jfx_corporateAccountName", param['cardInfo']['corporateAccountName'])
+		# param["entityInfo"]["unifiedSocialCreditCode"] = None
+		# param["entityInfo"]["permitRegistrationNumber"] = None
 		if len(data[0]['headers']) == 0:
 			headers = None
 		else:
@@ -313,6 +315,7 @@ class JfxTp(unittest.TestCase):
 				"serviceSn": Common.get_random('serviceSn'),
 				"accountName": self.r.get("jfx_corporateAccountName"),
 				"bankCode": 34,
+				"amount": 500000,
 				"accountNo": "6227002432220410613"  # 6227002432220410613
 			}
 		)
