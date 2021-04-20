@@ -20,6 +20,12 @@ test:
     port: 9919
     db: ifc_eridanus
 
+  redis:
+    host: 39.107.43.201
+    password: j_dR29nz1Z
+    port: 9917
+    db: 15
+
 qa:
   saas:
     host: 47.95.198.135
@@ -41,3 +47,11 @@ qa:
     password: dJ_xw2ve_Dc9_1OiY3
     port: 9919
     db: ifc_eridanus
+    decode_responses: True
+
+  redis:
+    host: db-qa.cloudloan.com
+    password: /;p09ol.,kjM
+    port: 6379
+    db: 15
+    decode_responses: True

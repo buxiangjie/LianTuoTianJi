@@ -33,6 +33,7 @@ class CreditNone(unittest.TestCase):
 	@ddt.data(*excel_data)
 	def test_credit_apply(self, data):
 		"""授信申请参数校验"""
+		_value = None
 		case = str(data['casename'])
 		print(case)
 		red = Common.p2p_get_userinfo(environment=self.env, frame="pytest")
@@ -79,6 +80,7 @@ class CreditNone(unittest.TestCase):
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data['resultCode']))
+		self.assertIn(_value, rep["errMsg"])
 
 
 @ddt.ddt
@@ -162,6 +164,7 @@ class ApplyNone(unittest.TestCase):
 
 	@ddt.data(*excel_data)
 	def test_apply(self, data):
+		_value = None
 		red =Common.p2p_get_userinfo(environment=self.env, frame="pytest")
 		self.credit(red)
 		self.query_result(red)
@@ -221,6 +224,7 @@ class ApplyNone(unittest.TestCase):
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data['resultCode']))
+		self.assertIn(_value, rep["errMsg"])
 
 
 if __name__ == '__main__':
