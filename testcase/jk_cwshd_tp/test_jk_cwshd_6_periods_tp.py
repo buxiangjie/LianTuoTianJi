@@ -21,7 +21,6 @@ from common.get_sql_data import GetSqlData
 
 
 @allure.feature("宠物商户贷6期")
-@pytest.mark.skip("业务未上线")
 class TestJkCwShd6PeriodsTp:
 	file = Config().get_item('File', 'jk_cwshd_case_file')
 

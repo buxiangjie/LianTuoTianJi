@@ -18,11 +18,11 @@ from config.configer import Config
 from common.get_sql_data import GetSqlData
 
 
-class JkCkshd12PeriodsTp(unittest.TestCase):
+class JkCwshd12PeriodsTp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = "test"
+		cls.env = "qa"
 		cls.r = Common.conn_redis(environment=cls.env)
 		cls.file = Config().get_item('File', 'jk_cwshd_case_file')
 
@@ -63,13 +63,13 @@ class JkCkshd12PeriodsTp(unittest.TestCase):
 			headers = None
 		else:
 			headers = json.loads(data[0]['headers'])
-		# headers["X-TBC-SKIP-ENCRYPT"] = "true"
-		# headers["X-TBC-SKIP-SIGN"] = "true"
+		headers["X-TBC-SKIP-ENCRYPT"] = "true"
+		headers["X-TBC-SKIP-SIGN"] = "true"
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="cloudloan",
+			product="gateway",
 			environment=self.env,
 			prod_type="jkjr"
 		)
@@ -169,7 +169,7 @@ class JkCkshd12PeriodsTp(unittest.TestCase):
 			{
 				"sourceProjectId": self.r.get('jk_cwshd_12_periods_sourceProjectId'),
 				"sourceUserId": self.r.get('jk_cwshd_12_periods_sourceUserId'),
-				# "transactionId": self.r.get('jk_cwshd_12_periods_transactionId')
+				"transactionId": self.r.get('jk_cwshd_12_periods_transactionId')
 			}
 		)
 		param['applyInfo'].update(
@@ -183,9 +183,9 @@ class JkCkshd12PeriodsTp(unittest.TestCase):
 			{
 				"loanAmount": 50000,
 				"loanTerm": 12,
-				"assetInterestRate": 0.09,
+				"assetInterestRate": 0.1,
 				"userInterestRate": 0.16,
-				"discountRate": 0.01
+				"discountRate": 0.000
 			}
 		)
 		param['personalInfo'].update(
@@ -199,13 +199,13 @@ class JkCkshd12PeriodsTp(unittest.TestCase):
 			headers = None
 		else:
 			headers = json.loads(data[0]['headers'])
-		# headers["X-TBC-SKIP-ENCRYPT"] = "true"
-		# headers["X-TBC-SKIP-SIGN"] = "true"
+		headers["X-TBC-SKIP-ENCRYPT"] = "true"
+		headers["X-TBC-SKIP-SIGN"] = "true"
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="cloudloan",
+			product="gateway",
 			environment=self.env,
 			prod_type="jkjr"
 		)
@@ -265,6 +265,7 @@ class JkCkshd12PeriodsTp(unittest.TestCase):
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		self.assertEqual(rep['content']['auditStatus'], 2)
 
+	# @unittest.skip("-")
 	def test_107_sign_borrow(self):
 		"""上传借款协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
@@ -313,6 +314,7 @@ class JkCkshd12PeriodsTp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
+	# @unittest.skip("-")
 	def test_109_contact_query(self):
 		"""合同结果查询:获取签章后的借款协议"""
 		data = excel_table_byname(self.file, 'contract_query')

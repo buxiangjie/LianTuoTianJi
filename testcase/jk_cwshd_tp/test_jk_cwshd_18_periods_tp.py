@@ -22,7 +22,7 @@ class JkCwshd18PeriodsTp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = "test"
+		cls.env = "qa"
 		cls.r = Common.conn_redis(environment=cls.env)
 		cls.file = Config().get_item('File', 'jk_cwshd_case_file')
 
@@ -570,12 +570,12 @@ class JkCwshd18PeriodsTp(unittest.TestCase):
 			json.dumps(rep['content']['repaymentPlanList'])
 		)
 
-	@unittest.skip("跳过")
+	# @unittest.skip("跳过")
 	def test_118_offline_repay_repayment(self):
 		"""线下还款流水推送：正常还一期"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
-		period = 1
+		period = 2
 		plan_pay_date = GetSqlData.get_repayment_detail(
 			project_id=self.r.get("jk_cwshd_18_periods_projectId"),
 			environment=self.env,
