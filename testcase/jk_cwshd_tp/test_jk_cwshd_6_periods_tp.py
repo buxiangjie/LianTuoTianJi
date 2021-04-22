@@ -508,7 +508,7 @@ class TestJkCwShd6PeriodsTp:
 				"serviceSn": r.get(red["loan_service_sn"]),
 				"id": r.get(red["id_card"]),
 				"accountName": r.get(red["user_name"]),
-				"amount": 50000
+				"amount": 30000
 			}
 		)
 		if len(data[0]['headers']) == 0:
