@@ -63,13 +63,13 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			headers = None
 		else:
 			headers = json.loads(data[0]['headers'])
-		# headers["X-TBC-SKIP-ENCRYPT"] = "true"
-		# headers["X-TBC-SKIP-SIGN"] = "true"
+		headers["X-TBC-SKIP-ENCRYPT"] = "true"
+		headers["X-TBC-SKIP-SIGN"] = "true"
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="cloudloan",
+			product="gateway",
 			environment=self.env,
 			prod_type="jkjr"
 		)
@@ -170,13 +170,12 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			{
 				"sourceProjectId": self.r.get('jk_ckshd_12_periods_sourceProjectId'),
 				"sourceUserId": self.r.get('jk_ckshd_12_periods_sourceUserId'),
-				# "transactionId": self.r.get('jk_ckshd_12_periods_transactionId')
+				"transactionId": self.r.get('jk_ckshd_12_periods_transactionId')
 			}
 		)
 		param['applyInfo'].update(
 			{
 				"applyTime": Common.get_time("-"),
-				# "applyTime": "2021-03-29 00:00:00",
 				"applyAmount": 30000,
 				"applyTerm": 12,
 			}
@@ -185,9 +184,9 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			{
 				"loanAmount": 30000,
 				"loanTerm": 12,
-				"assetInterestRate": 0.03,
+				"assetInterestRate": 0.13,
 				"userInterestRate": 0.16,
-				"discountRate": 0.07
+				"discountRate": 0.00
 			}
 		)
 		param['personalInfo'].update(
@@ -571,7 +570,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			json.dumps(rep['content']['repaymentPlanList'])
 		)
 
-	@unittest.skip("跳过")
+	# @unittest.skip("跳过")
 	def test_118_offline_repay_repayment(self):
 		"""线下还款流水推送：正常还一期"""
 		data = excel_table_byname(self.file, 'offline_repay')

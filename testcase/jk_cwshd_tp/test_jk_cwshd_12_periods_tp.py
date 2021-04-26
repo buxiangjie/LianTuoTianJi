@@ -669,7 +669,7 @@ class JkCwshd12PeriodsTp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	@unittest.skip("跳过")
+	# @unittest.skip("跳过")
 	def test_120_offline_return(self):
 		"""线下还款流水推送：退货"""
 		data = excel_table_byname(self.file, 'offline_repay')

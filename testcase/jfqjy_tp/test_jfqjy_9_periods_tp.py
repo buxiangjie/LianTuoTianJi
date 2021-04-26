@@ -8,14 +8,14 @@ import unittest
 import os
 import json
 import sys
-import time
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from common.common_func import Common
 from log.logger import Logger
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 logger = Logger(logger="test_jfqjy_9_periods_tp").getlog()
 

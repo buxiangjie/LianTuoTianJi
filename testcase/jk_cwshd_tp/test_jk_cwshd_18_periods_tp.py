@@ -22,7 +22,7 @@ class JkCwshd18PeriodsTp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = "qa"
+		cls.env = "test"
 		cls.r = Common.conn_redis(environment=cls.env)
 		cls.file = Config().get_item('File', 'jk_cwshd_case_file')
 
@@ -183,9 +183,9 @@ class JkCwshd18PeriodsTp(unittest.TestCase):
 			{
 				"loanAmount": 50000,
 				"loanTerm": 18,
-				"assetInterestRate": 0,
+				"assetInterestRate": 0.05,
 				"userInterestRate": 0.16,
-				"discountRate": 0.1
+				"discountRate": 0.05
 			}
 		)
 		param['personalInfo'].update(
@@ -265,7 +265,6 @@ class JkCwshd18PeriodsTp(unittest.TestCase):
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		self.assertEqual(rep['content']['auditStatus'], 2)
 
-	# @unittest.skip("-")
 	def test_107_sign_borrow(self):
 		"""上传借款协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
@@ -570,12 +569,12 @@ class JkCwshd18PeriodsTp(unittest.TestCase):
 			json.dumps(rep['content']['repaymentPlanList'])
 		)
 
-	# @unittest.skip("跳过")
+	@unittest.skip("跳过")
 	def test_118_offline_repay_repayment(self):
 		"""线下还款流水推送：正常还一期"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
-		period = 2
+		period = 1
 		plan_pay_date = GetSqlData.get_repayment_detail(
 			project_id=self.r.get("jk_cwshd_18_periods_projectId"),
 			environment=self.env,

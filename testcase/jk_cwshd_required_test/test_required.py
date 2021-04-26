@@ -80,7 +80,8 @@ class CreditNone(unittest.TestCase):
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data['resultCode']))
-		self.assertIn(_value, rep["errMsg"])
+		if rep["errMsg"] is not None:
+			self.assertIn(_value, rep["errMsg"])
 
 
 @ddt.ddt

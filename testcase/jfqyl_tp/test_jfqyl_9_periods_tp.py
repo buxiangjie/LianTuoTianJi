@@ -21,7 +21,7 @@ class Jfqyl9Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = 'qa'
+		cls.env = 'test'
 		cls.r = Common.conn_redis(environment=cls.env)
 		cls.file = Config().get_item('File', 'jfq_case_file')
 
@@ -35,7 +35,7 @@ class Jfqyl9Tp(unittest.TestCase):
 		Common.p2p_get_userinfo('jfqyl_9_periods', self.env)
 		self.r.mset(
 			{
-				"jfqyl_9_periods_sourceUserId": Common.get_random('userid'),
+				"jfqyl_9_periods_sourceUserId":  Common.get_random('userid'),
 				"jfqyl_9_periods_transactionId": Common.get_random('transactionId'),
 				"jfqyl_9_periods_phone": Common.get_random('phone'),
 				"jfqyl_9_periods_sourceProjectId": Common.get_random('sourceProjectId'),
@@ -65,6 +65,9 @@ class Jfqyl9Tp(unittest.TestCase):
 				"userInterestRate": 0.153
 			}
 		)
+		# self.r.set("jfqyl_9_periods_cardNum", "120000198004156074")
+		# self.r.set("jfqyl_9_periods_custName", "李桂芝")
+		# self.r.set("jfqyl_9_periods_phone", "15574460658")
 		param['personalInfo'].update(
 			{
 				"cardNum": self.r.get('jfqyl_9_periods_cardNum'),
@@ -152,6 +155,7 @@ class Jfqyl9Tp(unittest.TestCase):
 				"serviceSn": Common.get_random('serviceSn'),
 				"sourceUserId": self.r.get('jfqyl_9_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
+				"contractType": 2,
 				"transactionId": self.r.get('jfqyl_9_periods_transactionId'),
 				"associationId": self.r.get('jfqyl_9_periods_projectId'),
 				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")
@@ -346,7 +350,6 @@ class Jfqyl9Tp(unittest.TestCase):
 		self.r.set("jfqyl_9_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
 	# @unittest.skip("跳过")
 	def test_111_calculate(self):
 		"""还款计划试算:提前结清"""
@@ -381,7 +384,7 @@ class Jfqyl9Tp(unittest.TestCase):
 	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
 	@unittest.skip("即科不支持退货")
 	def test_112_calculate(self):
-		"""还款计划试算:提前结清"""
+		"""还款计划试算:退货"""
 		data = excel_table_byname(self.file, 'calculate')
 		param = json.loads(data[0]['param'])
 		param.update(
@@ -410,7 +413,6 @@ class Jfqyl9Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	# @unittest.skipUnless(sys.argv[4] == "repayment_offline", "-")
 	@unittest.skip("跳过")
 	def test_113_offline_repay_repayment(self):
 		"""线下还款流水推送：正常还一期"""
@@ -462,7 +464,7 @@ class Jfqyl9Tp(unittest.TestCase):
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	# @unittest.skipUnless(sys.argv[4] == "early_settlement_offline", "-")
-	@unittest.skip("跳过")
+	# @unittest.skip("跳过")
 	def test_114_offline_nrepay_early_settlement(self):
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.file, 'offline_repay')

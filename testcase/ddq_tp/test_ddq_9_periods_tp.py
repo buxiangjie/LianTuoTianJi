@@ -22,7 +22,7 @@ class Ddq9Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = 'qa'
+		cls.env = 'test'
 		cls.r = Common.conn_redis(environment=cls.env)
 		cls.file = Config().get_item('File', 'ddq_case_file')
 
@@ -414,7 +414,6 @@ class Ddq9Tp(unittest.TestCase):
 		self.r.set("ddq_9_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
 	# @unittest.skip("跳过")
 	def test_112_calculate(self):
 		"""还款计划试算:提前结清"""
@@ -447,7 +446,6 @@ class Ddq9Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	# @unittest.skipUnless(sys.argv[4] == "repayment_offline", "-")
 	@unittest.skip("跳过")
 	def test_113_offline_repay_repayment(self):
 		"""线下还款流水推送：正常还一期"""

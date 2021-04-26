@@ -202,9 +202,9 @@ class TestJkCkshd6PeriodsTp:
 			{
 				"loanAmount": 30000,
 				"loanTerm": 12,
-				"assetInterestRate": 0.09,
+				"assetInterestRate": 0.0,
 				"userInterestRate": 0.16,
-				"discountRate": 0.01
+				"discountRate": 0.1
 			}
 		)
 		param['personalInfo'].update(

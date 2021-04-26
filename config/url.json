@@ -15,7 +15,7 @@
     "qa": "http://api-qa1.cloudloan.com:9011"
   },
   "gateway": {
-    "dev": "192.168.8.88:9018/busi-api",
+    "dev": "http://192.168.8.94:9018/busi-api",
     "test": "http://172.17.205.187:9018/busi-api",
     "qa": "https://qa-gateway.cloudloan.com/busi-api"
   },

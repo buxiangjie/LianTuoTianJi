@@ -80,15 +80,18 @@ class Jfqyl3Tp(unittest.TestCase):
 			headers = None
 		else:
 			headers = json.loads(data[0]['headers'])
+		headers["X-TBC-SKIP-ENCRYPT"] = "true"
+		headers["X-TBC-SKIP-SIGN"] = "true"
 		rep = Common.response(
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			product="gateway",
-			environment=self.env
+			environment=self.env,
+			prod_type="jfq"
 		)
-		self.r.set('jfqyl_3_periods_projectId', rep['content']['projectId'])
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		self.r.set('jfqyl_3_periods_projectId', rep['content']['projectId'])
 
 	@unittest.skip("-")
 	def test_101_sign_credit(self):
