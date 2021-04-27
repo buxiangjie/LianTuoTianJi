@@ -68,4 +68,9 @@ class Assert:
 						Ulog.info(f"第{current['period']}期本金还款计划实还金额校验通过")
 					else:
 						Ulog.info(f"第{current['period']}期利息还款计划实还金额校验通过")
-
+					# 校验每一条还款计划的实际还款金额是否为0
+					assert_that(current["rest_amount"]).is_equal_to(0.0)
+					if current["repayment_plan_type"] == 1:
+						Ulog.info(f"第{current['period']}期本金还款计划剩余应还金额校验通过")
+					else:
+						Ulog.info(f"第{current['period']}期利息还款计划剩余应还金额校验通过")
