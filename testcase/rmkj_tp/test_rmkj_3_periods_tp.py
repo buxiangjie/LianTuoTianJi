@@ -920,7 +920,7 @@ class TestRmkj3Tp:
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	@allure.title("还款计划查询")
+	@allure.title("提前全部结清流水推送")
 	@allure.severity("blocker")
 	@pytest.mark.offline_settle_in_advance
 	def test_121_offline_repay_early_settlement(self, r, env, red):
@@ -971,7 +971,7 @@ class TestRmkj3Tp:
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 
-	@allure.title("退货")
+	@allure.title("退货流水推送")
 	@allure.severity("blocker")
 	@pytest.mark.returns
 	def test_122_refunds(self, r, env, red):
