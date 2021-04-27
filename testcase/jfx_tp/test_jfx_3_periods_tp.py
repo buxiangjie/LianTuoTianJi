@@ -440,12 +440,10 @@ class Jfx3PeriodTp(unittest.TestCase):
 				}
 			)
 			for i in range(len(param['repaymentDetailList'])):
-				pay_detail = GetSqlData.get_repayment_detail(
-					project_id=self.r.get('jfx_3_periods_projectId'),
-					environment=self.env,
-					period=per,
-					repayment_plan_type=param['repaymentDetailList'][i]['planCategory']
-				)
+				pay_detail = GetSqlData.get_repayment_plan_date(project_id=self.r.get('jfx_3_periods_projectId'),
+																environment=self.env,
+																repayment_plan_type=param['repaymentDetailList'][i][
+																	'planCategory'], period=per)
 				param['repaymentDetailList'][i].update(
 					{
 						"sourceRepaymentDetailId": Common.get_random("serviceSn"),

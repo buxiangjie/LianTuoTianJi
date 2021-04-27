@@ -709,9 +709,8 @@ class Rmkj9Tp(unittest.TestCase):
 		"""线下还款流水推送：正常还一期"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
-		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=self.r.get("rmkj_9_periods_projectId"), environment=self.env, period=1,
-			repayment_plan_type=1)
+		plan_pay_date = GetSqlData.get_repayment_plan_date(project_id=self.r.get("rmkj_9_periods_projectId"),
+														   environment=self.env, repayment_plan_type=1, period=1)
 		repayment_plan_list = self.r.get("rmkj_9_periods_repayment_plan")
 		success_amount = 0.00
 		repayment_detail_list = []
@@ -754,12 +753,8 @@ class Rmkj9Tp(unittest.TestCase):
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
-		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=self.r.get("rmkj_9_periods_projectId"),
-			environment=self.env,
-			period=1,
-			repayment_plan_type=1
-		)
+		plan_pay_date = GetSqlData.get_repayment_plan_date(project_id=self.r.get("rmkj_9_periods_projectId"),
+														   environment=self.env, repayment_plan_type=1, period=1)
 		repayment_plan_list = self.r.get("rmkj_9_periods_early_settlement_repayment_plan")
 		success_amount = 0.00
 		repayment_detail_list = []
@@ -795,17 +790,13 @@ class Rmkj9Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	@unittest.skip("跳过")
+	# @unittest.skip("跳过")
 	def test_122_refunds(self):
 		"""线下还款流水推送：退货"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
-		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=self.r.get("rmkj_9_periods_projectId"),
-			environment=self.env,
-			period=1,
-			repayment_plan_type=1
-		)
+		plan_pay_date = GetSqlData.get_repayment_plan_date(project_id=self.r.get("rmkj_9_periods_projectId"),
+														   environment=self.env, repayment_plan_type=1, period=1)
 		repayment_plan_list = self.r.get("rmkj_9_periods_refunds_repayment_plan")
 		success_amount = 0.00
 		repayment_detail_list = []
@@ -822,7 +813,7 @@ class Rmkj9Tp(unittest.TestCase):
 			"transactionId": self.r.get("rmkj_9_periods_sourceProjectId"),
 			"sourceProjectId": self.r.get("rmkj_9_periods_sourceProjectId"),
 			"sourceRepaymentId": Common.get_random("sourceProjectId"),
-			"planPayDate": plan_pay_date['plan_pay_date'],
+			"planPayDate": str(plan_pay_date['plan_pay_date']),
 			"successAmount": success_amount,
 			"repayType": 3,
 			"payTime": Common.get_time("-")

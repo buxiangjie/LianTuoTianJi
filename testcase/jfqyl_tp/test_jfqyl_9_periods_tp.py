@@ -21,7 +21,7 @@ class Jfqyl9Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = 'test'
+		cls.env = 'qa'
 		cls.r = Common.conn_redis(environment=cls.env)
 		cls.file = Config().get_item('File', 'jfq_case_file')
 
@@ -419,12 +419,8 @@ class Jfqyl9Tp(unittest.TestCase):
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
 		period = 1
-		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=self.r.get("jfqyl_9_periods_projectId"),
-			environment=self.env,
-			period=period,
-			repayment_plan_type=1
-		)
+		plan_pay_date = GetSqlData.get_repayment_plan_date(project_id=self.r.get("jfqyl_9_periods_projectId"),
+														   environment=self.env, repayment_plan_type=1, period=period)
 		repayment_plan_list = self.r.get("jfqyl_9_periods_repayment_plan")
 		success_amount = 0.00
 		repayment_detail_list = []
@@ -469,12 +465,8 @@ class Jfqyl9Tp(unittest.TestCase):
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
-		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=self.r.get("jfqyl_9_periods_projectId"),
-			environment=self.env,
-			period=1,
-			repayment_plan_type=1
-		)
+		plan_pay_date = GetSqlData.get_repayment_plan_date(project_id=self.r.get("jfqyl_9_periods_projectId"),
+														   environment=self.env, repayment_plan_type=1, period=1)
 		repayment_plan_list = json.loads(self.r.get("jfqyl_9_periods_early_settlement_repayment_plan"))
 		success_amount = 0.00
 		repayment_detail_list = []
@@ -546,12 +538,8 @@ class Jfqyl9Tp(unittest.TestCase):
 		"""退货"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
-		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=self.r.get("jfqyl_9_periods_projectId"),
-			environment=self.env,
-			period=1,
-			repayment_plan_type=1
-		)
+		plan_pay_date = GetSqlData.get_repayment_plan_date(project_id=self.r.get("jfqyl_9_periods_projectId"),
+														   environment=self.env, repayment_plan_type=1, period=1)
 		repayment_plan_list = json.loads(self.r.get("jfqyl_9_periods_return_repayment_plan"))
 		success_amount = 0.00
 		repayment_detail_list = []

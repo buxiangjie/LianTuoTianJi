@@ -224,12 +224,9 @@ class SyjRepaymentAdvance(unittest.TestCase):
 		}
 		for i in param['repaymentDetailList']:
 			plan_pay_type = plan_type.get(i['repaymentPlanType'])
-			repayment_detail = GetSqlData.get_repayment_detail(
-				project_id=self.r.get("syj_repayment_advance_projectId"),
-				environment=self.env,
-				period=i['period'],
-				repayment_plan_type=plan_pay_type
-			)
+			repayment_detail = GetSqlData.get_repayment_plan_date(
+				project_id=self.r.get("syj_repayment_advance_projectId"), environment=self.env,
+				repayment_plan_type=plan_pay_type, period=i['period'])
 			i.update(
 				{
 					"sourceRepaymentDetailId": Common.get_random("serviceSn"),
@@ -241,12 +238,9 @@ class SyjRepaymentAdvance(unittest.TestCase):
 			)
 		for y in param['repaymentPlanList']:
 			plan_pay_type_plan = plan_type.get(y['repaymentPlanType'])
-			repayment_detail_plan = GetSqlData.get_repayment_detail(
-				project_id=self.r.get("syj_repayment_advance_projectId"),
-				environment=self.env,
-				period=y['period'],
-				repayment_plan_type=plan_pay_type_plan
-			)
+			repayment_detail_plan = GetSqlData.get_repayment_plan_date(
+				project_id=self.r.get("syj_repayment_advance_projectId"), environment=self.env,
+				repayment_plan_type=plan_pay_type_plan, period=y['period'])
 			y.update(
 				{
 					"sourcePlanId": repayment_detail_plan.get('source_plan_id'),

@@ -190,12 +190,11 @@ class TestYzfRepayment:
 			asset_plan_owner = param['repaymentDetailList'][i]['assetPlanOwner']
 			if asset_plan_owner == "foundPartner":
 				if plan_catecory == 1 or plan_catecory == 2:
-					repayment_detail = GetSqlData.get_repayment_detail(
-						project_id=r.get("yzf_repayment_projectId"),
-						environment=env,
-						period=param['repaymentDetailList'][i]['period'],
-						repayment_plan_type=plan_pay_type
-					)
+					repayment_detail = GetSqlData.get_repayment_plan_date(project_id=r.get("yzf_repayment_projectId"),
+																		  environment=env,
+																		  repayment_plan_type=plan_pay_type,
+																		  period=param['repaymentDetailList'][i][
+																			  'period'])
 					param['repaymentDetailList'][i].update(
 						{
 							"sourceRepaymentDetailId": Common.get_random("serviceSn"),
@@ -260,12 +259,10 @@ class TestYzfRepayment:
 					}
 				)
 			elif plan_list_asset_plan_owner == 'foundPartner':
-				plan_list_detail = GetSqlData.get_repayment_detail(
-					project_id=r.get("yzf_repayment_projectId"),
-					environment=env,
-					period=param['repaymentPlanList'][i]['period'],
-					repayment_plan_type=plan_list_pay_type
-				)
+				plan_list_detail = GetSqlData.get_repayment_plan_date(project_id=r.get("yzf_repayment_projectId"),
+																	  environment=env,
+																	  repayment_plan_type=plan_list_pay_type,
+																	  period=param['repaymentPlanList'][i]['period'])
 				param['repaymentPlanList'][i].update(
 					{
 						"sourcePlanId": plan_list_detail.get('source_plan_id'),

@@ -420,9 +420,8 @@ class Jfx6PeriodTp(unittest.TestCase):
 		repayment_plan_list = self.r.get("jfx_6_periods_repayment_plan")
 		success_amount = 0.00
 		period = 1
-		plan_pay_date = GetSqlData.get_repayment_detail(
-			project_id=self.r.get("jfx_6_periods_projectId"), environment=self.env, period=period,
-			repayment_plan_type=1)
+		plan_pay_date = GetSqlData.get_repayment_plan_date(project_id=self.r.get("jfx_6_periods_projectId"),
+														   environment=self.env, repayment_plan_type=1, period=period)
 		repayment_detail_list = []
 		for i in json.loads(repayment_plan_list):
 			if i['period'] == period:
@@ -486,12 +485,10 @@ class Jfx6PeriodTp(unittest.TestCase):
 				}
 			)
 			for i in range(len(param['repaymentDetailList'])):
-				pay_detail = GetSqlData.get_repayment_detail(
-					project_id=self.r.get('jfx_6_periods_projectId'),
-					environment=self.env,
-					period=per,
-					repayment_plan_type=param['repaymentDetailList'][i]['planCategory']
-				)
+				pay_detail = GetSqlData.get_repayment_plan_date(project_id=self.r.get('jfx_6_periods_projectId'),
+																environment=self.env,
+																repayment_plan_type=param['repaymentDetailList'][i][
+																	'planCategory'], period=per)
 				param['repaymentDetailList'][i].update(
 					{
 						"sourceRepaymentDetailId": Common.get_random("serviceSn"),

@@ -190,12 +190,9 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 				asset_plan_owner = i['assetPlanOwner']
 				if asset_plan_owner == "foundPartner":
 					if plan_catecory == 1 or plan_catecory == 2:
-						repayment_detail = GetSqlData.get_repayment_detail(
-							project_id=self.r.get("yzf_repayment_normal_settle_projectId"),
-							environment=self.env,
-							period=per,
-							repayment_plan_type=plan_pay_type
-						)
+						repayment_detail = GetSqlData.get_repayment_plan_date(
+							project_id=self.r.get("yzf_repayment_normal_settle_projectId"), environment=self.env,
+							repayment_plan_type=plan_pay_type, period=per)
 						i.update(
 							{
 								"sourceRepaymentDetailId": Common.get_random("serviceSn"),
@@ -209,12 +206,9 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 					else:
 						if per == 24:
 							if plan_catecory == 2002:
-								repayment_detail = GetSqlData.get_repayment_detail(
+								repayment_detail = GetSqlData.get_repayment_plan_date(
 									project_id=self.r.get("yzf_repayment_normal_settle_projectId"),
-									environment=self.env,
-									period=24,
-									repayment_plan_type=2
-								)
+									environment=self.env, repayment_plan_type=2, period=24)
 								user_repayment_detail = GetSqlData.get_user_repayment_detail(
 									project_id=self.r.get("yzf_repayment_normal_settle_projectId"),
 									environment=self.env,
@@ -293,12 +287,9 @@ class YzfRepaymentNormalSettle(unittest.TestCase):
 						}
 					)
 				elif plan_list_asset_plan_owner == 'foundPartner':
-					plan_list_detail = GetSqlData.get_repayment_detail(
-						project_id=self.r.get("yzf_repayment_normal_settle_projectId"),
-						environment=self.env,
-						period=per,
-						repayment_plan_type=plan_list_pay_type
-					)
+					plan_list_detail = GetSqlData.get_repayment_plan_date(
+						project_id=self.r.get("yzf_repayment_normal_settle_projectId"), environment=self.env,
+						repayment_plan_type=plan_list_pay_type, period=per)
 					p.update(
 						{
 							"sourcePlanId": plan_list_detail.get('source_plan_id'),

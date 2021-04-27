@@ -277,12 +277,10 @@ class TestCfq12PeriodsTp:
 			asset_plan_owner = i['assetPlanOwner']
 			if asset_plan_owner == "foundPartner":
 				if plan_catecory == 1 or plan_catecory == 2:
-					repayment_detail = GetSqlData.get_repayment_detail(
-						project_id=r.get("cfq_12_periods_projectId"),
-						environment=env,
-						period=period,
-						repayment_plan_type=plan_pay_type
-					)
+					repayment_detail = GetSqlData.get_repayment_plan_date(project_id=r.get("cfq_12_periods_projectId"),
+																		  environment=env,
+																		  repayment_plan_type=plan_pay_type,
+																		  period=period)
 					i.update(
 						{
 							"sourceRepaymentDetailId": Common.get_random("serviceSn"),
@@ -351,12 +349,10 @@ class TestCfq12PeriodsTp:
 					}
 				)
 			elif plan_list_asset_plan_owner == 'foundPartner':
-				plan_list_detail2 = GetSqlData.get_repayment_detail(
-					project_id=r.get("cfq_12_periods_projectId"),
-					environment=env,
-					period=i['period'],
-					repayment_plan_type=plan_list_pay_type
-				)
+				plan_list_detail2 = GetSqlData.get_repayment_plan_date(project_id=r.get("cfq_12_periods_projectId"),
+																	   environment=env,
+																	   repayment_plan_type=plan_list_pay_type,
+																	   period=i['period'])
 				i.update(
 					{
 						"sourcePlanId": plan_list_detail2.get('source_plan_id'),
@@ -471,10 +467,11 @@ class TestCfq12PeriodsTp:
 						}
 					)
 				elif i['assetPlanOwner'] == 'foundPartner':
-					plan_list_detail2 = GetSqlData.get_repayment_detail(
-						project_id=r.get("cfq_12_periods_projectId"),
-						environment=env, period=i['period'],
-						repayment_plan_type=plan_type[i['repaymentPlanType']])
+					plan_list_detail2 = GetSqlData.get_repayment_plan_date(project_id=r.get("cfq_12_periods_projectId"),
+																		   environment=env,
+																		   repayment_plan_type=plan_type[
+																			   i['repaymentPlanType']],
+																		   period=i['period'])
 					i.update(
 						{
 							"sourcePlanId": plan_list_detail2.get('source_plan_id'),
@@ -540,10 +537,10 @@ class TestCfq12PeriodsTp:
 				"Interest": "2"
 			}
 			if i['assetPlanOwner'] == "foundPartner":
-				plan_list_detail = GetSqlData.get_repayment_detail(
-					project_id=r.get("cfq_12_periods_projectId"),
-					environment=env, period=i['period'],
-					repayment_plan_type=plan_pay_type.get(i['repaymentPlanType']))
+				plan_list_detail = GetSqlData.get_repayment_plan_date(project_id=r.get("cfq_12_periods_projectId"),
+																	  environment=env,
+																	  repayment_plan_type=plan_pay_type.get(
+																		  i['repaymentPlanType']), period=i['period'])
 			elif i['assetPlanOwner'] == "financePartner":
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r.get("cfq_12_periods_projectId"),
@@ -608,10 +605,10 @@ class TestCfq12PeriodsTp:
 				"Interest": "2"
 			}
 			if i['assetPlanOwner'] == "foundPartner":
-				plan_list_detail = GetSqlData.get_repayment_detail(
-					project_id=r.get("cfq_12_periods_projectId"),
-					environment=env, period=i['period'],
-					repayment_plan_type=plan_pay_type.get(i['repaymentPlanType']))
+				plan_list_detail = GetSqlData.get_repayment_plan_date(project_id=r.get("cfq_12_periods_projectId"),
+																	  environment=env,
+																	  repayment_plan_type=plan_pay_type.get(
+																		  i['repaymentPlanType']), period=i['period'])
 			elif i['assetPlanOwner'] == "financePartner":
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r.get("cfq_12_periods_projectId"),
@@ -662,12 +659,10 @@ class TestCfq12PeriodsTp:
 			asset_plan_owner = i['assetPlanOwner']
 			if asset_plan_owner == "foundPartner":
 				if plan_catecory == 1 or plan_catecory == 2:
-					repayment_detail1 = GetSqlData.get_repayment_detail(
-						project_id=r.get("cfq_12_periods_projectId"),
-						environment=env,
-						period=period,
-						repayment_plan_type=plan_pay_type
-					)
+					repayment_detail1 = GetSqlData.get_repayment_plan_date(project_id=r.get("cfq_12_periods_projectId"),
+																		   environment=env,
+																		   repayment_plan_type=plan_pay_type,
+																		   period=period)
 					i.update(
 						{
 							"sourceRepaymentDetailId": Common.get_random("serviceSn"),
@@ -751,12 +746,10 @@ class TestCfq12PeriodsTp:
 					}
 				)
 			elif plan_list_asset_plan_owner == 'foundPartner':
-				plan_list_detail5 = GetSqlData.get_repayment_detail(
-					project_id=r.get("cfq_12_periods_projectId"),
-					environment=env,
-					period=i['period'],
-					repayment_plan_type=plan_list_pay_type
-				)
+				plan_list_detail5 = GetSqlData.get_repayment_plan_date(project_id=r.get("cfq_12_periods_projectId"),
+																	   environment=env,
+																	   repayment_plan_type=plan_list_pay_type,
+																	   period=i['period'])
 				i.update(
 					{
 						"sourcePlanId": plan_list_detail5.get('source_plan_id'),
@@ -821,12 +814,10 @@ class TestCfq12PeriodsTp:
 			asset_plan_owner = i['assetPlanOwner']
 			if asset_plan_owner == "foundPartner":
 				if plan_catecory == 1 or plan_catecory == 2:
-					repayment_detail1 = GetSqlData.get_repayment_detail(
-						project_id=r.get("cfq_12_periods_projectId"),
-						environment=env,
-						period=i['period'],
-						repayment_plan_type=plan_pay_type
-					)
+					repayment_detail1 = GetSqlData.get_repayment_plan_date(project_id=r.get("cfq_12_periods_projectId"),
+																		   environment=env,
+																		   repayment_plan_type=plan_pay_type,
+																		   period=i['period'])
 					i.update(
 						{
 							"sourceRepaymentDetailId": Common.get_random("serviceSn"),
@@ -910,12 +901,10 @@ class TestCfq12PeriodsTp:
 					}
 				)
 			elif plan_list_asset_plan_owner == 'foundPartner':
-				plan_list_detail5 = GetSqlData.get_repayment_detail(
-					project_id=r.get("cfq_12_periods_projectId"),
-					environment=env,
-					period=i['period'],
-					repayment_plan_type=plan_list_pay_type
-				)
+				plan_list_detail5 = GetSqlData.get_repayment_plan_date(project_id=r.get("cfq_12_periods_projectId"),
+																	   environment=env,
+																	   repayment_plan_type=plan_list_pay_type,
+																	   period=i['period'])
 				i.update(
 					{
 						"sourcePlanId": plan_list_detail5.get('source_plan_id'),

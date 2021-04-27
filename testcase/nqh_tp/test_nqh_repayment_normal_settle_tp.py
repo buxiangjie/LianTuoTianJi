@@ -173,12 +173,8 @@ class TestNqhRepaymentNormalSettle:
 				"Principal": "1",
 				"Interest": "2"
 			}
-			repayment = GetSqlData.get_repayment_detail(
-				project_id=r.get("nqh_repayment_normal_settle_projectId"),
-				environment=env,
-				period=per,
-				repayment_plan_type="1"
-			)
+			repayment = GetSqlData.get_repayment_plan_date(project_id=r.get("nqh_repayment_normal_settle_projectId"),
+														   environment=env, repayment_plan_type="1", period=per)
 			success_amount = GetSqlData.get_repayment_amount(
 				environment=env,
 				project_id=r.get("nqh_repayment_normal_settle_projectId"),
@@ -195,12 +191,9 @@ class TestNqhRepaymentNormalSettle:
 			)
 			for i in param['repaymentDetailList']:
 				plan_pay_type = plan_type.get(i['repaymentPlanType'])
-				repayment_detail = GetSqlData.get_repayment_detail(
-					project_id=r.get("nqh_repayment_normal_settle_projectId"),
-					environment=env,
-					period=per,
-					repayment_plan_type=plan_pay_type
-				)
+				repayment_detail = GetSqlData.get_repayment_plan_date(
+					project_id=r.get("nqh_repayment_normal_settle_projectId"), environment=env,
+					repayment_plan_type=plan_pay_type, period=per)
 				i.update(
 					{
 						"sourceRepaymentDetailId": Common.get_random("serviceSn"),
@@ -214,12 +207,9 @@ class TestNqhRepaymentNormalSettle:
 			for y in param['repaymentPlanList']:
 				plan_pay_type_plan = plan_type.get(y['repaymentPlanType'])
 				if y['assetPlanOwner'] == 'foundPartner':
-					repayment_detail_plan = GetSqlData.get_repayment_detail(
-						project_id=r.get("nqh_repayment_normal_settle_projectId"),
-						environment=env,
-						period=per,
-						repayment_plan_type=plan_pay_type_plan
-					)
+					repayment_detail_plan = GetSqlData.get_repayment_plan_date(
+						project_id=r.get("nqh_repayment_normal_settle_projectId"), environment=env,
+						repayment_plan_type=plan_pay_type_plan, period=per)
 					y.update(
 						{
 							"sourcePlanId": repayment_detail_plan.get('source_plan_id'),

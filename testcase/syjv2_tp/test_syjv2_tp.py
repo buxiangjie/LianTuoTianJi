@@ -231,11 +231,10 @@ class TestSyjv2Tp:
 		for i in param['repaymentDetailList']:
 			if i['repaymentPlanType'] in ("1", "2"):
 				plan_pay_type = plan_type.get(i['repaymentPlanType'])
-				repayment_detail = GetSqlData.get_repayment_detail(
-					project_id=r.get("syjv2_projectId"),
-					environment=env,
-					period=i['period'],
-					repayment_plan_type=plan_pay_type)
+				repayment_detail = GetSqlData.get_repayment_plan_date(project_id=r.get("syjv2_projectId"),
+																	  environment=env,
+																	  repayment_plan_type=plan_pay_type,
+																	  period=i['period'])
 				i.update(
 					{
 						"sourceRepaymentDetailId": Common.get_random("serviceSn"),
@@ -245,11 +244,9 @@ class TestSyjv2Tp:
 					}
 				)
 			else:
-				repayment_detail = GetSqlData.get_repayment_detail(
-					project_id=r.get("syjv2_projectId"),
-					environment=env,
-					period=i['period'],
-					repayment_plan_type=1)
+				repayment_detail = GetSqlData.get_repayment_plan_date(project_id=r.get("syjv2_projectId"),
+																	  environment=env, repayment_plan_type=1,
+																	  period=i['period'])
 				i.update(
 					{
 						"sourceRepaymentDetailId": Common.get_random("serviceSn"),
@@ -260,11 +257,10 @@ class TestSyjv2Tp:
 				)
 		for i in param['repaymentPlanList']:
 			plan_pay_type_plan = plan_type.get(i['repaymentPlanType'])
-			repayment_detail_plan = GetSqlData.get_repayment_detail(
-				project_id=r.get("syjv2_projectId"),
-				environment=env,
-				period=i['period'],
-				repayment_plan_type=plan_pay_type_plan)
+			repayment_detail_plan = GetSqlData.get_repayment_plan_date(project_id=r.get("syjv2_projectId"),
+																	   environment=env,
+																	   repayment_plan_type=plan_pay_type_plan,
+																	   period=i['period'])
 			i.update(
 				{
 					"sourcePlanId": repayment_detail_plan.get('source_plan_id'),
@@ -346,12 +342,10 @@ class TestSyjv2Tp:
 			}
 			plan_list_detail = {}
 			if i['assetPlanOwner'] == "foundPartner":
-				plan_list_detail = GetSqlData.get_repayment_detail(
-					project_id=r.get('syjv2_projectId'),
-					environment=env,
-					period=i['period'],
-					repayment_plan_type=plan_pay_type.get(i['repaymentPlanType'])
-				)
+				plan_list_detail = GetSqlData.get_repayment_plan_date(project_id=r.get('syjv2_projectId'),
+																	  environment=env,
+																	  repayment_plan_type=plan_pay_type.get(
+																		  i['repaymentPlanType']), period=i['period'])
 			elif i['assetPlanOwner'] == "financePartner":
 				plan_list_detail = GetSqlData.get_user_repayment_detail(
 					project_id=r.get('syjv2_projectId'),
@@ -416,12 +410,10 @@ class TestSyjv2Tp:
 			asset_plan_owner = i['assetPlanOwner']
 			if asset_plan_owner == "foundPartner":
 				if plan_catecory == 1 or plan_catecory == 2:
-					repayment_detail = GetSqlData.get_repayment_detail(
-						project_id=r.get('syjv2_projectId'),
-						environment=env,
-						period=period,
-						repayment_plan_type=plan_pay_type
-					)
+					repayment_detail = GetSqlData.get_repayment_plan_date(project_id=r.get('syjv2_projectId'),
+																		  environment=env,
+																		  repayment_plan_type=plan_pay_type,
+																		  period=period)
 					i.update(
 						{
 							"sourceRepaymentDetailId": Common.get_random("serviceSn"),
@@ -441,12 +433,9 @@ class TestSyjv2Tp:
 						repayment_plan_type=3,
 						feecategory=i['planCategory']
 					)
-					repayment_detail = GetSqlData.get_repayment_detail(
-						project_id=r.get('syjv2_projectId'),
-						environment=env,
-						period=1,
-						repayment_plan_type=2
-					)
+					repayment_detail = GetSqlData.get_repayment_plan_date(project_id=r.get('syjv2_projectId'),
+																		  environment=env, repayment_plan_type=2,
+																		  period=1)
 					i.update(
 						{
 							"sourceRepaymentDetailId": Common.get_random("serviceSn"),
@@ -513,12 +502,10 @@ class TestSyjv2Tp:
 					}
 				)
 			elif plan_list_asset_plan_owner == 'foundPartner':
-				plan_list_detail = GetSqlData.get_repayment_detail(
-					project_id=r.get('syjv2_projectId'),
-					environment=env,
-					period=i['period'],
-					repayment_plan_type=plan_list_pay_type
-				)
+				plan_list_detail = GetSqlData.get_repayment_plan_date(project_id=r.get('syjv2_projectId'),
+																	  environment=env,
+																	  repayment_plan_type=plan_list_pay_type,
+																	  period=i['period'])
 				i.update(
 					{
 						"sourcePlanId": plan_list_detail.get('source_plan_id'),

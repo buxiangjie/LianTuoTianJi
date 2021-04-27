@@ -192,10 +192,9 @@ class TestNqhOnePeriodSameDayReturn:
 
 		for i in param['repaymentDetailList']:
 			plan_pay_type = plan_type.get(i['repaymentPlanType'])
-			repayment_detail = GetSqlData.get_repayment_detail(
-				project_id=r.get("nqh_one_period_same_day_return_projectId"),
-				environment=env, period=i['period'],
-				repayment_plan_type=plan_pay_type)
+			repayment_detail = GetSqlData.get_repayment_plan_date(
+				project_id=r.get("nqh_one_period_same_day_return_projectId"), environment=env,
+				repayment_plan_type=plan_pay_type, period=i['period'])
 			i.update(
 				{
 					"sourceRepaymentDetailId": Common.get_random("serviceSn"),
@@ -207,10 +206,9 @@ class TestNqhOnePeriodSameDayReturn:
 			)
 		for y in param['repaymentPlanList']:
 			plan_pay_type_plan = plan_type.get(y['repaymentPlanType'])
-			repayment_detail_plan = GetSqlData.get_repayment_detail(
-				project_id=r.get("nqh_one_period_same_day_return_projectId"),
-				environment=env, period=y['period'],
-				repayment_plan_type=plan_pay_type_plan)
+			repayment_detail_plan = GetSqlData.get_repayment_plan_date(
+				project_id=r.get("nqh_one_period_same_day_return_projectId"), environment=env,
+				repayment_plan_type=plan_pay_type_plan, period=y['period'])
 			if plan_pay_type_plan == '1':
 				y.update(
 					{
@@ -256,12 +254,8 @@ class TestNqhOnePeriodSameDayReturn:
 			"Principal": "1",
 			"Interest": "2"
 		}
-		repayment = GetSqlData.get_repayment_detail(
-			project_id=r.get("nqh_one_period_same_day_return_projectId"),
-			environment=env,
-			period=1,
-			repayment_plan_type="1"
-		)
+		repayment = GetSqlData.get_repayment_plan_date(project_id=r.get("nqh_one_period_same_day_return_projectId"),
+													   environment=env, repayment_plan_type="1", period=1)
 
 		success_amount = GetSqlData.get_repayment_amount(
 			project_id=r.get("nqh_one_period_same_day_return_projectId"),
@@ -278,10 +272,9 @@ class TestNqhOnePeriodSameDayReturn:
 		)
 		for i in param['repaymentDetailList']:
 			plan_pay_type = plan_type.get(i['repaymentPlanType'])
-			repayment_detail = GetSqlData.get_repayment_detail(
-				project_id=r.get("nqh_one_period_same_day_return_projectId"),
-				environment=env, period=1,
-				repayment_plan_type=plan_pay_type)
+			repayment_detail = GetSqlData.get_repayment_plan_date(
+				project_id=r.get("nqh_one_period_same_day_return_projectId"), environment=env,
+				repayment_plan_type=plan_pay_type, period=1)
 			i.update(
 				{
 					"sourceRepaymentDetailId": Common.get_random("serviceSn"),
@@ -294,10 +287,9 @@ class TestNqhOnePeriodSameDayReturn:
 
 		for y in param['repaymentPlanList']:
 			plan_pay_type_plan = plan_type.get(y['repaymentPlanType'])
-			repayment_detail_plan = GetSqlData.get_repayment_detail(
-				project_id=r.get("nqh_one_period_same_day_return_projectId"),
-				environment=env, period=y['period'],
-				repayment_plan_type=plan_pay_type_plan)
+			repayment_detail_plan = GetSqlData.get_repayment_plan_date(
+				project_id=r.get("nqh_one_period_same_day_return_projectId"), environment=env,
+				repayment_plan_type=plan_pay_type_plan, period=y['period'])
 			y.update(
 				{
 					"sourcePlanId": repayment_detail_plan.get('source_plan_id'),

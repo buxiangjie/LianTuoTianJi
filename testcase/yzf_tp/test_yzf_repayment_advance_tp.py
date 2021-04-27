@@ -235,11 +235,9 @@ class TestYzfRepaymentAdvance:
 						}
 					)
 				elif i['assetPlanOwner'] == 'foundPartner':
-					plan_list_detail = GetSqlData.get_repayment_detail(
-						project_id=r.get("yzf_repayment_advance_projectId"),
-						environment=env, period=i['period'],
-						repayment_plan_type=plan_type[i['repaymentPlanType']]
-					)
+					plan_list_detail = GetSqlData.get_repayment_plan_date(
+						project_id=r.get("yzf_repayment_advance_projectId"), environment=env,
+						repayment_plan_type=plan_type[i['repaymentPlanType']], period=i['period'])
 					i.update(
 						{
 							"sourcePlanId": plan_list_detail.get('source_plan_id'),
