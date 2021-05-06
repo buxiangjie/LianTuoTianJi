@@ -51,7 +51,7 @@ class GetSqlData:
 			cur = conn.cursor()
 			cur.execute(sql)
 			conn.commit()
-			Ulog.info(f"执行sql:{sql}")
+			Ulog().logger_().info(f"执行sql:{sql}")
 		except Exception as e:
 			conn.rollback()
 			raise e
@@ -72,7 +72,7 @@ class GetSqlData:
 			conn = GetSqlData.conn_database(environment, source)
 			cur = conn.cursor()
 			cur.execute(sql)
-			Ulog.info(f"""执行查询语句:{sql}""")
+			Ulog().logger_().info(f"""执行查询语句:{sql}""")
 			return cur.fetchall()
 		except Exception as e:
 			raise e
@@ -127,7 +127,7 @@ class GetSqlData:
 	@staticmethod
 	def credit_set(environment: str, credit_id: str) -> str:
 		"""授信时调用，根据环境判断是否需要等待补偿"""
-		Ulog.info("开始检查授信步骤")
+		Ulog().logger_().info("开始检查授信步骤")
 		if Config().get_item("Switch", "credit") == "1":
 			# GetSqlData.change_credit_step(environment, credit_id)
 			GetSqlData.change_credit_status(environment, credit_id)
@@ -138,16 +138,16 @@ class GetSqlData:
 		version = 1
 		while status != 4:
 			if version > 20:
-				Ulog.info("授信未成功")
+				Ulog().logger_().info("授信未成功")
 				break
 			step = GetSqlData().check_credit_step(environment, credit_id)
 			if step != 4:
-				Ulog.info(f"当前授信步骤为:{step:d};当前循环次数为:{version:d}")
+				Ulog().logger_().info(f"当前授信步骤为:{step:d};当前循环次数为:{version:d}")
 				Common.trigger_task(job_name="creditReparationJob", env=environment)
 				version += 1
 				time.sleep(2)
 			elif step == 4:
-				Ulog.info("当前授信已完成,可以进行下个步骤!")
+				Ulog().logger_().info("当前授信已完成,可以进行下个步骤!")
 				status = 4
 
 	@staticmethod
@@ -160,14 +160,14 @@ class GetSqlData:
 	@staticmethod
 	def loan_set(environment: str, project_id: str) -> str:
 		"""放款申请后调用，查询放款状态是否成功"""
-		Ulog.info("开始检查放款步骤")
+		Ulog().logger_().info("开始检查放款步骤")
 		time.sleep(3)
 		# datas = '{"projectId":"%s","code":2000,"success":true,"inProcess":false}'%project_id
-		# Ulog.info(datas)
+		# Ulog().logger_().info(datas)
 		# rep = requests.post(url="http://api-qa1.cloudloan.com:9011/api/v1/busi/callback/loan/apply",
 		# 			  data=datas)
-		# Ulog.info(rep.status_code)
-		# Ulog.info(rep.text)
+		# Ulog().logger_().info(rep.status_code)
+		# Ulog().logger_().info(rep.text)
 		# http://api-qa1.cloudloan.com 39.107.43.201
 		# while True:
 		Common.trigger_task("projectLoanReparationJob", environment)
@@ -178,14 +178,14 @@ class GetSqlData:
 				version = 1
 				while GetSqlData().check_loan_result(environment, project_id) != 1:
 					if version > 100:
-						Ulog.info(f"循环{version - 1}次未查询到放款成功状态，判断为放款失败")
+						Ulog().logger_().info(f"循环{version - 1}次未查询到放款成功状态，判断为放款失败")
 						break
 					res = GetSqlData().check_loan_result(environment, project_id)
 					if res == 0:
-						Ulog.info(f"当前loan_result为:{res};放款失败")
+						Ulog().logger_().info(f"当前loan_result为:{res};放款失败")
 						break
 					if res != 1:
-						Ulog.info(f"当前loan_result为:{res};当前循环次数为:{version}")
+						Ulog().logger_().info(f"当前loan_result为:{res};当前循环次数为:{version}")
 						Common.trigger_task("projectLoanReparationJob", environment)
 						version += 1
 						time.sleep(2)
@@ -205,7 +205,7 @@ class GetSqlData:
 		finish_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 		# finish_time = "2021-03-29 00:00:00"
 		if Config().get_item("Switch", "loan") == '1':
-			Ulog.info("放款开关已关闭，走虚拟放款逻辑")
+			Ulog().logger_().info("放款开关已关闭，走虚拟放款逻辑")
 			sql1 = f"""
 				Update sandbox_saas_steamrunner.sr_pay_order 
 				set code=2000,msg='成功',finish_time='{finish_time}' 
@@ -234,7 +234,7 @@ class GetSqlData:
 			for sql in sqls:
 				GetSqlData.exec_update(environment, sql)
 		else:
-			Ulog.info("放款开关已开启,走真实放款流程")
+			Ulog().logger_().info("放款开关已开启,走真实放款流程")
 
 	@staticmethod
 	def get_asset_id(environment: str, project_id: str) -> str:
@@ -387,7 +387,7 @@ class GetSqlData:
 			period: Optional[str] = None
 	) -> list:
 		"""
-		获取费计划中的关联
+		获取费计划
 		"""
 		asset_id = GetSqlData.get_asset_id(environment, project_id)
 		plan_table = 'fee_plan_0' + GetSqlData.get_sub_table(environment, asset_id)
@@ -419,7 +419,8 @@ class GetSqlData:
 		sql = f"""
 				select * 
 				from repayment
-				where asset_id = {asset_id};
+				where asset_id = {asset_id}
+				order by create_time asc ;
 				"""
 		repayment = json.loads(json.dumps(GetSqlData.exec_select(environment, sql), cls=Encoder))
 		return repayment
@@ -458,11 +459,11 @@ class GetSqlData:
 		version = 1
 		while True:
 			if version > 10:
-				Ulog.info(f'''当前查询次数{version}''')
+				Ulog().logger_().info(f'''当前查询次数{version}''')
 				break
 			user_amount = GetSqlData.user_amount(user_id, environment)
 			if user_amount > 0.00:
-				Ulog.info("额度检查完成")
+				Ulog().logger_().info("额度检查完成")
 				break
 			elif user_amount == 0.000000:
 				version += 1
@@ -484,20 +485,20 @@ class GetSqlData:
 	@staticmethod
 	def project_result(project_id: str, environment: str) -> str:
 		"""进件审核结果查询"""
-		Ulog.info("开始检查进件审核步骤")
+		Ulog().logger_().info("开始检查进件审核步骤")
 		try:
 			version = 1
 			while True:
 				if version > 10:
-					Ulog.info(f"{version}次未查询到进件审核成功状态")
+					Ulog().logger_().info(f"{version}次未查询到进件审核成功状态")
 					break
 				audit_status = GetSqlData().project_audit_status(project_id, environment)
 				if audit_status != 2:
-					Ulog.info(f"当前进件审核状态为:{audit_status};当前查询次数为:{version}")
+					Ulog().logger_().info(f"当前进件审核状态为:{audit_status};当前查询次数为:{version}")
 					version += 1
 					time.sleep(10)
 				elif audit_status == 2:
-					Ulog.info("进件审核成功")
+					Ulog().logger_().info("进件审核成功")
 					break
 		except Exception as e:
 			raise e
@@ -506,7 +507,7 @@ class GetSqlData:
 	def change_project_audit_status(project_id: str, environment: str):
 		"""修改进件审核状态为通过"""
 		if Config().get_item("Switch", "project") == '1':
-			Ulog.info("风控已关闭，走虚拟进件风控逻辑")
+			Ulog().logger_().info("风控已关闭，走虚拟进件风控逻辑")
 			sql = f"""
 						UPDATE sandbox_saas.project_detail
 						SET audit_status = 2, audit_result = 1, project_step = 5
@@ -514,7 +515,7 @@ class GetSqlData:
 					"""
 			GetSqlData.exec_update(environment, sql)
 		else:
-			Ulog.info("风控开关已开启，走真实风控流程")
+			Ulog().logger_().info("风控开关已开启，走真实风控流程")
 			GetSqlData.project_result(project_id, environment)
 
 	@staticmethod

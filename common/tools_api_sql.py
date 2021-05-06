@@ -45,7 +45,7 @@ class ToolsSql(GetSqlData):
 			cur = await conn.cursor()
 			await cur.execute(sql)
 			await conn.commit()
-			Ulog.info(f"执行sql:{sql}")
+			Ulog().logger_().info(f"执行sql:{sql}")
 		except Exception as e:
 			await conn.rollback()
 			raise e
@@ -113,7 +113,7 @@ class ToolsSql(GetSqlData):
 
 	@staticmethod
 	async def ss(x):
-		Ulog.info(time.ctime())
+		Ulog().logger_().info(time.ctime())
 		await asyncio.sleep(x)
-		Ulog.info(f"""---{x}""")
+		Ulog().logger_().info(f"""---{x}""")
 		return "dddd"
