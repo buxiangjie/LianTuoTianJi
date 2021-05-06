@@ -136,7 +136,7 @@ class Assert:
 						assert_that(fee_plan["rest_amount"]).is_equal_to(0)
 						assert_that(fee_plan["pay_time"]).is_equal_to(repay_data["pay_time"])
 			if fee_detail_count == 0:
-				Ulog.error("费计划与费流水不匹配")
+				Ulog().logger_().error("费计划与费流水不匹配")
 			Ulog().logger_().info("费计划/费流水的还款类型/资金归属/还款时间/计划还款时间/费状态/剩余应还金额校验通过")
 			for repayment_plan in repay_data["current_repayment_plan"]:
 				for repayment_detail in repay_data["current_repayment_detail"]:
@@ -145,7 +145,7 @@ class Assert:
 						assert_that(repayment_detail["pay_time"]).is_equal_to(repay_data["pay_time"])
 						assert_that(repayment_detail["this_pay_amount"]).is_equal_to(repayment_plan["pay_amount"])
 			if not_fee_detail_count == 0:
-				Ulog.error("还款计划与还款流水不匹配")
+				Ulog().logger_().error("还款计划与还款流水不匹配")
 			Ulog().logger_().info("还款流水的还款时间/还款金额校验通过")
 
 	@staticmethod

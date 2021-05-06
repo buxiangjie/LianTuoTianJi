@@ -9,6 +9,8 @@ import os
 import json
 import sys
 
+from busi_assert.busi_asset import Assert
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from common.common_func import Common
@@ -408,6 +410,7 @@ class Rmkj12Tp(unittest.TestCase):
 			environment=self.env
 		)
 		assert rep['resultCode'], int(data[0]['resultCode'])
+		Assert.check_repayment(False, self.env, self.r.get("rmkj_6_periods_projectId"), param)
 		self.r.set("rmkj_12_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
 	# @unittest.skip("跳过")
