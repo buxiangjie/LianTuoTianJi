@@ -32,7 +32,7 @@ class TestJfx24PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
-	def test_100_credit_apply(self, r, env):
+	def test_100_credit_apply(self, r, env, red):
 		"""额度授信"""
 		data = excel_table_byname(self.file, 'credit_apply_data')
 		Common.p2p_get_userinfo('jfx_24_periods', env)
@@ -93,7 +93,7 @@ class TestJfx24PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
-	def test_101_query_result(self, r, env):
+	def test_101_query_result(self, r, env, red):
 		"""授信结果查询"""
 		Assert.check_column("jfx_credit", env, r.get("jfx_24_periods_creditId"))
 		GetSqlData.credit_set(
@@ -123,7 +123,7 @@ class TestJfx24PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
-	def test_102_query_user_amount(self, r, env):
+	def test_102_query_user_amount(self, r, env, red):
 		"""用户额度查询"""
 		data = excel_table_byname(self.file, 'query_user_amount')
 		param = json.loads(data[0]['param'])
@@ -152,7 +152,7 @@ class TestJfx24PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
-	def test_103_sign_credit(self, r, env):
+	def test_103_sign_credit(self, r, env, red):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
 		param = json.loads(data[0]['param'])
@@ -187,7 +187,7 @@ class TestJfx24PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
-	def test_104_project_apply(self, r, env):
+	def test_104_project_apply(self, r, env, red):
 		"""进件"""
 		data = excel_table_byname(self.file, 'test_project')
 		param = json.loads(data[0]['param'])
@@ -251,7 +251,7 @@ class TestJfx24PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
-	def test_105_query_apply_result(self, r, env):
+	def test_105_query_apply_result(self, r, env, red):
 		"""进件结果查询"""
 		Assert.check_column("jfx_project", env, r.get("jfx_24_periods_projectId"))
 		GetSqlData.change_project_audit_status(
@@ -285,7 +285,7 @@ class TestJfx24PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
-	def test_106_sign_credit(self, r, env):
+	def test_106_sign_credit(self, r, env, red):
 		"""上传借款授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
 		param = json.loads(data[0]['param'])
@@ -319,7 +319,7 @@ class TestJfx24PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
-	def test_107_contract_sign(self, r, env):
+	def test_107_contract_sign(self, r, env, red):
 		"""上传借款合同"""
 		data = excel_table_byname(self.file, 'contract_sign')
 		param = json.loads(data[0]['param'])
@@ -353,7 +353,7 @@ class TestJfx24PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
-	def test_108_pfa(self, r, env):
+	def test_108_pfa(self, r, env, red):
 		"""放款申请"""
 		data = excel_table_byname(self.file, 'project_loan')
 		param = json.loads(data[0]['param'])
@@ -393,7 +393,7 @@ class TestJfx24PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
-	def test_109_pfa_query(self, r, env):
+	def test_109_pfa_query(self, r, env, red):
 		"""放款结果查询"""
 		GetSqlData.loan_set(
 			environment=env,
@@ -419,7 +419,7 @@ class TestJfx24PeriodTp:
 	@allure.severity("blocker")
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.skip
-	def test_110_early_settlement(self, r, env):
+	def test_110_early_settlement(self, r, env, red):
 		"""还款计划试算:提前结清"""
 		data = excel_table_byname(self.file, 'calculate')
 		param = json.loads(data[0]['param'])
@@ -455,7 +455,7 @@ class TestJfx24PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.settle
-	def test_111_query_repaymentplan(self, r, env):
+	def test_111_query_repaymentplan(self, r, env, red):
 		"""还款计划查询"""
 		data = excel_table_byname(self.file, 'repayment_plan')
 		param = json.loads(data[0]['param'])
@@ -477,7 +477,7 @@ class TestJfx24PeriodTp:
 	@allure.title("还款流水推送")
 	@allure.severity("blocker")
 	@pytest.mark.offline_repay
-	def test_112_repayment(self, r, env):
+	def test_112_repayment(self, r, env, red):
 		"""还款流水推送"""
 		data = excel_table_byname(self.file, 'repayment')
 		param = json.loads(data[0]['param'])
@@ -523,7 +523,7 @@ class TestJfx24PeriodTp:
 	@allure.title("全部结清")
 	@allure.severity("blocker")
 	@pytest.mark.settle
-	def test_113_repayment(self, r, env):
+	def test_113_repayment(self, r, env, red):
 		"""还款流水推送:全部结清"""
 		data = excel_table_byname(self.file, 'repayment')
 		param = json.loads(data[0]['param'])
@@ -568,7 +568,7 @@ class TestJfx24PeriodTp:
 
 	@allure.title("提前结清")
 	@allure.severity("normal")
-	def test_114_offline_settle(self, r, env):
+	def test_114_offline_settle(self, r, env, red):
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
@@ -614,7 +614,7 @@ class TestJfx24PeriodTp:
 	@allure.title("资金流水推送")
 	@allure.severity("normal")
 	@pytest.mark.offline_repay
-	def test_115_capital_flow(self, r, env):
+	def test_115_capital_flow(self, r, env, red):
 		"""资金流水推送"""
 		data = excel_table_byname(self.file, 'cash_push')
 		param = json.loads(data[0]['param'])

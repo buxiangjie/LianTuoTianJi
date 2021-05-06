@@ -8,6 +8,8 @@ import os
 import json
 import sys
 
+from busi_assert.busi_asset import Assert
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pytest
@@ -607,6 +609,7 @@ class TestRmkj3Tp:
 			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		Assert.check_repayment(False, env, r.get(red["project_id"]))
 		r.setex(red["repayment_plan"], 72000, json.dumps(rep['content']['repaymentPlanList']))
 
 	@allure.title("提前结清试算")
@@ -716,6 +719,7 @@ class TestRmkj3Tp:
 			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		Assert.check_repayment(True, env, r.get(red["project_id"]), param)
 		r.setex(red["deduction_task_id"], 72000, rep['content']['deductionTaskId'])
 
 	@allure.title("主动还款-连续还款结清")
@@ -768,6 +772,7 @@ class TestRmkj3Tp:
 				environment=env
 			)
 			assert rep['resultCode'] == int(data[0]['resultCode'])
+			Assert.check_repayment(True, env, r.get(red["project_id"]), param)
 			r.setex(red["deduction_task_id"], 72000, rep['content']['deductionTaskId'])
 
 	@allure.title("主动还款-提前全部结清")
@@ -812,6 +817,7 @@ class TestRmkj3Tp:
 			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		Assert.check_repayment(True, env, r.get(red["project_id"]), param)
 		r.setex(red["deduction_task_id"], 72000, rep['content']['deductionTaskId'])
 
 	@allure.severity("blocker")
@@ -876,8 +882,12 @@ class TestRmkj3Tp:
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
 		period = 1
-		plan_pay_date = GetSqlData.get_repayment_plan_date(project_id=r.get(red["project_id"]), environment=env,
-														   repayment_plan_type=1, period=period)
+		plan_pay_date = GetSqlData.get_repayment_plan_date(
+			project_id=r.get(red["project_id"]),
+			environment=env,
+			repayment_plan_type=1,
+			period=period
+		)
 		repayment_plan_list = r.get(red["repayment_plan"])
 		success_amount = 0.00
 		repayment_detail_list = []
@@ -896,7 +906,7 @@ class TestRmkj3Tp:
 				"transactionId": r.get(red["source_project_id"]),
 				"sourceProjectId": r.get(red["source_project_id"]),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
-				"planPayDate": str(plan_pay_date['plan_pay_date']),
+				"planPayDate": plan_pay_date['plan_pay_date'],
 				"successAmount": success_amount,
 				"payTime": Common.get_time("-"),
 				"period": period
@@ -915,6 +925,7 @@ class TestRmkj3Tp:
 			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		Assert.check_repayment(True, env, r.get(red["project_id"]), param)
 
 	@allure.title("提前全部结清流水推送")
 	@allure.severity("blocker")
@@ -923,8 +934,12 @@ class TestRmkj3Tp:
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
-		plan_pay_date = GetSqlData.get_repayment_plan_date(project_id=r.get(red["project_id"]), environment=env,
-														   repayment_plan_type=1, period=1)
+		plan_pay_date = GetSqlData.get_repayment_plan_date(
+			project_id=r.get(red["project_id"]),
+			environment=env,
+			repayment_plan_type=1,
+			period=1
+		)
 		repayment_plan_list = r.get(red["early_settlement_repayment_plan"])
 		success_amount = 0.00
 		repayment_detail_list = []
@@ -942,7 +957,7 @@ class TestRmkj3Tp:
 				"transactionId": r.get(red["source_project_id"]),
 				"sourceProjectId": r.get(red["source_project_id"]),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
-				"planPayDate": str(plan_pay_date.get('plan_pay_date')),
+				"planPayDate": plan_pay_date.get('plan_pay_date'),
 				"successAmount": success_amount,
 				"repayType": 2,
 				"period": json.loads(repayment_plan_list)[0]['period'],
@@ -962,6 +977,7 @@ class TestRmkj3Tp:
 			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		Assert.check_repayment(True, env, r.get(red["project_id"]), param)
 
 	@allure.title("退货流水推送")
 	@allure.severity("blocker")
@@ -970,8 +986,12 @@ class TestRmkj3Tp:
 		"""线下还款流水推送：退货"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
-		plan_pay_date = GetSqlData.get_repayment_plan_date(project_id=r.get(red["project_id"]), environment=env,
-														   repayment_plan_type=1, period=1)
+		plan_pay_date = GetSqlData.get_repayment_plan_date(
+			project_id=r.get(red["project_id"]),
+			environment=env,
+			repayment_plan_type=1,
+			period=1
+		)
 		repayment_plan_list = r.get(red["return_repayment_plan"])
 		success_amount = 0.00
 		repayment_detail_list = []
@@ -989,7 +1009,7 @@ class TestRmkj3Tp:
 				"transactionId": r.get(red["source_project_id"]),
 				"sourceProjectId": r.get(red["source_project_id"]),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
-				"planPayDate": str(plan_pay_date['plan_pay_date']),
+				"planPayDate": plan_pay_date['plan_pay_date'],
 				"successAmount": success_amount,
 				"repayType": 3,
 				"payTime": Common.get_time("-")
@@ -1008,6 +1028,7 @@ class TestRmkj3Tp:
 			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		Assert.check_repayment(True, env, r.get(red["project_id"]), param)
 
 
 if __name__ == '__main__':

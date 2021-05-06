@@ -445,6 +445,7 @@ class TestJfx12PeriodTp:
 			environment=env
 		)
 		assert int(data[0]['resultCode']) == rep['resultCode']
+		Assert.check_repayment(False, env, r.get(red["project_id"]))
 		r.setex(red["repayment_plan"], 72000, json.dumps(rep['content']['repaymentPlanList']))
 
 	@allure.title("还款流水推送")
@@ -492,6 +493,7 @@ class TestJfx12PeriodTp:
 			product="cloudloan"
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		Assert.check_repayment(True, env, r.get(red["project_id"]), param)
 
 	@allure.title("全部结清")
 	@allure.severity("blocker")
@@ -538,6 +540,7 @@ class TestJfx12PeriodTp:
 				product="cloudloan"
 			)
 			assert rep['resultCode'] == int(data[0]['resultCode'])
+			Assert.check_repayment(True, env, r.get(red["project_id"]), param)
 
 	@allure.title("提前结清")
 	@allure.severity("normal")
@@ -545,8 +548,12 @@ class TestJfx12PeriodTp:
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
-		plan_pay_date = GetSqlData.get_repayment_plan_date(project_id=r.get(red["project_id"]), environment=env,
-														   repayment_plan_type=1, period=1)
+		plan_pay_date = GetSqlData.get_repayment_plan_date(
+			project_id=r.get(red["project_id"]),
+			environment=env,
+			repayment_plan_type=1,
+			period=1
+		)
 		repayment_plan_list = r.get(red["early_settlement_repayment_plan"])
 		success_amount = 0.00
 		repayment_detail_list = []
@@ -583,6 +590,7 @@ class TestJfx12PeriodTp:
 			environment=env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		Assert.check_repayment(True, env, r.get(red["project_id"]), param)
 
 	@allure.title("资金流水推送")
 	@allure.severity("normal")

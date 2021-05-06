@@ -590,6 +590,7 @@ class TestJkCkshd6PeriodsTp:
 			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		Assert.check_repayment(False, env, r.get(red["project_id"]))
 		r.setex(red["repayment_plan"], 72000, json.dumps(rep['content']['repaymentPlanList']))
 
 	@allure.title("还款计划试算:提前结清")
@@ -699,6 +700,7 @@ class TestJkCkshd6PeriodsTp:
 			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		Assert.check_repayment(True, env, r.get(red["project_id"]), param)
 
 	@allure.title("线下还款流水推送：提前全部结清")
 	@allure.severity("blocker")
@@ -746,6 +748,7 @@ class TestJkCkshd6PeriodsTp:
 			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		Assert.check_repayment(True, env, r.get(red["project_id"]), param)
 
 	@allure.title("线下还款流水推送：退货")
 	@allure.severity("blocker")
@@ -793,6 +796,7 @@ class TestJkCkshd6PeriodsTp:
 			environment=env
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
+		Assert.check_repayment(True, env, r.get(red["project_id"]), param)
 
 	@allure.title("资金流水推送")
 	@allure.severity("blocker")
