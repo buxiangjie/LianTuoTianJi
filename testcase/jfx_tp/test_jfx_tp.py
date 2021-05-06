@@ -373,10 +373,10 @@ class JfxTp(unittest.TestCase):
 			environment=self.env
 		)
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
+		Assert.check_repayment(False, self.env, self.r.get("jfx_projectId"))
 		self.r.set("jfx_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
-	# @unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
-	@unittest.skip("11")
+	@unittest.skip("-")
 	def test_112_repayment(self):
 		"""还款流水推送"""
 		data = excel_table_byname(self.file, 'repayment')
@@ -419,6 +419,7 @@ class JfxTp(unittest.TestCase):
 			product="cloudloan"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		Assert.check_repayment(True, self.env, self.r.get("jfx_projectId"), param)
 
 	@unittest.skip("11")
 	def test_113_capital_flow(self):

@@ -9,6 +9,7 @@ import unittest
 import os
 import json
 import sys
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from common.common_func import Common
@@ -16,7 +17,6 @@ from busi_assert.busi_asset import Assert
 from common.open_excel import excel_table_byname
 from config.configer import Config
 from common.get_sql_data import GetSqlData
-
 
 
 class Jfx3PeriodTp(unittest.TestCase):
@@ -364,19 +364,19 @@ class Jfx3PeriodTp(unittest.TestCase):
 			environment=self.env
 		)
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
+		Assert.check_repayment(False, self.env, self.r.get("jfx_3_periods_projectId"))
 		self.r.set("jfx_3_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
-	# @unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
 	@unittest.skip("skip")
 	def test_B_repayment(self):
 		"""还款流水推送"""
-		global plan_pay_date
 		data = excel_table_byname(self.file, 'repayment')
 		param = json.loads(data[0]['param'])
 		repayment_plan_list = self.r.get("jfx_3_periods_repayment_plan")
 		success_amount = 0.00
 		repayment_detail_list = []
 		period = 1
+		plan_pay_date = None
 		for i in json.loads(repayment_plan_list):
 			if i['period'] == period:
 				plan_detail = {
@@ -406,17 +406,16 @@ class Jfx3PeriodTp(unittest.TestCase):
 			headers = None
 		else:
 			headers = json.loads(data[0]['headers'])
-		headers["X-TBC-SKIP-SIGN"] = "true"
 		rep = Common.response(
 			faceaddr=data[0]['url'], headers=headers,
 			data=param,
 			environment=self.env,
-			product="gateway"
+			product="cloudloan"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		Assert.check_repayment(True, self.env, self.r.get("jfx_3_periods_projectId"), param)
 
-	@unittest.skip("1")
-	# @unittest.skipUnless(sys.argv[4] == "early_repayment", "条件成立时执行")
+	@unittest.skip("-")
 	def test_B1_repayment(self):
 		"""还款流水推送:提前全部结清"""
 		data = excel_table_byname(self.file, 'repayment')
@@ -440,10 +439,12 @@ class Jfx3PeriodTp(unittest.TestCase):
 				}
 			)
 			for i in range(len(param['repaymentDetailList'])):
-				pay_detail = GetSqlData.get_repayment_plan_date(project_id=self.r.get('jfx_3_periods_projectId'),
-																environment=self.env,
-																repayment_plan_type=param['repaymentDetailList'][i][
-																	'planCategory'], period=per)
+				pay_detail = GetSqlData.get_repayment_plan_date(
+					project_id=self.r.get('jfx_3_periods_projectId'),
+					environment=self.env,
+					repayment_plan_type=param['repaymentDetailList'][i]['planCategory'],
+					period=per
+				)
 				param['repaymentDetailList'][i].update(
 					{
 						"sourceRepaymentDetailId": Common.get_random("serviceSn"),
@@ -455,15 +456,16 @@ class Jfx3PeriodTp(unittest.TestCase):
 			else:
 				headers = json.loads(data[0]['headers'])
 			rep = Common.response(
-				faceaddr=data[0]['url'], headers=headers,
+				faceaddr=data[0]['url'],
+				headers=headers,
 				data=json.dumps(param, ensure_ascii=False),
 				environment=self.env,
 				product="cloudloan"
 			)
 
 			self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+			Assert.check_repayment(True, self.env, self.r.get("jfx_3_periods_projectId"), param)
 
-	# @unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
 	@unittest.skip("skip")
 	def test_C_capital_flow(self):
 		"""资金流水推送"""
@@ -491,7 +493,8 @@ class Jfx3PeriodTp(unittest.TestCase):
 		else:
 			headers = json.loads(data[0]['headers'])
 		rep = Common.response(
-			faceaddr=data[0]['url'], headers=headers,
+			faceaddr=data[0]['url'],
+			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=self.env,
 			product="cloudloan"

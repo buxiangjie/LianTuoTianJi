@@ -410,6 +410,7 @@ class Jfx6PeriodTp(unittest.TestCase):
 			environment=self.env
 		)
 		self.assertEqual(int(data[0]['resultCode']), rep['resultCode'])
+		Assert.check_repayment(False, self.env, self.r.get('jfx_6_periods_projectId'))
 		self.r.set("jfx_6_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
 	@unittest.skip("11")
@@ -420,8 +421,12 @@ class Jfx6PeriodTp(unittest.TestCase):
 		repayment_plan_list = self.r.get("jfx_6_periods_repayment_plan")
 		success_amount = 0.00
 		period = 1
-		plan_pay_date = GetSqlData.get_repayment_plan_date(project_id=self.r.get("jfx_6_periods_projectId"),
-														   environment=self.env, repayment_plan_type=1, period=period)
+		plan_pay_date = GetSqlData.get_repayment_plan_date(
+			project_id=self.r.get("jfx_6_periods_projectId"),
+			environment=self.env,
+			repayment_plan_type=1,
+			period=period
+		)
 		repayment_detail_list = []
 		for i in json.loads(repayment_plan_list):
 			if i['period'] == period:
@@ -440,7 +445,7 @@ class Jfx6PeriodTp(unittest.TestCase):
 				"sourceProjectId": self.r.get("jfx_6_periods_sourceProjectId"),
 				"sourceUserId": self.r.get("jfx_6_periods_sourceUserId"),
 				"serviceSn": Common.get_random("serviceSn"),
-				"planPayDate": str(plan_pay_date['plan_pay_date']),
+				"planPayDate": plan_pay_date['plan_pay_date'],
 				"payTime": Common.get_time("-"),
 				"successAmount": success_amount,
 				"period": period
@@ -459,13 +464,14 @@ class Jfx6PeriodTp(unittest.TestCase):
 			product="cloudloan"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		Assert.check_repayment(True, self.env, self.r.get('jfx_6_periods_projectId'), param)
 
 	@unittest.skip("1")
 	def test_113_repayment(self):
 		"""还款流水推送:提前全部结清"""
 		data = excel_table_byname(self.file, 'repayment')
 		param = json.loads(data[0]['param'])
-		for per in range(2, 7):
+		for per in range(1, 7):
 			success_amount = GetSqlData.get_repayment_amount(
 				project_id=self.r.get("jfx_6_periods_projectId"),
 				environment=self.env,
@@ -485,10 +491,12 @@ class Jfx6PeriodTp(unittest.TestCase):
 				}
 			)
 			for i in range(len(param['repaymentDetailList'])):
-				pay_detail = GetSqlData.get_repayment_plan_date(project_id=self.r.get('jfx_6_periods_projectId'),
-																environment=self.env,
-																repayment_plan_type=param['repaymentDetailList'][i][
-																	'planCategory'], period=per)
+				pay_detail = GetSqlData.get_repayment_plan_date(
+					project_id=self.r.get('jfx_6_periods_projectId'),
+					environment=self.env,
+					repayment_plan_type=param['repaymentDetailList'][i]['planCategory'],
+					period=per
+				)
 				param['repaymentDetailList'][i].update(
 					{
 						"sourceRepaymentDetailId": Common.get_random("serviceSn"),
@@ -508,8 +516,8 @@ class Jfx6PeriodTp(unittest.TestCase):
 			)
 
 			self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+			Assert.check_repayment(True, self.env, self.r.get('jfx_6_periods_projectId'), param)
 
-	# @unittest.skipUnless(sys.argv[4] == "repayment", "条件成立时执行")
 	@unittest.skip("11")
 	def test_114_capital_flow(self):
 		"""资金流水推送"""

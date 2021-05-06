@@ -9,6 +9,8 @@ import os
 import json
 import sys
 import time
+
+from busi_assert.busi_asset import Assert
 from common.common_func import Common
 from log.logger import Logger
 from common.open_excel import excel_table_byname
@@ -319,10 +321,10 @@ class Jfqjy3Tp(unittest.TestCase):
 			product="cloudloan",
 			environment=self.env
 		)
-		self.r.set("jfqjy_3_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		Assert.check_repayment(False, self.env, self.r.get("jfqjy_3_periods_projectId"))
+		self.r.set("jfqjy_3_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
-	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
 	# @unittest.skip("跳过")
 	def test_111_calculate(self):
 		"""还款计划试算:提前结清"""
@@ -354,7 +356,6 @@ class Jfqjy3Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	# @unittest.skipUnless(sys.argv[4] == "early_settlement", "-")
 	# @unittest.skip("跳过")
 	def test_112_calculate(self):
 		"""还款计划试算:退货"""
@@ -386,15 +387,18 @@ class Jfqjy3Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	# @unittest.skipUnless(sys.argv[4] == "repayment_offline", "-")
 	@unittest.skip("跳过")
 	def test_113_offline_repay_repayment(self):
 		"""线下还款流水推送：正常还一期"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
 		period = 1
-		plan_pay_date = GetSqlData.get_repayment_plan_date(project_id=self.r.get("jfqjy_3_periods_projectId"),
-														   environment=self.env, repayment_plan_type=1, period=period)
+		plan_pay_date = GetSqlData.get_repayment_plan_date(
+			project_id=self.r.get("jfqjy_3_periods_projectId"),
+			environment=self.env,
+			repayment_plan_type=1,
+			period=period
+		)
 		repayment_plan_list = self.r.get("jfqjy_3_periods_repayment_plan")
 		success_amount = 0.00
 		repayment_detail_list = []
@@ -413,7 +417,7 @@ class Jfqjy3Tp(unittest.TestCase):
 				"transactionId": self.r.get("jfqjy_3_periods_sourceProjectId"),
 				"sourceProjectId": self.r.get("jfqjy_3_periods_sourceProjectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
-				"planPayDate": str(plan_pay_date['plan_pay_date']),
+				"planPayDate": plan_pay_date['plan_pay_date'],
 				"successAmount": success_amount,
 				"payTime": Common.get_time("-"),
 				"period": period
@@ -432,15 +436,19 @@ class Jfqjy3Tp(unittest.TestCase):
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		Assert.check_repayment(True, self.env, self.r.get("jfqjy_3_periods_projectId"), param)
 
-	# @unittest.skipUnless(sys.argv[4] == "early_settlement_offline", "-")
 	@unittest.skip("跳过")
 	def test_114_offline_nrepay_early_settlement(self):
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
-		plan_pay_date = GetSqlData.get_repayment_plan_date(project_id=self.r.get("jfqjy_3_periods_projectId"),
-														   environment=self.env, repayment_plan_type=1, period=1)
+		plan_pay_date = GetSqlData.get_repayment_plan_date(
+			project_id=self.r.get("jfqjy_3_periods_projectId"),
+			environment=self.env,
+			repayment_plan_type=1,
+			period=1
+		)
 		repayment_plan_list = json.loads(self.r.get("jfqjy_3_periods_early_settlement_repayment_plan"))
 		success_amount = 0.00
 		repayment_detail_list = []
@@ -458,7 +466,7 @@ class Jfqjy3Tp(unittest.TestCase):
 				"transactionId": self.r.get("jfqjy_3_periods_sourceProjectId"),
 				"sourceProjectId": self.r.get("jfqjy_3_periods_sourceProjectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
-				"planPayDate": str(plan_pay_date['plan_pay_date']),
+				"planPayDate": plan_pay_date['plan_pay_date'],
 				"successAmount": success_amount,
 				"repayType": 2,
 				"period": repayment_plan_list[0]['period'],
@@ -478,14 +486,19 @@ class Jfqjy3Tp(unittest.TestCase):
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		Assert.check_repayment(True, self.env, self.r.get("jfqjy_3_periods_projectId"), param)
 
 	@unittest.skip("-")
 	def test_116_return(self):
 		"""退货"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
-		plan_pay_date = GetSqlData.get_repayment_plan_date(project_id=self.r.get("jfqjy_3_periods_projectId"),
-														   environment=self.env, repayment_plan_type=1, period=1)
+		plan_pay_date = GetSqlData.get_repayment_plan_date(
+			project_id=self.r.get("jfqjy_3_periods_projectId"),
+			environment=self.env,
+			repayment_plan_type=1,
+			period=1
+		)
 		repayment_plan_list = json.loads(self.r.get("jfqjy_3_periods_return_repayment_plan"))
 		success_amount = 0.00
 		repayment_detail_list = []
@@ -503,7 +516,7 @@ class Jfqjy3Tp(unittest.TestCase):
 				"transactionId": self.r.get("jfqjy_3_periods_sourceProjectId"),
 				"sourceProjectId": self.r.get("jfqjy_3_periods_sourceProjectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
-				"planPayDate": str(plan_pay_date['plan_pay_date']),
+				"planPayDate": plan_pay_date['plan_pay_date'],
 				"successAmount": success_amount,
 				"repayType": 3,
 				"period": repayment_plan_list[0]['period'],
@@ -523,6 +536,7 @@ class Jfqjy3Tp(unittest.TestCase):
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		Assert.check_repayment(True, self.env, self.r.get("jfqjy_3_periods_projectId"), param)
 
 	@unittest.skip("-")
 	def test_117_capital_flow(self):
@@ -584,6 +598,7 @@ class Jfqjy3Tp(unittest.TestCase):
 			product="cloudloan"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+
 
 if __name__ == '__main__':
 	unittest.main()

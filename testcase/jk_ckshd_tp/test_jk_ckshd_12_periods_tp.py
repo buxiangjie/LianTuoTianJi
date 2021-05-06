@@ -508,6 +508,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		Assert.check_repayment(False, self.env, self.r.get("jk_ckshd_12_periods_projectId"))
 		self.r.set("jk_ckshd_12_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
 	def test_116_calculate(self):
@@ -535,10 +536,8 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
-		self.r.set(
-			"jk_ckshd_12_periods_early_settlement_repayment_plan",
-			json.dumps(rep['content']['repaymentPlanList'])
-		)
+		self.r.set("jk_ckshd_12_periods_early_settlement_repayment_plan",
+				   json.dumps(rep['content']['repaymentPlanList']))
 
 	def test_117_calculate(self):
 		"""还款计划试算:退货"""
@@ -576,8 +575,12 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
 		period = 1
-		plan_pay_date = GetSqlData.get_repayment_plan_date(project_id=self.r.get("jk_ckshd_12_periods_projectId"),
-														   environment=self.env, repayment_plan_type=1, period=period)
+		plan_pay_date = GetSqlData.get_repayment_plan_date(
+			project_id=self.r.get("jk_ckshd_12_periods_projectId"),
+			environment=self.env,
+			repayment_plan_type=1,
+			period=period
+		)
 		repayment_plan_list = self.r.get("jk_ckshd_12_periods_repayment_plan")
 		success_amount = 0.00
 		repayment_detail_list = []
@@ -596,7 +599,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 				"transactionId": self.r.get("jk_ckshd_12_periods_sourceProjectId"),
 				"sourceProjectId": self.r.get("jk_ckshd_12_periods_sourceProjectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
-				"planPayDate": str(plan_pay_date['plan_pay_date']),
+				"planPayDate": plan_pay_date['plan_pay_date'],
 				"successAmount": success_amount,
 				"payTime": Common.get_time("-"),
 				"period": period
@@ -615,14 +618,19 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		Assert.check_repayment(True, self.env, self.r.get("jk_ckshd_12_periods_projectId"), param)
 
-	# @unittest.skip("跳过")
+	@unittest.skip("跳过")
 	def test_119_offline_repay_early_settlement(self):
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
-		plan_pay_date = GetSqlData.get_repayment_plan_date(project_id=self.r.get("jk_ckshd_12_periods_projectId"),
-														   environment=self.env, repayment_plan_type=1, period=1)
+		plan_pay_date = GetSqlData.get_repayment_plan_date(
+			project_id=self.r.get("jk_ckshd_12_periods_projectId"),
+			environment=self.env,
+			repayment_plan_type=1,
+			period=1
+		)
 		repayment_plan_list = json.loads(self.r.get("jk_ckshd_12_periods_early_settlement_repayment_plan"))
 		success_amount = 0.00
 		repayment_detail_list = []
@@ -640,7 +648,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 				"transactionId": self.r.get("jk_ckshd_12_periods_sourceProjectId"),
 				"sourceProjectId": self.r.get("jk_ckshd_12_periods_sourceProjectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
-				"planPayDate": str(plan_pay_date['plan_pay_date']),
+				"planPayDate": plan_pay_date['plan_pay_date'],
 				"successAmount": success_amount,
 				"repayType": 2,
 				"period": repayment_plan_list[0]['period'],
@@ -660,14 +668,19 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		Assert.check_repayment(True, self.env, self.r.get("jk_ckshd_12_periods_projectId"), param)
 
 	@unittest.skip("跳过")
 	def test_120_offline_return(self):
 		"""线下还款流水推送：退货"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
-		plan_pay_date = GetSqlData.get_repayment_plan_date(project_id=self.r.get("jk_ckshd_12_periods_projectId"),
-														   environment=self.env, repayment_plan_type=1, period=1)
+		plan_pay_date = GetSqlData.get_repayment_plan_date(
+			project_id=self.r.get("jk_ckshd_12_periods_projectId"),
+			environment=self.env,
+			repayment_plan_type=1,
+			period=1
+		)
 		repayment_plan_list = json.loads(self.r.get("jk_ckshd_12_periods_return_repayment_plan"))
 		success_amount = 0.00
 		repayment_detail_list = []
@@ -685,7 +698,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 				"transactionId": self.r.get("jk_ckshd_12_periods_sourceProjectId"),
 				"sourceProjectId": self.r.get("jk_ckshd_12_periods_sourceProjectId"),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
-				"planPayDate": str(plan_pay_date['plan_pay_date']),
+				"planPayDate": plan_pay_date['plan_pay_date'],
 				"successAmount": success_amount,
 				"repayType": 3,
 				"period": repayment_plan_list[0]['period'],
@@ -705,6 +718,7 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
+		Assert.check_repayment(True, self.env, self.r.get("jk_ckshd_12_periods_projectId"), param)
 
 	@unittest.skip("-")
 	def test_121_capital_flow(self):
@@ -768,4 +782,3 @@ class JkCkshd6PeriodsTp(unittest.TestCase):
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
-		self.r.set("jk_ckshd_12_periods_contractId", rep['content']['contractId'])
