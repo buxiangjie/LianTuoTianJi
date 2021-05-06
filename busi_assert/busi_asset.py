@@ -118,7 +118,7 @@ class Assert:
 		assert_that(repay_data["database_repayment"]["source_repayment_id"]).is_equal_to(
 			repay_data["source_repayment_id"])
 		Ulog().logger_().info(f"第{repay_data['period']}期repayment表还款类型/成功金额/资金来源/还款时间/渠道还款ID校验通过")
-		if repay_data["current_fee_plan"] is None:
+		if len(repay_data["current_fee_plan"]) == 0:
 			Ulog().logger_().info("当前期无费计划,无需校验")
 		else:
 			fee_detail_count = 0
@@ -157,7 +157,7 @@ class Assert:
 		assert_that(repay_data["database_repayment"]["source_repayment_id"]).is_equal_to(
 			repay_data["source_repayment_id"])
 		Ulog().logger_().info(f"第{repay_data['period']}期提前结清repayment表还款类型/成功金额/资金来源/还款时间/渠道还款ID校验通过")
-		if repay_data["current_fee_plan"] is None:
+		if len(repay_data["current_fee_plan"]) == 0:
 			Ulog().logger_().info("当前期无费计划,无需校验")
 		else:
 			fee_detail_count = 0
@@ -205,7 +205,7 @@ class Assert:
 		assert_that(repay_data["database_repayment"]["source_repayment_id"]).is_equal_to(
 			repay_data["source_repayment_id"])
 		Ulog().logger_().info(f"第{repay_data['period']}期提前结清repayment表还款类型/成功金额/资金来源/还款时间/渠道还款ID校验通过")
-		if repay_data["current_fee_plan"] is None:
+		if len(repay_data["current_fee_plan"]) == 0:
 			Ulog().logger_().info("当前期无费计划,无需校验")
 		else:
 			fee_detail_count = 0

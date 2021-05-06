@@ -102,7 +102,7 @@ class Kkd3Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
+			product="cloudloan",
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -130,7 +130,7 @@ class Kkd3Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
+			product="cloudloan",
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -159,7 +159,7 @@ class Kkd3Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
+			product="cloudloan",
 			environment=self.env
 		)
 		self.r.set("kkd_3_periods_contractId", rep['content']['contractId'])
@@ -186,7 +186,7 @@ class Kkd3Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
+			product="cloudloan",
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -204,7 +204,7 @@ class Kkd3Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
+			product="cloudloan",
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -230,7 +230,7 @@ class Kkd3Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
+			product="cloudloan",
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -255,7 +255,7 @@ class Kkd3Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
+			product="cloudloan",
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -282,7 +282,7 @@ class Kkd3Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
+			product="cloudloan",
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -309,7 +309,7 @@ class Kkd3Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
+			product="cloudloan",
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -333,7 +333,7 @@ class Kkd3Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
+			product="cloudloan",
 			environment=self.env
 		)
 		self.r.set("kkd_3_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
@@ -362,13 +362,13 @@ class Kkd3Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
+			product="cloudloan",
 			environment=self.env
 		)
 		self.r.set("kkd_3_periods_early_settlement_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	@unittest.skip("跳过")
+	# @unittest.skip("跳过")
 	def test_112_offline_repay_repayment(self):
 		"""线下还款流水推送：正常还一期"""
 		data = excel_table_byname(self.file, 'offline_repay')
@@ -400,7 +400,7 @@ class Kkd3Tp(unittest.TestCase):
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
 				"planPayDate": plan_pay_date['plan_pay_date'],
 				"successAmount": success_amount,
-				"payTime": Common.get_time("day"),
+				"payTime": Common.get_time(),
 				"period": period
 			}
 		)
@@ -413,7 +413,7 @@ class Kkd3Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
+			product="cloudloan",
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -463,7 +463,7 @@ class Kkd3Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
+			product="cloudloan",
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -491,7 +491,7 @@ class Kkd3Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
+			product="cloudloan",
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -517,7 +517,7 @@ class Kkd3Tp(unittest.TestCase):
 			faceaddr=data[0]['url'],
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
-			product="gateway",
+			product="cloudloan",
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
@@ -553,7 +553,7 @@ class Kkd3Tp(unittest.TestCase):
 			headers=headers,
 			data=json.dumps(param, ensure_ascii=False),
 			environment=self.env,
-			product="gateway"
+			product="cloudloan"
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
