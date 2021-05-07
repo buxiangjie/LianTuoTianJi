@@ -9,6 +9,8 @@ import os
 import json
 import sys
 
+from common.universal import Universal
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from common.common_func import Common
@@ -572,8 +574,14 @@ class JkCwshd12PeriodsTp(unittest.TestCase):
 			json.dumps(rep['content']['repaymentPlanList'])
 		)
 
+	@unittest.skip("-")
+	def test_118_overdue(self):
+		Universal.overdue(1,self.env,self.r.get("jk_cwshd_12_periods_projectId"),1)
+
+
+
 	@unittest.skip("跳过")
-	def test_118_offline_repay_repayment(self):
+	def test_119_offline_repay_repayment(self):
 		"""线下还款流水推送：正常还一期"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
@@ -624,7 +632,7 @@ class JkCwshd12PeriodsTp(unittest.TestCase):
 		Assert.check_repayment(True, self.env, self.r.get("jk_cwshd_12_periods_projectId"), param)
 
 	@unittest.skip("跳过")
-	def test_119_offline_repay_early_settlement(self):
+	def test_120_offline_repay_early_settlement(self):
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
@@ -674,7 +682,7 @@ class JkCwshd12PeriodsTp(unittest.TestCase):
 		Assert.check_repayment(True, self.env, self.r.get("jk_cwshd_12_periods_projectId"), param)
 
 	@unittest.skip("跳过")
-	def test_120_offline_return(self):
+	def test_121_offline_return(self):
 		"""线下还款流水推送：退货"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
@@ -724,7 +732,7 @@ class JkCwshd12PeriodsTp(unittest.TestCase):
 		Assert.check_repayment(True, self.env, self.r.get("jk_cwshd_12_periods_projectId"), param)
 
 	@unittest.skip("-")
-	def test_121_capital_flow(self):
+	def test_122_capital_flow(self):
 		"""资金流水推送"""
 		data = excel_table_byname(self.file, 'cash_push')
 		param = json.loads(data[0]['param'])
@@ -758,7 +766,7 @@ class JkCwshd12PeriodsTp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	def test_122_sign_purchase_vouchers(self):
+	def test_123_sign_purchase_vouchers(self):
 		"""上传采购凭证"""
 		data = excel_table_byname(self.file, 'contract_sign')
 		param = json.loads(data[0]['param'])

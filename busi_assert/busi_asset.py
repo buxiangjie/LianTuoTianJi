@@ -45,6 +45,47 @@ class Assert:
 			Assert._init_repayment_plan(env, project_id)
 
 	@staticmethod
+	def check_overdue(period: int, env: str, project_id: str) -> None:
+		"""
+		检查逾期后还款计划
+		"""
+		fee_plan = GetSqlData.get_fee_plan(project_id, env)
+		repayment_plan = GetSqlData.get_repayment_plan(project_id=project_id, environment=env)
+		_data = {
+			"current_fee_plan": [],  # 当前期费计划
+			"before_fee_plan": [],  # 已发生的费计划
+			"after_fee_plan": [],  # 未发生的费计划
+			"current_repayment_plan": [],  # 当前期的还款计划
+			"before_repayment_plan": [],  # 已发生的还款计划
+			"after_repayment_plan": [],  # 未发生的还款计划
+		}
+		for f in fee_plan:
+			if ["period"] == period:
+				_data["current_fee_plan"].append(f)
+			elif f["period"] < period:
+				_data["before_fee_plan"].append(f)
+			else:
+				_data["after_fee_plan"].append(f)
+		for p in repayment_plan:
+			if p["period"] == period:
+				_data["current_repayment_plan"].append(p)
+			elif p["period"] < period:
+				_data["before_repayment_plan"].append(p)
+			else:
+				_data["after_repayment_plan"].append(p)
+		if len(fee_plan) == 0:
+			Ulog().logger_().info("无费计划,不需要校验")
+		else:
+			for fee in _data["current_fee_plan"]:
+				assert_that(fee["overdue_status"]).is_equal_to(1)
+				assert_that(fee["overdue_days"]).is_greater_than(0)
+			Ulog().logger_().info("费计划逾期状态与逾期天数校验通过")
+		for plan in _data["current_repayment_plan"]:
+			assert_that(plan["overdue_status"]).is_equal_to(1)
+			assert_that(plan["overdue_days"]).is_greater_than(0)
+		Ulog().logger_().info("还款计划逾期状态与逾期天数校验通过")
+
+	@staticmethod
 	def _get_repay_data(env: str, project_id: str, param: Optional[dict]) -> dict:
 		"""
 		初始化校验需要用到的还款数据

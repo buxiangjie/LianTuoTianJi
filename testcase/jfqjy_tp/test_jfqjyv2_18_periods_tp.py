@@ -9,6 +9,7 @@ import json
 import sys
 
 from busi_assert.busi_asset import Assert
+from common.universal import Universal
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import allure
@@ -424,6 +425,13 @@ class TestJfqjyv218Tp:
 		)
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 		r.setex(red["return_repayment_plan"], 72000, json.dumps(rep['content']['repaymentPlanList']))
+
+	@allure.title("逾期一期")
+	@allure.severity(allure.severity_level.BLOCKER)
+	@pytest.mark.overdue
+	def test_overdue(self, env, r, red):
+		"""逾期一期"""
+		Universal.overdue(1, env, r.get(red["project_id"]), 1)
 
 	@allure.title("还款流水推送")
 	@allure.severity("blocker")

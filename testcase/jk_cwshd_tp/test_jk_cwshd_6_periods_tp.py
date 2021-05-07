@@ -8,6 +8,8 @@ import os
 import json
 import sys
 
+from common.universal import Universal
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pytest
@@ -646,6 +648,13 @@ class TestJkCwShd6PeriodsTp:
 		assert rep['resultCode'] == int(data[0]['resultCode'])
 		r.setex(red["return_repayment_plan"], 72000, json.dumps(rep['content']['repaymentPlanList']))
 
+	@allure.title("逾期一期")
+	@allure.severity(allure.severity_level.BLOCKER)
+	@pytest.mark.overdue
+	def test_overdue(self, env, r, red):
+		"""逾期一期"""
+		Universal.overdue(1, env, r.get(red["project_id"]), 1)
+
 	@allure.title("还款流水推送")
 	@allure.severity("blocker")
 	@pytest.mark.offline_repay
@@ -654,8 +663,12 @@ class TestJkCwShd6PeriodsTp:
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
 		period = 1
-		plan_pay_date = GetSqlData.get_repayment_plan_date(project_id=r.get(red["project_id"]), environment=env,
-														   repayment_plan_type=1, period=period)
+		plan_pay_date = GetSqlData.get_repayment_plan_date(
+			project_id=r.get(red["project_id"]),
+			environment=env,
+			repayment_plan_type=1,
+			period=period
+		)
 		repayment_plan_list = r.get(red["repayment_plan"])
 		success_amount = 0.00
 		repayment_detail_list = []

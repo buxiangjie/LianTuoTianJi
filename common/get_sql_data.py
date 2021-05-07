@@ -452,7 +452,6 @@ class GetSqlData:
 		plan = json.loads(json.dumps(GetSqlData.exec_select(environment, sql), cls=Encoder))
 		return plan
 
-
 	@staticmethod
 	def check_user_amount(user_id, environment):
 		"""查询用户可用额度"""
@@ -760,14 +759,31 @@ class GetSqlData:
 		GetSqlData.exec_update(environment, sql)
 
 	@staticmethod
-	def change_plan_pay_date(environment: str, project_id: str, period: int):
+	def change_plan_pay_date(environment: str, project_id: str, period: int, date: str):
 		"""修改还款计划应还时间"""
 		asset_id = GetSqlData.get_asset_id(environment, project_id)
 		table = "repayment_plan_0" + GetSqlData.get_sub_table(environment, asset_id)
 		sql = f"""
-				update sandbox_saas.{table}
-				set plan_pay_date='{Common.get_time("day")}'
-				where asset_id='{asset_id}' and period={period};
+					update sandbox_saas.{table}
+					set plan_pay_date='{date}'
+					where asset_id={asset_id}
+						and period={period}
+						and repayment_status=1;
+				"""
+		GetSqlData.exec_update(environment, sql)
+
+	@staticmethod
+	def change_fee_plan_pay_date(environment: str, project_id: str, period: int, date: str):
+		"""修改费计划应还时间"""
+		asset_id = GetSqlData.get_asset_id(environment, project_id)
+		table = "fee_plan_0" + GetSqlData.get_sub_table(environment, asset_id)
+		sql = f"""
+					update sandbox_saas.{table}
+					set plan_pay_date='{date}'
+					where asset_id={asset_id}
+						and period={period}
+						and fee_status=1
+						and fee_category=9001;
 				"""
 		GetSqlData.exec_update(environment, sql)
 
@@ -786,3 +802,22 @@ class GetSqlData:
 			raise KeyError("不支持的业务类型")
 		extra_info = json.loads(GetSqlData.exec_select(environment, sql)[0].get("extra_info"))
 		return extra_info
+
+	@staticmethod
+	def select_overdue_job_excute_status(environment: str):
+		if environment == "qa":
+			sql = """
+					select is_success from sandbox_saas.JOB_EXECUTION_LOG 
+					where job_name='overdueForCloudloanJob'
+					order by start_time
+					desc limit 2;
+			"""
+		else:
+			sql = """
+					select is_success from sandbox_saas.job_execution_log
+					where job_name='overdueForCloudloanJob'
+					order by start_time
+					desc limit 2;
+			"""
+		is_success = json.loads(GetSqlData.exec_select(environment, sql), cls=Encoder)
+		return is_success
