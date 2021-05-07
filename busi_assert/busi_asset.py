@@ -4,6 +4,8 @@
 @date:2020-05-12 11:26:00
 @describe: 断言
 """
+import allure
+
 from assertpy import assert_that
 from typing import Optional
 from common.get_sql_data import GetSqlData
@@ -13,6 +15,7 @@ from log.ulog import Ulog
 
 class Assert:
 	@staticmethod
+	@allure.step("检查授信/进件字段")
 	def check_column(info: str, environment: str, busi_id: str) -> None:
 		map_dict = EntityInfo[info].value
 		busi_type = info.split("_")[-1]
@@ -22,6 +25,7 @@ class Assert:
 			assert_that(key in sql_data.keys()).is_true()
 
 	@staticmethod
+	@allure.step("检查还款相关表字段")
 	def check_repayment(
 			is_repay: bool,
 			env: str,
@@ -45,6 +49,7 @@ class Assert:
 			Assert._init_repayment_plan(env, project_id)
 
 	@staticmethod
+	@allure.step("检查逾期相关表字段")
 	def check_overdue(period: int, env: str, project_id: str) -> None:
 		"""
 		检查逾期后还款计划

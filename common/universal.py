@@ -4,6 +4,8 @@
 @date:2021-05-07 09:26:00
 @describe: 通用用例
 """
+import allure
+
 from common.common_func import Common
 from common.get_sql_data import GetSqlData
 from typing import Optional
@@ -15,6 +17,7 @@ from busi_assert.busi_asset import Assert
 class Universal:
 
 	@staticmethod
+	@allure.step("修改数据至逾期")
 	def overdue(
 			period: int,
 			environment: str,
