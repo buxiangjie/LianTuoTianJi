@@ -32,6 +32,7 @@ class TestRmkj3Tp:
 	@pytest.mark.repayment
 	@pytest.mark.settle_in_advance
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.settle
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
@@ -102,6 +103,7 @@ class TestRmkj3Tp:
 	@pytest.mark.repayment
 	@pytest.mark.settle_in_advance
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
@@ -140,6 +142,7 @@ class TestRmkj3Tp:
 	@pytest.mark.repayment
 	@pytest.mark.settle_in_advance
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
@@ -177,6 +180,7 @@ class TestRmkj3Tp:
 	@pytest.mark.repayment
 	@pytest.mark.settle_in_advance
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
@@ -215,6 +219,7 @@ class TestRmkj3Tp:
 	@pytest.mark.repayment
 	@pytest.mark.settle_in_advance
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
@@ -252,6 +257,7 @@ class TestRmkj3Tp:
 	@pytest.mark.repayment
 	@pytest.mark.settle_in_advance
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
@@ -279,6 +285,7 @@ class TestRmkj3Tp:
 	@pytest.mark.repayment
 	@pytest.mark.settle_in_advance
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
@@ -314,6 +321,7 @@ class TestRmkj3Tp:
 	@pytest.mark.repayment
 	@pytest.mark.settle_in_advance
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
@@ -359,6 +367,7 @@ class TestRmkj3Tp:
 	@pytest.mark.repayment
 	@pytest.mark.settle_in_advance
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
@@ -398,6 +407,7 @@ class TestRmkj3Tp:
 	@pytest.mark.repayment
 	@pytest.mark.settle_in_advance
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
@@ -436,6 +446,7 @@ class TestRmkj3Tp:
 	@pytest.mark.repayment
 	@pytest.mark.settle_in_advance
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
@@ -477,6 +488,7 @@ class TestRmkj3Tp:
 	@pytest.mark.repayment
 	@pytest.mark.settle_in_advance
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
@@ -511,6 +523,7 @@ class TestRmkj3Tp:
 	@pytest.mark.repayment
 	@pytest.mark.settle_in_advance
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
@@ -556,6 +569,7 @@ class TestRmkj3Tp:
 	@pytest.mark.repayment
 	@pytest.mark.settle_in_advance
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
@@ -585,6 +599,7 @@ class TestRmkj3Tp:
 	@pytest.mark.repayment
 	@pytest.mark.settle_in_advance
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle

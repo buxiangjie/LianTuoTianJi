@@ -32,6 +32,7 @@ class TestJkCkshd6PeriodsTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.overdue
 	@pytest.mark.returns
 	def test_100_credit_apply(self, env, r, red):
 		"""额度授信"""
@@ -82,6 +83,7 @@ class TestJkCkshd6PeriodsTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.overdue
 	@pytest.mark.returns
 	def test_101_query_result(self, env, r, red):
 		"""授信结果查询"""
@@ -114,6 +116,7 @@ class TestJkCkshd6PeriodsTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.overdue
 	@pytest.mark.returns
 	def test_102_query_user_amount(self, env, r, red):
 		"""用户额度查询"""
@@ -145,6 +148,7 @@ class TestJkCkshd6PeriodsTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.overdue
 	@pytest.mark.returns
 	def test_103_sign_credit(self, env, r, red):
 		"""上传授信协议"""
@@ -180,6 +184,7 @@ class TestJkCkshd6PeriodsTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.overdue
 	@pytest.mark.returns
 	def test_104_apply(self, env, r, red):
 		"""进件"""
@@ -266,6 +271,7 @@ class TestJkCkshd6PeriodsTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.overdue
 	@pytest.mark.returns
 	def test_106_query_apply_result(self, env, r, red):
 		"""进件结果查询"""
@@ -301,6 +307,7 @@ class TestJkCkshd6PeriodsTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.overdue
 	@pytest.mark.returns
 	def test_107_sign_borrow(self, env, r, red):
 		"""上传借款协议"""
@@ -337,6 +344,7 @@ class TestJkCkshd6PeriodsTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.overdue
 	@pytest.mark.returns
 	def test_108_image_upload(self, env, r, red):
 		"""上传图片"""
@@ -361,6 +369,7 @@ class TestJkCkshd6PeriodsTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.overdue
 	@pytest.mark.returns
 	def test_109_contact_query(self, env, r, red):
 		"""合同结果查询:获取签章后的借款协议"""
@@ -393,6 +402,7 @@ class TestJkCkshd6PeriodsTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.overdue
 	@pytest.mark.returns
 	def test_110_calculate(self, env, r, red):
 		"""还款计划试算（未放款）:正常还款"""
@@ -424,6 +434,7 @@ class TestJkCkshd6PeriodsTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.overdue
 	@pytest.mark.returns
 	def test_111_deduction_share_sign(self, env, r, red):
 		"""协议支付号共享"""
@@ -469,6 +480,7 @@ class TestJkCkshd6PeriodsTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.overdue
 	@pytest.mark.returns
 	def test_112_deduction_share_sign(self, env, r, red):
 		"""委托划扣协议上传"""
@@ -503,6 +515,7 @@ class TestJkCkshd6PeriodsTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.overdue
 	@pytest.mark.returns
 	def test_113_loan_pfa(self, env, r, red):
 		"""放款申请"""
@@ -543,6 +556,7 @@ class TestJkCkshd6PeriodsTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.overdue
 	@pytest.mark.returns
 	def test_114_loan_query(self, env, r, red):
 		"""放款结果查询"""
@@ -569,6 +583,7 @@ class TestJkCkshd6PeriodsTp:
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
 	@pytest.mark.offline_settle_in_advance
+	@pytest.mark.overdue
 	@pytest.mark.returns
 	def test_115_query_repayment_plan(self, env, r, red):
 		"""国投云贷还款计划查询"""

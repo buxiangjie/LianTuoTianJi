@@ -30,6 +30,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.settle
 	def test_100_credit_apply(self, r, env, red):
 		"""额度授信"""
@@ -81,6 +82,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.settle
 	def test_101_query_result(self, r, env, red):
 		"""授信结果查询"""
@@ -110,6 +112,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.settle
 	def test_102_query_user_amount(self, r, env, red):
 		"""用户额度查询"""
@@ -138,6 +141,7 @@ class TestJfx12PeriodTp:
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.settle
 	def test_103_sign_credit(self, r, env, red):
 		"""上传授信协议"""
@@ -172,6 +176,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.settle
 	def test_104_project_apply(self, r, env, red):
 		"""进件"""
@@ -235,6 +240,7 @@ class TestJfx12PeriodTp:
 	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.settle
 	def test_105_query_apply_result(self, r, env, red):
 		"""进件结果查询"""
@@ -268,6 +274,7 @@ class TestJfx12PeriodTp:
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.settle
 	def test_106_sign_credit(self, r, env, red):
 		"""上传借款授信协议"""
@@ -301,6 +308,7 @@ class TestJfx12PeriodTp:
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.settle
 	def test_107_contract_sign(self, r, env, red):
 		"""上传借款合同"""
@@ -334,6 +342,7 @@ class TestJfx12PeriodTp:
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.settle
 	def test_108_pfa(self, r, env, red):
 		"""放款申请"""
@@ -373,6 +382,7 @@ class TestJfx12PeriodTp:
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.settle
 	def test_109_pfa_query(self, r, env, red):
 		"""放款结果查询"""
@@ -429,6 +439,7 @@ class TestJfx12PeriodTp:
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.settle
 	def test_111_query_repayment_plan(self, r, env, red):
 		"""还款计划查询"""

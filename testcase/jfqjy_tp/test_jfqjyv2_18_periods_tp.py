@@ -33,6 +33,7 @@ class TestJfqjyv218Tp:
 	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	def test_100_apply(self, r, env, red):
 		"""进件"""
@@ -91,6 +92,7 @@ class TestJfqjyv218Tp:
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	def test_101_sign_credit(self, r, env, red):
 		"""上传授信协议"""
@@ -125,6 +127,7 @@ class TestJfqjyv218Tp:
 	@pytest.mark.project
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	def test_102_query_apply_result(self, r, env, red):
 		"""进件结果查询"""
@@ -158,6 +161,7 @@ class TestJfqjyv218Tp:
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	def test_103_sign_borrow(self, r, env, red):
 		"""上传借款协议"""
@@ -192,6 +196,7 @@ class TestJfqjyv218Tp:
 	@allure.severity("normal")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	def test_105_image_upload(self, r, env, red):
 		"""上传图片"""
@@ -215,6 +220,7 @@ class TestJfqjyv218Tp:
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	def test_106_contact_query(self, r, env, red):
 		"""合同结果查询:获取签章后的借款协议"""
@@ -246,6 +252,7 @@ class TestJfqjyv218Tp:
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	def test_107_calculate(self, r, env, red):
 		"""还款计划试算（未放款）:正常还款"""
@@ -276,6 +283,7 @@ class TestJfqjyv218Tp:
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	def test_108_loan_pfa(self, r, env, red):
 		"""放款申请"""
@@ -315,6 +323,7 @@ class TestJfqjyv218Tp:
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	def test_109_loan_query(self, r, env, red):
 		"""放款结果查询"""
@@ -340,6 +349,7 @@ class TestJfqjyv218Tp:
 	@allure.severity("blocker")
 	@pytest.mark.asset
 	@pytest.mark.offline_repay
+	@pytest.mark.overdue
 	@pytest.mark.offline_settle_in_advance
 	def test_110_query_repayment_plan(self, r, env, red):
 		"""国投云贷还款计划查询"""
