@@ -91,6 +91,20 @@ class Assert:
 		Ulog().logger_().info("还款计划逾期状态与逾期天数校验通过")
 
 	@staticmethod
+	@allure.step("检查债转相关表字段")
+	def check_swap(
+			period: int,
+			env: str,
+			project_id: str,
+			is_compensation: Optional[bool] = True
+	) -> None:
+		swap_data = Assert._get_swap_data(env, project_id, period)
+		if is_compensation:
+			Assert._compensation_assert(swap_data)
+		else:
+			Assert._repurchase_assert(swap_data)
+
+	@staticmethod
 	def _get_repay_data(env: str, project_id: str, param: Optional[dict]) -> dict:
 		"""
 		初始化校验需要用到的还款数据
@@ -154,6 +168,101 @@ class Assert:
 			elif repayment_detail["period"] > _data["period"]:
 				_data["after_repayment_detail"].append(repayment_detail)
 		return _data
+
+	@staticmethod
+	def _get_swap_data(env: str, project_id: str, period: int):
+		_data = {
+			"period": period,
+			"current_repayment_plan": [],  # 当前期的还款计划
+			"before_repayment_plan": [],  # 已发生的还款计划
+			"after_repayment_plan": [],  # 未发生的还款计划
+			"current_fee_plan": [],  # 当前期费计划
+			"before_fee_plan": [],  # 已发生的费计划
+			"after_fee_plan": [],  # 未发生的费计划
+			"current_swap_detail": [],  # 当前期债转详情
+			"before_swap_detail": [],  # 已发生期的债转详情
+			"after_swap_detail": [],  # 未发生期的债转详情
+			"maturity": GetSqlData.get_maturity(project_id=project_id, environment=env),
+			"database_repayment_plan": GetSqlData.get_repayment_plan(project_id=project_id, environment=env),
+			"database_fee_plan": GetSqlData.get_fee_plan(project_id, env)
+		}
+		for p in _data["database_repayment_plan"]:
+			if p["period"] == period:
+				_data["current_repayment_plan"].append(p)
+			elif p["period"] < period:
+				_data["before_repayment_plan"].append(p)
+			else:
+				_data["after_repayment_plan"].append(p)
+		for f in _data["database_fee_plan"]:
+			if f["period"] == period:
+				_data["current_fee_plan"].append(f)
+			elif f["period"] < period:
+				_data["before_fee_plan"].append(f)
+			else:
+				_data["after_fee_plan"].append(f)
+		return _data
+
+	@staticmethod
+	def _compensation_assert(swap_data: dict) -> None:
+		"""
+		代偿检查
+		:param swap_data:
+		:return:
+		"""
+		if len(swap_data["current_fee_plan"]) > 0:
+			for fee in swap_data["current_fee_plan"]:
+				assert_that(fee["credit_assign_method"]).is_equal_to(2)
+				assert_that(fee["current_vendor"]).is_not_equal_to(1)
+				assert_that(fee["current_channel"]).is_not_equal_to(1)
+			Ulog().logger_().info("费计划的归属/当前所属渠道校验通过")
+		for repayment_plan in swap_data["current_repayment_plan"]:
+			assert_that(repayment_plan["credit_assign_method"]).is_equal_to(2)
+			assert_that(repayment_plan["current_vendor"]).is_not_equal_to(1)
+			assert_that(repayment_plan["current_channel"]).is_not_equal_to(1)
+		Ulog().logger_().info("还款计划的归属/当前所属渠道校验通过")
+		assert_that(swap_data["current_swap_detail"]).is_length(2)
+
+	@staticmethod
+	def _repurchase_assert(swap_data: dict) -> None:
+		"""
+		回购检查
+		:param swap_data:
+		:return:
+		"""
+		if len(swap_data["current_fee_plan"]) > 0:
+			for fee in swap_data["current_fee_plan"]:
+				assert_that(fee["credit_assign_method"]).is_equal_to(2)
+				assert_that(fee["current_vendor"]).is_not_equal_to(1)
+				assert_that(fee["current_channel"]).is_not_equal_to(1)
+			Ulog().logger_().info("当前期费计划的归属/当前所属渠道校验通过")
+		if len(swap_data["after_fee_plan"]) > 0:
+			for fee in swap_data["after_fee_plan"]:
+				if fee["period"] < swap_data["period"] + 2:
+					assert_that(fee["credit_assign_method"]).is_equal_to(2)
+				else:
+					assert_that(fee["credit_assign_method"]).is_equal_to(3)
+				assert_that(fee["current_vendor"]).is_not_equal_to(1)
+				assert_that(fee["current_channel"]).is_not_equal_to(1)
+			Ulog().logger_().info("未发生期费计划的归属/当前所属渠道校验通过")
+		for repayment_plan in swap_data["after_repayment_plan"]:
+			if repayment_plan["period"] < swap_data["period"] + 2:
+				assert_that(repayment_plan["credit_assign_method"]).is_equal_to(2)
+			else:
+				assert_that(repayment_plan["credit_assign_method"]).is_equal_to(3)
+			assert_that(repayment_plan["current_vendor"]).is_not_equal_to(1)
+			assert_that(repayment_plan["current_channel"]).is_not_equal_to(1)
+		Ulog().logger_().info("未发生期还款计划所属渠道校验通过")
+		swap_detail_count = 0
+		for swap_detail in swap_data["after_swap_detail"]:
+			if swap_detail["period"] < swap_data["period"] + 2:
+				assert_that(swap_detail["credit_assign_method"]).is_not_equal_to(2)
+			else:
+				assert_that(swap_detail["credit_assign_method"]).is_not_equal_to(2)
+				assert_that(swap_detail["plan_category"]).is_equal_to(1)
+				swap_detail_count += 1
+		Ulog().logger_().info("未发生期回购流水所属渠道/流水类型校验通过")
+		assert_that(swap_detail_count).is_equal_to(swap_data["maturity"] - (swap_data["period"] + 2))
+		Ulog().logger_().info("回购期回购流水条数校验通过")
 
 	@staticmethod
 	def _business_type_1_repayment_detail(repay_data: dict) -> None:

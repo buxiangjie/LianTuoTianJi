@@ -23,7 +23,8 @@ class Universal:
 			environment: str,
 			project_id: str,
 			day: Optional[int] = None,
-			month: Optional[int] = None
+			month: Optional[int] = None,
+			is_special_repurchase: Optional[bool] = False
 	):
 		plan_pay_date = None
 		if all([day, month]):
@@ -34,7 +35,77 @@ class Universal:
 			plan_pay_date = Common.get_new_time("before", "days", day).split(" ")[0]
 		elif month is not None:
 			plan_pay_date = str(date.today() - relativedelta(months=month)).split(" ")[0]
-		GetSqlData.change_plan_pay_date(environment, project_id, period, plan_pay_date)
-		GetSqlData.change_fee_plan_pay_date(environment, project_id, period, plan_pay_date)
+		if is_special_repurchase is True:
+			for i in range(6):
+				GetSqlData.change_plan_pay_date(environment, project_id, period + i, plan_pay_date)
+				GetSqlData.change_fee_plan_pay_date(environment, project_id, period + i, plan_pay_date)
+		else:
+			GetSqlData.change_plan_pay_date(environment, project_id, period, plan_pay_date)
+			GetSqlData.change_fee_plan_pay_date(environment, project_id, period, plan_pay_date)
 		Common().trigger_task("overdueForCloudloanJob", environment)
 		Assert.check_overdue(period, environment, project_id)
+
+	@staticmethod
+	@allure.step("代偿")
+	def compensation(
+			period: int,
+			environment: str,
+			project_id: str,
+			product: str
+	) -> None:
+		products = {
+			"jfx": ["assetSwapJob_XJ_JFX_YYDMUL", "assetSwapJob_XJ_JFX_YYDSIN"],
+			"rmkj": "assetSwapJob_FQ_RM_RMYM",
+			"jfq": ["assetSwapJob_FQ_JK_JFQJY", "assetSwapJob_FQ_JK_JFQJYV2", "assetSwapJob_FQ_JK_JFQYL",
+					"assetSwapJob_FQ_JK_JFQYLV2"],
+			"wxjk": ["assetSwapJob_XJ_WX_DDQ", "assetSwapJob_XJ_WX_KKD"],
+			"ckshd": "assetSwapJob_FQ_JK_CKSHD",
+			"cwshd": "assetSwapJob_FQ_JK_CWSHD"
+		}
+		Universal.overdue(period, environment, project_id, 3)
+		if isinstance(products[product], list):
+			for job in products[product]:
+				Common.trigger_task(job, environment)
+		else:
+			Common.trigger_task(products[product], environment)
+		Assert.check_swap(period, environment, project_id)
+
+	@staticmethod
+	@allure.step("回购")
+	def repurchase(
+			period: int,
+			environment: str,
+			project_id: str,
+			product: str
+	) -> None:
+		products = {
+			"jfx": ["assetSwapJob_XJ_JFX_YYDMUL", "assetSwapJob_XJ_JFX_YYDSIN"],
+			"rmkj": "assetSwapJob_FQ_RM_RMYM",
+			"jfq": ["assetSwapJob_FQ_JK_JFQJY", "assetSwapJob_FQ_JK_JFQJYV2", "assetSwapJob_FQ_JK_JFQYL",
+					"assetSwapJob_FQ_JK_JFQYLV2"],
+			"wxjk": ["assetSwapJob_XJ_WX_DDQ", "assetSwapJob_XJ_WX_KKD"],
+			"ckshd": "assetSwapJob_FQ_JK_CKSHD",
+			"cwshd": "assetSwapJob_FQ_JK_CWSHD"
+		}
+		if product == "wxjk":
+			Universal.overdue(period, environment, project_id, 3, is_special_repurchase=True)
+			if isinstance(products[product], list):
+				for job in products[product]:
+					Common.trigger_task(job, environment)
+			else:
+				Common.trigger_task(products[product], environment)
+		else:
+			Universal.overdue(period, environment, project_id, 3)
+			if isinstance(products[product], list):
+				for job in products[product]:
+					Common.trigger_task(job, environment)
+			else:
+				Common.trigger_task(products[product], environment)
+			Universal.overdue(period, environment, project_id, 94)
+			Universal.overdue(period + 1, environment, project_id, 3)
+			if isinstance(products[product], list):
+				for job in products[product]:
+					Common.trigger_task(job, environment)
+			else:
+				Common.trigger_task(products[product], environment)
+		Assert.check_swap(period, environment, project_id, False)
