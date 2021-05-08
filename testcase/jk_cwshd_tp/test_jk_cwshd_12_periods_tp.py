@@ -576,12 +576,18 @@ class JkCwshd12PeriodsTp(unittest.TestCase):
 
 	@unittest.skip("-")
 	def test_118_overdue(self):
-		Universal.overdue(1,self.env,self.r.get("jk_cwshd_12_periods_projectId"),1)
+		Universal.overdue(1, self.env, self.r.get("jk_cwshd_12_periods_projectId"), 1)
 
+	@unittest.skip("-")
+	def test_119_compensation(self):
+		Universal.compensation(1, self.env, self.r.get("jk_cwshd_12_periods_projectId"), "cwshd")
 
+	@unittest.skip("-")
+	def test_120_repurchase(self):
+		Universal.compensation(1, self.env, self.r.get("jk_cwshd_12_periods_projectId"), "cwshd")
 
 	@unittest.skip("跳过")
-	def test_119_offline_repay_repayment(self):
+	def test_121_offline_repay_repayment(self):
 		"""线下还款流水推送：正常还一期"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
@@ -632,7 +638,7 @@ class JkCwshd12PeriodsTp(unittest.TestCase):
 		Assert.check_repayment(True, self.env, self.r.get("jk_cwshd_12_periods_projectId"), param)
 
 	@unittest.skip("跳过")
-	def test_120_offline_repay_early_settlement(self):
+	def test_122_offline_repay_early_settlement(self):
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
@@ -682,7 +688,7 @@ class JkCwshd12PeriodsTp(unittest.TestCase):
 		Assert.check_repayment(True, self.env, self.r.get("jk_cwshd_12_periods_projectId"), param)
 
 	@unittest.skip("跳过")
-	def test_121_offline_return(self):
+	def test_123_offline_return(self):
 		"""线下还款流水推送：退货"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
@@ -732,7 +738,7 @@ class JkCwshd12PeriodsTp(unittest.TestCase):
 		Assert.check_repayment(True, self.env, self.r.get("jk_cwshd_12_periods_projectId"), param)
 
 	@unittest.skip("-")
-	def test_122_capital_flow(self):
+	def test_124_capital_flow(self):
 		"""资金流水推送"""
 		data = excel_table_byname(self.file, 'cash_push')
 		param = json.loads(data[0]['param'])
@@ -766,7 +772,7 @@ class JkCwshd12PeriodsTp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	def test_123_sign_purchase_vouchers(self):
+	def test_125_sign_purchase_vouchers(self):
 		"""上传采购凭证"""
 		data = excel_table_byname(self.file, 'contract_sign')
 		param = json.loads(data[0]['param'])

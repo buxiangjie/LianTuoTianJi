@@ -52,7 +52,7 @@ class Assert:
 	@allure.step("检查逾期相关表字段")
 	def check_overdue(period: int, env: str, project_id: str) -> None:
 		"""
-		检查逾期后还款计划
+		检查逾期后还款计划与资产
 		"""
 		fee_plan = GetSqlData.get_fee_plan(project_id, env)
 		repayment_plan = GetSqlData.get_repayment_plan(project_id=project_id, environment=env)
@@ -63,6 +63,7 @@ class Assert:
 			"current_repayment_plan": [],  # 当前期的还款计划
 			"before_repayment_plan": [],  # 已发生的还款计划
 			"after_repayment_plan": [],  # 未发生的还款计划
+			"asset": GetSqlData.get_asset(project_id, env)
 		}
 		for f in fee_plan:
 			if ["period"] == period:
@@ -89,6 +90,8 @@ class Assert:
 			assert_that(plan["overdue_status"]).is_equal_to(1)
 			assert_that(plan["overdue_days"]).is_greater_than(0)
 		Ulog().logger_().info("还款计划逾期状态与逾期天数校验通过")
+		assert_that(_data["asset"]["cur_overdue_days"]).is_greater_than(0)
+		Ulog().logger_().info("资产当前逾期天数校验通过")
 
 	@staticmethod
 	@allure.step("检查债转相关表字段")
@@ -184,7 +187,8 @@ class Assert:
 			"after_swap_detail": [],  # 未发生期的债转详情
 			"maturity": GetSqlData.get_maturity(project_id=project_id, environment=env),
 			"database_repayment_plan": GetSqlData.get_repayment_plan(project_id=project_id, environment=env),
-			"database_fee_plan": GetSqlData.get_fee_plan(project_id, env)
+			"database_fee_plan": GetSqlData.get_fee_plan(project_id, env),
+			"asset": GetSqlData.get_asset(project_id, env)
 		}
 		for p in _data["database_repayment_plan"]:
 			if p["period"] == period:
@@ -221,6 +225,10 @@ class Assert:
 			assert_that(repayment_plan["current_channel"]).is_not_equal_to(1)
 		Ulog().logger_().info("还款计划的归属/当前所属渠道校验通过")
 		assert_that(swap_data["current_swap_detail"]).is_length(2)
+		if swap_data["period"] == swap_data["maturity"]:
+			assert_that(swap_data["asset"]["current_vendor"]).is_not_equal_to(1)
+			assert_that(swap_data["asset"]["current_channel"]).is_not_equal_to(1)
+			Ulog().logger_().info("资产表当前归属渠道校验通过")
 
 	@staticmethod
 	def _repurchase_assert(swap_data: dict) -> None:
@@ -263,6 +271,9 @@ class Assert:
 		Ulog().logger_().info("未发生期回购流水所属渠道/流水类型校验通过")
 		assert_that(swap_detail_count).is_equal_to(swap_data["maturity"] - (swap_data["period"] + 2))
 		Ulog().logger_().info("回购期回购流水条数校验通过")
+		assert_that(swap_data["asset"]["current_vendor"]).is_not_equal_to(1)
+		assert_that(swap_data["asset"]["current_channel"]).is_not_equal_to(1)
+		Ulog().logger_().info("资产表当前归属渠道校验通过")
 
 	@staticmethod
 	def _business_type_1_repayment_detail(repay_data: dict) -> None:

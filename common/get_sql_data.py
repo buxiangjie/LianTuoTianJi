@@ -668,6 +668,17 @@ class GetSqlData:
 		return period
 
 	@staticmethod
+	def get_asset(project_id: str, environment: str) -> dict:
+		"""获取资产表内容"""
+		asset_id = GetSqlData.get_asset_id(environment, project_id)
+		sql = f"""
+				select * from asset
+				where id={asset_id};
+				"""
+		asset = json.loads(json.dumps(GetSqlData.exec_select(environment, sql)[0], cls=Encoder))
+		return asset
+
+	@staticmethod
 	def get_prod_project_id(asset_id: str):
 		"""获取进件ID"""
 		sql = f"""select project_id from saas_zhtb where asset_id={asset_id}"""
