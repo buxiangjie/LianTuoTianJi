@@ -53,21 +53,8 @@ class Universal:
 			project_id: str,
 			product: str
 	) -> None:
-		products = {
-			"jfx": ["assetSwapJob_XJ_JFX_YYDMUL", "assetSwapJob_XJ_JFX_YYDSIN"],
-			"rmkj": "assetSwapJob_FQ_RM_RMYM",
-			"jfq": ["assetSwapJob_FQ_JK_JFQJY", "assetSwapJob_FQ_JK_JFQJYV2", "assetSwapJob_FQ_JK_JFQYL",
-					"assetSwapJob_FQ_JK_JFQYLV2"],
-			"wxjk": ["assetSwapJob_XJ_WX_DDQ", "assetSwapJob_XJ_WX_KKD"],
-			"ckshd": "assetSwapJob_FQ_JK_CKSHD",
-			"cwshd": "assetSwapJob_FQ_JK_CWSHD"
-		}
 		Universal.overdue(period, environment, project_id, 3)
-		if isinstance(products[product], list):
-			for job in products[product]:
-				Common.trigger_task(job, environment)
-		else:
-			Common.trigger_task(products[product], environment)
+		Universal._run_swap_task(product, environment)
 		Assert.check_swap(period, environment, project_id)
 
 	@staticmethod
@@ -78,6 +65,19 @@ class Universal:
 			project_id: str,
 			product: str
 	) -> None:
+		if product == "wxjk":
+			Universal.overdue(period, environment, project_id, 3, is_special_repurchase=True)
+			Universal._run_swap_task(product, environment)
+		else:
+			Universal.overdue(period, environment, project_id, 3)
+			Universal._run_swap_task(product, environment)
+			Universal.overdue(period, environment, project_id, 94)
+			Universal.overdue(period + 1, environment, project_id, 3)
+			Universal._run_swap_task(product, environment)
+		Assert.check_swap(period, environment, project_id, False)
+
+	@staticmethod
+	def _run_swap_task(product: str, environment: str):
 		products = {
 			"jfx": ["assetSwapJob_XJ_JFX_YYDMUL", "assetSwapJob_XJ_JFX_YYDSIN"],
 			"rmkj": "assetSwapJob_FQ_RM_RMYM",
@@ -87,25 +87,8 @@ class Universal:
 			"ckshd": "assetSwapJob_FQ_JK_CKSHD",
 			"cwshd": "assetSwapJob_FQ_JK_CWSHD"
 		}
-		if product == "wxjk":
-			Universal.overdue(period, environment, project_id, 3, is_special_repurchase=True)
-			if isinstance(products[product], list):
-				for job in products[product]:
-					Common.trigger_task(job, environment)
-			else:
-				Common.trigger_task(products[product], environment)
+		if isinstance(products[product], list):
+			for job in products[product]:
+				Common.trigger_task(job, environment)
 		else:
-			Universal.overdue(period, environment, project_id, 3)
-			if isinstance(products[product], list):
-				for job in products[product]:
-					Common.trigger_task(job, environment)
-			else:
-				Common.trigger_task(products[product], environment)
-			Universal.overdue(period, environment, project_id, 94)
-			Universal.overdue(period + 1, environment, project_id, 3)
-			if isinstance(products[product], list):
-				for job in products[product]:
-					Common.trigger_task(job, environment)
-			else:
-				Common.trigger_task(products[product], environment)
-		Assert.check_swap(period, environment, project_id, False)
+			Common.trigger_task(products[product], environment)

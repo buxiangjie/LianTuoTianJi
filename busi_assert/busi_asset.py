@@ -188,6 +188,7 @@ class Assert:
 			"maturity": GetSqlData.get_maturity(project_id=project_id, environment=env),
 			"database_repayment_plan": GetSqlData.get_repayment_plan(project_id=project_id, environment=env),
 			"database_fee_plan": GetSqlData.get_fee_plan(project_id, env),
+			"database_swap_detail": GetSqlData.get_swap_detail(project_id,env),
 			"asset": GetSqlData.get_asset(project_id, env)
 		}
 		for p in _data["database_repayment_plan"]:
@@ -204,6 +205,13 @@ class Assert:
 				_data["before_fee_plan"].append(f)
 			else:
 				_data["after_fee_plan"].append(f)
+		for s in _data["database_swap_detail"]:
+			if s["period"] == period:
+				_data["current_swap_detail"].append(s)
+			elif s["period"] < period:
+				_data["before_swap_detail"].append(s)
+			else:
+				_data["after_swap_detail"].append(s)
 		return _data
 
 	@staticmethod
@@ -219,16 +227,26 @@ class Assert:
 				assert_that(fee["current_vendor"]).is_not_equal_to(1)
 				assert_that(fee["current_channel"]).is_not_equal_to(1)
 			Ulog().logger_().info("费计划的归属/当前所属渠道校验通过")
-		for repayment_plan in swap_data["current_repayment_plan"]:
-			assert_that(repayment_plan["credit_assign_method"]).is_equal_to(2)
-			assert_that(repayment_plan["current_vendor"]).is_not_equal_to(1)
-			assert_that(repayment_plan["current_channel"]).is_not_equal_to(1)
+		else:
+			assert_that(swap_data["current_swap_detail"]).is_length(2)
+			Ulog().logger_().info("债转详情条数校验通过")
 		Ulog().logger_().info("还款计划的归属/当前所属渠道校验通过")
-		assert_that(swap_data["current_swap_detail"]).is_length(2)
 		if swap_data["period"] == swap_data["maturity"]:
 			assert_that(swap_data["asset"]["current_vendor"]).is_not_equal_to(1)
 			assert_that(swap_data["asset"]["current_channel"]).is_not_equal_to(1)
 			Ulog().logger_().info("资产表当前归属渠道校验通过")
+		for swap_detail in swap_data["current_swap_detail"]:
+			for repayment_plan in swap_data["current_repayment_plan"]:
+				assert_that(repayment_plan["credit_assign_method"]).is_equal_to(2)
+				assert_that(repayment_plan["current_vendor"]).is_not_equal_to(1)
+				assert_that(repayment_plan["current_channel"]).is_not_equal_to(1)
+				if swap_detail["repayment_plan_type"] == repayment_plan["repayment_plan_type"]:
+					assert_that(swap_detail["action_amount"]).is_equal_to(repayment_plan["cur_amount"])
+					assert_that(swap_detail["credit_assign_method"]).is_equal_to(repayment_plan["credit_assign_method"])
+					assert_that(swap_detail["current_vendor"]).is_equal_to(repayment_plan["current_vendor"])
+					assert_that(swap_detail["current_channel"]).is_equal_to(repayment_plan["current_channel"])
+		Ulog().logger_().info("还款计划所属渠道校验通过")
+		Ulog().logger_().info("债转详情转移金额/所属渠道校验通过")
 
 	@staticmethod
 	def _repurchase_assert(swap_data: dict) -> None:
@@ -237,12 +255,7 @@ class Assert:
 		:param swap_data:
 		:return:
 		"""
-		if len(swap_data["current_fee_plan"]) > 0:
-			for fee in swap_data["current_fee_plan"]:
-				assert_that(fee["credit_assign_method"]).is_equal_to(2)
-				assert_that(fee["current_vendor"]).is_not_equal_to(1)
-				assert_that(fee["current_channel"]).is_not_equal_to(1)
-			Ulog().logger_().info("当前期费计划的归属/当前所属渠道校验通过")
+		Assert._compensation_assert(swap_data)
 		if len(swap_data["after_fee_plan"]) > 0:
 			for fee in swap_data["after_fee_plan"]:
 				if fee["period"] < swap_data["period"] + 2:
@@ -263,13 +276,13 @@ class Assert:
 		swap_detail_count = 0
 		for swap_detail in swap_data["after_swap_detail"]:
 			if swap_detail["period"] < swap_data["period"] + 2:
-				assert_that(swap_detail["credit_assign_method"]).is_not_equal_to(2)
+				assert_that(swap_detail["credit_assign_method"]).is_equal_to(2)
 			else:
 				assert_that(swap_detail["credit_assign_method"]).is_not_equal_to(2)
 				assert_that(swap_detail["plan_category"]).is_equal_to(1)
 				swap_detail_count += 1
 		Ulog().logger_().info("未发生期回购流水所属渠道/流水类型校验通过")
-		assert_that(swap_detail_count).is_equal_to(swap_data["maturity"] - (swap_data["period"] + 2))
+		assert_that(swap_detail_count).is_equal_to(swap_data["maturity"] - (swap_data["period"] + 1))
 		Ulog().logger_().info("回购期回购流水条数校验通过")
 		assert_that(swap_data["asset"]["current_vendor"]).is_not_equal_to(1)
 		assert_that(swap_data["asset"]["current_channel"]).is_not_equal_to(1)

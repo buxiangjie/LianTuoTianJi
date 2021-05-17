@@ -453,6 +453,23 @@ class GetSqlData:
 		return plan
 
 	@staticmethod
+	def get_swap_detail(
+			project_id: str,
+			environment: str,
+	) -> list:
+		"""
+		获取债转详情表
+		"""
+		asset_id = GetSqlData.get_asset_id(environment, project_id)
+		sql = f"""
+				select * 
+				from asset_swap_detail
+				where asset_id = {asset_id};
+				"""
+		swap_detail = json.loads(json.dumps(GetSqlData.exec_select(environment, sql), cls=Encoder))
+		return swap_detail
+
+	@staticmethod
 	def check_user_amount(user_id, environment):
 		"""查询用户可用额度"""
 		version = 1
