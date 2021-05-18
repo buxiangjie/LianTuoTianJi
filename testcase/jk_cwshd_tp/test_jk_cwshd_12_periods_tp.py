@@ -584,7 +584,7 @@ class JkCwshd12PeriodsTp(unittest.TestCase):
 
 	@unittest.skip("-")
 	def test_120_repurchase(self):
-		Universal.compensation(1, self.env, self.r.get("jk_cwshd_12_periods_projectId"), "cwshd")
+		Universal.repurchase(1, self.env, self.r.get("jk_cwshd_12_periods_projectId"), "cwshd")
 
 	@unittest.skip("跳过")
 	def test_121_offline_repay_repayment(self):
@@ -799,4 +799,3 @@ class JkCwshd12PeriodsTp(unittest.TestCase):
 			environment=self.env
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
-		self.r.set("jk_cwshd_12_periods_contractId", rep['content']['contractId'])

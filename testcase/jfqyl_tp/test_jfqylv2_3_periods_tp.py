@@ -22,7 +22,7 @@ class Jfqylv23Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = 'qa'
+		cls.env = 'test'
 		cls.r = Common.conn_redis(environment=cls.env)
 		cls.file = Config().get_item('File', 'jfq_case_file')
 
@@ -63,7 +63,7 @@ class Jfqylv23Tp(unittest.TestCase):
 				"loanAmount": 33333.33,
 				"loanTerm": 3,
 				"assetInterestRate": 0.153,
-				"userInterestRate": 0.153
+				"userInterestRate": 0.102431
 			}
 		)
 		param['personalInfo'].update(

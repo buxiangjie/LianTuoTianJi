@@ -32,6 +32,8 @@ class TestJfx12PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.overdue
 	@pytest.mark.settle
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_100_credit_apply(self, r, env, red):
 		"""额度授信"""
 		data = excel_table_byname(self.file, 'credit_apply_data')
@@ -84,6 +86,8 @@ class TestJfx12PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.overdue
 	@pytest.mark.settle
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_101_query_result(self, r, env, red):
 		"""授信结果查询"""
 		Assert.check_column("jfx_credit", env, r.get(red["credit_id"]))
@@ -114,6 +118,8 @@ class TestJfx12PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.overdue
 	@pytest.mark.settle
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_102_query_user_amount(self, r, env, red):
 		"""用户额度查询"""
 		data = excel_table_byname(self.file, 'query_user_amount')
@@ -143,6 +149,8 @@ class TestJfx12PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.overdue
 	@pytest.mark.settle
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_103_sign_credit(self, r, env, red):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
@@ -178,6 +186,8 @@ class TestJfx12PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.overdue
 	@pytest.mark.settle
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_104_project_apply(self, r, env, red):
 		"""进件"""
 		data = excel_table_byname(self.file, 'test_project')
@@ -242,6 +252,8 @@ class TestJfx12PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.overdue
 	@pytest.mark.settle
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_105_query_apply_result(self, r, env, red):
 		"""进件结果查询"""
 		Assert.check_column("jfx_project", env, r.get(red["project_id"]))
@@ -276,6 +288,8 @@ class TestJfx12PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.overdue
 	@pytest.mark.settle
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_106_sign_credit(self, r, env, red):
 		"""上传借款授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
@@ -310,6 +324,8 @@ class TestJfx12PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.overdue
 	@pytest.mark.settle
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_107_contract_sign(self, r, env, red):
 		"""上传借款合同"""
 		data = excel_table_byname(self.file, 'contract_sign')
@@ -344,6 +360,8 @@ class TestJfx12PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.overdue
 	@pytest.mark.settle
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_108_pfa(self, r, env, red):
 		"""放款申请"""
 		data = excel_table_byname(self.file, 'project_loan')
@@ -384,6 +402,8 @@ class TestJfx12PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.overdue
 	@pytest.mark.settle
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_109_pfa_query(self, r, env, red):
 		"""放款结果查询"""
 		GetSqlData.loan_set(
@@ -441,6 +461,8 @@ class TestJfx12PeriodTp:
 	@pytest.mark.offline_repay
 	@pytest.mark.overdue
 	@pytest.mark.settle
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_111_query_repayment_plan(self, r, env, red):
 		"""还款计划查询"""
 		data = excel_table_byname(self.file, 'repayment_plan')
@@ -467,6 +489,20 @@ class TestJfx12PeriodTp:
 	def test_overdue(self, env, r, red):
 		"""逾期一期"""
 		Universal.overdue(1, env, r.get(red["project_id"]), 1)
+
+	@allure.title("代偿一期")
+	@allure.severity(allure.severity_level.BLOCKER)
+	@pytest.mark.compensation
+	def test_compensation(self, env, r, red):
+		"""代偿一期"""
+		Universal.compensation(1, env, r.get(red["project_id"]), "jfx")
+
+	@allure.title("回购")
+	@allure.severity(allure.severity_level.BLOCKER)
+	@pytest.mark.repurchase
+	def test_repurchase(self, env, r, red):
+		"""回购"""
+		Universal.repurchase(1, env, r.get(red["project_id"]), "jfx")
 
 	@allure.title("还款流水推送")
 	@allure.severity("blocker")
@@ -591,7 +627,7 @@ class TestJfx12PeriodTp:
 				"transactionId": r.get(red["source_project_id"]),
 				"sourceProjectId": r.get(red["source_project_id"]),
 				"sourceRepaymentId": Common.get_random("sourceProjectId"),
-				"planPayDate": str(plan_pay_date['plan_pay_date']),
+				"planPayDate": plan_pay_date['plan_pay_date'],
 				"successAmount": success_amount,
 				"repayType": 2,
 				"period": json.loads(repayment_plan_list)[0]['period']
@@ -620,7 +656,10 @@ class TestJfx12PeriodTp:
 		data = excel_table_byname(self.file, 'cash_push')
 		param = json.loads(data[0]['param'])
 		success_amount = GetSqlData.get_repayment_amount(
-			project_id=r.get(red["project_id"]), environment=env, period=1)
+			project_id=r.get(red["project_id"]),
+			environment=env,
+			period=1
+		)
 		param.update(
 			{
 				"serviceSn": Common.get_random("serviceSn"),

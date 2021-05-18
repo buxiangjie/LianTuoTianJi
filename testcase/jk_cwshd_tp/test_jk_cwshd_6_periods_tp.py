@@ -35,6 +35,8 @@ class TestJkCwShd6PeriodsTp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.overdue
 	@pytest.mark.returns
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_100_credit_apply(self, env, r, red):
 		"""额度授信"""
 		data = excel_table_byname(self.file, 'credit')
@@ -83,6 +85,8 @@ class TestJkCwShd6PeriodsTp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.overdue
 	@pytest.mark.returns
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_101_query_result(self, env, r, red):
 		"""授信结果查询"""
 		GetSqlData.credit_set(
@@ -115,6 +119,8 @@ class TestJkCwShd6PeriodsTp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.overdue
 	@pytest.mark.returns
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_102_query_user_amount(self, env, r, red):
 		"""用户额度查询"""
 		data = excel_table_byname(self.file, 'query_user_amount')
@@ -147,6 +153,8 @@ class TestJkCwShd6PeriodsTp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.overdue
 	@pytest.mark.returns
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_103_sign_credit(self, env, r, red):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
@@ -184,6 +192,8 @@ class TestJkCwShd6PeriodsTp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.overdue
 	@pytest.mark.returns
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_104_apply(self, env, r, red):
 		"""进件"""
 		data = excel_table_byname(self.file, 'apply')
@@ -268,6 +278,8 @@ class TestJkCwShd6PeriodsTp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.overdue
 	@pytest.mark.returns
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_106_query_apply_result(self, env, r, red):
 		"""进件结果查询"""
 		Assert.check_column("jk_cwshd_project", env, r.get(red["project_id"]))
@@ -304,6 +316,8 @@ class TestJkCwShd6PeriodsTp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.overdue
 	@pytest.mark.returns
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_107_sign_borrow(self, env, r, red):
 		"""上传借款协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
@@ -340,6 +354,8 @@ class TestJkCwShd6PeriodsTp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.overdue
 	@pytest.mark.returns
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_108_image_upload(self, env, r, red):
 		"""上传图片"""
 		data = excel_table_byname(self.file, 'image_upload')
@@ -365,6 +381,8 @@ class TestJkCwShd6PeriodsTp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.overdue
 	@pytest.mark.returns
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_109_contact_query(self, env, r, red):
 		"""合同结果查询:获取签章后的借款协议"""
 		data = excel_table_byname(self.file, 'contract_query')
@@ -398,6 +416,8 @@ class TestJkCwShd6PeriodsTp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.overdue
 	@pytest.mark.returns
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_110_calculate(self, env, r, red):
 		"""还款计划试算（未放款）:正常还款"""
 		data = excel_table_byname(self.file, 'calculate')
@@ -430,6 +450,8 @@ class TestJkCwShd6PeriodsTp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.overdue
 	@pytest.mark.returns
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_111_deduction_share_sign(self, env, r, red):
 		"""协议支付号共享"""
 		data = excel_table_byname(self.file, 'deduction_share_sign')
@@ -475,6 +497,8 @@ class TestJkCwShd6PeriodsTp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.overdue
 	@pytest.mark.returns
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_112_deduction_share_sign(self, env, r, red):
 		"""委托划扣协议上传"""
 		data = excel_table_byname(self.file, 'upload')
@@ -510,6 +534,8 @@ class TestJkCwShd6PeriodsTp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.overdue
 	@pytest.mark.returns
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_113_loan_pfa(self, env, r, red):
 		"""放款申请"""
 		data = excel_table_byname(self.file, 'loan_pfa')
@@ -551,6 +577,8 @@ class TestJkCwShd6PeriodsTp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.overdue
 	@pytest.mark.returns
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_114_loan_query(self, env, r, red):
 		"""放款结果查询"""
 		GetSqlData.loan_set(environment=env, project_id=r.get(red["project_id"]))
@@ -578,6 +606,8 @@ class TestJkCwShd6PeriodsTp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.overdue
 	@pytest.mark.returns
+	@pytest.mark.compensation
+	@pytest.mark.repurchase
 	def test_115_query_repayment_plan(self, env, r, red):
 		"""国投云贷还款计划查询"""
 		data = excel_table_byname(self.file, 'query_repayment_plan')
@@ -669,6 +699,20 @@ class TestJkCwShd6PeriodsTp:
 	def test_overdue(self, env, r, red):
 		"""逾期一期"""
 		Universal.overdue(1, env, r.get(red["project_id"]), 1)
+
+	@allure.title("代偿一期")
+	@allure.severity(allure.severity_level.BLOCKER)
+	@pytest.mark.compensation
+	def test_compensation(self, env, r, red):
+		"""代偿一期"""
+		Universal.compensation(1, env, r.get(red["project_id"]), "cwshd")
+
+	@allure.title("回购")
+	@allure.severity(allure.severity_level.BLOCKER)
+	@pytest.mark.repurchase
+	def test_repurchase(self, env, r, red):
+		"""回购"""
+		Universal.repurchase(1, env, r.get(red["project_id"]), "cwshd")
 
 	@allure.title("还款流水推送")
 	@allure.severity("blocker")

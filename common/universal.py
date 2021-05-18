@@ -26,6 +26,15 @@ class Universal:
 			month: Optional[int] = None,
 			is_special_repurchase: Optional[bool] = False
 	):
+		"""
+		:param period: 1
+		:param environment: test/qa
+		:param project_id: str
+		:param day: int
+		:param month: int
+		:param is_special_repurchase: 如果产品为卡卡贷/豆豆钱,则该字段值为True
+		:return:
+		"""
 		plan_pay_date = None
 		if all([day, month]):
 			raise IOError("逾期时间只能有一个")
@@ -53,6 +62,13 @@ class Universal:
 			project_id: str,
 			product: str
 	) -> None:
+		"""
+		:param period: 1
+		:param environment: test/qa
+		:param project_id: str
+		:param product: str, 'jfx,rmkj,jfq,ckshd,cwshd,wxjk'
+		:return: None
+		"""
 		Universal.overdue(period, environment, project_id, 3)
 		Universal._run_swap_task(product, environment)
 		Assert.check_swap(period, environment, project_id)
@@ -65,6 +81,13 @@ class Universal:
 			project_id: str,
 			product: str
 	) -> None:
+		"""
+		:param period: 1
+		:param environment: test/qa
+		:param project_id: str
+		:param product: str, 'jfx,rmkj,jfq,ckshd,cwshd,wxjk'
+		:return: None
+		"""
 		if product == "wxjk":
 			Universal.overdue(period, environment, project_id, 3, is_special_repurchase=True)
 			Universal._run_swap_task(product, environment)
@@ -78,17 +101,22 @@ class Universal:
 
 	@staticmethod
 	def _run_swap_task(product: str, environment: str):
+		"""
+		运行债转任务
+		:param product:
+		:param environment:
+		:return:
+		"""
 		products = {
-			"jfx": ["assetSwapJob_XJ_JFX_YYDMUL", "assetSwapJob_XJ_JFX_YYDSIN"],
-			"rmkj": "assetSwapJob_FQ_RM_RMYM",
-			"jfq": ["assetSwapJob_FQ_JK_JFQJY", "assetSwapJob_FQ_JK_JFQJYV2", "assetSwapJob_FQ_JK_JFQYL",
-					"assetSwapJob_FQ_JK_JFQYLV2"],
-			"wxjk": ["assetSwapJob_XJ_WX_DDQ", "assetSwapJob_XJ_WX_KKD"],
-			"ckshd": "assetSwapJob_FQ_JK_CKSHD",
-			"cwshd": "assetSwapJob_FQ_JK_CWSHD"
+			"jfx": ["XJ_JFX_YYDMUL", "XJ_JFX_YYDSIN"],
+			"rmkj": "FQ_RM_RMYM",
+			"jfq": ["FQ_JK_JFQJY", "FQ_JK_JFQJYV2", "FQ_JK_JFQYL", "FQ_JK_JFQYLV2"],
+			"wxjk": ["XJ_WX_DDQ", "XJ_WX_KKD"],
+			"ckshd": "FQ_JK_CKSHD",
+			"cwshd": "FQ_JK_CWSHD"
 		}
 		if isinstance(products[product], list):
 			for job in products[product]:
-				Common.trigger_task(job, environment)
+				Common.trigger_task("assetSwapJob/" + job, environment)
 		else:
-			Common.trigger_task(products[product], environment)
+			Common.trigger_task("assetSwapJob/" + products[product], environment)

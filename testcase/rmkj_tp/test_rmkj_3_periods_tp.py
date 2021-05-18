@@ -36,6 +36,7 @@ class TestRmkj3Tp:
 	@pytest.mark.settle
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
+	@pytest.mark.compensation
 	def test_100_apply(self, r, env, red):
 		"""进件申请"""
 		data = excel_table_byname(self.file, 'apply')
@@ -107,6 +108,7 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
+	@pytest.mark.compensation
 	def test_101_sign_credit(self, r, env, red):
 		"""上传授信协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
@@ -146,6 +148,7 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
+	@pytest.mark.compensation
 	def test_102_query_apply_result(self, r, env, red):
 		"""进件结果查询"""
 		GetSqlData.change_project_audit_status(
@@ -184,6 +187,7 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
+	@pytest.mark.compensation
 	def test_103_sign_borrow(self, r, env, red):
 		"""上传借款协议"""
 		data = excel_table_byname(self.file, 'contract_sign')
@@ -223,6 +227,7 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
+	@pytest.mark.compensation
 	def test_1033_sign_repayment(self, r, env, red):
 		"""上传还款计划文件"""
 		data = excel_table_byname(self.file, 'contract_sign')
@@ -261,6 +266,7 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
+	@pytest.mark.compensation
 	def test_104_image_upload(self, r, env, red):
 		"""上传医疗美容图片"""
 		data = excel_table_byname(self.file, 'image_upload')
@@ -289,6 +295,7 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
+	@pytest.mark.compensation
 	def test_105_contact_query(self, r, env, red):
 		"""合同结果查询:获取签章后的借款协议"""
 		data = excel_table_byname(self.file, 'contract_query')
@@ -325,6 +332,7 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
+	@pytest.mark.compensation
 	def test_106_sign(self, r, env, red):
 		"""预签约"""
 		data = excel_table_byname(self.file, 'sign')
@@ -371,6 +379,7 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
+	@pytest.mark.compensation
 	def test_107_confirm(self, r, env, red):
 		"""确认签约"""
 		data = excel_table_byname(self.file, 'confirm')
@@ -411,6 +420,7 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
+	@pytest.mark.compensation
 	def test_108_query_sign(self, r, env, red):
 		"""绑卡结果查询"""
 		data = excel_table_byname(self.file, 'query_sign')
@@ -450,6 +460,7 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
+	@pytest.mark.compensation
 	def test_109_card_change(self, r, env, red):
 		"""还款卡推送"""
 		data = excel_table_byname(self.file, 'card_change')
@@ -492,6 +503,7 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
+	@pytest.mark.compensation
 	def test_1091_calculate(self, r, env, red):
 		"""还款计划试算（未放款）:正常还款"""
 		data = excel_table_byname(self.file, 'calculate')
@@ -527,6 +539,7 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
+	@pytest.mark.compensation
 	def test_110_loan_pfa(self, r, env, red):
 		"""放款申请"""
 		data = excel_table_byname(self.file, 'loan_pfa')
@@ -573,6 +586,7 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
+	@pytest.mark.compensation
 	def test_111_loan_query(self, r, env, red):
 		"""放款结果查询"""
 		GetSqlData.loan_set(environment=env, project_id=r.get(red["project_id"]))
@@ -603,6 +617,7 @@ class TestRmkj3Tp:
 	@pytest.mark.offline_settle_in_advance
 	@pytest.mark.returns
 	@pytest.mark.settle
+	@pytest.mark.compensation
 	def test_112_query_repayment_plan(self, r, env, red):
 		"""国投云贷还款计划查询"""
 		data = excel_table_byname(self.file, 'query_repayment_plan')
@@ -695,6 +710,13 @@ class TestRmkj3Tp:
 	def test_overdue(self, env, r, red):
 		"""逾期一期"""
 		Universal.overdue(1, env, r.get(red["project_id"]), 1)
+
+	@allure.title("代偿一期")
+	@allure.severity(allure.severity_level.BLOCKER)
+	@pytest.mark.compensation
+	def test_compensation(self, env, r, red):
+		"""代偿一期"""
+		Universal.compensation(1, env, r.get(red["project_id"]), "rmkj")
 
 	@allure.title("主动还款一期")
 	@allure.severity("blocker")
