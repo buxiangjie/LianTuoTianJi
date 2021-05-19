@@ -10,6 +10,8 @@ import os
 import json
 import sys
 
+from common.universal import Universal
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from common.common_func import Common
@@ -187,7 +189,7 @@ class Jfx6PeriodTp(unittest.TestCase):
 		param['applyInfo'].update(
 			{
 				"applyTime": Common.get_time(),
-				"applyAmount": 500000.00,
+				"applyAmount": 50000.00,
 				"applyTerm": 6
 			}
 		)
@@ -200,7 +202,7 @@ class Jfx6PeriodTp(unittest.TestCase):
 		)
 		param['loanInfo'].update(
 			{
-				"loanAmount": 500000.00,
+				"loanAmount": 50000.00,
 				"assetInterestRate": 0.158156,
 				"userInterestRate": 0.153156,
 				"loanTerm": 6
@@ -349,7 +351,7 @@ class Jfx6PeriodTp(unittest.TestCase):
 				"serviceSn": Common.get_random('serviceSn'),
 				"accountName": self.r.get("jfx_6_periods_corporateAccountName"),
 				"bankCode": "34",
-				"amount": 500000.00,
+				"amount": 50000.00,
 				"accountNo": "6227002432220410613"  # 6227003814170172872
 			}
 		)
@@ -413,8 +415,20 @@ class Jfx6PeriodTp(unittest.TestCase):
 		Assert.check_repayment(False, self.env, self.r.get('jfx_6_periods_projectId'))
 		self.r.set("jfx_6_periods_repayment_plan", json.dumps(rep['content']['repaymentPlanList']))
 
+	@unittest.skip("-")
+	def test_112_overdue(self):
+		Universal.overdue(1, self.env, self.r.get("jfx_6_periods_projectId"), 1)
+
+	@unittest.skip("-")
+	def test_113_compensation(self):
+		Universal.compensation(1, self.env, self.r.get("jfx_6_periods_projectId"), "jfx_mul")
+
+	# @unittest.skip("-")
+	def test_114_repurchase(self):
+		Universal.repurchase(1, self.env, self.r.get("jfx_6_periods_projectId"), "jfx_mul")
+
 	@unittest.skip("11")
-	def test_112_repayment(self):
+	def test_115_repayment(self):
 		"""还款流水推送"""
 		data = excel_table_byname(self.file, 'repayment')
 		param = json.loads(data[0]['param'])
@@ -467,7 +481,7 @@ class Jfx6PeriodTp(unittest.TestCase):
 		Assert.check_repayment(True, self.env, self.r.get('jfx_6_periods_projectId'), param)
 
 	@unittest.skip("1")
-	def test_113_repayment(self):
+	def test_116_repayment(self):
 		"""还款流水推送:提前全部结清"""
 		data = excel_table_byname(self.file, 'repayment')
 		param = json.loads(data[0]['param'])
@@ -519,7 +533,7 @@ class Jfx6PeriodTp(unittest.TestCase):
 			Assert.check_repayment(True, self.env, self.r.get('jfx_6_periods_projectId'), param)
 
 	@unittest.skip("11")
-	def test_114_capital_flow(self):
+	def test_117_capital_flow(self):
 		"""资金流水推送"""
 		data = excel_table_byname(self.file, 'cash_push')
 		param = json.loads(data[0]['param'])
@@ -554,7 +568,7 @@ class Jfx6PeriodTp(unittest.TestCase):
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
 	@unittest.skip("-")
-	def test_115_offline_partial(self):
+	def test_118_offline_partial(self):
 		"""线下还款:部分还款"""
 		data = excel_table_byname(self.file, 'offline_partial')
 		param = json.loads(data[0]['param'])

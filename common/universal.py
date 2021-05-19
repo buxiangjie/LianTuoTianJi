@@ -96,6 +96,10 @@ class Universal:
 			for i in range(0, 3):
 				Universal.overdue(period + i, environment, project_id, 6)
 				Universal._run_swap_task(product, environment)
+		elif product == "rmkj":
+			for i in range(0,2):
+				Universal.overdue(period + i, environment, project_id, 1)
+			Universal._run_swap_task(product, environment)
 		else:
 			Universal.overdue(period, environment, project_id, 3)
 			Universal._run_swap_task(product, environment)

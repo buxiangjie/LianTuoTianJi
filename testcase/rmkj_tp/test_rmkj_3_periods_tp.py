@@ -711,12 +711,12 @@ class TestRmkj3Tp:
 		"""逾期一期"""
 		Universal.overdue(1, env, r.get(red["project_id"]), 1)
 
-	@allure.title("代偿一期")
+	@allure.title("回购")
 	@allure.severity(allure.severity_level.BLOCKER)
 	@pytest.mark.compensation
-	def test_compensation(self, env, r, red):
+	def test_repurchase(self, env, r, red):
 		"""代偿一期"""
-		Universal.compensation(1, env, r.get(red["project_id"]), "rmkj")
+		Universal.repurchase(1, env, r.get(red["project_id"]), "rmkj")
 
 	@allure.title("主动还款一期")
 	@allure.severity("blocker")
