@@ -69,7 +69,10 @@ class Universal:
 		:param product: str, 'jfx,rmkj,jfq,ckshd,cwshd,wxjk'
 		:return: None
 		"""
-		Universal.overdue(period, environment, project_id, 3)
+		if product == "wxjk":
+			Universal.overdue(period, environment, project_id, 1)
+		else:
+			Universal.overdue(period, environment, project_id, 3)
 		Universal._run_swap_task(product, environment)
 		Assert.check_swap(period, environment, project_id)
 
@@ -89,7 +92,7 @@ class Universal:
 		:return: None
 		"""
 		if product == "wxjk":
-			Universal.overdue(period, environment, project_id, 3, is_special_repurchase=True)
+			Universal.overdue(period, environment, project_id, 1, is_special_repurchase=True)
 			Universal._run_swap_task(product, environment)
 		else:
 			Universal.overdue(period, environment, project_id, 3)
