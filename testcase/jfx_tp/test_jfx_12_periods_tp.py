@@ -495,14 +495,14 @@ class TestJfx12PeriodTp:
 	@pytest.mark.compensation
 	def test_compensation(self, env, r, red):
 		"""代偿一期"""
-		Universal.compensation(1, env, r.get(red["project_id"]), "jfx")
+		Universal.compensation(1, env, r.get(red["project_id"]), "jfx_mul")
 
 	@allure.title("回购")
 	@allure.severity(allure.severity_level.BLOCKER)
 	@pytest.mark.repurchase
 	def test_repurchase(self, env, r, red):
 		"""回购"""
-		Universal.repurchase(1, env, r.get(red["project_id"]), "jfx")
+		Universal.repurchase(1, env, r.get(red["project_id"]), "jfx_mul")
 
 	@allure.title("还款流水推送")
 	@allure.severity("blocker")

@@ -256,37 +256,96 @@ class Assert:
 		:return:
 		"""
 		Assert._compensation_assert(swap_data)
-		if len(swap_data["after_fee_plan"]) > 0:
-			for fee in swap_data["after_fee_plan"]:
-				if fee["period"] < swap_data["period"] + 2:
-					assert_that(fee["credit_assign_method"]).is_equal_to(2)
+		if swap_data["current_repayment_plan"][0]["current_vendor"] == 9:
+			if len(swap_data["after_fee_plan"]) > 0:
+				for fee in swap_data["after_fee_plan"]:
+					if fee["period"] < swap_data["period"] + 3:
+						assert_that(fee["credit_assign_method"]).is_equal_to(2)
+					else:
+						assert_that(fee["credit_assign_method"]).is_equal_to(3)
+					assert_that(fee["current_vendor"]).is_not_equal_to(1)
+					assert_that(fee["current_channel"]).is_not_equal_to(1)
+				Ulog().logger_().info("未发生期费计划的归属/当前所属渠道校验通过")
+			for repayment_plan in swap_data["after_repayment_plan"]:
+				if repayment_plan["period"] < swap_data["period"] + 3:
+					assert_that(repayment_plan["credit_assign_method"]).is_equal_to(2)
 				else:
-					assert_that(fee["credit_assign_method"]).is_equal_to(3)
-				assert_that(fee["current_vendor"]).is_not_equal_to(1)
-				assert_that(fee["current_channel"]).is_not_equal_to(1)
-			Ulog().logger_().info("未发生期费计划的归属/当前所属渠道校验通过")
-		for repayment_plan in swap_data["after_repayment_plan"]:
-			if repayment_plan["period"] < swap_data["period"] + 2:
-				assert_that(repayment_plan["credit_assign_method"]).is_equal_to(2)
-			else:
-				assert_that(repayment_plan["credit_assign_method"]).is_equal_to(3)
-			assert_that(repayment_plan["current_vendor"]).is_not_equal_to(1)
-			assert_that(repayment_plan["current_channel"]).is_not_equal_to(1)
-		Ulog().logger_().info("未发生期还款计划所属渠道校验通过")
-		swap_detail_count = 0
-		for swap_detail in swap_data["after_swap_detail"]:
-			if swap_detail["period"] < swap_data["period"] + 2:
-				assert_that(swap_detail["credit_assign_method"]).is_equal_to(2)
-			else:
-				assert_that(swap_detail["credit_assign_method"]).is_not_equal_to(2)
-				assert_that(swap_detail["plan_category"]).is_equal_to(1)
-				swap_detail_count += 1
-		Ulog().logger_().info("未发生期回购流水所属渠道/流水类型校验通过")
-		assert_that(swap_detail_count).is_equal_to(swap_data["maturity"] - (swap_data["period"] + 1))
-		Ulog().logger_().info("回购期回购流水条数校验通过")
-		assert_that(swap_data["asset"]["current_vendor"]).is_not_equal_to(1)
-		assert_that(swap_data["asset"]["current_channel"]).is_not_equal_to(1)
-		Ulog().logger_().info("资产表当前归属渠道校验通过")
+					assert_that(repayment_plan["credit_assign_method"]).is_equal_to(3)
+				assert_that(repayment_plan["current_vendor"]).is_not_equal_to(1)
+				assert_that(repayment_plan["current_channel"]).is_not_equal_to(1)
+			Ulog().logger_().info("未发生期还款计划所属渠道校验通过")
+			swap_detail_count = 0
+			for swap_detail in swap_data["after_swap_detail"]:
+				if swap_detail["period"] < swap_data["period"] + 3:
+					assert_that(swap_detail["credit_assign_method"]).is_equal_to(2)
+				else:
+					assert_that(swap_detail["credit_assign_method"]).is_not_equal_to(2)
+					assert_that(swap_detail["plan_category"]).is_equal_to(1)
+					swap_detail_count += 1
+			Ulog().logger_().info("未发生期回购流水所属渠道/流水类型校验通过")
+			assert_that(swap_detail_count).is_equal_to(swap_data["maturity"] - (swap_data["period"] + 2))
+			Ulog().logger_().info("回购期回购流水条数校验通过")
+		elif swap_data["current_repayment_plan"][0]["current_vendor"] == 12:
+			if len(swap_data["after_fee_plan"]) > 0:
+				for fee in swap_data["after_fee_plan"]:
+					if fee["period"] < swap_data["period"] + 6:
+						assert_that(fee["credit_assign_method"]).is_equal_to(2)
+					else:
+						assert_that(fee["credit_assign_method"]).is_equal_to(3)
+					assert_that(fee["current_vendor"]).is_not_equal_to(1)
+					assert_that(fee["current_channel"]).is_not_equal_to(1)
+				Ulog().logger_().info("未发生期费计划的归属/当前所属渠道校验通过")
+			for repayment_plan in swap_data["after_repayment_plan"]:
+				if repayment_plan["period"] < swap_data["period"] + 6:
+					assert_that(repayment_plan["credit_assign_method"]).is_equal_to(2)
+				else:
+					assert_that(repayment_plan["credit_assign_method"]).is_equal_to(3)
+				assert_that(repayment_plan["current_vendor"]).is_not_equal_to(1)
+				assert_that(repayment_plan["current_channel"]).is_not_equal_to(1)
+			Ulog().logger_().info("未发生期还款计划所属渠道校验通过")
+			swap_detail_count = 0
+			for swap_detail in swap_data["after_swap_detail"]:
+				if swap_detail["period"] < swap_data["period"] + 6:
+					assert_that(swap_detail["credit_assign_method"]).is_equal_to(2)
+				else:
+					assert_that(swap_detail["credit_assign_method"]).is_not_equal_to(2)
+					assert_that(swap_detail["plan_category"]).is_equal_to(1)
+					swap_detail_count += 1
+			Ulog().logger_().info("未发生期回购流水所属渠道/流水类型校验通过")
+			assert_that(swap_detail_count).is_equal_to(swap_data["maturity"] - (swap_data["period"] + 5))
+			Ulog().logger_().info("回购期回购流水条数校验通过")
+		else:
+			if len(swap_data["after_fee_plan"]) > 0:
+				for fee in swap_data["after_fee_plan"]:
+					if fee["period"] < swap_data["period"] + 2:
+						assert_that(fee["credit_assign_method"]).is_equal_to(2)
+					else:
+						assert_that(fee["credit_assign_method"]).is_equal_to(3)
+					assert_that(fee["current_vendor"]).is_not_equal_to(1)
+					assert_that(fee["current_channel"]).is_not_equal_to(1)
+				Ulog().logger_().info("未发生期费计划的归属/当前所属渠道校验通过")
+			for repayment_plan in swap_data["after_repayment_plan"]:
+				if repayment_plan["period"] < swap_data["period"] + 2:
+					assert_that(repayment_plan["credit_assign_method"]).is_equal_to(2)
+				else:
+					assert_that(repayment_plan["credit_assign_method"]).is_equal_to(3)
+				assert_that(repayment_plan["current_vendor"]).is_not_equal_to(1)
+				assert_that(repayment_plan["current_channel"]).is_not_equal_to(1)
+			Ulog().logger_().info("未发生期还款计划所属渠道校验通过")
+			swap_detail_count = 0
+			for swap_detail in swap_data["after_swap_detail"]:
+				if swap_detail["period"] < swap_data["period"] + 2:
+					assert_that(swap_detail["credit_assign_method"]).is_equal_to(2)
+				else:
+					assert_that(swap_detail["credit_assign_method"]).is_not_equal_to(2)
+					assert_that(swap_detail["plan_category"]).is_equal_to(1)
+					swap_detail_count += 1
+			Ulog().logger_().info("未发生期回购流水所属渠道/流水类型校验通过")
+			assert_that(swap_detail_count).is_equal_to(swap_data["maturity"] - (swap_data["period"] + 1))
+			Ulog().logger_().info("回购期回购流水条数校验通过")
+			assert_that(swap_data["asset"]["current_vendor"]).is_not_equal_to(1)
+			assert_that(swap_data["asset"]["current_channel"]).is_not_equal_to(1)
+			Ulog().logger_().info("资产表当前归属渠道校验通过")
 
 	@staticmethod
 	def _business_type_1_repayment_detail(repay_data: dict) -> None:

@@ -44,13 +44,8 @@ class Universal:
 			plan_pay_date = Common.get_new_time("before", "days", day).split(" ")[0]
 		elif month is not None:
 			plan_pay_date = str(date.today() - relativedelta(months=month)).split(" ")[0]
-		if is_special_repurchase is True:
-			for i in range(6):
-				GetSqlData.change_plan_pay_date(environment, project_id, period + i, plan_pay_date)
-				GetSqlData.change_fee_plan_pay_date(environment, project_id, period + i, plan_pay_date)
-		else:
-			GetSqlData.change_plan_pay_date(environment, project_id, period, plan_pay_date)
-			GetSqlData.change_fee_plan_pay_date(environment, project_id, period, plan_pay_date)
+		GetSqlData.change_plan_pay_date(environment, project_id, period, plan_pay_date)
+		GetSqlData.change_fee_plan_pay_date(environment, project_id, period, plan_pay_date)
 		Common().trigger_task("overdueForCloudloanJob", environment)
 		Assert.check_overdue(period, environment, project_id)
 
@@ -66,11 +61,13 @@ class Universal:
 		:param period: 1
 		:param environment: test/qa
 		:param project_id: str
-		:param product: str, 'jfx,rmkj,jfq,ckshd,cwshd,wxjk'
+		:param product: str, 'jfx_sin,jfx_mul,rmkj,jfq,ckshd,cwshd,wxjk'
 		:return: None
 		"""
 		if product == "wxjk":
 			Universal.overdue(period, environment, project_id, 1)
+		elif product == "jfx_mul":
+			Universal.overdue(period, environment, project_id, 6)
 		else:
 			Universal.overdue(period, environment, project_id, 3)
 		Universal._run_swap_task(product, environment)
@@ -88,12 +85,17 @@ class Universal:
 		:param period: 1
 		:param environment: test/qa
 		:param project_id: str
-		:param product: str, 'jfx,rmkj,jfq,ckshd,cwshd,wxjk'
+		:param product: str, 'jfx_sin,jfx_mul,rmkj,jfq,ckshd,cwshd,wxjk'
 		:return: None
 		"""
 		if product == "wxjk":
-			Universal.overdue(period, environment, project_id, 1, is_special_repurchase=True)
-			Universal._run_swap_task(product, environment)
+			for i in range(0, 6):
+				Universal.overdue(period + i, environment, project_id, 1)
+				Universal._run_swap_task(product, environment)
+		elif product == "jfx_mul":
+			for i in range(0, 3):
+				Universal.overdue(period + i, environment, project_id, 6)
+				Universal._run_swap_task(product, environment)
 		else:
 			Universal.overdue(period, environment, project_id, 3)
 			Universal._run_swap_task(product, environment)
@@ -111,7 +113,8 @@ class Universal:
 		:return:
 		"""
 		products = {
-			"jfx": ["XJ_JFX_YYDMUL", "XJ_JFX_YYDSIN"],
+			"jfx_sin": "XJ_JFX_YYDSIN",
+			"jfx_mul": "XJ_JFX_YYDMUL",
 			"rmkj": "FQ_RM_RMYM",
 			"jfq": ["FQ_JK_JFQJY", "FQ_JK_JFQJYV2", "FQ_JK_JFQYL", "FQ_JK_JFQYLV2"],
 			"wxjk": ["XJ_WX_DDQ", "XJ_WX_KKD"],
