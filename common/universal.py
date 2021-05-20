@@ -101,16 +101,10 @@ class Universal:
 				Universal.overdue(period + i, environment, project_id, 1)
 			Universal._run_swap_task(product, environment)
 		else:
-			if product == "jfq":
-				Universal.overdue(period, environment, project_id, 2)
-				Universal._run_swap_task(product, environment)
-				Universal.overdue(period, environment, project_id, 94)
-				Universal.overdue(period + 1, environment, project_id, 2)
-			else:
-				Universal.overdue(period, environment, project_id, 3)
-				Universal._run_swap_task(product, environment)
-				Universal.overdue(period, environment, project_id, 94)
-				Universal.overdue(period + 1, environment, project_id, 3)
+			Universal.overdue(period, environment, project_id, 3)
+			Universal._run_swap_task(product, environment)
+			Universal.overdue(period, environment, project_id, 94)
+			Universal.overdue(period + 1, environment, project_id, 3)
 			Universal._run_swap_task(product, environment)
 		Assert.check_swap(period, environment, project_id, False)
 
