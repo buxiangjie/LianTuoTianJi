@@ -12,6 +12,7 @@ import sys
 from busi_assert.busi_asset import Assert
 from common.common_func import Common
 from common.open_excel import excel_table_byname
+from common.universal import Universal
 from config.configer import Config
 from common.get_sql_data import GetSqlData
 
@@ -22,7 +23,7 @@ class Jfqylv23Tp(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		cls.env = 'test'
+		cls.env = 'qa'
 		cls.r = Common.conn_redis(environment=cls.env)
 		cls.file = Config().get_item('File', 'jfq_case_file')
 
@@ -156,6 +157,7 @@ class Jfqylv23Tp(unittest.TestCase):
 				"serviceSn": Common.get_random('serviceSn'),
 				"sourceUserId": self.r.get('jfqylv2_3_periods_sourceUserId'),
 				"sourceContractId": Common.get_random('userid'),
+				"contractType": 2,
 				"transactionId": self.r.get('jfqylv2_3_periods_transactionId'),
 				"associationId": self.r.get('jfqylv2_3_periods_projectId'),
 				"content": Common.get_json_data('data', 'borrow_sign.json').get("content")
@@ -361,7 +363,7 @@ class Jfqylv23Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
-	# @unittest.skip("跳过")
+	@unittest.skip("跳过")
 	def test_112_calculate(self):
 		"""还款计划试算:退货"""
 		data = excel_table_byname(self.file, 'calculate')
@@ -392,8 +394,21 @@ class Jfqylv23Tp(unittest.TestCase):
 		)
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 
+	@unittest.skip("-")
+	def test_113_overdue(self):
+		Universal.overdue(1, self.env, self.r.get("jfqylv2_3_periods_projectId"), 1)
+
+	@unittest.skip("-")
+	def test_114_compensation(self):
+		Universal.compensation(1, self.env, self.r.get("jfqylv2_3_periods_projectId"), "jfq")
+
+	@unittest.skip("-")
+	def test_115_repurchase(self):
+		Universal.repurchase(1, self.env, self.r.get("jfqylv2_3_periods_projectId"), "jfq")
+
+
 	@unittest.skip("跳过")
-	def test_113_offline_repay_repayment(self):
+	def test_116_offline_repay_repayment(self):
 		"""线下还款流水推送：正常还一期"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
@@ -443,8 +458,8 @@ class Jfqylv23Tp(unittest.TestCase):
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		Assert.check_repayment(True, self.env, self.r.get("jfqylv2_3_periods_projectId"), param)
 
-	@unittest.skip("跳过")
-	def test_114_offline_nrepay_early_settlement(self):
+	# @unittest.skip("跳过")
+	def test_117_offline_nrepay_early_settlement(self):
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
@@ -494,7 +509,7 @@ class Jfqylv23Tp(unittest.TestCase):
 		Assert.check_repayment(True, self.env, self.r.get("jfqylv2_3_periods_projectId"), param)
 
 	@unittest.skip("-")
-	def test_116_return(self):
+	def test_118_return(self):
 		"""退货"""
 		data = excel_table_byname(self.file, 'offline_repay')
 		param = json.loads(data[0]['param'])
@@ -544,7 +559,7 @@ class Jfqylv23Tp(unittest.TestCase):
 		Assert.check_repayment(True, self.env, self.r.get("jfqylv2_3_periods_projectId"), param)
 
 	@unittest.skip("-")
-	def test_117_capital_flow(self):
+	def test_119_capital_flow(self):
 		"""资金流水推送"""
 		data = excel_table_byname(self.file, 'cash_push')
 		param = json.loads(data[0]['param'])
@@ -580,7 +595,7 @@ class Jfqylv23Tp(unittest.TestCase):
 		self.assertEqual(response_data['resultCode'], int(data[0]['resultCode']))
 
 	@unittest.skip("-")
-	def test_118_project_cancel(self):
+	def test_120_project_cancel(self):
 		"""进件取消"""
 		data = excel_table_byname(self.file, 'project_cancel')
 		param = json.loads(data[0]['param'])
