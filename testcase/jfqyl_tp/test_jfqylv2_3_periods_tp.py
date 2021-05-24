@@ -458,7 +458,7 @@ class Jfqylv23Tp(unittest.TestCase):
 		self.assertEqual(rep['resultCode'], int(data[0]['resultCode']))
 		Assert.check_repayment(True, self.env, self.r.get("jfqylv2_3_periods_projectId"), param)
 
-	# @unittest.skip("跳过")
+	@unittest.skip("跳过")
 	def test_117_offline_nrepay_early_settlement(self):
 		"""线下还款流水推送：提前全部结清"""
 		data = excel_table_byname(self.file, 'offline_repay')

@@ -210,13 +210,13 @@ class TestJfx12PeriodTp:
 		param['applyInfo'].update(
 			{
 				"applyTime": Common.get_time(),
-				"applyAmount": 84920.00,
+				"applyAmount": 30000.00,
 				"applyTerm": 12
 			}
 		)
 		param['loanInfo'].update(
 			{
-				"loanAmount": 84920.00,
+				"loanAmount": 30000.00,
 				"assetInterestRate": 0.158156,
 				"userInterestRate": 0.152156,
 				"loanTerm": 12
@@ -374,7 +374,7 @@ class TestJfx12PeriodTp:
 				"serviceSn": Common.get_random('serviceSn'),
 				"accountName": r.get(red["corporate_account_name"]),
 				"bankCode": 86,
-				"amount": 84920.00,
+				"amount": 30000.00,
 				"accountNo": "6214830173648711"  # 6227002432220410613
 			}
 		)

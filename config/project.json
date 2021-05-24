@@ -338,5 +338,10 @@
     "id": "jk_cwshd_18_periods_cardNum",
     "name": "jk_cwshd_18_periods_custName",
     "card": "jk_cwshd_18_periods_bankcard"
+  },
+  "zqys": {
+    "id": "zqys_cardNum",
+    "name": "zqys_custName",
+    "card": "zqys_bankcard"
   }
 }
